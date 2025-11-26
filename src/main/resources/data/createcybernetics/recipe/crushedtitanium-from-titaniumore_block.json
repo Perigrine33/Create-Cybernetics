@@ -1,0 +1,32 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:titaniumore_block"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "count": 1,
+      "id": "createcybernetics:crushedtitanium"
+    },
+    {
+      "chance": 0.75,
+      "id": "createcybernetics:crushedtitanium"
+    },
+    {
+      "chance": 0.75,
+      "id": "create:experience_nugget"
+    },
+    {
+      "chance": 0.12,
+      "id": "minecraft:cobblestone"
+    }
+  ]
+}

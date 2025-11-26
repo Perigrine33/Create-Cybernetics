@@ -1,0 +1,32 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:deepslate_titaniumore_block"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "count": 2,
+      "id": "createcybernetics:crushedtitanium"
+    },
+    {
+      "chance": 0.25,
+      "id": "createcybernetics:crushedtitanium"
+    },
+    {
+      "chance": 0.75,
+      "id": "create:experience_nugget"
+    },
+    {
+      "chance": 0.12,
+      "id": "minecraft:cobbled_deepslate"
+    }
+  ]
+}
