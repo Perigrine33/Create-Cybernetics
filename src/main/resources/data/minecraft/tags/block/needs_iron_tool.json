@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "createcybernetics:titaniumore_block",
+    "createcybernetics:deepslate_titaniumore_block",
+    "createcybernetics:titanium_block",
+    "createcybernetics:raw_titanium_block"
+  ]
+}

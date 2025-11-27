@@ -22,6 +22,31 @@ public class ModItems {
     public static final DeferredItem<Item> TITANIUMSHEET = ITEMS.register("titaniumsheet",
             () -> new Item(new Item.Properties()));
 
+    public static final DeferredItem<Item> CYBERPUNK_DISC = ITEMS.register("cyberpunk_disc",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> COMPONENT_ACTUATOR = ITEMS.register("component_actuator",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_FIBEROPTICS = ITEMS.register("component_fiberoptics",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_FULLERENE = ITEMS.register("component_fullerene",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_DIODES = ITEMS.register("component_diodes",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_PLATING = ITEMS.register("component_plating",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_GRAPHICSCARD = ITEMS.register("component_graphicscard",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_SSD = ITEMS.register("component_ssd",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_STORAGE = ITEMS.register("component_storage",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_SYNTHNERVES = ITEMS.register("component_synthnerves",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPONENT_MESH = ITEMS.register("component_mesh",
+            () -> new Item(new Item.Properties()));
+
+
 
 //BODY PARTS
     public static final DeferredItem<Item> BODYPART_RIGHTLEG = ITEMS.register("bodypart_rightleg",
@@ -214,6 +239,8 @@ public class ModItems {
     public static final DeferredItem<Item> WETWARE_FIREBREATHINGGLAND = ITEMS.register("wetware_firebreathinggland",
         () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> WETWARE_GILLS = ITEMS.register("wetware_gills",
+        () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> WETWARE_GUARDIANEYE = ITEMS.register("wetware_guardianeye",
         () -> new Item(new Item.Properties()));
 
 

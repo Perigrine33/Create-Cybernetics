@@ -5,6 +5,17 @@
   "item.createcybernetics.titaniumnugget": "Titanium Nugget",
   "item.createcybernetics.titaniumsheet": "Titanium Sheet",
 
+  "item.createcybernetics.component_actuator": "Actuator",
+  "item.createcybernetics.component_fiberoptics": "Fiber Optics",
+  "item.createcybernetics.component_fullerene": "Fullerene Microstructure",
+  "item.createcybernetics.component_diodes": "Electric Diodes",
+  "item.createcybernetics.component_plating": "Titanium Plating",
+  "item.createcybernetics.component_graphicscard": "GPU Card",
+  "item.createcybernetics.component_ssd": "SSD Card",
+  "item.createcybernetics.component_storage": "Storage Tank",
+  "item.createcybernetics.component_synthnerves": "SynthNerves",
+  "item.createcybernetics.component_mesh": "Titanium Mesh",
+
 
   "item.createcybernetics.bodypart_rightleg": "Right Leg",
   "item.createcybernetics.bodypart_leftleg": "Left Leg",
@@ -101,6 +112,7 @@
 
   "item.createcybernetics.wetware_firebreathinggland": "Dragon Breath Gland",
   "item.createcybernetics.wetware_gills": "Fish Gills",
+  "item.createcybernetics.wetware_guardianeye": "Guardian Eye",
 
 
 

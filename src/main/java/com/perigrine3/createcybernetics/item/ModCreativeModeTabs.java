@@ -29,6 +29,18 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TITANIUMNUGGET);
                         output.accept(ModItems.TITANIUMSHEET);
 
+                        //COMPONENTS
+                        output.accept(ModItems.COMPONENT_ACTUATOR);
+                        output.accept(ModItems.COMPONENT_FIBEROPTICS);
+                        output.accept(ModItems.COMPONENT_FULLERENE);
+                        output.accept(ModItems.COMPONENT_DIODES);
+                        output.accept(ModItems.COMPONENT_PLATING);
+                        output.accept(ModItems.COMPONENT_GRAPHICSCARD);
+                        output.accept(ModItems.COMPONENT_SSD);
+                        output.accept(ModItems.COMPONENT_STORAGE);
+                        output.accept(ModItems.COMPONENT_SYNTHNERVES);
+                        output.accept(ModItems.COMPONENT_MESH);
+
                     }).build());
 
     public static final Supplier<CreativeModeTab> CREATE_CYBERNETICS_UPGRADES_TAB = CREATIVE_MODE_TAB.register("create_cybernetics_upgrades_tab",
@@ -133,6 +145,7 @@ public class ModCreativeModeTabs {
                     //WETWARE UPGRADES
                         output.accept(ModItems.WETWARE_FIREBREATHINGGLAND);
                         output.accept(ModItems.WETWARE_GILLS);
+                        output.accept(ModItems.WETWARE_GUARDIANEYE);
 
 
 
