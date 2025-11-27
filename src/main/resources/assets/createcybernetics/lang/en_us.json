@@ -1,0 +1,114 @@
+{
+  "item.createcybernetics.titaniumingot": "Titanium Ingot",
+  "item.createcybernetics.rawtitanium": "Raw Titanium",
+  "item.createcybernetics.crushedtitanium": "Crushed Titanium",
+  "item.createcybernetics.titaniumnugget": "Titanium Nugget",
+  "item.createcybernetics.titaniumsheet": "Titanium Sheet",
+
+
+  "item.createcybernetics.bodypart_rightleg": "Right Leg",
+  "item.createcybernetics.bodypart_leftleg": "Left Leg",
+  "item.createcybernetics.bodypart_rightarm": "Right Arm",
+  "item.createcybernetics.bodypart_leftarm": "Left Arm",
+  "item.createcybernetics.bodypart_skeleton": "Skeleton",
+  "item.createcybernetics.bodypart_brain": "Brain",
+  "item.createcybernetics.bodypart_eyeballs": "Eyeballs",
+  "item.createcybernetics.bodypart_heart": "Heart",
+  "item.createcybernetics.bodypart_lungs": "Lungs",
+  "item.createcybernetics.bodypart_liver": "Liver",
+  "item.createcybernetics.bodypart_intestines": "Intestines",
+  "item.createcybernetics.bodypart_muscle": "Muscle Tissue",
+  "item.createcybernetics.bodypart_skin": "Dermal Tissue",
+
+
+  "item.createcybernetics.basecyberware_rightleg": "Right Cyberleg",
+  "item.createcybernetics.basecyberware_leftleg": "Left Cyberleg",
+  "item.createcybernetics.basecyberware_rightarm": "Right Cyberarm",
+  "item.createcybernetics.basecyberware_leftarm": "Left Cyberarm",
+  "item.createcybernetics.basecyberware_linearframe": "Linear Frame",
+  "item.createcybernetics.basecyberware_cybereyes": "Cybereyes",
+  "item.createcybernetics.basecyberware_cyberheart": "Mechanical Heart",
+
+  "item.createcybernetics.eyeupgrades_hudlens": "HUDlens",
+  "item.createcybernetics.eyeupgrades_navigationchip": "Navigation Module",
+  "item.createcybernetics.eyeupgrades_hudjack": "HUDjack Module",
+  "item.createcybernetics.eyeupgrades_nightvision": "Low Light Module",
+  "item.createcybernetics.eyeupgrades_targeting": "Targeting Module",
+  "item.createcybernetics.eyeupgrades_underwatervision": "Watervision Module",
+  "item.createcybernetics.eyeupgrades_zoom": "Optic Zoom Module",
+
+  "item.createcybernetics.armupgrades_armcannon": "Arm Cannon",
+  "item.createcybernetics.armupgrades_flywheel": "Quickdraw Flywheel",
+  "item.createcybernetics.armupgrades_claws": "Retractable Claws",
+  "item.createcybernetics.armupgrades_crafthands": "Crafting Hands",
+  "item.createcybernetics.armupgrades_drillfist": "Drillfist",
+  "item.createcybernetics.armupgrades_engineersphalanges": "Engineer's Phalanges",
+  "item.createcybernetics.armupgrades_firestarter": "Firestarter",
+  "item.createcybernetics.armupgrades_pneumaticwrist": "Pneumatic Wrist",
+  "item.createcybernetics.armupgrades_reinforcedknuckles": "Reinforced Knuckles",
+
+  "item.createcybernetics.legupgrades_metaldetector": "Metal Detector",
+  "item.createcybernetics.legupgrades_anklebracers": "Ankle Bracers",
+  "item.createcybernetics.legupgrades_jumpboost": "Pneumatic Ankles",
+  "item.createcybernetics.legupgrades_propellers": "Calf Propellers",
+  "item.createcybernetics.legupgrades_spurs": "Implanted Spurs",
+
+  "item.createcybernetics.boneupgrades_bonebattery": "Marrow Battery",
+  "item.createcybernetics.boneupgrades_boneflex": "Citrate Enhancement",
+  "item.createcybernetics.boneupgrades_bonelacing": "Bonelacing",
+  "item.createcybernetics.boneupgrades_elytra": "Deployable Elytra",
+  "item.createcybernetics.boneupgrades_piezo": "Piezoelectric Energy Generator",
+  "item.createcybernetics.boneupgrades_spinalinjector": "Spinal Injector",
+
+  "item.createcybernetics.brainupgrade_eyeofdefender": "Eye of Defender",
+  "item.createcybernetics.brainupgrades_consciousnesstransmitter": "Needlecaster",
+  "item.createcybernetics.brainupgrades_corticalstack": "Cortical Stack",
+  "item.createcybernetics.brainupgrades_enderjammer": "Enderjammer",
+  "item.createcybernetics.brainupgrades_matrix": "Threat Matrix",
+  "item.createcybernetics.brainupgrades_neuralcontextualizer": "Neural Contextualizer",
+  "item.createcybernetics.brainupgrades_cyberdeck": "Cyberdeck",
+
+  "item.createcybernetics.heartupgrades_coupler": "Cardiovascular Coupler",
+  "item.createcybernetics.heartupgrades_creeperheart": "Creeperheart",
+  "item.createcybernetics.heartupgrades_defibrillator": "Internal Defibrillator",
+  "item.createcybernetics.heartupgrades_stemcell": "Stem Cell Synthesizer",
+  "item.createcybernetics.heartupgrades_platelets": "Platelet Dispatcher",
+
+  "item.createcybernetics.lungsupgrades_hyperoxygenation": "Hyperoxygenation Boost",
+  "item.createcybernetics.lungsupgrades_oxygen": "Internal Oxygen Tank",
+
+  "item.createcybernetics.organsupgrades_adrenaline": "Adrenal Pump",
+  "item.createcybernetics.organsupgrades_battery": "Internal Battery",
+  "item.createcybernetics.organsupgrades_diamondwaferstack": "Diamond Waferstack",
+  "item.createcybernetics.organsupgrades_dualisticconverter": "Dualistic Converter",
+  "item.createcybernetics.organsupgrades_liverfilter": "Liver Filter",
+  "item.createcybernetics.organsupgrades_magiccatalyst": "Magic Catalyst",
+  "item.createcybernetics.organsupgrades_metabolic": "Metabolic Converter",
+  "item.createcybernetics.organsupgrade_densebattery": "Dense Battery",
+
+  "item.createcybernetics.skinupgrades_arterialturbine": "Arterial Turbine",
+  "item.createcybernetics.skinupgrades_chromatophores": "Synthetic Chromatophores",
+  "item.createcybernetics.skinupgrades_synthskin": "SynthSkin",
+  "item.createcybernetics.skinupgrades_immuno": "Immunosuppressor",
+  "item.createcybernetics.skinupgrades_faceplate": "Interchangeable Faceplate",
+  "item.createcybernetics.skinupgrades_netheriteplating": "Isothermal Plating",
+  "item.createcybernetics.skinupgrades_solarskin": "SolarSkin",
+  "item.createcybernetics.skinupgrades_subdermalarmor": "Subdermal Armor",
+  "item.createcybernetics.skinupgrades_subdermalspikes": "Subdermal Spikes",
+
+  "item.createcybernetics.muscleupgrades_synthmuscle": "Synthetic Muscle",
+  "item.createcybernetics.muscleupgrades_wiredreflexes": "Wired Reflexes",
+
+  "item.createcybernetics.wetware_firebreathinggland": "Dragon Breath Gland",
+  "item.createcybernetics.wetware_gills": "Fish Gills",
+
+
+
+  "block.createcybernetics.titaniumore_block": "Titanium Ore",
+  "block.createcybernetics.deepslate_titaniumore_block": "Deepslate Titanium Ore",
+  "block.createcybernetics.titanium_block": "Block of Titanium",
+  "block.createcybernetics.raw_titanium_block": "Block of Raw Titanium",
+
+  "creativetab.createcybernetics.create_cybernetics_tab": "Create: Cybernetics Items & Blocks",
+  "creativetab.createcybernetics.create_cybernetics_upgrades_tab": "Create: Cybernetics"
+}
