@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "G": {
+      "item": "minecraft:ghast_tear"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    }
+  },
+
+  "pattern": [
+    "PP PP",
+    "PGTGP",
+    " TNT ",
+    "PGTGP",
+    "PP PP"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:heartupgrades_stemcell"
+  },
+  "show_notification": false
+}

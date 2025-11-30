@@ -1,0 +1,37 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "L": {
+      "item": "minecraft:lapis_block"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "SGGGS",
+    "PLLLP",
+    "W W W",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:skinupgrades_solarskin"
+  },
+  "show_notification": false
+}

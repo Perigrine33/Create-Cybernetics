@@ -28,11 +28,16 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TITANIUMINGOT);
                         output.accept(ModItems.TITANIUMNUGGET);
                         output.accept(ModItems.TITANIUMSHEET);
+                        output.accept(ModItems.EYEUPGRADEBASE);
+                        output.accept(ModItems.TITANIUM_HAND);
+                        output.accept(ModItems.NEUROPOZYNE);
+
+                        output.accept(ModItems.CYBERPUNK_DISC);
 
                         //COMPONENTS
                         output.accept(ModItems.COMPONENT_ACTUATOR);
                         output.accept(ModItems.COMPONENT_FIBEROPTICS);
-                        output.accept(ModItems.COMPONENT_FULLERENE);
+                        output.accept(ModItems.COMPONENT_WIRING);
                         output.accept(ModItems.COMPONENT_DIODES);
                         output.accept(ModItems.COMPONENT_PLATING);
                         output.accept(ModItems.COMPONENT_GRAPHICSCARD);
@@ -65,13 +70,12 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BODYPART_MUSCLE);
                         output.accept(ModItems.BODYPART_SKIN);
                     //BASE CYBERWARE
-                        output.accept(ModItems.BASECYBERWARE_RIGHTARM);
                         output.accept(ModItems.BASECYBERWARE_LEFTARM);
-                        output.accept(ModItems.BASECYBERWARE_RIGHTLEG);
+                        output.accept(ModItems.BASECYBERWARE_RIGHTARM);
                         output.accept(ModItems.BASECYBERWARE_LEFTLEG);
-                        output.accept(ModItems.BASECYBERWARE_LINEARFRAME);
+                        output.accept(ModItems.BASECYBERWARE_RIGHTLEG);
                         output.accept(ModItems.BASECYBERWARE_CYBEREYES);
-                        output.accept(ModItems.BASECYBERWARE_CYBERHEART);
+                        output.accept(ModItems.BASECYBERWARE_LINEARFRAME);
                     //EYE UPGRADES
                         output.accept(ModItems.EYEUPGRADES_HUDLENS);
                         output.accept(ModItems.EYEUPGRADES_NAVIGATIONCHIP);
@@ -87,7 +91,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ARMUPGRADES_DRILLFIST);
                         output.accept(ModItems.ARMUPGRADES_FLYWHEEL);
                         output.accept(ModItems.ARMUPGRADES_FIRESTARTER);
-                        output.accept(ModItems.ARMUPGRADES_ENGINEERSPHALANGES);
                         output.accept(ModItems.ARMUPGRADES_PNEUMATICWRIST);
                         output.accept(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES);
                     //LEG UPGRADES
@@ -111,7 +114,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BRAINUPGRADES_MATRIX);
                         output.accept(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER);
                         output.accept(ModItems.BRAINUPGRADES_CYBERDECK);
+                        output.accept(ModItems.BRAINUPGRADES_IDEM);
                     //HEART UPGRADES
+                        output.accept(ModItems.HEARTUPGRADES_CYBERHEART);
                         output.accept(ModItems.HEARTUPGRADES_COUPLER);
                         output.accept(ModItems.HEARTUPGRADES_CREEPERHEART);
                         output.accept(ModItems.HEARTUPGRADES_DEFIBRILLATOR);

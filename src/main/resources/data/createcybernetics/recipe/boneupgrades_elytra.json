@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "I": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "E": {
+      "item": "minecraft:elytra"
+    },
+    "M": {
+      "item": "minecraft:phantom_membrane"
+    },
+    "T": {
+      "item": "create:electron_tube"
+    }
+  },
+
+  "pattern": [
+    " NIN ",
+    " PTP ",
+    "PMEMP",
+    "PPTPP",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:boneupgrades_elytra"
+  },
+  "show_notification": false
+}

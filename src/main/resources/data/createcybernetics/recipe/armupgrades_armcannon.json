@@ -1,0 +1,43 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "D": {
+      "item": "minecraft:dispenser"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "S": {
+      "item": "createcybernetics:component_storage"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "PPEPG",
+    " SDRN",
+    "PPEPG",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:armupgrades_armcannon"
+  },
+  "show_notification": false
+}

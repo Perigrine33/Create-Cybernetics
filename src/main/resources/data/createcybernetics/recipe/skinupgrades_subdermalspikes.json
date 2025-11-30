@@ -1,0 +1,31 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "T": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "S S S",
+    "TSTST",
+    "PPPPP",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:skinupgrades_subdermalspikes"
+  },
+  "show_notification": false
+}

@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "R": {
+      "item": "create:rose_quartz"
+    },
+    "B": {
+      "item": "minecraft:bone"
+    },
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    }
+  },
+
+  "pattern": [
+    "  PQR",
+    "  WRA",
+    "PWBWP",
+    "ARW  ",
+    "RQP  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:boneupgrades_piezo"
+  },
+  "show_notification": false
+}

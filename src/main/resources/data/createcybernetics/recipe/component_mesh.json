@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumsheet"
+    },
+    "N": {
+      "item": "createcybernetics:titaniumnugget"
+    }
+  },
+  "pattern": [
+    "TNT",
+    "NTN",
+    "TNT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:component_mesh"
+  }
+}

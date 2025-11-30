@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    },
+    "B": {
+      "item": "minecraft:blue_dye"
+    },
+    "T": {
+      "item": "minecraft:ghast_tear"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "D": {
+      "item": "createcybernetics:organsupgrades_dualisticconverter"
+    }
+  },
+
+  "pattern": [
+    "  T  ",
+    " TNT ",
+    "RWDWB",
+    " TNT ",
+    "  T  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:organsupgrades_magiccatalyst"
+  },
+  "show_notification": false
+}

@@ -1,0 +1,31 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    },
+    "M": {
+      "item": "createcybernetics:component_mesh"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "SSSSS",
+    "PPPPP",
+    "M M M",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:skinupgrades_subdermalarmor"
+  },
+  "show_notification": false
+}

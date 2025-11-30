@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "minecraft:tnt"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    }
+  },
+  "pattern": [
+    "   ",
+    "TNT",
+    " T "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:heartupgrades_creeperheart"
+  }
+}

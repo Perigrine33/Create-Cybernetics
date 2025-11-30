@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "E": {
+      "item": "minecraft:end_crystal"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "V": {
+      "item": "minecraft:black_dye"
+    },
+    "B": {
+      "item": "minecraft:blue_dye"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    }
+  },
+
+  "pattern": [
+    "DD DD",
+    "DE ED",
+    " W W ",
+    " RWB ",
+    " WVW "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:organsupgrades_diamondwaferstack"
+  },
+  "show_notification": false
+}

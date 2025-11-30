@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "I": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "S": {
+      "item": "createcybernetics:component_storage"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "C": {
+      "item": "create:cogwheel"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+
+  "pattern": [
+    "I I I",
+    "I I I",
+    "SCSCS",
+    "PRPRP",
+    " PNP "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:armupgrades_claws"
+  },
+  "show_notification": false
+}

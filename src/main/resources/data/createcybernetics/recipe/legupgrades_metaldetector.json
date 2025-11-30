@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "T": {
+      "item": "minecraft:note_block"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "C": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+
+  "pattern": [
+    " PTP ",
+    "PEREP",
+    "PCICP",
+    "PCICP",
+    "PCICP"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:legupgrades_metaldetector"
+  },
+  "show_notification": false
+}

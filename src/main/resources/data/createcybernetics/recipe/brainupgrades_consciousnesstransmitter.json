@@ -1,0 +1,37 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "N": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "S": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    }
+  },
+
+  "pattern": [
+    "E P  ",
+    " NP  ",
+    "PPT  ",
+    "  TS ",
+    "  TS "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_consciousnesstransmitter"
+  },
+  "show_notification": false
+}

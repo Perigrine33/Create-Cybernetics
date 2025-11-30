@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "L": {
+      "item": "minecraft:lapis_block"
+    },
+    "B": {
+      "item": "minecraft:blue_dye"
+    },
+    "V": {
+      "item": "minecraft:red_dye"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    }
+  },
+
+  "pattern": [
+    " WPW ",
+    "VPLPB",
+    "W P W",
+    "VPRPB",
+    " WPW "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:organsupgrades_dualisticconverter"
+  },
+  "show_notification": false
+}

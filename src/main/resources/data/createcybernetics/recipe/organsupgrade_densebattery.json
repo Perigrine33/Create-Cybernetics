@@ -1,0 +1,43 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "B": {
+      "item": "createcybernetics:organsupgrades_battery"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "M": {
+      "item": "createcybernetics:component_mesh"
+    },
+    "D": {
+      "item": "createcybernetics:component_diodes"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    }
+  },
+
+  "pattern": [
+    "GRDRG",
+    "TBWBT",
+    "TBBBT",
+    "TBMBT",
+    "TBBBT"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:organsupgrade_densebattery"
+  },
+  "show_notification": false
+}

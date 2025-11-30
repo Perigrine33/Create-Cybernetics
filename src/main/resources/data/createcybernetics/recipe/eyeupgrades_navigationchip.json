@@ -1,0 +1,46 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "P": {
+      "item": "minecraft:blue_dye"
+    },
+    "B": {
+      "item": "createcybernetics:eyeupgradebase"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "D": {
+      "item": "createcybernetics:component_diodes"
+    }
+  },
+
+  "pattern": [
+    " NRN ",
+    " DCD ",
+    "PGBSP",
+    " DCD ",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:eyeupgrades_navigationchip"
+  },
+  "show_notification": false
+}

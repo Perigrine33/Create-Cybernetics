@@ -1,0 +1,48 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "F": {
+      "item": "createcybernetics:component_fiberoptics"
+    },
+    "P": {
+      "item": "minecraft:light_blue_dye"
+    },
+    "B": {
+      "item": "createcybernetics:eyeupgradebase"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "V": {
+      "item": "create:framed_glass"
+    },
+    "M": {
+      "item": "minecraft:phantom_membrane"
+    }
+  },
+
+  "pattern": [
+    " NRN ",
+    " FMF ",
+    "PGBSP",
+    " FVF "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:eyeupgrades_underwatervision"
+  },
+  "show_notification": false
+}

@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "D": {
+      "item": "minecraft:pink_dye"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "O": {
+      "item": "minecraft:observer"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "B": {
+      "item": "createcybernetics:bodypart_brain"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+
+  "pattern": [
+    "  D  ",
+    " PPPG",
+    " POP ",
+    " NBN ",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_neuralcontextualizer"
+  },
+  "show_notification": false
+}

@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "F": {
+      "item": "createcybernetics:component_fiberoptics"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "M": {
+      "item": "minecraft:phantom_membrane"
+    }
+  },
+
+  "pattern": [
+    " MF  ",
+    "MF   ",
+    "MFGN ",
+    "MF   ",
+    " MF  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:eyeupgrades_hudlens"
+  },
+  "show_notification": false
+}

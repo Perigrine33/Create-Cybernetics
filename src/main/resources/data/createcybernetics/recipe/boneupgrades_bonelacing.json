@@ -1,0 +1,28 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "M": {
+      "item": "createcybernetics:component_mesh"
+    },
+    "B": {
+      "item": "minecraft:bone"
+    }
+  },
+
+  "pattern": [
+    "   MM",
+    "  M M",
+    " MBM ",
+    "M M  ",
+    "MM   "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:boneupgrades_bonelacing"
+  },
+  "show_notification": false
+}

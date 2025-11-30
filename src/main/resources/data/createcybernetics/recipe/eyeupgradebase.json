@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "S": {
+      "item": "createcybernetics:titaniumsheet"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "GRG",
+    "SES",
+    "STS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:eyeupgradebase"
+  }
+}

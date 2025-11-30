@@ -5,10 +5,16 @@
   "item.createcybernetics.titaniumnugget": "Titanium Nugget",
   "item.createcybernetics.titaniumsheet": "Titanium Sheet",
 
+  "item.createcybernetics.eyeupgradebase": "Cybereye Module Base",
+  "item.createcybernetics.titanium_hand": "Titanium Hand",
+  "item.createcybernetics.neuropozyne": "Neuropozyne Autoinjector",
+
+  "item.createcybernetics.cyberpunk_disc": "Music Disc",
+
   "item.createcybernetics.component_actuator": "Actuator",
   "item.createcybernetics.component_fiberoptics": "Fiber Optics",
-  "item.createcybernetics.component_fullerene": "Fullerene Microstructure",
-  "item.createcybernetics.component_diodes": "Electric Diodes",
+  "item.createcybernetics.component_wiring": "Copper Wiring",
+  "item.createcybernetics.component_diodes": "Microelectric Diodes",
   "item.createcybernetics.component_plating": "Titanium Plating",
   "item.createcybernetics.component_graphicscard": "GPU Card",
   "item.createcybernetics.component_ssd": "SSD Card",
@@ -36,9 +42,8 @@
   "item.createcybernetics.basecyberware_leftleg": "Left Cyberleg",
   "item.createcybernetics.basecyberware_rightarm": "Right Cyberarm",
   "item.createcybernetics.basecyberware_leftarm": "Left Cyberarm",
-  "item.createcybernetics.basecyberware_linearframe": "Linear Frame",
   "item.createcybernetics.basecyberware_cybereyes": "Cybereyes",
-  "item.createcybernetics.basecyberware_cyberheart": "Mechanical Heart",
+  "item.createcybernetics.basecyberware_linearframe": "Linear Frame",
 
   "item.createcybernetics.eyeupgrades_hudlens": "HUDlens",
   "item.createcybernetics.eyeupgrades_navigationchip": "Navigation Module",
@@ -53,7 +58,6 @@
   "item.createcybernetics.armupgrades_claws": "Retractable Claws",
   "item.createcybernetics.armupgrades_crafthands": "Crafting Hands",
   "item.createcybernetics.armupgrades_drillfist": "Drillfist",
-  "item.createcybernetics.armupgrades_engineersphalanges": "Engineer's Phalanges",
   "item.createcybernetics.armupgrades_firestarter": "Firestarter",
   "item.createcybernetics.armupgrades_pneumaticwrist": "Pneumatic Wrist",
   "item.createcybernetics.armupgrades_reinforcedknuckles": "Reinforced Knuckles",
@@ -78,7 +82,9 @@
   "item.createcybernetics.brainupgrades_matrix": "Threat Matrix",
   "item.createcybernetics.brainupgrades_neuralcontextualizer": "Neural Contextualizer",
   "item.createcybernetics.brainupgrades_cyberdeck": "Cyberdeck",
+  "item.createcybernetics.brainupgrades_idem": "I.D.E.M.",
 
+  "item.createcybernetics.heartupgrades_cyberheart": "Mechanical Heart",
   "item.createcybernetics.heartupgrades_coupler": "Cardiovascular Coupler",
   "item.createcybernetics.heartupgrades_creeperheart": "Creeperheart",
   "item.createcybernetics.heartupgrades_defibrillator": "Internal Defibrillator",

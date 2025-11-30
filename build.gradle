@@ -123,7 +123,6 @@ dependencies {
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
-    implementation("curse.maven:createaddition-439890:7262496")
     implementation ("curse.maven:jei-238222:6589027")
     implementation ("curse.maven:farmers-delight-398521:6917256")
 }

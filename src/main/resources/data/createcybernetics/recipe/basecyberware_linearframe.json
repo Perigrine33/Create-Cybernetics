@@ -1,0 +1,37 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "A": {
+      "item": "createcybernetics:component_actuator"
+    },
+    "T": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "S": {
+      "item": "createcybernetics:titaniumsheet"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    }
+  },
+
+  "pattern": [
+    "  T  ",
+    " PSP ",
+    "PATAP",
+    "EPSPE",
+    "PATAP"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:basecyberware_linearframe"
+  },
+  "show_notification": false
+}

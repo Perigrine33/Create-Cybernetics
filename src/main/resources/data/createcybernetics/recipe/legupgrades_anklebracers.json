@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "V": {
+      "item": "create:mechanical_piston"
+    },
+    "E": {
+      "item": "create:piston_extension_pole"
+    }
+  },
+
+  "pattern": [
+    " TTT ",
+    " PVP ",
+    " PEP ",
+    " PVP ",
+    " TTT "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:legupgrades_anklebracers"
+  },
+  "show_notification": false
+}

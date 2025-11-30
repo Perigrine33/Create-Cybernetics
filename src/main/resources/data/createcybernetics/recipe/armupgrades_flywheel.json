@@ -1,0 +1,37 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "I": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "C": {
+      "item": "create:cogwheel"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "RP PR",
+    "ITCTI",
+    " PCP ",
+    "  P  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:armupgrades_flywheel"
+  },
+  "show_notification": false
+}

@@ -1,0 +1,46 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "C": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "F": {
+      "item": "createcybernetics:component_fiberoptics"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "A": {
+      "item": "createcybernetics:component_actuator"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "M": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "D": {
+      "item": "createcybernetics:component_diodes"
+    }
+  },
+
+  "pattern": [
+    " PPP ",
+    "PFMDN",
+    "CFGAN",
+    "PFMDN",
+    " PPP "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:basecyberware_cybereyes"
+  },
+  "show_notification": false
+}

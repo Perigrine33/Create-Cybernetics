@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "A": {
+      "item": "createcybernetics:component_actuator"
+    }
+  },
+
+  "pattern": [
+    "   PP",
+    "  PNP",
+    " PAP ",
+    " PNP ",
+    "PTT  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:basecyberware_leftleg"
+  },
+  "show_notification": false
+}
