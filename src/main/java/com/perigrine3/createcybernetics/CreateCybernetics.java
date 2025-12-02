@@ -62,8 +62,6 @@ public class CreateCybernetics {
         ModItems.register(eventBus);
         ModBlocks.register(eventBus);
 
-
-        // Register the item to a creative tab
         eventBus.addListener(this::addCreative);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us

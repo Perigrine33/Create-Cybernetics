@@ -38,21 +38,20 @@ public class ModBlocks {
                     .strength(3f).requiresCorrectToolForDrops().sound(SoundType.STONE)), true);
 
 //FUNCTIONAL BLOCKS
-    public static final DeferredBlock<Block> SURGERY_CHAMBER_BOTTOM = registerBlock(
-        "surgery_chamber",
-        () -> new SurgeryChamberBlockBottom(BlockBehaviour.Properties.of().noOcclusion().sound(SoundType.METAL)), true);
-    public static final DeferredBlock<Block> SURGERY_CHAMBER_TOP = registerBlock(
-            "surgery_chamber_top",
-            () -> new SurgeryChamberBlockTop(BlockBehaviour.Properties.of().noOcclusion().sound(SoundType.METAL)), false);
+    public static final DeferredBlock<Block> SURGERY_CHAMBER_BOTTOM = registerBlock("surgery_chamber",
+        () -> new SurgeryChamberBlockBottom(BlockBehaviour.Properties.of()
+                .noOcclusion().sound(SoundType.METAL)), true);
+    public static final DeferredBlock<Block> SURGERY_CHAMBER_TOP = registerBlock("surgery_chamber_top",
+            () -> new SurgeryChamberBlockTop(BlockBehaviour.Properties.of()
+                    .noOcclusion().sound(SoundType.METAL)), false);
 
 
 
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block, boolean registerItem) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
-        if (registerItem) {
-            ModItems.ITEMS.register(name, () -> new BlockItem(toReturn.get(), new Item.Properties()));
-        }
+        registerBlockItem(name, toReturn);
+
         return toReturn;
     }
 

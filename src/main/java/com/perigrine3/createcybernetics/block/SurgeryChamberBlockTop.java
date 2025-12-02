@@ -7,6 +7,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,13 +17,18 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.Collections;
+import java.util.List;
+
 public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
     public static final BooleanProperty OPENED = BooleanProperty.create("opened");
+    public static final BooleanProperty SLAVE = BooleanProperty.create("slave");
     public static final MapCodec<SurgeryChamberBlockTop> CODEC = simpleCodec(SurgeryChamberBlockTop::new);
     private static final VoxelShape BACKWALL    = Block.box(14, 0, 0, 16, 16, 16);
     private static final VoxelShape WESTWALL    = Block.box(0, 0, 14, 16, 16, 16);
@@ -38,7 +45,8 @@ public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(OPENED, false));
+                .setValue(OPENED, false)
+                .setValue(SLAVE, true));
     }
 
     @Override
@@ -53,7 +61,7 @@ public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OPENED);
+        builder.add(FACING, OPENED, SLAVE);
     }
 
     @Override
@@ -76,15 +84,21 @@ public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
     }
 
     @Override
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+        return List.of(); // top never drops anything
+    }
+
+    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            // Remove bottom block if top is destroyed
             BlockPos bottomPos = pos.below();
             BlockState bottomState = level.getBlockState(bottomPos);
+
             if (bottomState.is(ModBlocks.SURGERY_CHAMBER_BOTTOM.get())) {
-                level.setBlock(bottomPos, Blocks.AIR.defaultBlockState(), 35);
+                level.destroyBlock(bottomPos, true);
             }
             super.onRemove(state, level, pos, newState, isMoving);
         }
     }
+
 }

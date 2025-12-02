@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -15,14 +16,19 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.List;
+
 public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     public static final BooleanProperty OPENED = BooleanProperty.create("opened");
+    public static final BooleanProperty SLAVE = BooleanProperty.create("slave");
     public static final MapCodec<SurgeryChamberBlockBottom> CODEC = simpleCodec(SurgeryChamberBlockBottom::new);
     private static final VoxelShape BACKWALL     = Block.box(14, 0, 0, 16, 16, 16);
     private static final VoxelShape WESTWALL     = Block.box(0, 0, 14, 16, 16, 16);
@@ -39,7 +45,8 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(OPENED, false));
+                .setValue(OPENED, false)
+                .setValue(SLAVE, false));
     }
 
     @Override
@@ -55,7 +62,7 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OPENED);
+        builder.add(FACING, OPENED, SLAVE);
     }
 
     @Nullable
@@ -66,13 +73,15 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
         if (!level.getBlockState(pos.above()).canBeReplaced(context)) {
             return null;
         }
-        BlockState topState = ModBlocks.SURGERY_CHAMBER_TOP.get().defaultBlockState()
+        BlockState topState = ModBlocks.SURGERY_CHAMBER_TOP.get()
+                .defaultBlockState()
                 .setValue(FACING, context.getHorizontalDirection())
                 .setValue(SurgeryChamberBlockTop.OPENED, false);
         level.setBlock(pos.above(), topState, 3);
         return this.defaultBlockState()
                 .setValue(FACING, context.getHorizontalDirection())
-                .setValue(OPENED, false);
+                .setValue(OPENED, false)
+                .setValue(SLAVE, false);
     }
 
     @Override
@@ -94,13 +103,21 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     }
 
     @Override
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+        if (state.getValue(SLAVE)) {
+            return List.of();
+        }
+        return List.of(new ItemStack(ModBlocks.SURGERY_CHAMBER_BOTTOM.get()));
+    }
+
+    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
             // Remove top block if bottom is destroyed
             BlockPos topPos = pos.above();
             BlockState topState = level.getBlockState(topPos);
             if (topState.is(ModBlocks.SURGERY_CHAMBER_TOP.get())) {
-                level.setBlock(topPos, Blocks.AIR.defaultBlockState(), 35);
+                level.destroyBlock(topPos, false);
             }
             super.onRemove(state, level, pos, newState, isMoving);
         }
