@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.item;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.block.ModBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +24,8 @@ public class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
 
                         //Adds items to the creative mode tab
+                        output.accept(ModBlocks.SURGERY_CHAMBER_BOTTOM);
+
                         output.accept(ModItems.RAWTITANIUM);
                         output.accept(ModItems.CRUSHEDTITANIUM);
                         output.accept(ModItems.TITANIUMINGOT);
@@ -151,6 +154,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WETWARE_FIREBREATHINGGLAND);
                         output.accept(ModItems.WETWARE_GILLS);
                         output.accept(ModItems.WETWARE_GUARDIANEYE);
+                        output.accept(ModItems.WETWARE_POLARBEARFUR);
+                        output.accept(ModItems.WETWARE_RAVAGERTENDONS);
 
 
 

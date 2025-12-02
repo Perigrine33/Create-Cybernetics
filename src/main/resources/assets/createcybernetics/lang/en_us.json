@@ -8,8 +8,9 @@
   "item.createcybernetics.eyeupgradebase": "Cybereye Module Base",
   "item.createcybernetics.titanium_hand": "Titanium Hand",
   "item.createcybernetics.neuropozyne": "Neuropozyne Autoinjector",
+  "item.createcybernetics.expcapsule": "Cortical Stack Capsule",
 
-  "item.createcybernetics.cyberpunk_disc": "Music Disc",
+  "item.createcybernetics.cyberpunk_disc": "§bMusic Disc",
 
   "item.createcybernetics.component_actuator": "Actuator",
   "item.createcybernetics.component_fiberoptics": "Fiber Optics",
@@ -119,6 +120,8 @@
   "item.createcybernetics.wetware_firebreathinggland": "Dragon Breath Gland",
   "item.createcybernetics.wetware_gills": "Fish Gills",
   "item.createcybernetics.wetware_guardianeye": "Guardian Eye",
+  "item.createcybernetics.wetware_polarbearfur": "Polar Bear Fur",
+  "item.createcybernetics.wetware_ravagertendons": "Ravager Tendons",
 
 
 
@@ -127,6 +130,165 @@
   "block.createcybernetics.titanium_block": "Block of Titanium",
   "block.createcybernetics.raw_titanium_block": "Block of Raw Titanium",
 
+
+  "block.createcybernetics.surgery_chamber": "Surgery Chamber",
+
   "creativetab.createcybernetics.create_cybernetics_tab": "Create: Cybernetics Items & Blocks",
-  "creativetab.createcybernetics.create_cybernetics_upgrades_tab": "Create: Cybernetics"
+  "creativetab.createcybernetics.create_cybernetics_upgrades_tab": "Create: Cybernetics",
+
+
+  "tooltip.createcybernetics.neuropozyne.tooltip": "§6Temporarily reduces §eCyberware Rejection§6 symptoms",
+  "tooltip.createcybernetics.cyberpunk_disc.tooltip": "Cyberpunk - [INSERT NAME HERE]",
+
+
+
+                      "tooltip.createcybernetics.hold_shift_down": "§8Hold [§7Shift§8] for summary",
+
+
+                      "tooltip.createcybernetics.basiccomponent_tooltip": "§8§oBASIC COMPONENT",
+                      "tooltip.createcybernetics.wetware_tooltip": "§c§lWETWARE",
+                      "tooltip.createcybernetics.basecyberware_tooltip": "§9§lBASE CYBERWARE",
+                      "tooltip.createcybernetics.eyeupgrades_tooltip": "§9§lEYE UPGRADES",
+                      "tooltip.createcybernetics.armupgrades_tooltip": "§9§lARM UPGRADES",
+                      "tooltip.createcybernetics.legupgrades_tooltip": "§9§lLEG UPGRADES",
+                      "tooltip.createcybernetics.boneupgrades_tooltip": "§9§lBONE UPGRADES",
+                      "tooltip.createcybernetics.brainupgrade_tooltip": "§9§lBRAIN UPGRADES",
+                      "tooltip.createcybernetics.heartupgrades_tooltip": "§9§lHEART UPGRADES",
+                      "tooltip.createcybernetics.lungsupgrades_tooltip": "§9§lLUNG UPGRADES",
+                      "tooltip.createcybernetics.organsupgrades_tooltip": "§9§lORGANS UPGRADES",
+                      "tooltip.createcybernetics.skinupgrades_tooltip": "§9§lSKIN UPGRADES",
+                      "tooltip.createcybernetics.muscleupgrades_tooltip": "§9§lMUSCLE UPGRADES",
+                      "tooltip.createcybernetics.wetwareupgrades_tooltip": "§4§lWETWARE UPGRADES",
+
+
+
+      "tooltip.createcybernetics.basecyberware_rightleg.tooltip1": "§1Cyberlimb Replacement",
+      "tooltip.createcybernetics.basecyberware_leftleg.tooltip1": "§1Cyberlimb Replacement",
+      "tooltip.createcybernetics.basecyberware_rightarm.tooltip1": "§1Cyberlimb Replacement",
+      "tooltip.createcybernetics.basecyberware_leftarm.tooltip1": "§1Cyberlimb Replacement",
+      "tooltip.createcybernetics.basecyberware_linearframe.tooltip1": "§1Cyberskeleton Replacement",
+      "tooltip.createcybernetics.basecyberware_cybereyes.tooltip1": "§1Cybereye Replacement",
+
+      "tooltip.createcybernetics.eyeupgrades_hudlens.tooltip1": "§1Adds a HUD to the user's vision",
+          "tooltip.createcybernetics.eyeupgrades_hudlens.tooltip2": "§7Requires §cEyeballs",
+      "tooltip.createcybernetics.eyeupgrades_navigationchip.tooltip1": "§1Adds a minimap to the user's vision",
+          "tooltip.createcybernetics.eyeupgrades_navigationchip.tooltip2": "§7Requires §9Cybereyes",
+      "tooltip.createcybernetics.eyeupgrades_hudjack.tooltip1": "§1Adds a HUD to the user's vision",
+          "tooltip.createcybernetics.eyeupgrades_hudjack.tooltip2": "§7Requires §9Cybereyes",
+      "tooltip.createcybernetics.eyeupgrades_nightvision.tooltip1": "§1Provides clarity in the dark",
+          "tooltip.createcybernetics.eyeupgrades_nightvision.tooltip2": "§7Requires §9Cybereyes",
+      "tooltip.createcybernetics.eyeupgrades_targeting.tooltip1": "§1Targets the last attacked creature",
+          "tooltip.createcybernetics.eyeupgrades_targeting.tooltip2": "§7Requires §9Cybereyes",
+      "tooltip.createcybernetics.eyeupgrades_underwatervision.tooltip1": "§1Provides clarity underwater",
+          "tooltip.createcybernetics.eyeupgrades_underwatervision.tooltip2": "§7Requires §9Cybereyes",
+      "tooltip.createcybernetics.eyeupgrades_zoom.tooltip1": "§1Allows the user to see distant objects",
+          "tooltip.createcybernetics.eyeupgrades_zoom.tooltip2": "§7Requires §9Cybereyes",
+
+      "tooltip.createcybernetics.armupgrades_armcannon.tooltip1": "§1Can launch various items and projectiles",
+          "tooltip.createcybernetics.armupgrades_armcannon.tooltip2": "§7Requires §9Cyberarm",
+      "tooltip.createcybernetics.armupgrades_flywheel.tooltip1": "§1Rapidly draws bows and crossbows",
+          "tooltip.createcybernetics.armupgrades_flywheel.tooltip2": "§7Requires §9Cyberarm",
+      "tooltip.createcybernetics.armupgrades_claws.tooltip1": "§1Retractable combat claws",
+          "tooltip.createcybernetics.armupgrades_claws.tooltip2": "§7Requires §9Cyberarm",
+      "tooltip.createcybernetics.armupgrades_crafthands.tooltip1": "§1Grants the user the ability to craft in a 3x3 grid without a Crafting Table",
+        "tooltip.createcybernetics.armupgrades_crafthands.tooltip2": "§7Requires §9Cyberarm",
+      "tooltip.createcybernetics.armupgrades_drillfist.tooltip1": "§1Allows the user to mine anything without a tool (at the cost of a useable hand)",
+        "tooltip.createcybernetics.armupgrades_drillfist.tooltip2": "§7Requires §9Cyberarm)",
+      "tooltip.createcybernetics.armupgrades_firestarter.tooltip1": "§1Can ignite creatures and blocks",
+        "tooltip.createcybernetics.armupgrades_firestarter.tooltip2": "§7Requires §9Cyberarm",
+      "tooltip.createcybernetics.armupgrades_pneumaticwrist.tooltip1": "§1Adds knockback to melee attacks and +2 Block Reach",
+          "tooltip.createcybernetics.armupgrades_pneumaticwrist.tooltip2": "§7Requires §9Cyberarm",
+      "tooltip.createcybernetics.armupgrades_reinforcedknuckles.tooltip1": "§1Allows the user to mine stone level blocks without a tool",
+          "tooltip.createcybernetics.armupgrades_reinforcedknuckles.tooltip2": "§7Requires §9Cyberarm",
+
+      "tooltip.createcybernetics.legupgrades_metaldetector.tooltip1": "§1Can detect magnetic blocks up to 15 blocks below the user",
+          "tooltip.createcybernetics.legupgrades_metaldetector.tooltip2": "§7Requires §9Cyberleg",
+      "tooltip.createcybernetics.legupgrades_anklebracers.tooltip1": "§1Negates damage taken from falling up to 25 blocks",
+          "tooltip.createcybernetics.legupgrades_anklebracers.tooltip2": "§7Requires §9Cyberleg",
+      "tooltip.createcybernetics.legupgrades_jumpboost.tooltip1": "§1Allows the user to jump up to 5 blocks by running and holding jump",
+          "tooltip.createcybernetics.legupgrades_jumpboost.tooltip2": "§7Requires §9Cyberleg",
+      "tooltip.createcybernetics.legupgrades_propellers.tooltip1": "§1Grants the user Dolphins Grace when swimming",
+          "tooltip.createcybernetics.legupgrades_propellers.tooltip2": "§7Requires §9Cyberleg",
+      "tooltip.createcybernetics.legupgrades_spurs.tooltip1": "§1Increases the speed of creatures the user is riding",
+          "tooltip.createcybernetics.legupgrades_spurs.tooltip2": "§7Requires §9Cyberleg",
+
+      "tooltip.createcybernetics.boneupgrades_bonebattery.tooltip1": "§1Stores energy",
+          "tooltip.createcybernetics.boneupgrades_bonebattery.tooltip2": "§3Stacks up to 3x",
+      "tooltip.createcybernetics.boneupgrades_boneflex.tooltip1": "§1Negates damage taken from falling up to 10 blocks",
+          "tooltip.createcybernetics.boneupgrades_boneflex.tooltip2": "§3Stacks up to 2x",
+      "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip1": "§1Adds 5 health to the user",
+          "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip2": "§3Stacks up to 4x",
+      "tooltip.createcybernetics.boneupgrades_elytra.tooltip1": "§1An elytra fused to the user's spine",
+          "tooltip.createcybernetics.boneupgrades_elytra.tooltip2": "§7Requires §9Linear Frame",
+      "tooltip.createcybernetics.boneupgrades_piezo.tooltip1": "§1Provides energy from movement at the risk of incurring occasional damage",
+          "tooltip.createcybernetics.boneupgrades_piezo.tooltip2": "§3Stacks up to 3x",
+      "tooltip.createcybernetics.boneupgrades_spinalinjector.tooltip1": "§1Allows the user to store and use up to 4 potions with extra duration",
+          "tooltip.createcybernetics.boneupgrades_spinalinjector.tooltip2": "§7Requires §9Linear Frame",
+
+      "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip1": "§1Teleports the user out of the way of projectiles",
+          "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip2": "§7Requires §cBrain",
+      "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip1": "§1Sends up to 14 experience to the user's new body when killed",
+          "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip2": "§7Requires §cBrain",
+      "tooltip.createcybernetics.brainupgrades_corticalstack.tooltip1": "§1Stores experience in a Capsule when the user is killed",
+          "tooltip.createcybernetics.brainupgrades_corticalstack.tooltip2": "§7Requires §cBrain",
+      "tooltip.createcybernetics.brainupgrades_enderjammer.tooltip1": "§1Prevents Endermen from teleporting in a 10 block radius around the user",
+      "tooltip.createcybernetics.brainupgrades_matrix.tooltip1": "§1Highlights threats in a 25 block radius around the user",
+          "tooltip.createcybernetics.brainupgrades_matrix.tooltip2": "§7Requires §cBrain",
+      "tooltip.createcybernetics.brainupgrades_neuralcontextualizer.tooltip1": "§1Automatically equips the required tool if it is in the user's inventory",
+          "tooltip.createcybernetics.brainupgrades_neuralcontextualizer.tooltip2": "§7Requires §cBrain",
+      "tooltip.createcybernetics.brainupgrades_cyberdeck.tooltip1": "§1Allows the user to remotely hack cybernetics",
+          "tooltip.createcybernetics.brainupgrades_cyberdeck.tooltip2": "§7Requires §cBrain",
+      "tooltip.createcybernetics.brainupgrades_idem.tooltip1": "§1(InterDimensional Escape Module) Allows the user to escape to another dimension for 15 seconds",
+          "tooltip.createcybernetics.brainupgrades_idem.tooltip2": "§7Requires §cBrain",
+
+      "tooltip.createcybernetics.heartupgrades_cyberheart.tooltip1": "§1Negates weakness status effects",
+      "tooltip.createcybernetics.heartupgrades_coupler.tooltip1": "§1Generates energy from the beating of an organic heart",
+          "tooltip.createcybernetics.heartupgrades_coupler.tooltip2": "§7Requires §cHeart",
+      "tooltip.createcybernetics.heartupgrades_creeperheart.tooltip1": "§1Explodes the user when killed",
+          "tooltip.createcybernetics.heartupgrades_creeperheart.tooltip2": "§7Requires §cHeart",
+      "tooltip.createcybernetics.heartupgrades_defibrillator.tooltip1": "§1Revives the user 1 time when killed",
+          "tooltip.createcybernetics.heartupgrades_defibrillator.tooltip2": "§7Requires §cHeart",
+      "tooltip.createcybernetics.heartupgrades_stemcell.tooltip1": "§1Provides regeneration when health drops below 10",
+      "tooltip.createcybernetics.heartupgrades_platelets.tooltip1": "§1Provides ambient regeneration when the user is at rest",
+
+      "tooltip.createcybernetics.lungsupgrades_hyperoxygenation.tooltip1": "§1Provides a boost to running speed",
+          "tooltip.createcybernetics.lungsupgrades_hyperoxygenation.tooltip2": "§3Stacks up to 3x",
+              "tooltip.createcybernetics.lungsupgrades_hyperoxygenation.tooltip3": "§7Requires §cLungs",
+      "tooltip.createcybernetics.lungsupgrades_oxygen.tooltip1": "§1Stores 1 extra minute of oxygen when the user is in breathable air",
+          "tooltip.createcybernetics.lungsupgrades_oxygen.tooltip2": "§7Requires §cLungs",
+
+      "tooltip.createcybernetics.organsupgrades_adrenaline.tooltip1": "§1Grants the user Speed and Strength when attacked",
+      "tooltip.createcybernetics.organsupgrades_battery.tooltip1": "§1Stores energy",
+          "tooltip.createcybernetics.organsupgrades_battery.tooltip2": "§3Stacks up to 5x",
+      "tooltip.createcybernetics.organsupgrades_diamondwaferstack.tooltip1": "§1Generates a slow trickle of energy",
+          "tooltip.createcybernetics.organsupgrades_diamondwaferstack.tooltip2": "§3Stacks up to 3x",
+      "tooltip.createcybernetics.organsupgrades_dualisticconverter.tooltip1": "§1Generates energy from conflicting Redstone and Lapis wavelengths",
+      "tooltip.createcybernetics.organsupgrades_liverfilter.tooltip1": "§1Negates all negative status effects",
+      "tooltip.createcybernetics.organsupgrades_magiccatalyst.tooltip1": "§1Generates a large amount of energy from conflicting Redstone and Lapis wavelengths",
+      "tooltip.createcybernetics.organsupgrades_metabolic.tooltip1": "§1Generates energy from metabolic function",
+          "tooltip.createcybernetics.organsupgrades_metabolic.tooltip2": "§7Requires §cIntestines",
+      "tooltip.createcybernetics.organsupgrade_densebattery.tooltip1": "§1Stores a large amount of energy from a Charging Block",
+
+      "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip1": "§1Generates energy from user movement",
+          "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip2": "§3Stacks up to 4x",
+      "tooltip.createcybernetics.skinupgrades_chromatophores.tooltip1": "§1Allows the user to camoflauge perfectly in any environment",
+      "tooltip.createcybernetics.skinupgrades_synthskin.tooltip1": "§1Hides §9Cyberlimbs",
+      "tooltip.createcybernetics.skinupgrades_immuno.tooltip1": "§1Reduces Cybernetic rejection, but makes the user weak against negative status effects",
+      "tooltip.createcybernetics.skinupgrades_faceplate.tooltip1": "§1Allows the user to wear different faces to change the displayed username",
+      "tooltip.createcybernetics.skinupgrades_netheriteplating.tooltip1": "§1Grants the user immunity to fire and lava",
+      "tooltip.createcybernetics.skinupgrades_solarskin.tooltip1": "§1Generates energy when the user is in sunlight",
+      "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip1": "§1Provides 1 armor levels",
+          "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip2": "§3Stacks up to 5x",
+      "tooltip.createcybernetics.skinupgrades_subdermalspikes.tooltip1": "§1Applies the Thorns effect when attacked",
+
+      "tooltip.createcybernetics.muscleupgrades_synthmuscle.tooltip1": "§1Grants extra speed and strength",
+      "tooltip.createcybernetics.muscleupgrades_wiredreflexes.tooltip1": "§1Turns the user to face attackers",
+
+      "tooltip.createcybernetics.wetware_firebreathinggland.tooltip1": "§cAllows the user to shoot Dragon Fireballs",
+      "tooltip.createcybernetics.wetware_gills.tooltip1": "§cAllows the user to breathe underwater",
+      "tooltip.createcybernetics.wetware_guardianeye.tooltip1": "§cAllows the user to shoot Guardian Lasers",
+      "tooltip.createcybernetics.wetware_polarbearfur.tooltip1": "§cNegates the freezing status effect",
+      "tooltip.createcybernetics.wetware_ravagertendons.tooltip1": "§cProvides strength and durability to the user"
+
+
 }

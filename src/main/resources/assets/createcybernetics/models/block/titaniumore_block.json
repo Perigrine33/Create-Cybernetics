@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "createcybernetics:block/titaniumore_block"
-  }
-}

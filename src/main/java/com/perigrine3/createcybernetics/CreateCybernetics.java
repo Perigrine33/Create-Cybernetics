@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics;
 
 import com.perigrine3.createcybernetics.block.ModBlocks;
+import com.perigrine3.createcybernetics.component.ModDataComponents;
 import com.perigrine3.createcybernetics.item.ModCreativeModeTabs;
 import com.perigrine3.createcybernetics.item.ModItems;
 import org.slf4j.Logger;
@@ -67,6 +68,8 @@ public class CreateCybernetics {
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        ModDataComponents.register(eventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
