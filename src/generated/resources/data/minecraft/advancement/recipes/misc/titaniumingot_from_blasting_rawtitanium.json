@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rawtitanium": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:rawtitanium"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:titaniumingot_from_blasting_rawtitanium"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rawtitanium"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:titaniumingot_from_blasting_rawtitanium"
+    ]
+  }
+}

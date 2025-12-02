@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "createcybernetics:block/deepslate_titaniumore_block"
+  }
+}

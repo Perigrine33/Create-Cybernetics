@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createcybernetics:titaniumingot_from_titanium_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_titanium_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:titanium_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_titanium_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createcybernetics:titaniumingot_from_titanium_block"
+    ]
+  }
+}

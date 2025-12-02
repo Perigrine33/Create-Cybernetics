@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_deepslate_titaniumore_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:deepslate_titaniumore_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:titaniumingot_from_blasting_deepslate_titaniumore_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_deepslate_titaniumore_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:titaniumingot_from_blasting_deepslate_titaniumore_block"
+    ]
+  }
+}

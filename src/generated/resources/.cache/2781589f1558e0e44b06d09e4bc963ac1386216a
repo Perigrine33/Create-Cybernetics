@@ -1,0 +1,15 @@
+// 1.21.1	2025-11-30T22:47:45.4679155	Tags for minecraft:item mod id createcybernetics
+0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
+c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
+22dd43158827f4d7cda7a49ec4b5120807881949 data/createcybernetics/tags/item/body_parts.json
+83df59694b0dd4c1d4de5e4b486f4a87f790ac1b data/createcybernetics/tags/item/bone_upgrades.json
+cde113c0dcc4652b6034b5d8dcc158f166769ff7 data/createcybernetics/tags/item/brain_upgrades.json
+840bab42521084126e0ec4a27b63874cba1002b7 data/createcybernetics/tags/item/cyberware_item.json
+caaf43881ba4d906fcca137efb7389246f0f7660 data/createcybernetics/tags/item/eye_upgrades.json
+e1af38c781817bc5409595ced275f781bfbb55b8 data/createcybernetics/tags/item/heart_upgrades.json
+6da99b2e9be1f66fe3b6ed0b2092ac32b2ef26b6 data/createcybernetics/tags/item/leg_upgrades.json
+03dfaa238950e6386e25b498ad4682b894ec3850 data/createcybernetics/tags/item/lung_upgrades.json
+57d5f1afed754bcee8e33afabe17c892ff80a49c data/createcybernetics/tags/item/muscle_upgrades.json
+21189b7057f39986677a3d65a0a16df49791a3de data/createcybernetics/tags/item/organ_upgrades.json
+bf0bce90c6471c3c38035c1d1bc0190d57af149c data/createcybernetics/tags/item/skin_upgrades.json
+0bbba610d87050695ad9807eb63199d44e9d8679 data/createcybernetics/tags/item/wetware_item.json
