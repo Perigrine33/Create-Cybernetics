@@ -1,0 +1,14 @@
+{
+  "type": "createcybernetics:add_item",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:entities/zombie_villager"
+    },
+    {
+      "chance": 1.0E-4,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "item": "createcybernetics:bodypart_brain"
+}

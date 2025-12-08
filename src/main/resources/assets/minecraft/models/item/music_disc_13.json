@@ -1,0 +1,32 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "item/music_disc_13"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 37000
+      },
+      "model": "item/cyberpsycho0"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 37001
+      },
+      "model": "item/neon_overlords1"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 37002
+      },
+      "model": "item/neurohack2"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 37003
+      },
+      "model": "item/the_grid3"
+    }
+  ]
+}

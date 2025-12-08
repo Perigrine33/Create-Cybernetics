@@ -1,0 +1,40 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:brainupgrades_enderjammer"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.20,
+      "id": "create:electron_tube"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:ender_pearl"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:lightning_rod"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:end_rod"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:chorus_flower"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}
