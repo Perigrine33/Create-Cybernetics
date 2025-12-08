@@ -15,6 +15,12 @@
     "createcybernetics:bodypart_skin",
     "createcybernetics:wetware_firebreathinggland",
     "createcybernetics:wetware_gills",
-    "createcybernetics:wetware_guardianeye"
+    "createcybernetics:wetware_guardianeye",
+    "createcybernetics:wetware_blubber",
+    "createcybernetics:wetware_sculklungs",
+    "createcybernetics:wetware_tacticalinksac",
+    "createcybernetics:wetware_aerostasisgyrobladder",
+    "createcybernetics:wetware_polarbearfur",
+    "createcybernetics:wetware_ravagertendons"
   ]
 }

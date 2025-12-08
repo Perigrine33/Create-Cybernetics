@@ -1,0 +1,44 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:skinupgrades_netheriteplating"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.35,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.50,
+      "id": "createcybernetics:component_synthnerves"
+    },
+    {
+      "chance": 0.25,
+      "id": "createcybernetics:skinupgrades_synthskin"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:slime_block"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:blue_ice"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:netherite_block"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

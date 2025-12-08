@@ -105,7 +105,13 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BODYPART_SKIN.get())
                 .add(ModItems.WETWARE_FIREBREATHINGGLAND.get())
                 .add(ModItems.WETWARE_GILLS.get())
-                .add(ModItems.WETWARE_GUARDIANEYE.get());
+                .add(ModItems.WETWARE_GUARDIANEYE.get())
+                .add(ModItems.WETWARE_BLUBBER.get())
+                .add(ModItems.WETWARE_SCULKLUNGS.get())
+                .add(ModItems.WETWARE_TACTICALINKSAC.get())
+                .add(ModItems.WETWARE_AEROSTASISGYROBLADDER.get())
+                .add(ModItems.WETWARE_POLARBEARFUR.get())
+                .add(ModItems.WETWARE_RAVAGERTENDONS.get());
 //BODY PARTS
         tag(ModTags.Items.BODY_PARTS)
                 .add(ModItems.BODYPART_RIGHTLEG.get())
@@ -145,7 +151,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.LEGUPGRADES_ANKLEBRACERS.get())
                 .add(ModItems.LEGUPGRADES_JUMPBOOST.get())
                 .add(ModItems.LEGUPGRADES_PROPELLERS.get())
-                .add(ModItems.LEGUPGRADES_SPURS.get());
+                .add(ModItems.LEGUPGRADES_SPURS.get())
+                .add(ModItems.LEGUPGRADES_OCELOTPAWS.get());
 //BONE UPGRADES
         tag(ModTags.Items.BONE_UPGRADES)
                 .add(ModItems.BONEUPGRADES_BONEBATTERY.get())

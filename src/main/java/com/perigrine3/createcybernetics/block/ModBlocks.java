@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.block;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.common.block.RobosurgeonBlock;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -45,7 +46,7 @@ public class ModBlocks {
             () -> new SurgeryChamberBlockTop(BlockBehaviour.Properties.of()
                     .noOcclusion().sound(SoundType.METAL)), false);
     public static final DeferredBlock<Block> ROBOSURGEON = registerBlock("robosurgeon",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new RobosurgeonBlock(BlockBehaviour.Properties.of()
                     .noOcclusion().sound(SoundType.METAL)), true);
 
 

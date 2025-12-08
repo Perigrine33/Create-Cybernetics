@@ -1,0 +1,40 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:boneupgrades_spinalinjector"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_storage"
+    },
+    {
+      "chance": 0.25,
+      "id": "createcybernetics:titaniumsheet"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:electron_tube"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:dispenser"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

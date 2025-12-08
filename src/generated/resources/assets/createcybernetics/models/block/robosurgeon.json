@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "createcybernetics:block/blankmachine",
+    "up": "createcybernetics:block/blankmachine",
+    "north": "createcybernetics:block/robosurgeon",
+    "east": "createcybernetics:block/robosurgeon",
+    "south": "createcybernetics:block/robosurgeon",
+    "west": "createcybernetics:block/robosurgeon",
+    "particle": "createcybernetics:block/blankmachine"
+  },
+  "render_type": "solid"
+}

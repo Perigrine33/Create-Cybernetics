@@ -1,0 +1,45 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:armupgrades_claws"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.50,
+      "id": "createcybernetics:component_storage"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_synthnerves"
+    },
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:titaniumnugget"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:cogwheel"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:redstone"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+
+}

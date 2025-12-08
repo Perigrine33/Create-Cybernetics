@@ -1,0 +1,41 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:eyeupgrades_nightvision"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_fiberoptics"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_graphicscard"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_ssd"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:gold_nugget"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:redstone"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+
+}

@@ -1,6 +1,9 @@
 package com.perigrine3.createcybernetics;
 
 import com.perigrine3.createcybernetics.block.ModBlocks;
+import com.perigrine3.createcybernetics.block.entity.ModBlockEntities;
+import com.perigrine3.createcybernetics.common.capabilities.CyberwareCapability;
+import com.perigrine3.createcybernetics.common.capabilities.ModCapabilities;
 import com.perigrine3.createcybernetics.component.ModDataComponents;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.entity.ModEntities;
@@ -8,11 +11,14 @@ import com.perigrine3.createcybernetics.entity.client.*;
 import com.perigrine3.createcybernetics.item.ModCreativeModeTabs;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.loot.ModLootModifiers;
+import com.perigrine3.createcybernetics.screen.ModMenuTypes;
+import com.perigrine3.createcybernetics.screen.custom.RobosurgeonScreen;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -31,7 +37,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(CreateCybernetics.MODID)
 public class CreateCybernetics {
     public static final String MODID = "createcybernetics";
@@ -42,34 +47,28 @@ public class CreateCybernetics {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
-    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public CreateCybernetics(IEventBus eventBus, ModContainer modContainer) {
-        // Register the commonSetup method for modloading
         eventBus.addListener(this::commonSetup);
-
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
-
-        ModCreativeModeTabs.register(eventBus);
-
-        ModItems.register(eventBus);
-        ModBlocks.register(eventBus);
 
         eventBus.addListener(this::addCreative);
 
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
-        ModDataComponents.register(eventBus);
-        ModEffects.register(eventBus);
-        ModLootModifiers.register(eventBus);
-
+        ModCreativeModeTabs.register(eventBus);
+        ModItems.register(eventBus);
+        ModBlocks.register(eventBus);
+        ModBlockEntities.register(eventBus);
         ModSounds.register(eventBus);
         ModEntities.register(eventBus);
+        ModEffects.register(eventBus);
+        ModMenuTypes.register(eventBus);
+
+        ModLootModifiers.register(eventBus);
+        ModDataComponents.register(eventBus);
+
+        ModCapabilities.register(eventBus);
+
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -109,5 +108,12 @@ public class CreateCybernetics {
             EntityRenderers.register(ModEntities.SMASHER.get(), SmasherRenderer::new);
             EntityRenderers.register(ModEntities.CYBERZOMBIE.get(), CyberzombieRenderer::new);
         }
+
+        @SubscribeEvent
+        public static void registerScreens(RegisterMenuScreensEvent event) {
+            event.register(ModMenuTypes.ROBOSURGEON_MENU.get(), RobosurgeonScreen::new);
+        }
     }
+
+
 }

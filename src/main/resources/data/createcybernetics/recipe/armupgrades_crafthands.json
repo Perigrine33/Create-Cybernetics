@@ -18,15 +18,18 @@
     },
     "S": {
       "item": "createcybernetics:component_synthnerves"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
     }
   },
 
   "pattern": [
     " TTT ",
     " NNN ",
-    " PHNT",
+    " PMNT",
     " PSP ",
-    "     "
+    "  H  "
   ],
 
   "result": {
