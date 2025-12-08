@@ -1,0 +1,36 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_consciousnesstransmitter"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:titaniumnugget"
+    },
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.35,
+      "id": "createcybernetics:component_synthnerves"
+    },
+    {
+      "chance": 0.20,
+      "id": "create:electron_tube"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

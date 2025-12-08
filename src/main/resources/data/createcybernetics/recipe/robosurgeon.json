@@ -1,0 +1,52 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "D": {
+      "item": "minecraft:dispenser"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "V": {
+      "item": "minecraft:glass_pane"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "Q": {
+      "item": "createcybernetics:netherite_qpu"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "F": {
+      "item": "createcybernetics:component_storage"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "M": {
+      "item": "createcybernetics:component_diodes"
+    }
+  },
+
+  "pattern": [
+    "TTTTT",
+    "TMFMT",
+    "TGQST",
+    "TWVWT",
+    "TRDRT"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:robosurgeon"
+  },
+  "show_notification": false
+}

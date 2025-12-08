@@ -1,0 +1,40 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_solarskin"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.35,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.50,
+      "id": "createcybernetics:component_wiring"
+    },
+    {
+      "chance": 0.25,
+      "id": "createcybernetics:skinupgrades_synthskin"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:glass_pane"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:lapis_block"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

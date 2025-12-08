@@ -1,0 +1,40 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_liverfilter"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_synthnerves"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_mesh"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:bodypart_liver"
+    },
+    {
+      "chance": 0.20,
+      "id": "create:filter"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

@@ -44,10 +44,13 @@ public class ModBlocks {
     public static final DeferredBlock<Block> SURGERY_CHAMBER_TOP = registerBlock("surgery_chamber_top",
             () -> new SurgeryChamberBlockTop(BlockBehaviour.Properties.of()
                     .noOcclusion().sound(SoundType.METAL)), false);
+    public static final DeferredBlock<Block> ROBOSURGEON = registerBlock("robosurgeon",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .noOcclusion().sound(SoundType.METAL)), true);
 
 
 
-
+//setup registerItem at a later date
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block, boolean registerItem) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

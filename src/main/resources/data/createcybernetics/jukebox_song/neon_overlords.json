@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.createcybernetics.music_disc_neon_overlords.desc"
+  },
+  "length_in_seconds": 122.0,
+  "sound_event": "createcybernetics:neon_overlords"
+}

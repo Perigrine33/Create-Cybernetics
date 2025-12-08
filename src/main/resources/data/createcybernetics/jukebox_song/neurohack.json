@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.createcybernetics.music_disc_neurohack.desc"
+  },
+  "length_in_seconds": 62.0,
+  "sound_event": "createcybernetics:neurohack"
+}

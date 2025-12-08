@@ -1,0 +1,36 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:organsupgrades_magiccatalyst"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "minecraft:ghast_tear"
+    },
+    {
+      "chance": 0.50,
+      "id": "createcybernetics:organsupgrades_dualisticconverter"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_wiring"
+    },
+    {
+      "chance": 0.05,
+      "id": "minecraft:nether_star"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

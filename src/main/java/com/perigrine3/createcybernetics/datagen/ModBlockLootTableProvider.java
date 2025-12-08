@@ -31,6 +31,8 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
     protected void generate() {
 
         dropSelf(ModBlocks.SURGERY_CHAMBER_BOTTOM.get());
+        dropSelf(ModBlocks.SURGERY_CHAMBER_TOP.get());
+        dropSelf(ModBlocks.ROBOSURGEON.get());
 
         dropSelf(ModBlocks.TITANIUM_BLOCK.get());
         dropSelf(ModBlocks.RAW_TITANIUM_BLOCK.get());

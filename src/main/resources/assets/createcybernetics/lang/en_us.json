@@ -9,8 +9,24 @@
   "item.createcybernetics.titanium_hand": "Titanium Hand",
   "item.createcybernetics.neuropozyne": "Neuropozyne Autoinjector",
   "item.createcybernetics.expcapsule": "Cortical Stack Capsule",
+  "item.createcybernetics.netherite_qpu": "Netherite Quantum Processor",
 
-  "item.createcybernetics.cyberpunk_disc": "§bMusic Disc",
+  "item.createcybernetics.music_disc_cyberpsycho": "§bMusic Disc",
+  "item.createcybernetics.music_disc_cyberpsycho.desc": "Cyberpsycho - Perigrine3",
+  "item.createcybernetics.music_disc_neon_overlords": "§bMusic Disc",
+  "item.createcybernetics.music_disc_neon_overlords.desc": "Neon Overlords - Perigrine3",
+  "item.createcybernetics.music_disc_neurohack": "§bMusic Disc",
+  "item.createcybernetics.music_disc_neurohack.desc": "Neurohack - Perigrine3",
+  "item.createcybernetics.music_disc_the_grid": "§bMusic Disc",
+  "item.createcybernetics.music_disc_the_grid.desc": "The Grid - Perigrine3",
+
+  "item.createcybernetics.cyberzombie_spawn_egg": "Cyberzombie Spawn Egg",
+  "item.createcybernetics.cyberskeleton_spawn_egg": "Cyberskeleton Spawn Egg",
+
+  "item.createcybernetics.smasher_spawn_egg": "Smasher Spawn Egg",
+  "item.createcybernetics.punklin_spawn_egg": "Punklin Spawn Egg",
+  "item.createcybernetics.pigstrom_spawn_egg": "Pigstrom Spawn Egg",
+  "item.createcybernetics.hogboy_spawn_egg": "HogBoy Spawn Egg",
 
   "item.createcybernetics.component_actuator": "Actuator",
   "item.createcybernetics.component_fiberoptics": "Fiber Optics",
@@ -37,6 +53,10 @@
   "item.createcybernetics.bodypart_intestines": "Intestines",
   "item.createcybernetics.bodypart_muscle": "Muscle Tissue",
   "item.createcybernetics.bodypart_skin": "Dermal Tissue",
+
+  "item.createcybernetics.bodypart_guardianretina": "Guardian Retina",
+  "item.createcybernetics.bodypart_wardenesophagus": "Warden Esophagus",
+  "item.createcybernetics.bodypart_gyroscopicbladder": "Gryoscopic Bladder",
 
 
   "item.createcybernetics.basecyberware_rightleg": "Right Cyberleg",
@@ -65,9 +85,10 @@
 
   "item.createcybernetics.legupgrades_metaldetector": "Metal Detector",
   "item.createcybernetics.legupgrades_anklebracers": "Ankle Bracers",
-  "item.createcybernetics.legupgrades_jumpboost": "Pneumatic Ankles",
+  "item.createcybernetics.legupgrades_jumpboost": "Pneumatic Calves",
   "item.createcybernetics.legupgrades_propellers": "Calf Propellers",
   "item.createcybernetics.legupgrades_spurs": "Implanted Spurs",
+  "item.createcybernetics.legupgrades_ocelotpaws": "Ocelot Paws",
 
   "item.createcybernetics.boneupgrades_bonebattery": "Marrow Battery",
   "item.createcybernetics.boneupgrades_boneflex": "Citrate Enhancement",
@@ -113,16 +134,90 @@
   "item.createcybernetics.skinupgrades_solarskin": "SolarSkin",
   "item.createcybernetics.skinupgrades_subdermalarmor": "Subdermal Armor",
   "item.createcybernetics.skinupgrades_subdermalspikes": "Subdermal Spikes",
+  "item.createcybernetics.skinupgrades_sweat": "Enhanced Sweat Glands",
 
   "item.createcybernetics.muscleupgrades_synthmuscle": "Synthetic Muscle",
   "item.createcybernetics.muscleupgrades_wiredreflexes": "Wired Reflexes",
 
-  "item.createcybernetics.wetware_firebreathinggland": "Dragon Breath Gland",
+  "item.createcybernetics.wetware_blubber": "Polar Bear Fat",
+  "item.createcybernetics.wetware_firebreathinggland": "Igniphorus Gland",
   "item.createcybernetics.wetware_gills": "Fish Gills",
   "item.createcybernetics.wetware_guardianeye": "Guardian Eye",
   "item.createcybernetics.wetware_polarbearfur": "Polar Bear Fur",
   "item.createcybernetics.wetware_ravagertendons": "Ravager Tendons",
+  "item.createcybernetics.wetware_sculklungs": "Sculk Lungs",
+  "item.createcybernetics.wetware_tacticalinksac": "Tactical Ink Sac",
+  "item.createcybernetics.wetware_aerostasisgyrobladder": "Aerostatic Gryobladder",
 
+
+  "item.createcybernetics.scavenged_rightleg": "Right Cyberleg",
+  "item.createcybernetics.scavenged_leftleg": "Left Cyberleg",
+  "item.createcybernetics.scavenged_rightarm": "Right Cyberarm",
+  "item.createcybernetics.scavenged_leftarm": "Left Cyberarm",
+  "item.createcybernetics.scavenged_cybereyes": "Cybereyes",
+  "item.createcybernetics.scavenged_linearframe": "Linear Frame",
+  "item.createcybernetics.scavenged_hudlens": "HUDlens",
+  "item.createcybernetics.scavenged_navigationchip": "Navigation Module",
+  "item.createcybernetics.scavenged_hudjack": "HUDjack Module",
+  "item.createcybernetics.scavenged_nightvision": "Low Light Module",
+  "item.createcybernetics.scavenged_targeting": "Targeting Module",
+  "item.createcybernetics.scavenged_underwatervision": "Watervision Module",
+  "item.createcybernetics.scavenged_zoom": "Optic Zoom Module",
+  "item.createcybernetics.scavenged_armcannon": "Arm Cannon",
+  "item.createcybernetics.scavenged_flywheel": "Quickdraw Flywheel",
+  "item.createcybernetics.scavenged_claws": "Retractable Claws",
+  "item.createcybernetics.scavenged_crafthands": "Crafting Hands",
+  "item.createcybernetics.scavenged_drillfist": "Drillfist",
+  "item.createcybernetics.scavenged_firestarter": "Firestarter",
+  "item.createcybernetics.scavenged_pneumaticwrist": "Pneumatic Wrist",
+  "item.createcybernetics.scavenged_reinforcedknuckles": "Reinforced Knuckles",
+  "item.createcybernetics.scavenged_metaldetector": "Metal Detector",
+  "item.createcybernetics.scavenged_anklebracers": "Ankle Bracers",
+  "item.createcybernetics.scavenged_jumpboost": "Pneumatic Ankles",
+  "item.createcybernetics.scavenged_propellers": "Calf Propellers",
+  "item.createcybernetics.scavenged_spurs": "Implanted Spurs",
+  "item.createcybernetics.scavenged_ocelotpaws": "Ocelot Paws",
+  "item.createcybernetics.scavenged_bonebattery": "Marrow Battery",
+  "item.createcybernetics.scavenged_boneflex": "Citrate Enhancement",
+  "item.createcybernetics.scavenged_bonelacing": "Bonelacing",
+  "item.createcybernetics.scavenged_elytra": "Deployable Elytra",
+  "item.createcybernetics.scavenged_piezo": "Piezoelectric Energy Generator",
+  "item.createcybernetics.scavenged_spinalinjector": "Spinal Injector",
+  "item.createcybernetics.scavenged_eyeofdefender": "Eye of Defender",
+  "item.createcybernetics.scavenged_consciousnesstransmitter": "Needlecaster",
+  "item.createcybernetics.scavenged_corticalstack": "Cortical Stack",
+  "item.createcybernetics.scavenged_enderjammer": "Enderjammer",
+  "item.createcybernetics.scavenged_matrix": "Threat Matrix",
+  "item.createcybernetics.scavenged_neuralcontextualizer": "Neural Contextualizer",
+  "item.createcybernetics.scavenged_cyberdeck": "Cyberdeck",
+  "item.createcybernetics.scavenged_idem": "I.D.E.M.",
+  "item.createcybernetics.scavenged_cyberheart": "Mechanical Heart",
+  "item.createcybernetics.scavenged_coupler": "Cardiovascular Coupler",
+  "item.createcybernetics.scavenged_creeperheart": "Creeperheart",
+  "item.createcybernetics.scavenged_defibrillator": "Internal Defibrillator",
+  "item.createcybernetics.scavenged_stemcell": "Stem Cell Synthesizer",
+  "item.createcybernetics.scavenged_platelets": "Platelet Dispatcher",
+  "item.createcybernetics.scavenged_hyperoxygenation": "Hyperoxygenation Boost",
+  "item.createcybernetics.scavenged_oxygen": "Internal Oxygen Tank",
+  "item.createcybernetics.scavenged_adrenaline": "Adrenal Pump",
+  "item.createcybernetics.scavenged_battery": "Internal Battery",
+  "item.createcybernetics.scavenged_diamondwaferstack": "Diamond Waferstack",
+  "item.createcybernetics.scavenged_dualisticconverter": "Dualistic Converter",
+  "item.createcybernetics.scavenged_liverfilter": "Liver Filter",
+  "item.createcybernetics.scavenged_metabolic": "Metabolic Converter",
+  "item.createcybernetics.scavenged_densebattery": "Dense Battery",
+  "item.createcybernetics.scavenged_arterialturbine": "Arterial Turbine",
+  "item.createcybernetics.scavenged_chromatophores": "Synthetic Chromatophores",
+  "item.createcybernetics.scavenged_synthskin": "SynthSkin",
+  "item.createcybernetics.scavenged_immuno": "Immunosuppressor",
+  "item.createcybernetics.scavenged_faceplate": "Interchangeable Faceplate",
+  "item.createcybernetics.scavenged_netheriteplating": "Isothermal Plating",
+  "item.createcybernetics.scavenged_solarskin": "SolarSkin",
+  "item.createcybernetics.scavenged_subdermalarmor": "Subdermal Armor",
+  "item.createcybernetics.scavenged_subdermalspikes": "Subdermal Spikes",
+  "item.createcybernetics.scavenged_sweat": "Enhanced Sweat Glands",
+  "item.createcybernetics.scavenged_synthmuscle": "Synthetic Muscle",
+  "item.createcybernetics.scavenged_wiredreflexes": "Wired Reflexes",
 
 
   "block.createcybernetics.titaniumore_block": "Titanium Ore",
@@ -131,21 +226,45 @@
   "block.createcybernetics.raw_titanium_block": "Block of Raw Titanium",
 
 
+  "block.createcybernetics.robosurgeon": "Robosurgeon",
   "block.createcybernetics.surgery_chamber": "Surgery Chamber",
+
+
+  "entity.mccourse.smasher": "Smasher",
+  "entity.mccourse.punklin": "Punklin",
+  "entity.mccourse.pigstrom": "Pigstrom",
+  "entity.mccourse.hogboy": "HogBoy",
+
+
+  "effect.createcybernetics.cyberware_rejection": "Cyberware Rejection",
+
+  "painting.createcybernetics.technomancer.title": "Technomancer 1",
+  "painting.createcybernetics.technomancer.author": "Perigrine3",
+  "painting.createcybernetics.technomancer2.title": "Technomancer 2",
+  "painting.createcybernetics.technomancer2.author": "Perigrine3",
+  "painting.createcybernetics.night_punk.title": "Night Punk",
+  "painting.createcybernetics.night_punk.author": "Perigrine3",
+  "painting.createcybernetics.city_streets.title": "City Streets",
+  "painting.createcybernetics.city_streets.author": "Perigrine3",
+  "painting.createcybernetics.the_punk_in_the_cyber.title": "The Punk In The Cyber",
+  "painting.createcybernetics.the_punk_in_the_cyber.author": "Perigrine3",
+  "painting.createcybernetics.cyberpsycho.title": "Cyberpsycho",
+  "painting.createcybernetics.cyberpsycho.author": "Perigrine3",
+
+
 
   "creativetab.createcybernetics.create_cybernetics_tab": "Create: Cybernetics Items & Blocks",
   "creativetab.createcybernetics.create_cybernetics_upgrades_tab": "Create: Cybernetics",
 
 
-  "tooltip.createcybernetics.neuropozyne.tooltip": "§6Temporarily reduces §eCyberware Rejection§6 symptoms",
-  "tooltip.createcybernetics.cyberpunk_disc.tooltip": "Cyberpunk - [INSERT NAME HERE]",
-
-
-
                       "tooltip.createcybernetics.hold_shift_down": "§8Hold [§7Shift§8] for summary",
+
+  "tooltip.createcybernetics.neuropozyne.tooltip": "§6Temporarily reduces §eCyberware Rejection§6 symptoms",
 
 
                       "tooltip.createcybernetics.basiccomponent_tooltip": "§8§oBASIC COMPONENT",
+                      "tooltip.createcybernetics.legendarycomponent_tooltip": "§e§oLEGENDARY COMPONENT",
+
                       "tooltip.createcybernetics.wetware_tooltip": "§c§lWETWARE",
                       "tooltip.createcybernetics.basecyberware_tooltip": "§9§lBASE CYBERWARE",
                       "tooltip.createcybernetics.eyeupgrades_tooltip": "§9§lEYE UPGRADES",
@@ -160,6 +279,8 @@
                       "tooltip.createcybernetics.muscleupgrades_tooltip": "§9§lMUSCLE UPGRADES",
                       "tooltip.createcybernetics.wetwareupgrades_tooltip": "§4§lWETWARE UPGRADES",
 
+                      "tooltip.createcybernetics.scavenged_tooltip": "§6§oSCAVENGED CYBERWARE",
+
 
 
       "tooltip.createcybernetics.basecyberware_rightleg.tooltip1": "§1Cyberlimb Replacement",
@@ -172,13 +293,13 @@
       "tooltip.createcybernetics.eyeupgrades_hudlens.tooltip1": "§1Adds a HUD to the user's vision",
           "tooltip.createcybernetics.eyeupgrades_hudlens.tooltip2": "§7Requires §cEyeballs",
       "tooltip.createcybernetics.eyeupgrades_navigationchip.tooltip1": "§1Adds a minimap to the user's vision",
-          "tooltip.createcybernetics.eyeupgrades_navigationchip.tooltip2": "§7Requires §9Cybereyes",
+          "tooltip.createcybernetics.eyeupgrades_navigationchip.tooltip2": "§7Requires §9Cybereyes§7 & §9HUDjack",
       "tooltip.createcybernetics.eyeupgrades_hudjack.tooltip1": "§1Adds a HUD to the user's vision",
           "tooltip.createcybernetics.eyeupgrades_hudjack.tooltip2": "§7Requires §9Cybereyes",
       "tooltip.createcybernetics.eyeupgrades_nightvision.tooltip1": "§1Provides clarity in the dark",
           "tooltip.createcybernetics.eyeupgrades_nightvision.tooltip2": "§7Requires §9Cybereyes",
       "tooltip.createcybernetics.eyeupgrades_targeting.tooltip1": "§1Targets the last attacked creature",
-          "tooltip.createcybernetics.eyeupgrades_targeting.tooltip2": "§7Requires §9Cybereyes",
+          "tooltip.createcybernetics.eyeupgrades_targeting.tooltip2": "§7Requires §9Cybereyes§7 & §9HUDjack",
       "tooltip.createcybernetics.eyeupgrades_underwatervision.tooltip1": "§1Provides clarity underwater",
           "tooltip.createcybernetics.eyeupgrades_underwatervision.tooltip2": "§7Requires §9Cybereyes",
       "tooltip.createcybernetics.eyeupgrades_zoom.tooltip1": "§1Allows the user to see distant objects",
@@ -211,6 +332,8 @@
           "tooltip.createcybernetics.legupgrades_propellers.tooltip2": "§7Requires §9Cyberleg",
       "tooltip.createcybernetics.legupgrades_spurs.tooltip1": "§1Increases the speed of creatures the user is riding",
           "tooltip.createcybernetics.legupgrades_spurs.tooltip2": "§7Requires §9Cyberleg",
+      "tooltip.createcybernetics.legupgrades_ocelotpaws.tooltip1": "§1Makes all player movement silent",
+          "tooltip.createcybernetics.legupgrades_ocelotpaws.tooltip2": "§7Requires §9Cyberleg",
 
       "tooltip.createcybernetics.boneupgrades_bonebattery.tooltip1": "§1Stores energy",
           "tooltip.createcybernetics.boneupgrades_bonebattery.tooltip2": "§3Stacks up to 3x",
@@ -280,15 +403,20 @@
       "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip1": "§1Provides 1 armor levels",
           "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip2": "§3Stacks up to 5x",
       "tooltip.createcybernetics.skinupgrades_subdermalspikes.tooltip1": "§1Applies the Thorns effect when attacked",
+      "tooltip.createcybernetics.skinupgrades_sweat.tooltip1": "§1Releases large amounts of sweat to release heat",
 
       "tooltip.createcybernetics.muscleupgrades_synthmuscle.tooltip1": "§1Grants extra speed and strength",
       "tooltip.createcybernetics.muscleupgrades_wiredreflexes.tooltip1": "§1Turns the user to face attackers",
 
+      "tooltip.createcybernetics.wetware_blubber.tooltip1": "§cInsulates the user against the cold",
       "tooltip.createcybernetics.wetware_firebreathinggland.tooltip1": "§cAllows the user to shoot Dragon Fireballs",
       "tooltip.createcybernetics.wetware_gills.tooltip1": "§cAllows the user to breathe underwater",
       "tooltip.createcybernetics.wetware_guardianeye.tooltip1": "§cAllows the user to shoot Guardian Lasers",
       "tooltip.createcybernetics.wetware_polarbearfur.tooltip1": "§cNegates the freezing status effect",
-      "tooltip.createcybernetics.wetware_ravagertendons.tooltip1": "§cProvides strength and durability to the user"
+      "tooltip.createcybernetics.wetware_ravagertendons.tooltip1": "§cProvides strength and durability to the user",
+      "tooltip.createcybernetics.wetware_sculklungs.tooltip1": "§cAllows the user to emit a sonic shriek attack",
+      "tooltip.createcybernetics.wetware_tacticalinksac.tooltip1": "§cUser inflicts blindness on attackers",
+      "tooltip.createcybernetics.wetware_aerostasisgyrobladder.tooltip1": "§cUser gains some flight abilities"
 
 
 }

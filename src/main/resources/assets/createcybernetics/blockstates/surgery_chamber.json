@@ -1,13 +1,24 @@
 {
   "variants": {
-    "facing=north,opened=false,slave=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom" },
-    "facing=south,opened=false,slave=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 180 },
-    "facing=east,opened=false,slave=false":  { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 90 },
-    "facing=west,opened=false,slave=false":  { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 270 },
+    "facing=north,opened=false,slave=false,surgery_done=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom" },
+    "facing=south,opened=false,slave=false,surgery_done=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 180 },
+    "facing=east,opened=false,slave=false,surgery_done=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 90 },
+    "facing=west,opened=false,slave=false,surgery_done=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 270 },
 
-    "facing=north,opened=true,slave=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened" },
-    "facing=south,opened=true,slave=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 180 },
-    "facing=east,opened=true,slave=false":  { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 90 },
-    "facing=west,opened=true,slave=false":  { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 270 }
+    "facing=north,opened=true,slave=false,surgery_done=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened" },
+    "facing=south,opened=true,slave=false,surgery_done=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 180 },
+    "facing=east,opened=true,slave=false,surgery_done=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 90 },
+    "facing=west,opened=true,slave=false,surgery_done=false": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 270 },
+
+    "facing=north,opened=false,slave=false,surgery_done=true": { "model": "createcybernetics:block/surgery_chamber_block_bottom" },
+    "facing=south,opened=false,slave=false,surgery_done=true": { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 180 },
+    "facing=east,opened=false,slave=false,surgery_done=true": { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 90 },
+    "facing=west,opened=false,slave=false,surgery_done=true": { "model": "createcybernetics:block/surgery_chamber_block_bottom", "y": 270 },
+
+    "facing=north,opened=true,slave=false,surgery_done=true": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened" },
+    "facing=south,opened=true,slave=false,surgery_done=true": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 180 },
+    "facing=east,opened=true,slave=false,surgery_done=true": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 90 },
+    "facing=west,opened=true,slave=false,surgery_done=true": { "model": "createcybernetics:block/surgery_chamber_block_bottom_opened", "y": 270 }
   }
 }
+

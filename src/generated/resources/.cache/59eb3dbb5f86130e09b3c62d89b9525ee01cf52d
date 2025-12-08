@@ -1,6 +1,8 @@
-// 1.21.1	2025-12-01T15:35:02.6352962	Loot Tables
+// 1.21.1	2025-12-03T12:12:09.3315371	Loot Tables
 c8a4d3132b2416fe46c16482b8eac45044f7f755 data/createcybernetics/loot_table/blocks/deepslate_titaniumore_block.json
 9aaf5d4aa3e77b3db8a2e448152e5b2508ee6631 data/createcybernetics/loot_table/blocks/raw_titanium_block.json
-8392b4196d209c2953e15e0578380d6edef54109 data/createcybernetics/loot_table/blocks/surgery_chamber_block.json
+55ad66f16b807ca67f154b3f87fc95f744b5740f data/createcybernetics/loot_table/blocks/robosurgeon.json
+87c8c2e6317039467f40c828aaccaa1f1401ccf8 data/createcybernetics/loot_table/blocks/surgery_chamber.json
+35a7b7fed80305b39bec1c4b7041c2b460c97836 data/createcybernetics/loot_table/blocks/surgery_chamber_top.json
 915b212d6a0ba767f4735e1a40b6df19c8a93e58 data/createcybernetics/loot_table/blocks/titaniumore_block.json
 4331278e56dcbb0efc37d2228dfc0160309bd648 data/createcybernetics/loot_table/blocks/titanium_block.json

@@ -1,13 +1,15 @@
 package com.perigrine3.createcybernetics.item;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.entity.ModEntities;
+import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -36,25 +38,48 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> EXPCAPSULE = ITEMS.register("expcapsule",
             () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> NEUROPOZYNE = ITEMS.register("neuropozyne",
-            () -> new Item(new Item.Properties().stacksTo(16)) {
+    public static final DeferredItem<Item> NETHERITE_QPU = ITEMS.register("netherite_qpu",
+            () -> new Item(new Item.Properties()){
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legendarycomponent_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+
+    public static final DeferredItem<Item> NEUROPOZYNE = ITEMS.register("neuropozyne",
+            () -> new Item(new Item.Properties().stacksTo(16).food(ModFoodProperties.NEUROPOZYNE)) {
+                @Override
+                public UseAnim getUseAnimation(ItemStack stack) {
+                    return UseAnim.BOW;
+                }
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context , List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     if (Screen.hasShiftDown()) {
                         tooltipComponents.add(Component.translatable("tooltip.createcybernetics.neuropozyne.tooltip"));
                     } else {
                         tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
                     }
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-                }});
+                }
+    });
 
-    public static final DeferredItem<Item> CYBERPUNK_DISC = ITEMS.register("cyberpunk_disc",
-            () -> new Item(new Item.Properties().stacksTo(1)) {
-                @Override
-                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.cyberpunk_disc.tooltip"));
-                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-                }});
+    public static final DeferredItem<Item> MUSIC_DISC_CYBERPSYCHO = ITEMS.register("music_disc_cyberpsycho",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.CYBERPSYCHO_KEY)));
+        public static final DeferredItem<Item> MUSIC_DISC_NEON_OVERLORDS = ITEMS.register("music_disc_neon_overlords",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.NEON_OVERLORDS_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_NEUROHACK = ITEMS.register("music_disc_neurohack",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.NEUROHACK_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_THE_GRID = ITEMS.register("music_disc_the_grid",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.THE_GRID_KEY)));
+
+
+//SPAWN EGGS
+    public static final DeferredItem<Item> SMASHER_SPAWN_EGG = ITEMS.register("smasher_spawn_egg",
+        () -> new DeferredSpawnEggItem(ModEntities.SMASHER, 0x7f7b7b, 0xf44336,
+                new Item.Properties()));
+    public static final DeferredItem<Item> CYBERZOMBIE_SPAWN_EGG = ITEMS.register("cyberzombie_spawn_egg",
+        () -> new DeferredSpawnEggItem(ModEntities.CYBERZOMBIE, 0x2596be, 0x3c5740,
+                new Item.Properties()));
 
 
 //BASIC COMPONENTS
@@ -231,6 +256,32 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> BODYPART_SKIN = ITEMS.register("bodypart_skin",
+            () -> new Item(new Item.Properties().stacksTo(16)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+
+//ANIMAL BODYPARTS
+    public static final DeferredItem<Item> BODYPART_GUARDIANRETINA = ITEMS.register("bodypart_guardianretina",
+            () -> new Item(new Item.Properties().stacksTo(16)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BODYPART_WARDENESOPHAGUS = ITEMS.register("bodypart_wardenesophagus",
+            () -> new Item(new Item.Properties().stacksTo(16)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BODYPART_GYROSCOPICBLADDER = ITEMS.register("bodypart_gyroscopicbladder",
             () -> new Item(new Item.Properties().stacksTo(16)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -635,6 +686,21 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
+    public static final DeferredItem<Item> LEGUPGRADES_OCELOTPAWS = ITEMS.register("legupgrades_ocelotpaws",
+        () -> new Item(new Item.Properties().stacksTo(1)) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legupgrades_ocelotpaws.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legupgrades_ocelotpaws.tooltip2"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
 
 //BONE UPGRADES
     public static final DeferredItem<Item> BONEUPGRADES_BONEBATTERY = ITEMS.register("boneupgrades_bonebattery",
@@ -761,7 +827,7 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
-    public static final DeferredItem<Item> BRAINUPGRADES_CORTICALSTACK = ITEMS.register("brainupgrades_corticalstack",
+        public static final DeferredItem<Item> BRAINUPGRADES_CORTICALSTACK = ITEMS.register("brainupgrades_corticalstack",
             () -> new Item(new Item.Properties().stacksTo(1)) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -1221,6 +1287,22 @@ public class ModItems {
             }
         });
 
+    //COLD SWEAT COMPAT
+        public static final DeferredItem<Item> SKINUPGRADES_SWEAT = ITEMS.register("skinupgrades_sweat",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_sweat.tooltip1"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
+
 //MUSCLE UPGRADES
     public static final DeferredItem<Item> MUSCLEUPGRADES_SYNTHMUSCLE = ITEMS.register("muscleupgrades_synthmuscle",
         () -> new Item(new Item.Properties().stacksTo(1)) {
@@ -1252,6 +1334,23 @@ public class ModItems {
         });
 
 //WETWARE UPGRADES
+
+    //COLD SWEAT COMPAT
+        public static final DeferredItem<Item> WETWARE_BLUBBER = ITEMS.register("wetware_blubber",
+                () -> new Item(new Item.Properties().stacksTo(1)) {
+                    @Override
+                    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                        if (Screen.hasShiftDown()) {
+                            tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetwareupgrades_tooltip"));
+                            tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_blubber.tooltip1"));
+                        } else {
+                            tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetwareupgrades_tooltip"));
+                            tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                        }
+                        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                    }
+                });
+
     public static final DeferredItem<Item> WETWARE_FIREBREATHINGGLAND = ITEMS.register("wetware_firebreathinggland",
         () -> new Item(new Item.Properties().stacksTo(1)) {
             @Override
@@ -1322,8 +1421,596 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
+    public static final DeferredItem<Item> WETWARE_SCULKLUNGS = ITEMS.register("wetware_sculklungs",
+        () -> new Item(new Item.Properties().stacksTo(1)) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetwareupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_sculklungs.tooltip1"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetwareupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
+    public static final DeferredItem<Item> WETWARE_TACTICALINKSAC = ITEMS.register("wetware_tacticalinksac",
+        () -> new Item(new Item.Properties().stacksTo(1)) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetwareupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_tacticalinksac.tooltip1"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetwareupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
+    public static final DeferredItem<Item> WETWARE_AEROSTASISGYROBLADDER = ITEMS.register("wetware_aerostasisgyrobladder",
+        () -> new Item(new Item.Properties().stacksTo(1)) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetwareupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_aerostasisgyrobladder.tooltip1"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetwareupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
 
 
+
+//SCAVENGED CYBERWARE
+    public static final DeferredItem<Item> SCAVENGED_RIGHTLEG = ITEMS.register("scavenged_rightleg",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_LEFTLEG = ITEMS.register("scavenged_leftleg",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_RIGHTARM = ITEMS.register("scavenged_rightarm",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_LEFTARM = ITEMS.register("scavenged_leftarm",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_LINEARFRAME = ITEMS.register("scavenged_linearframe",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CYBEREYES = ITEMS.register("scavenged_cybereyes",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_HUDLENS = ITEMS.register("scavenged_hudlens",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_NAVIGATIONCHIP = ITEMS.register("scavenged_navigationchip",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_HUDJACK = ITEMS.register("scavenged_hudjack",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_NIGHTVISION = ITEMS.register("scavenged_nightvision",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_TARGETING = ITEMS.register("scavenged_targeting",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item>SCAVENGED_UNDERWATERVISION = ITEMS.register("scavenged_underwatervision",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_ZOOM = ITEMS.register("scavenged_zoom",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_ARMCANNON = ITEMS.register("scavenged_armcannon",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_FLYWHEEL = ITEMS.register("scavenged_flywheel",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CLAWS = ITEMS.register("scavenged_claws",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CRAFTHANDS = ITEMS.register("scavenged_crafthands",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_DRILLFIST = ITEMS.register("scavenged_drillfist",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_FIRESTARTER = ITEMS.register("scavenged_firestarter",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_PNEUMATICWRIST = ITEMS.register("scavenged_pneumaticwrist",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_REINFORCEDKNUCKLES = ITEMS.register("scavenged_reinforcedknuckles",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_METALDETECTOR = ITEMS.register("scavenged_metaldetector",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_ANKLEBRACERS = ITEMS.register("scavenged_anklebracers",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_JUMPBOOST = ITEMS.register("scavenged_jumpboost",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_PROPELLERS = ITEMS.register("scavenged_propellers",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_SPURS = ITEMS.register("scavenged_spurs",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_OCELOTPAWS = ITEMS.register("scavenged_ocelotpaws",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_BONEBATTERY = ITEMS.register("scavenged_bonebattery",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_BONEFLEX = ITEMS.register("scavenged_boneflex",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_BONELACING = ITEMS.register("scavenged_bonelacing",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_ELYTRA = ITEMS.register("scavenged_elytra",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_PIEZO = ITEMS.register("scavenged_piezo",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_SPINALINJECTOR = ITEMS.register("scavenged_spinalinjector",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_EYEOFDEFENDER = ITEMS.register("scavenged_eyeofdefender",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CONCIOUSNESSTRANSMITTER = ITEMS.register("scavenged_consciousnesstransmitter",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CORTICALSTACK = ITEMS.register("scavenged_corticalstack",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_ENDERJAMMER = ITEMS.register("scavenged_enderjammer",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_MATRIX = ITEMS.register("scavenged_matrix",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_NEURALCONTEXTUALIZER = ITEMS.register("scavenged_neuralcontextualizer",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CYBERDECK = ITEMS.register("scavenged_cyberdeck",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_IDEM = ITEMS.register("scavenged_idem",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CYBERHEART = ITEMS.register("scavenged_cyberheart",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_COUPLER = ITEMS.register("scavenged_coupler",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CREEPERHEART = ITEMS.register("scavenged_creeperheart",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_DEFIBRILLATOR = ITEMS.register("scavenged_defibrillator",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_STEMCELL = ITEMS.register("scavenged_stemcell",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_PLATELETS = ITEMS.register("scavenged_platelets",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_HYPEROXYGENATION = ITEMS.register("scavenged_hyperoxygenation",
+            () -> new Item(new Item.Properties().stacksTo(1)){
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_OXYGEN = ITEMS.register("scavenged_oxygen",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_ADRENALINE = ITEMS.register("scavenged_adrenaline",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_BATTERY = ITEMS.register("scavenged_battery",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_DIAMONDWAFERSTACK = ITEMS.register("scavenged_diamondwaferstack",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_DUALISTICCONVERTER = ITEMS.register("scavenged_dualisticconverter",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_LIVERFILTER = ITEMS.register("scavenged_liverfilter",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_METABOLIC = ITEMS.register("scavenged_metabolic",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_DENSEBATTERY = ITEMS.register("scavenged_densebattery",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_ARTERIALTURBINE = ITEMS.register("scavenged_arterialturbine",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_CHROMATOPHORES = ITEMS.register("scavenged_chromatophores",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_SYNTHSKIN = ITEMS.register("scavenged_synthskin",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_IMMUNO = ITEMS.register("scavenged_immuno",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_FACEPLATE = ITEMS.register("scavenged_faceplate",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_NETHERITEPLATING = ITEMS.register("scavenged_netheriteplating",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_SOLARSKIN = ITEMS.register("scavenged_solarskin",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_SUBDERMALARMOR = ITEMS.register("scavenged_subdermalarmor",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_SUBDERMALSPIKES = ITEMS.register("scavenged_subdermalspikes",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_SWEAT = ITEMS.register("scavenged_sweat",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_SYNTHMUSCLE = ITEMS.register("scavenged_synthmuscle",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_WIREDREFLEXES = ITEMS.register("scavenged_wiredreflexes",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

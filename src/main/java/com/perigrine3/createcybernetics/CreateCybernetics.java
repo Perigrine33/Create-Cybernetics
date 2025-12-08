@@ -2,24 +2,24 @@ package com.perigrine3.createcybernetics;
 
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.component.ModDataComponents;
+import com.perigrine3.createcybernetics.effect.ModEffects;
+import com.perigrine3.createcybernetics.entity.ModEntities;
+import com.perigrine3.createcybernetics.entity.client.*;
 import com.perigrine3.createcybernetics.item.ModCreativeModeTabs;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.loot.ModLootModifiers;
+import com.perigrine3.createcybernetics.sound.ModSounds;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -29,9 +29,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -68,6 +65,11 @@ public class CreateCybernetics {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         ModDataComponents.register(eventBus);
+        ModEffects.register(eventBus);
+        ModLootModifiers.register(eventBus);
+
+        ModSounds.register(eventBus);
+        ModEntities.register(eventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -86,6 +88,11 @@ public class CreateCybernetics {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(ModBlocks.TITANIUM_BLOCK);
         }
+
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.accept(ModItems.SMASHER_SPAWN_EGG);
+            event.accept(ModItems.CYBERZOMBIE_SPAWN_EGG);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -93,5 +100,14 @@ public class CreateCybernetics {
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+    }
+
+    @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public static class ClientModEvents {
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            EntityRenderers.register(ModEntities.SMASHER.get(), SmasherRenderer::new);
+            EntityRenderers.register(ModEntities.CYBERZOMBIE.get(), CyberzombieRenderer::new);
+        }
     }
 }

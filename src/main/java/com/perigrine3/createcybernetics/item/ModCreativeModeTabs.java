@@ -24,7 +24,9 @@ public class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
 
                         //Adds items to the creative mode tab
+                        output.accept(ModBlocks.ROBOSURGEON);
                         output.accept(ModBlocks.SURGERY_CHAMBER_BOTTOM);
+                        output.accept(ModItems.NEUROPOZYNE);
 
                         output.accept(ModItems.RAWTITANIUM);
                         output.accept(ModItems.CRUSHEDTITANIUM);
@@ -33,9 +35,11 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TITANIUMSHEET);
                         output.accept(ModItems.EYEUPGRADEBASE);
                         output.accept(ModItems.TITANIUM_HAND);
-                        output.accept(ModItems.NEUROPOZYNE);
 
-                        output.accept(ModItems.CYBERPUNK_DISC);
+                        output.accept(ModItems.MUSIC_DISC_CYBERPSYCHO);
+                        output.accept(ModItems.MUSIC_DISC_NEON_OVERLORDS);
+                        output.accept(ModItems.MUSIC_DISC_NEUROHACK);
+                        output.accept(ModItems.MUSIC_DISC_THE_GRID);
 
                         //COMPONENTS
                         output.accept(ModItems.COMPONENT_ACTUATOR);
@@ -48,6 +52,84 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.COMPONENT_STORAGE);
                         output.accept(ModItems.COMPONENT_SYNTHNERVES);
                         output.accept(ModItems.COMPONENT_MESH);
+
+                        output.accept(ModItems.NETHERITE_QPU);
+
+                        //WETWARE PARTS
+                        output.accept(ModItems.BODYPART_GUARDIANRETINA);
+                        output.accept(ModItems.BODYPART_WARDENESOPHAGUS);
+                        output.accept(ModItems.BODYPART_GYROSCOPICBLADDER);
+
+                        //SCAVENGED PARTS
+                        output.accept(ModItems.SCAVENGED_RIGHTLEG);
+                        output.accept(ModItems.SCAVENGED_LEFTLEG);
+                        output.accept(ModItems.SCAVENGED_RIGHTARM);
+                        output.accept(ModItems.SCAVENGED_LEFTARM);
+                        output.accept(ModItems.SCAVENGED_CYBEREYES);
+                        output.accept(ModItems.SCAVENGED_LINEARFRAME);
+                        output.accept(ModItems.SCAVENGED_HUDLENS);
+                        output.accept(ModItems.SCAVENGED_NAVIGATIONCHIP);
+                        output.accept(ModItems.SCAVENGED_HUDJACK);
+                        output.accept(ModItems.SCAVENGED_NIGHTVISION);
+                        output.accept(ModItems.SCAVENGED_TARGETING);
+                        output.accept(ModItems.SCAVENGED_UNDERWATERVISION);
+                        output.accept(ModItems.SCAVENGED_ZOOM);
+                        output.accept(ModItems.SCAVENGED_ARMCANNON);
+                        output.accept(ModItems.SCAVENGED_FLYWHEEL);
+                        output.accept(ModItems.SCAVENGED_CLAWS);
+                        output.accept(ModItems.SCAVENGED_CRAFTHANDS);
+                        output.accept(ModItems.SCAVENGED_DRILLFIST);
+                        output.accept(ModItems.SCAVENGED_FIRESTARTER);
+                        output.accept(ModItems.SCAVENGED_PNEUMATICWRIST);
+                        output.accept(ModItems.SCAVENGED_REINFORCEDKNUCKLES);
+                        output.accept(ModItems.SCAVENGED_METALDETECTOR);
+                        output.accept(ModItems.SCAVENGED_ANKLEBRACERS);
+                        output.accept(ModItems.SCAVENGED_JUMPBOOST);
+                        output.accept(ModItems.SCAVENGED_PROPELLERS);
+                        output.accept(ModItems.SCAVENGED_SPURS);
+                        output.accept(ModItems.SCAVENGED_OCELOTPAWS);
+                        output.accept(ModItems.SCAVENGED_BONEBATTERY);
+                        output.accept(ModItems.SCAVENGED_BONEFLEX);
+                        output.accept(ModItems.SCAVENGED_BONELACING);
+                        output.accept(ModItems.SCAVENGED_ELYTRA);
+                        output.accept(ModItems.SCAVENGED_PIEZO);
+                        output.accept(ModItems.SCAVENGED_SPINALINJECTOR);
+                        output.accept(ModItems.SCAVENGED_EYEOFDEFENDER);
+                        output.accept(ModItems.SCAVENGED_CONCIOUSNESSTRANSMITTER);
+                        output.accept(ModItems.SCAVENGED_CORTICALSTACK);
+                        output.accept(ModItems.SCAVENGED_ENDERJAMMER);
+                        output.accept(ModItems.SCAVENGED_MATRIX);
+                        output.accept(ModItems.SCAVENGED_NEURALCONTEXTUALIZER);
+                        output.accept(ModItems.SCAVENGED_CYBERDECK);
+                        output.accept(ModItems.SCAVENGED_IDEM);
+                        output.accept(ModItems.SCAVENGED_CYBERHEART);
+                        output.accept(ModItems.SCAVENGED_COUPLER);
+                        output.accept(ModItems.SCAVENGED_CREEPERHEART);
+                        output.accept(ModItems.SCAVENGED_DEFIBRILLATOR);
+                        output.accept(ModItems.SCAVENGED_STEMCELL);
+                        output.accept(ModItems.SCAVENGED_PLATELETS);
+                        output.accept(ModItems.SCAVENGED_HYPEROXYGENATION);
+                        output.accept(ModItems.SCAVENGED_OXYGEN);
+                        output.accept(ModItems.SCAVENGED_ADRENALINE);
+                        output.accept(ModItems.SCAVENGED_BATTERY);
+                        output.accept(ModItems.SCAVENGED_DIAMONDWAFERSTACK);
+                        output.accept(ModItems.SCAVENGED_DUALISTICCONVERTER);
+                        output.accept(ModItems.SCAVENGED_LIVERFILTER);
+                        output.accept(ModItems.SCAVENGED_METABOLIC);
+                        output.accept(ModItems.SCAVENGED_DENSEBATTERY);
+                        output.accept(ModItems.SCAVENGED_ARTERIALTURBINE);
+                        output.accept(ModItems.SCAVENGED_CHROMATOPHORES);
+                        output.accept(ModItems.SCAVENGED_SYNTHSKIN);
+                        output.accept(ModItems.SCAVENGED_IMMUNO);
+                        output.accept(ModItems.SCAVENGED_FACEPLATE);
+                        output.accept(ModItems.SCAVENGED_NETHERITEPLATING);
+                        output.accept(ModItems.SCAVENGED_SOLARSKIN);
+                        output.accept(ModItems.SCAVENGED_SUBDERMALARMOR);
+                        output.accept(ModItems.SCAVENGED_SUBDERMALSPIKES);
+                        output.accept(ModItems.SCAVENGED_SWEAT);
+                        output.accept(ModItems.SCAVENGED_SYNTHMUSCLE);
+                        output.accept(ModItems.SCAVENGED_WIREDREFLEXES);
+
 
                     }).build());
 
@@ -102,6 +184,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.LEGUPGRADES_JUMPBOOST);
                         output.accept(ModItems.LEGUPGRADES_PROPELLERS);
                         output.accept(ModItems.LEGUPGRADES_SPURS);
+                        output.accept(ModItems.LEGUPGRADES_OCELOTPAWS);
                     //BONE UPGRADES
                         output.accept(ModItems.BONEUPGRADES_BONEBATTERY);
                         output.accept(ModItems.BONEUPGRADES_BONEFLEX);
@@ -147,15 +230,20 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SKINUPGRADES_SOLARSKIN);
                         output.accept(ModItems.SKINUPGRADES_SUBDERMALARMOR);
                         output.accept(ModItems.SKINUPGRADES_SUBDERMALSPIKES);
+                        output.accept(ModItems.SKINUPGRADES_SWEAT);
                     //MUSCLE UPGRADES
                         output.accept(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE);
                         output.accept(ModItems.MUSCLEUPGRADES_WIREDREFLEXES);
                     //WETWARE UPGRADES
+                        output.accept(ModItems.WETWARE_BLUBBER);
                         output.accept(ModItems.WETWARE_FIREBREATHINGGLAND);
                         output.accept(ModItems.WETWARE_GILLS);
                         output.accept(ModItems.WETWARE_GUARDIANEYE);
                         output.accept(ModItems.WETWARE_POLARBEARFUR);
                         output.accept(ModItems.WETWARE_RAVAGERTENDONS);
+                        output.accept(ModItems.WETWARE_SCULKLUNGS);
+                        output.accept(ModItems.WETWARE_TACTICALINKSAC);
+                        output.accept(ModItems.WETWARE_AEROSTASISGYROBLADDER);
 
 
 

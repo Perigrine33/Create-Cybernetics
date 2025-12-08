@@ -1,0 +1,34 @@
+{
+  "cyberpsycho": {
+    "sounds": [
+      {
+        "name": "createcybernetics:cyberpsycho",
+        "stream": true
+      }
+    ]
+  },
+  "neon_overlords": {
+    "sounds": [
+      {
+        "name": "createcybernetics:neon_overlords",
+        "stream": true
+      }
+    ]
+  },
+  "neurohack": {
+    "sounds": [
+      {
+        "name": "createcybernetics:neurohack",
+        "stream": true
+      }
+    ]
+  },
+  "the_grid": {
+    "sounds": [
+      {
+        "name": "createcybernetics:the_grid",
+        "stream": true
+      }
+    ]
+  }
+}

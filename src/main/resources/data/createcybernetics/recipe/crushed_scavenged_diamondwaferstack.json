@@ -1,0 +1,44 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_diamondwaferstack"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_wiring"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:diamond"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:end_crystal"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:blue_dye"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:red_dye"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:black_dye"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

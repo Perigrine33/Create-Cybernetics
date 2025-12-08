@@ -23,7 +23,19 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.TITANIUM_HAND.get());
         basicItem(ModItems.NEUROPOZYNE.get());
         basicItem(ModItems.EXPCAPSULE.get());
-        basicItem(ModItems.CYBERPUNK_DISC.get());
+        basicItem(ModItems.NETHERITE_QPU.get());
+
+        basicItem(ModItems.MUSIC_DISC_CYBERPSYCHO.get());
+        basicItem(ModItems.MUSIC_DISC_NEON_OVERLORDS.get());
+        basicItem(ModItems.MUSIC_DISC_NEUROHACK.get());
+        basicItem(ModItems.MUSIC_DISC_THE_GRID.get());
+
+        withExistingParent(ModItems.SMASHER_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.CYBERZOMBIE_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+
+
+//COMPONENT
+        {
         basicItem(ModItems.COMPONENT_ACTUATOR.get());
         basicItem(ModItems.COMPONENT_FIBEROPTICS.get());
         basicItem(ModItems.COMPONENT_WIRING.get());
@@ -34,6 +46,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COMPONENT_STORAGE.get());
         basicItem(ModItems.COMPONENT_SYNTHNERVES.get());
         basicItem(ModItems.COMPONENT_MESH.get());
+    }
+
+//BODY PART
+        {
         basicItem(ModItems.BODYPART_RIGHTLEG.get());
         basicItem(ModItems.BODYPART_LEFTLEG.get());
         basicItem(ModItems.BODYPART_RIGHTARM.get());
@@ -47,12 +63,27 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BODYPART_INTESTINES.get());
         basicItem(ModItems.BODYPART_MUSCLE.get());
         basicItem(ModItems.BODYPART_SKIN.get());
+    }
+
+//ANIMAL BODY PARTS
+        {
+        basicItem(ModItems.BODYPART_GUARDIANRETINA.get());
+        basicItem(ModItems.BODYPART_WARDENESOPHAGUS.get());
+        basicItem(ModItems.BODYPART_GYROSCOPICBLADDER.get());
+    }
+
+//BASE
+        {
         basicItem(ModItems.BASECYBERWARE_RIGHTLEG.get());
         basicItem(ModItems.BASECYBERWARE_LEFTLEG.get());
         basicItem(ModItems.BASECYBERWARE_RIGHTARM.get());
         basicItem(ModItems.BASECYBERWARE_LEFTARM.get());
         basicItem(ModItems.BASECYBERWARE_CYBEREYES.get());
         basicItem(ModItems.BASECYBERWARE_LINEARFRAME.get());
+    }
+
+//EYES
+        {
         basicItem(ModItems.EYEUPGRADES_HUDLENS.get());
         basicItem(ModItems.EYEUPGRADES_NAVIGATIONCHIP.get());
         basicItem(ModItems.EYEUPGRADES_HUDJACK.get());
@@ -60,6 +91,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.EYEUPGRADES_TARGETING.get());
         basicItem(ModItems.EYEUPGRADES_UNDERWATERVISION.get());
         basicItem(ModItems.EYEUPGRADES_ZOOM.get());
+    }
+
+//ARMS
+        {
         basicItem(ModItems.ARMUPGRADES_ARMCANNON.get());
         basicItem(ModItems.ARMUPGRADES_FLYWHEEL.get());
         basicItem(ModItems.ARMUPGRADES_CLAWS.get());
@@ -68,17 +103,30 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.ARMUPGRADES_FIRESTARTER.get());
         basicItem(ModItems.ARMUPGRADES_PNEUMATICWRIST.get());
         basicItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get());
+    }
+
+//LEGS
+        {
         basicItem(ModItems.LEGUPGRADES_METALDETECTOR.get());
         basicItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get());
         basicItem(ModItems.LEGUPGRADES_JUMPBOOST.get());
         basicItem(ModItems.LEGUPGRADES_PROPELLERS.get());
         basicItem(ModItems.LEGUPGRADES_SPURS.get());
+        basicItem(ModItems.LEGUPGRADES_OCELOTPAWS.get());
+    }
+
+//BONE
+        {
         basicItem(ModItems.BONEUPGRADES_BONEBATTERY.get());
         basicItem(ModItems.BONEUPGRADES_BONEFLEX.get());
         basicItem(ModItems.BONEUPGRADES_BONELACING.get());
         basicItem(ModItems.BONEUPGRADES_ELYTRA.get());
         basicItem(ModItems.BONEUPGRADES_PIEZO.get());
         basicItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get());
+    }
+
+//BRAIN
+        {
         basicItem(ModItems.BRAINUPGRADES_EYEOFDEFENDER.get());
         basicItem(ModItems.BRAINUPGRADES_CONCIOUSNESSTRANSMITTER.get());
         basicItem(ModItems.BRAINUPGRADES_CORTICALSTACK.get());
@@ -87,14 +135,26 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER.get());
         basicItem(ModItems.BRAINUPGRADES_CYBERDECK.get());
         basicItem(ModItems.BRAINUPGRADES_IDEM.get());
+    }
+
+//HEART
+        {
         basicItem(ModItems.HEARTUPGRADES_CYBERHEART.get());
         basicItem(ModItems.HEARTUPGRADES_COUPLER.get());
         basicItem(ModItems.HEARTUPGRADES_CREEPERHEART.get());
         basicItem(ModItems.HEARTUPGRADES_DEFIBRILLATOR.get());
         basicItem(ModItems.HEARTUPGRADES_STEMCELL.get());
         basicItem(ModItems.HEARTUPGRADES_PLATELETS.get());
+    }
+
+//LUNGS
+        {
         basicItem(ModItems.LUNGSUPGRADES_HYPEROXYGENATION.get());
         basicItem(ModItems.LUNGSUPGRADES_OXYGEN.get());
+    }
+
+//ORGANS
+        {
         basicItem(ModItems.ORGANSUPGRADES_ADRENALINE.get());
         basicItem(ModItems.ORGANSUPGRADES_BATTERY.get());
         basicItem(ModItems.ORGANSUPGRADES_DIAMONDWAFERSTACK.get());
@@ -103,6 +163,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.ORGANSUPGRADES_MAGICCATALYST.get());
         basicItem(ModItems.ORGANSUPGRADES_METABOLIC.get());
         basicItem(ModItems.ORGANSUPGRADES_DENSEBATTERY.get());
+    }
+
+//SKIN
+        {
         basicItem(ModItems.SKINUPGRADES_ARTERIALTURBINE.get());
         basicItem(ModItems.SKINUPGRADES_CHROMATOPHORES.get());
         basicItem(ModItems.SKINUPGRADES_SYNTHSKIN.get());
@@ -112,13 +176,100 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SKINUPGRADES_SOLARSKIN.get());
         basicItem(ModItems.SKINUPGRADES_SUBDERMALARMOR.get());
         basicItem(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get());
+        basicItem(ModItems.SKINUPGRADES_SWEAT.get());
+    }
+
+//MUSCLE
+        {
         basicItem(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get());
         basicItem(ModItems.MUSCLEUPGRADES_WIREDREFLEXES.get());
-        basicItem(ModItems.WETWARE_FIREBREATHINGGLAND.get());
-        basicItem(ModItems.WETWARE_GILLS.get());
-        basicItem(ModItems.WETWARE_GUARDIANEYE.get());
-        basicItem(ModItems.WETWARE_POLARBEARFUR.get());
-        basicItem(ModItems.WETWARE_RAVAGERTENDONS.get());
+    }
 
+//WETWARE
+        {
+            basicItem(ModItems.WETWARE_BLUBBER.get());
+            basicItem(ModItems.WETWARE_FIREBREATHINGGLAND.get());
+            basicItem(ModItems.WETWARE_GILLS.get());
+            basicItem(ModItems.WETWARE_GUARDIANEYE.get());
+            basicItem(ModItems.WETWARE_POLARBEARFUR.get());
+            basicItem(ModItems.WETWARE_RAVAGERTENDONS.get());
+            basicItem(ModItems.WETWARE_SCULKLUNGS.get());
+            basicItem(ModItems.WETWARE_TACTICALINKSAC.get());
+            basicItem(ModItems.WETWARE_AEROSTASISGYROBLADDER.get());
+        }
+
+
+
+//SCAVENGED
+        {
+            basicItem(ModItems.SCAVENGED_RIGHTLEG.get());
+            basicItem(ModItems.SCAVENGED_LEFTLEG.get());
+            basicItem(ModItems.SCAVENGED_RIGHTARM.get());
+            basicItem(ModItems.SCAVENGED_LEFTARM.get());
+            basicItem(ModItems.SCAVENGED_CYBEREYES.get());
+            basicItem(ModItems.SCAVENGED_LINEARFRAME.get());
+            basicItem(ModItems.SCAVENGED_HUDLENS.get());
+            basicItem(ModItems.SCAVENGED_NAVIGATIONCHIP.get());
+            basicItem(ModItems.SCAVENGED_HUDJACK.get());
+            basicItem(ModItems.SCAVENGED_NIGHTVISION.get());
+            basicItem(ModItems.SCAVENGED_TARGETING.get());
+            basicItem(ModItems.SCAVENGED_UNDERWATERVISION.get());
+            basicItem(ModItems.SCAVENGED_ZOOM.get());
+            basicItem(ModItems.SCAVENGED_ARMCANNON.get());
+            basicItem(ModItems.SCAVENGED_FLYWHEEL.get());
+            basicItem(ModItems.SCAVENGED_CLAWS.get());
+            basicItem(ModItems.SCAVENGED_CRAFTHANDS.get());
+            basicItem(ModItems.SCAVENGED_DRILLFIST.get());
+            basicItem(ModItems.SCAVENGED_FIRESTARTER.get());
+            basicItem(ModItems.SCAVENGED_PNEUMATICWRIST.get());
+            basicItem(ModItems.SCAVENGED_REINFORCEDKNUCKLES.get());
+            basicItem(ModItems.SCAVENGED_METALDETECTOR.get());
+            basicItem(ModItems.SCAVENGED_ANKLEBRACERS.get());
+            basicItem(ModItems.SCAVENGED_JUMPBOOST.get());
+            basicItem(ModItems.SCAVENGED_PROPELLERS.get());
+            basicItem(ModItems.SCAVENGED_SPURS.get());
+            basicItem(ModItems.SCAVENGED_OCELOTPAWS.get());
+            basicItem(ModItems.SCAVENGED_BONEBATTERY.get());
+            basicItem(ModItems.SCAVENGED_BONEFLEX.get());
+            basicItem(ModItems.SCAVENGED_BONELACING.get());
+            basicItem(ModItems.SCAVENGED_ELYTRA.get());
+            basicItem(ModItems.SCAVENGED_PIEZO.get());
+            basicItem(ModItems.SCAVENGED_SPINALINJECTOR.get());
+            basicItem(ModItems.SCAVENGED_EYEOFDEFENDER.get());
+            basicItem(ModItems.SCAVENGED_CONCIOUSNESSTRANSMITTER.get());
+            basicItem(ModItems.SCAVENGED_CORTICALSTACK.get());
+            basicItem(ModItems.SCAVENGED_ENDERJAMMER.get());
+            basicItem(ModItems.SCAVENGED_MATRIX.get());
+            basicItem(ModItems.SCAVENGED_NEURALCONTEXTUALIZER.get());
+            basicItem(ModItems.SCAVENGED_CYBERDECK.get());
+            basicItem(ModItems.SCAVENGED_IDEM.get());
+            basicItem(ModItems.SCAVENGED_CYBERHEART.get());
+            basicItem(ModItems.SCAVENGED_COUPLER.get());
+            basicItem(ModItems.SCAVENGED_CREEPERHEART.get());
+            basicItem(ModItems.SCAVENGED_DEFIBRILLATOR.get());
+            basicItem(ModItems.SCAVENGED_STEMCELL.get());
+            basicItem(ModItems.SCAVENGED_PLATELETS.get());
+            basicItem(ModItems.SCAVENGED_HYPEROXYGENATION.get());
+            basicItem(ModItems.SCAVENGED_OXYGEN.get());
+            basicItem(ModItems.SCAVENGED_ADRENALINE.get());
+            basicItem(ModItems.SCAVENGED_BATTERY.get());
+            basicItem(ModItems.SCAVENGED_DIAMONDWAFERSTACK.get());
+            basicItem(ModItems.SCAVENGED_DUALISTICCONVERTER.get());
+            basicItem(ModItems.SCAVENGED_LIVERFILTER.get());
+            basicItem(ModItems.SCAVENGED_METABOLIC.get());
+            basicItem(ModItems.SCAVENGED_DENSEBATTERY.get());
+            basicItem(ModItems.SCAVENGED_ARTERIALTURBINE.get());
+            basicItem(ModItems.SCAVENGED_CHROMATOPHORES.get());
+            basicItem(ModItems.SCAVENGED_SYNTHSKIN.get());
+            basicItem(ModItems.SCAVENGED_IMMUNO.get());
+            basicItem(ModItems.SCAVENGED_FACEPLATE.get());
+            basicItem(ModItems.SCAVENGED_NETHERITEPLATING.get());
+            basicItem(ModItems.SCAVENGED_SOLARSKIN.get());
+            basicItem(ModItems.SCAVENGED_SUBDERMALARMOR.get());
+            basicItem(ModItems.SCAVENGED_SUBDERMALSPIKES.get());
+            basicItem(ModItems.SCAVENGED_SWEAT.get());
+            basicItem(ModItems.SCAVENGED_SYNTHMUSCLE.get());
+            basicItem(ModItems.SCAVENGED_WIREDREFLEXES.get());
+        }
     }
 }

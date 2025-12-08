@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -29,6 +30,7 @@ import java.util.List;
 public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     public static final BooleanProperty OPENED = BooleanProperty.create("opened");
     public static final BooleanProperty SLAVE = BooleanProperty.create("slave");
+    public static final BooleanProperty SURGERY_DONE = BooleanProperty.create("surgery_done");
     public static final MapCodec<SurgeryChamberBlockBottom> CODEC = simpleCodec(SurgeryChamberBlockBottom::new);
     private static final VoxelShape BACKWALL     = Block.box(14, 0, 0, 16, 16, 16);
     private static final VoxelShape WESTWALL     = Block.box(0, 0, 14, 16, 16, 16);
@@ -46,7 +48,8 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(OPENED, false)
-                .setValue(SLAVE, false));
+                .setValue(SLAVE, false)
+                .setValue(SURGERY_DONE, false));
     }
 
     @Override
@@ -62,7 +65,7 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OPENED, SLAVE);
+        builder.add(FACING, OPENED, SLAVE, SURGERY_DONE);
     }
 
     @Nullable
@@ -102,6 +105,7 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
+    //Thanks, TwistedGate, you're a lifesaver :D
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         if (state.getValue(SLAVE)) {
@@ -122,4 +126,23 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
             super.onRemove(state, level, pos, newState, isMoving);
         }
     }
+
+    @Override
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (level.isClientSide) return;
+        if (!(entity instanceof Player player)) return;
+        BlockState topState = level.getBlockState(pos.above());
+        if (!topState.is(ModBlocks.SURGERY_CHAMBER_TOP.get())) return;
+        boolean connected = topState.getValue(SurgeryChamberBlockTop.CONNECTED);
+        boolean closed = !topState.getValue(SurgeryChamberBlockTop.OPENED);
+        if (state.getValue(SURGERY_DONE)) return;
+        if (connected && closed && !state.getValue(SURGERY_DONE)) {
+            float damageAmount = 10f;
+            player.hurt(level.damageSources().generic(), damageAmount);
+            level.setBlock(pos, state.setValue(SURGERY_DONE, true), 3);
+        }
+    }
+
+
+
 }

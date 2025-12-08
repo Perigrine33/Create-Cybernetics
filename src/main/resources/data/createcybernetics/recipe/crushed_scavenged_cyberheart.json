@@ -1,0 +1,36 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_cyberheart"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:mechanical_pump"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:fluid_pipe"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:redstone"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:comparator"
+    }
+  ]
+}

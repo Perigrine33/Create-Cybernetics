@@ -1,0 +1,40 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_densebattery"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:organsupgrades_battery"
+    },
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:titaniumnugget"
+    },
+    {
+      "chance": 0.25,
+      "id": "createcybernetics:component_wiring"
+    },
+    {
+      "chance": 0.25,
+      "id": "createcybernetics:component_mesh"
+    },
+    {
+      "chance": 0.25,
+      "id": "createcybernetics:component_diodes"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

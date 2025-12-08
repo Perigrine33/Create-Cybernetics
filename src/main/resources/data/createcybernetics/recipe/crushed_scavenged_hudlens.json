@@ -1,0 +1,38 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_hudlens"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.35,
+      "id": "createcybernetics:component_fiberoptics"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_synthnerves"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_graphicscard"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:phantom_membrane"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+
+
+}

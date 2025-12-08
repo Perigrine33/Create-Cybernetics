@@ -1,0 +1,44 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_defibrillator"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.35,
+      "id": "createcybernetics:component_synthnerves"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_wiring"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:redstone_torch"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:observer"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:lightning_rod"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

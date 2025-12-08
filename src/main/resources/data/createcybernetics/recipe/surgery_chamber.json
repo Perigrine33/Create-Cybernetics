@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "S": {
+      "item": "minecraft:shears"
+    },
+    "I": {
+      "item": "minecraft:iron_door"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "D": {
+      "item": "create:deployer"
+    }
+  },
+
+  "pattern": [
+    " TTTT",
+    " TDDT",
+    " TSST",
+    " TIIT",
+    " TTTT"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:surgery_chamber"
+  },
+  "show_notification": false
+}

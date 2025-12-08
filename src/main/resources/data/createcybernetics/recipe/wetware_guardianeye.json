@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "createcybernetics:bodypart_guardianretina"
+    },
+    {
+      "item": "createcybernetics:bodypart_eyeballs"
+    },
+    {
+      "item": "createcybernetics:component_mesh"
+    },
+    {
+      "item": "minecraft:shears"
+    },
+    {
+      "item": "minecraft:string"
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:wetware_guardianeye"
+  }
+}

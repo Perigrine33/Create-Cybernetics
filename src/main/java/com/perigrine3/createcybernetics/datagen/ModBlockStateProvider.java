@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.datagen;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.block.ModBlocks;
+import com.perigrine3.createcybernetics.item.ModFoodProperties;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -20,6 +21,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.RAW_TITANIUM_BLOCK);
 
         blockWithItem(ModBlocks.TITANIUM_BLOCK);
+
+        blockWithItem(ModBlocks.ROBOSURGEON);
     }
 
     private void blockWithItem(DeferredBlock<?> deferredBlock) {

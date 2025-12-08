@@ -1,0 +1,44 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:scavenged_piezo"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.50,
+      "id": "createcybernetics:component_wiring"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:rose_quartz"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:bone"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:amethyst_shard"
+    },
+    {
+      "chance": 0.25,
+      "id": "minecraft:quartz"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}
