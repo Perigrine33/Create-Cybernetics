@@ -1,14 +1,20 @@
 package com.perigrine3.createcybernetics.api;
 
-import java.util.List;
+import java.util.Map;
 
 public interface ICyberwareData {
 
-    List<InstalledCyberware> getInstalled();
+    InstalledCyberware get(CyberwareSlot slot, int index);
 
-    boolean install(InstalledCyberware cyberware);
+    void set(CyberwareSlot slot, int index, InstalledCyberware cyberware);
 
-    InstalledCyberware removeFromSlot(String slot);
+    InstalledCyberware remove(CyberwareSlot slot, int index);
+
+    Map<CyberwareSlot, InstalledCyberware[]> getAll();
+
+    int getHumanity();
+
+    void setHumanity(int value);
 
     void clear();
 

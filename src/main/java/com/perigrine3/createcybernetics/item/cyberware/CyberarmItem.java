@@ -1,0 +1,49 @@
+package com.perigrine3.createcybernetics.item.cyberware;
+
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+
+import java.util.Set;
+
+public class CyberarmItem extends Item implements ICyberwareItem {
+    public CyberarmItem(Properties props) {
+        super(props);
+    }
+
+    @Override
+    public int getHumanityCost() {
+        return 10;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
+    }
+
+    @Override
+    public boolean replacesOrgan() {
+        return true;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
+    }
+
+    @Override
+    public void onInstalled(Player player) {
+        // grant strength modifier
+    }
+
+    @Override
+    public void onRemoved(Player player) {
+        // remove strength modifier
+    }
+
+    @Override
+    public void onTick(Player player) {
+        ICyberwareItem.super.onTick(player);
+    }
+}

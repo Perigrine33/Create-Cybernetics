@@ -1,51 +1,69 @@
 package com.perigrine3.createcybernetics.common.capabilities;
 
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class PlayerCyberwareData implements ICyberwareData {
-    private final List<InstalledCyberware> installed = new ArrayList<>();
+
+    private final EnumMap<CyberwareSlot, InstalledCyberware[]> slots =
+            new EnumMap<>(CyberwareSlot.class);
+
     private boolean dirty = false;
     private int humanity = 100;
 
-    @Override
-    public List<InstalledCyberware> getInstalled() {
-        return Collections.unmodifiableList(installed);
-    }
-
-    @Override
-    public boolean install(InstalledCyberware c) {
-        installed.removeIf(existing -> existing.getSlot().equals(c.getSlot()));
-
-        installed.add(c);
-        dirty = true;
-        return true;
-    }
-
-    @Override
-    public InstalledCyberware removeFromSlot(String slot) {
-        for (int i = 0; i < installed.size(); i++) {
-            InstalledCyberware c = installed.get(i);
-            if (c.getSlot().equals(slot)) {
-                installed.remove(i);
-                dirty = true;
-                return c;
-            }
+    public PlayerCyberwareData() {
+        for (CyberwareSlot slot : CyberwareSlot.values()) {
+            slots.put(slot, new InstalledCyberware[slot.size]);
         }
-        return null;
+    }
+
+    @Override
+    public InstalledCyberware get(CyberwareSlot slot, int index) {
+        return slots.get(slot)[index];
+    }
+
+    @Override
+    public void set(CyberwareSlot slot, int index, InstalledCyberware cyberware) {
+        slots.get(slot)[index] = cyberware;
+        dirty = true;
+    }
+
+    @Override
+    public InstalledCyberware remove(CyberwareSlot slot, int index) {
+        InstalledCyberware old = slots.get(slot)[index];
+        slots.get(slot)[index] = null;
+        dirty = true;
+        return old;
+    }
+
+    @Override
+    public Map<CyberwareSlot, InstalledCyberware[]> getAll() {
+        return slots;
+    }
+
+    @Override
+    public int getHumanity() {
+        return humanity;
+    }
+
+    @Override
+    public void setHumanity(int value) {
+        humanity = value;
+        dirty = true;
     }
 
     @Override
     public void clear() {
-        installed.clear();
+        for (CyberwareSlot slot : CyberwareSlot.values()) {
+            slots.put(slot, new InstalledCyberware[slot.size]);
+        }
         dirty = true;
     }
 
@@ -62,50 +80,42 @@ public class PlayerCyberwareData implements ICyberwareData {
         dirty = false;
     }
 
-    public int getHumanity() {
-        return humanity;
-    }
-
-    public void setHumanity(int humanity) {
-        this.humanity = humanity;
-        dirty = true;
-    }
-
-    public ListTag saveNBT() {
-        ListTag list = new ListTag();
-        for (InstalledCyberware c : installed) {
-            list.add(c.save());
-        }
-        return list;
-    }
-
-    public void loadNBT(ListTag list) {
-        installed.clear();
-        for (int i = 0; i < list.size(); i++) {
-            CompoundTag tag = list.getCompound(i);
-            installed.add(InstalledCyberware.load(tag));
-        }
-    }
+    /* ---------------- NBT ---------------- */
 
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-
         ListTag list = new ListTag();
-        for (InstalledCyberware c : installed) {
-            list.add(c.save());
+
+        for (var entry : slots.entrySet()) {
+            CyberwareSlot slot = entry.getKey();
+            InstalledCyberware[] arr = entry.getValue();
+
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] != null) {
+                    CompoundTag c = arr[i].save();
+                    c.putString("SlotGroup", slot.name());
+                    c.putInt("Index", i);
+                    list.add(c);
+                }
+            }
         }
 
         tag.put("Cyberware", list);
         tag.putInt("Humanity", humanity);
-
         return tag;
     }
 
     public void deserializeNBT(CompoundTag tag) {
-        installed.clear();
+        clear();
+
         ListTag list = tag.getList("Cyberware", Tag.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
-            installed.add(InstalledCyberware.load(list.getCompound(i)));
+            CompoundTag c = list.getCompound(i);
+
+            CyberwareSlot slot = CyberwareSlot.valueOf(c.getString("SlotGroup"));
+            int index = c.getInt("Index");
+
+            slots.get(slot)[index] = InstalledCyberware.load(c);
         }
 
         humanity = tag.getInt("Humanity");

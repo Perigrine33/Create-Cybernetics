@@ -6,31 +6,58 @@ import net.minecraft.world.item.ItemStack;
 public class InstalledCyberware {
 
     private ItemStack item = ItemStack.EMPTY;
+    private CyberwareSlot slot = null;
+    private int index = -1;
     private int humanityCost = 0;
     private boolean powered = true;
-    private String slot = "none";
-
-    public InstalledCyberware(ItemStack item, String slot, int humanityCost) {
-        this.item = item.copy();
-        this.slot = slot;
-        this.humanityCost = humanityCost;
-    }
 
     public InstalledCyberware() {}
 
-    public ItemStack getItem() { return item; }
-    public String getSlot() { return slot; }
-    public int getHumanity() { return humanityCost; }
-    public boolean isPowered() { return powered; }
+    public InstalledCyberware(ItemStack item, CyberwareSlot slot, int index, int humanityCost) {
+        this.item = item.copy();
+        this.slot = slot;
+        this.index = index;
+        this.humanityCost = humanityCost;
+    }
 
-    public void setPowered(boolean powered) { this.powered = powered; }
+    public ItemStack getItem() {
+        return item;
+    }
+
+    public CyberwareSlot getSlot() {
+        return slot;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public int getHumanityCost() {
+        return humanityCost;
+    }
+
+    public boolean isPowered() {
+        return powered;
+    }
+
+    public void setPowered(boolean powered) {
+        this.powered = powered;
+    }
+
+    /* ---------------- NBT ---------------- */
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
+
         if (!item.isEmpty()) {
-            tag.put("Item", item.save(null)); // null provider works
+            tag.put("Item", item.save(null));
         }
-        tag.putString("Slot", slot);
+
+        if (slot != null) {
+            tag.putString("Slot", slot.name());
+            tag.putInt("Index", index);
+        }
+
         tag.putInt("Humanity", humanityCost);
         tag.putBoolean("Powered", powered);
         return tag;
@@ -38,12 +65,20 @@ public class InstalledCyberware {
 
     public static InstalledCyberware load(CompoundTag tag) {
         InstalledCyberware c = new InstalledCyberware();
+
         if (tag.contains("Item")) {
-            c.item = ItemStack.parse(null, tag.getCompound("Item")).orElse(ItemStack.EMPTY);
+            c.item = ItemStack.parse(null, tag.getCompound("Item"))
+                    .orElse(ItemStack.EMPTY);
         }
-        c.slot = tag.getString("Slot");
+
+        if (tag.contains("Slot")) {
+            c.slot = CyberwareSlot.valueOf(tag.getString("Slot"));
+            c.index = tag.getInt("Index");
+        }
+
         c.humanityCost = tag.getInt("Humanity");
         c.powered = tag.getBoolean("Powered");
+
         return c;
     }
 }

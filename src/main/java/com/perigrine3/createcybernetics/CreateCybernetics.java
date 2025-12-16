@@ -2,8 +2,7 @@ package com.perigrine3.createcybernetics;
 
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.block.entity.ModBlockEntities;
-import com.perigrine3.createcybernetics.common.capabilities.CyberwareCapability;
-import com.perigrine3.createcybernetics.common.capabilities.ModCapabilities;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.component.ModDataComponents;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.entity.ModEntities;
@@ -65,7 +64,7 @@ public class CreateCybernetics {
         ModLootModifiers.register(eventBus);
         ModDataComponents.register(eventBus);
 
-        ModCapabilities.register(eventBus);
+        ModAttachments.register(eventBus);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
@@ -75,9 +74,7 @@ public class CreateCybernetics {
 
     }
 
-    // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        //registers things to preexisting creative tabs
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             event.accept(ModBlocks.TITANIUMORE_BLOCK);
             event.accept(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK);
@@ -94,10 +91,8 @@ public class CreateCybernetics {
         }
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
 

@@ -1,6 +1,10 @@
 package com.perigrine3.createcybernetics.block;
 
 import com.mojang.serialization.MapCodec;
+import com.perigrine3.createcybernetics.block.entity.RobosurgeonBlockEntity;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.common.surgery.SurgeryController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -131,18 +135,31 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (level.isClientSide) return;
         if (!(entity instanceof Player player)) return;
-        BlockState topState = level.getBlockState(pos.above());
+
+        BlockPos topPos = pos.above();
+        BlockState topState = level.getBlockState(topPos);
+
         if (!topState.is(ModBlocks.SURGERY_CHAMBER_TOP.get())) return;
+
         boolean connected = topState.getValue(SurgeryChamberBlockTop.CONNECTED);
         boolean closed = !topState.getValue(SurgeryChamberBlockTop.OPENED);
-        if (state.getValue(SURGERY_DONE)) return;
-        if (connected && closed && !state.getValue(SURGERY_DONE)) {
-            float damageAmount = 10f;
-            player.hurt(level.damageSources().generic(), damageAmount);
-            level.setBlock(pos, state.setValue(SURGERY_DONE, true), 3);
-        }
+
+        if (!connected || !closed || state.getValue(SURGERY_DONE)) return;
+        BlockPos surgeonPos = topPos.above();
+        if (!level.getBlockState(surgeonPos).is(ModBlocks.ROBOSURGEON.get())) return;
+        if (!(level.getBlockEntity(surgeonPos) instanceof RobosurgeonBlockEntity surgeon)) return;
+
+        // --- PERFORM SURGERY ---
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+
+        SurgeryController.performSurgery(player, surgeon);
+        player.hurt(level.damageSources().generic(), 10.0f);
+
+        level.setBlock(pos, state.setValue(SURGERY_DONE, true), 3);
+
+        System.out.println(
+                "READ INSTANCE = "
+                        + System.identityHashCode(player.getData(ModAttachments.CYBERWARE))
+        );
     }
-
-
-
 }

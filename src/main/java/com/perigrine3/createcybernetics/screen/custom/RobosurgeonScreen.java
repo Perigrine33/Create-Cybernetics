@@ -58,9 +58,15 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private static final ResourceLocation SLOT_ICON =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
                     "textures/gui/robosurgeon/robosurgeon_interface_slot.png");
-    private static final ResourceLocation EMPTYSLOT_ICON =
+    private static final ResourceLocation REMOVALSLOT_ICON =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_slotempty.png");
+                    "textures/gui/robosurgeon/robosurgeon_interface_slotmarkedforremoval.png");
+    private static final ResourceLocation STAGEDINSTALLSLOT_ICON =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
+                    "textures/gui/robosurgeon/robosurgeon_interface_stagedinstallslot.png");
+    private static final ResourceLocation REMOVESLOT_ICON =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
+                    "textures/gui/robosurgeon/robosurgeon_interface_removeslot.png");
     private static final ResourceLocation SLOTHOVER_ICON =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
                     "textures/gui/robosurgeon/robosurgeon_interface_slothover.png");
@@ -209,12 +215,38 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         RenderSystem.setShaderTexture(0, GUI_TEXTURE);
         guiGraphics.blit(GUI_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight, 176, 222);
 
-        for (SlotBackground bg : slotBackgrounds) {
-            if (bg.viewMode == viewMode) {
-                drawSlotBackground(guiGraphics, bg);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        for (Slot slot : menu.slots) {
+            if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
+            if (!isSlotVisible(rsSlot)) continue;
+
+            int handlerIndex = rsSlot.getSlotIndex();
+
+            int x = leftPos + rsSlot.x - 1;
+            int y = topPos + rsSlot.y - 1;
+
+            guiGraphics.blit(SLOT_ICON, x, y, 0, 0, 18, 18, 18, 18);
+
+            if (menu.isMarkedForRemoval(handlerIndex)) {
+
+                guiGraphics.setColor(1f, 1f, 1f, 0.6f);
+                guiGraphics.blit(REMOVALSLOT_ICON, x, y, 0, 0, 18, 18, 18, 18);
+                guiGraphics.blit(REMOVESLOT_ICON, x, y, 0, 0, 18, 18, 18, 18);
+                guiGraphics.setColor(1f, 1f, 1f, 1f);
+
+            } else if (menu.isStaged(handlerIndex)) {
+
+                guiGraphics.setColor(1f, 1f, 1f, 0.6f);
+                guiGraphics.blit(STAGEDINSTALLSLOT_ICON, x, y, 0, 0, 18, 18, 18, 18);
+                guiGraphics.setColor(1f, 1f, 1f, 1f);
             }
         }
+
+        RenderSystem.disableBlend();
     }
+
 
 
     // -----------------------
@@ -343,19 +375,17 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private final List<SlotView> slotViews = new ArrayList<>();
 
     private boolean isSlotVisible(Slot slot) {
-        int teFirst = menu.getTeInventoryFirstSlotIndex();
-        if (slot.index < teFirst) return true;
-        return isHandlerSlotVisible(slot.index - teFirst);
+        if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) return true;
+        return isHandlerSlotVisible(rsSlot.getSlotIndex());
     }
 
     private void updateTeSlotActivity() {
-        int teFirst = menu.getTeInventoryFirstSlotIndex();
 
         for (Slot slot : menu.slots) {
             if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
 
-            int handlerIndex = slot.index - teFirst;
-            boolean visible = isHandlerSlotVisible(handlerIndex); // helper below
+            int handlerIndex = rsSlot.getSlotIndex(); // 0..64
+            boolean visible = isHandlerSlotVisible(handlerIndex);
             rsSlot.setActiveFlag(visible);
         }
     }
@@ -458,6 +488,31 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         slotViews.add(new SlotView(63, ViewMode.SKIN));
         slotViews.add(new SlotView(64, ViewMode.SKIN));
     }
+
+    private ResourceLocation getSlotBackgroundTexture(Slot slot) {
+
+        if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) {
+            return SLOT_ICON;
+        }
+
+        int teFirst = menu.getTeInventoryFirstSlotIndex();
+        int handlerIndex = slot.index - teFirst;
+
+        if (menu.isMarkedForRemoval(handlerIndex)) {
+            return REMOVALSLOT_ICON;
+        }
+
+        if (menu.isStaged(handlerIndex)) {
+            return SLOTHOVER_ICON;
+        }
+
+        if (menu.isInstalled(handlerIndex)) {
+            return SLOT_ICON;
+        }
+
+        return SLOT_ICON;
+    }
+
 
 
     // -----------------------
@@ -596,6 +651,9 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         markerManager.render(gui, modelX, modelY, mouseX, mouseY,
                 viewMode, modelViewer.getRotationPhase(), this.font);
+
+        this.renderTooltip(gui, mouseX, mouseY);
+
     }
 
     private void renderHeadModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
@@ -779,12 +837,12 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             return true;
         }
 
-        // prevent clicks on hidden slots
-        for (Slot slot : menu.slots) {
-            if (!isSlotVisible(slot) && isMouseOverSlot(slot, mouseX, mouseY)) {
-                return false;
-            }
+        // prevent clicks ONLY if the slot actually being clicked is hidden
+        Slot hovered = this.getSlotUnderMouse();
+        if (hovered != null && !isSlotVisible(hovered)) {
+            return false;
         }
+
 
         return super.mouseClicked(mouseX, mouseY, button);
     }

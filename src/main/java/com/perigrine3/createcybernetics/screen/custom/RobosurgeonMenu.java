@@ -1,26 +1,62 @@
 package com.perigrine3.createcybernetics.screen.custom;
 
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.block.entity.RobosurgeonBlockEntity;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
+import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.SlotItemHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class RobosurgeonMenu extends AbstractContainerMenu {
     public final RobosurgeonBlockEntity blockEntity;
     private final Level level;
+    private final List<RobosurgeonSlotItemHandler> robosurgeonSlots = new ArrayList<>();
     public int getTeInventoryFirstSlotIndex() {
         return TE_INVENTORY_FIRST_SLOT_INDEX;
     }
+
+    public boolean isInstalled(int index) {
+        return blockEntity.isInstalled(index);
+    }
+
+    public boolean isStaged(int index) {
+        return blockEntity.isStaged(index);
+    }
+
+    public boolean isMarkedForRemoval(int index) {
+        return blockEntity.isMarkedForRemoval(index);
+    }
+
+    public void toggleMarkedForRemoval(int index) {
+        blockEntity.toggleMarkedForRemoval(index);
+    }
+
+    public void setStaged(int index, boolean value) {
+        blockEntity.setStaged(index, value);
+    }
+
+    public void setInstalled(int index, boolean value) {
+        blockEntity.setInstalled(index, value);
+    }
+
 
 
     private static final int INVENTORY_Y_OFFSET = 56;
@@ -40,7 +76,6 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
-
         addRobosurgeonSlots();
     }
 
@@ -51,41 +86,188 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
-
+        addRobosurgeonSlots();
+        populateFromPlayer(inv.player);
     }
 
-    private void addSlotColumn(int startIndex, int count, int x, int startY) {
+
+    private void addSlotColumn(int startIndex, int count, int x, int startY, CyberwareSlot type) {
         for (int i = 0; i < count; i++) {
-            this.addSlot(new RobosurgeonSlotItemHandler(
-                    blockEntity.inventory,
-                    startIndex + i,
-                    x + 1,
-                    startY - (i * 18) + 1));
+            RobosurgeonSlotItemHandler slot =
+                    new RobosurgeonSlotItemHandler(
+                            blockEntity.inventory,
+                            startIndex + i,
+                            x + 1,
+                            startY - (i * 18) + 1,
+                            type
+                    );
+
+            robosurgeonSlots.add(slot);
+            this.addSlot(slot);
         }
     }
 
+
     private void addRobosurgeonSlots() {
-    // HEAD
-            addSlotColumn(0,  5, 151, 110); // BRAIN
-            addSlotColumn(5,  5, 151, 110); // EYES
-    // TORSO
-            addSlotColumn(10, 6, 151, 110); // HEART
-            addSlotColumn(16, 6, 151, 110); // LUNGS
-            addSlotColumn(22, 6, 151, 110); // ORGANS
-    // ARMS
-            addSlotColumn(28, 6, 43,  110); // RIGHT ARM
-            addSlotColumn(34, 6, 115, 110); // LEFT ARM
-    // LEGS
-            addSlotColumn(40, 5, 43,  110); // RIGHT LEG
-            addSlotColumn(45, 5, 115, 110); // LEFT LEG
-    // SKIN / STRUCTURE
-            addSlotColumn(50, 5, 79,  110); // MUSCLE
-            addSlotColumn(55, 5, 106, 110); // BONE
-            addSlotColumn(60, 5, 52,  110); // SKIN
+        // HEAD
+        addSlotColumn(0,  5, 151, 110, CyberwareSlot.BRAIN); // BRAIN
+        addSlotColumn(5,  5, 151, 110, CyberwareSlot.EYES); // EYES
+        // TORSO
+        addSlotColumn(10, 6, 151, 110, CyberwareSlot.HEART); // HEART
+        addSlotColumn(16, 6, 151, 110, CyberwareSlot.LUNGS); // LUNGS
+        addSlotColumn(22, 6, 151, 110, CyberwareSlot.ORGANS); // ORGANS
+        // ARMS
+        addSlotColumn(28, 6, 43,  110, CyberwareSlot.RARM); // RIGHT ARM
+        addSlotColumn(34, 6, 115, 110, CyberwareSlot.LARM); // LEFT ARM
+        // LEGS
+        addSlotColumn(40, 5, 43,  110, CyberwareSlot.RLEG); // RIGHT LEG
+        addSlotColumn(45, 5, 115, 110, CyberwareSlot.LLEG); // LEFT LEG
+        // SKIN / STRUCTURE
+        addSlotColumn(50, 5, 79,  110, CyberwareSlot.MUSCLE); // MUSCLE
+        addSlotColumn(55, 5, 106, 110, CyberwareSlot.BONE); // BONE
+        addSlotColumn(60, 5, 52,  110, CyberwareSlot.SKIN); // SKIN
     }
 
+    private void populateFromPlayer(Player player) {
+        if (player.level().isClientSide) return;
 
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
 
+        boolean hasContents = false;
+        for (int i = 0; i < blockEntity.inventory.getSlots(); i++) {
+            if (!blockEntity.inventory.getStackInSlot(i).isEmpty()) {
+                hasContents = true;
+                break;
+            }
+        }
+
+        if (hasContents) {
+            for (int i = 0; i < blockEntity.inventory.getSlots(); i++) {
+                if (!blockEntity.inventory.getStackInSlot(i).isEmpty()) {
+                    setInstalled(i, true);
+                }
+            }
+            return;
+        }
+
+        for (CyberwareSlot slot : CyberwareSlot.values()) {
+
+            InstalledCyberware[] installedData = data.getAll().get(slot);
+            if (installedData == null) continue;
+
+            int mappedSize = RobosurgeonSlotMap.mappedSize(slot);
+
+            for (int i = 0; i < mappedSize; i++) {
+
+                int invIndex = RobosurgeonSlotMap.toInventoryIndex(slot, i);
+                if (invIndex < 0) continue;
+
+                ItemStack stack;
+
+                if (i < installedData.length && installedData[i] != null) {
+                    stack = installedData[i].getItem().copy();
+                } else {
+                    stack = DefaultOrgans.get(slot, i);
+                }
+
+                if (!stack.isEmpty()) {
+                    blockEntity.inventory.setStackInSlot(invIndex, stack);
+
+                    setInstalled(invIndex, true);
+                    setStaged(invIndex, false);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+
+        if (slotId < 0 || slotId >= slots.size()) {
+            super.clicked(slotId, button, clickType, player);
+            return;
+        }
+
+        Slot slot = slots.get(slotId);
+
+        if (slot instanceof RobosurgeonSlotItemHandler rsSlot) {
+
+            int handlerIndex = rsSlot.getSlotIndex();
+            ItemStack carried = getCarried();
+
+            // ----------------------------------------
+            // BLOCK SHIFT-CLICK FROM ROBOSURGEON SLOTS
+            // ----------------------------------------
+            if (clickType == ClickType.QUICK_MOVE) {
+                return;
+            }
+
+            // ----------------------------------------
+            // RIGHT CLICK (button == 1)
+            // Remove STAGED items only
+            // ----------------------------------------
+            if (clickType == ClickType.PICKUP && button == 1) {
+
+                if (carried.isEmpty()
+                        && rsSlot.hasItem()
+                        && isStaged(handlerIndex)) {
+
+                    ItemStack stack = rsSlot.getItem().copy();
+
+                    rsSlot.set(ItemStack.EMPTY);
+                    setStaged(handlerIndex, false);
+
+                    if (!player.getInventory().add(stack)) {
+                        player.drop(stack, false);
+                    }
+
+                    return;
+                }
+
+                return; // block vanilla
+            }
+
+            // ----------------------------------------
+            // LEFT CLICK (button == 0)
+            // Mark INSTALLED items only
+            // ----------------------------------------
+            if (clickType == ClickType.PICKUP && button == 0) {
+
+                if (carried.isEmpty()
+                        && rsSlot.hasItem()
+                        && isInstalled(handlerIndex)
+                        && !isStaged(handlerIndex)) {
+
+                    toggleMarkedForRemoval(handlerIndex);
+                    return;
+                }
+
+                // ----------------------------------------
+                // MANUAL PLACEMENT DETECTION
+                // ----------------------------------------
+                if (!carried.isEmpty()
+                        && !rsSlot.hasItem()
+                        && !isInstalled(handlerIndex)
+                        && rsSlot.mayPlace(carried)) {
+
+                    // Let vanilla place ONE item
+                    super.clicked(slotId, button, clickType, player);
+
+                    // If placement succeeded, mark staged
+                    if (rsSlot.hasItem()) {
+                        setStaged(handlerIndex, true);
+                    }
+
+                    return;
+                }
+
+                return; // block vanilla pickup
+            }
+        }
+
+        super.clicked(slotId, button, clickType, player);
+    }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
     // must assign a slot number to each of the slots used by the GUI.
@@ -103,41 +285,52 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 65;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 65;
 
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int pIndex) {
-        Slot sourceSlot = slots.get(pIndex);
-        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
-        ItemStack sourceStack = sourceSlot.getItem();
-        ItemStack copyOfSourceStack = sourceStack.copy();
+    public ItemStack quickMoveStack(Player player, int index) {
 
-        // Check if the slot clicked is one of the vanilla container slots
-        if (pIndex < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-            // This is a vanilla container slot so merge the stack into the tile inventory
-            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
-                    + TE_INVENTORY_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;  // EMPTY_ITEM
-            }
-        } else if (pIndex < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
-            // This is a TE slot so merge the stack into the players inventory
-            if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else {
-            System.out.println("Invalid slotIndex:" + pIndex);
+        Slot sourceSlot = slots.get(index);
+        if (sourceSlot == null || !sourceSlot.hasItem()) {
             return ItemStack.EMPTY;
         }
-        // If stack size == 0 (the entire stack was moved) set slot contents to null
-        if (sourceStack.getCount() == 0) {
-            sourceSlot.set(ItemStack.EMPTY);
-        } else {
-            sourceSlot.setChanged();
+
+        ItemStack sourceStack = sourceSlot.getItem();
+        ItemStack copy = sourceStack.copy();
+
+        // PLAYER INVENTORY → ROBOSURGEON (STAGED)
+        if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
+
+            for (RobosurgeonSlotItemHandler targetSlot : robosurgeonSlots) {
+
+                int handlerIndex = targetSlot.getSlotIndex();
+
+                if (!targetSlot.isActive()) continue;
+                if (isInstalled(handlerIndex)) continue;
+                if (targetSlot.hasItem()) continue;
+                if (!targetSlot.mayPlace(sourceStack)) continue;
+
+                ItemStack moved = sourceStack.split(1);
+                targetSlot.set(moved);
+                setStaged(handlerIndex, true);
+
+                if (sourceStack.isEmpty()) {
+                    sourceSlot.set(ItemStack.EMPTY);
+                } else {
+                    sourceSlot.setChanged();
+                }
+
+                return copy;
+            }
+
+            return ItemStack.EMPTY;
         }
-        sourceSlot.onTake(playerIn, sourceStack);
-        return copyOfSourceStack;
+
+        // ROBOSURGEON → PLAYER (DISABLED BY DESIGN)
+        return ItemStack.EMPTY;
     }
+
 
     @Override
     public boolean stillValid(Player player) {
