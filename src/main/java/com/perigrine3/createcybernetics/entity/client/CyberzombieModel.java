@@ -12,6 +12,8 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+import static net.minecraft.client.model.AnimationUtils.animateZombieArms;
+
 public class CyberzombieModel<T extends CyberzombieEntity> extends HierarchicalModel<T> {
 
     public static final ModelLayerLocation LAYER_LOCATION =
@@ -20,7 +22,6 @@ public class CyberzombieModel<T extends CyberzombieEntity> extends HierarchicalM
     private final ModelPart waist;
     private final ModelPart body;
     private final ModelPart head;
-    private final ModelPart hat;
     private final ModelPart rightArm;
     private final ModelPart leftArm;
     private final ModelPart rightLeg;
@@ -30,7 +31,6 @@ public class CyberzombieModel<T extends CyberzombieEntity> extends HierarchicalM
         this.waist = root.getChild("waist");
         this.body = waist.getChild("body");
         this.head = body.getChild("head");
-        this.hat = head.getChild("hat");
         this.rightArm = body.getChild("rightArm");
         this.leftArm = body.getChild("leftArm");
         this.rightLeg = body.getChild("rightLeg");
@@ -46,8 +46,6 @@ public class CyberzombieModel<T extends CyberzombieEntity> extends HierarchicalM
                 .addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4), PartPose.offset(0.0F, -12.0F, 0.0F));
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0)
                 .addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8), PartPose.offset(0.0F, 0.0F, 0.0F));
-        head.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(32, 0)
-                .addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, new CubeDeformation(0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
         body.addOrReplaceChild("rightArm", CubeListBuilder.create().texOffs(40, 16)
                 .addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4), PartPose.offset(-5.0F, 2.0F, 0.0F));
         body.addOrReplaceChild("leftArm", CubeListBuilder.create().texOffs(40, 16).mirror()
@@ -62,30 +60,17 @@ public class CyberzombieModel<T extends CyberzombieEntity> extends HierarchicalM
 
     @Override
     public void setupAnim(CyberzombieEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.root().getAllParts().forEach(ModelPart::resetPose);
-        applyHeadRotation(netHeadYaw, headPitch);
-
-        // Idle / Walk
-        if (limbSwingAmount > 0.01f) {
-            this.animateWalk(CyberzombieAnimations.WALK_ANIM, limbSwing, limbSwingAmount, 2f, 2.5f);
-        } else {
-            this.animate(entity.idleAnimationState, CyberzombieAnimations.IDLE_ANIM, ageInTicks, 1f);
-        }
-
-        // Attack blending
-        float swing = entity.getSwingProgress(ageInTicks);
-        if (swing > 0f) {
-            // Interpolate arms raising
-            rightArm.xRot = Mth.lerp(swing, rightArm.xRot, -((float)Math.PI / 2));
-            leftArm.xRot = Mth.lerp(swing, leftArm.xRot, -((float)Math.PI / 2));
-        }
-    }
-
-    private void applyHeadRotation(float yaw, float pitch) {
-        yaw = Mth.clamp(yaw, -30f, 30f);
-        pitch = Mth.clamp(pitch, -25f, 45f);
-        head.yRot = yaw * ((float)Math.PI / 180f);
-        head.xRot = pitch * ((float)Math.PI / 180f);
+        this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
+        this.head.xRot = headPitch * ((float) Math.PI / 180F);
+        this.rightArm.xRot = 0.0F;
+        this.rightArm.yRot = 0.0F;
+        this.rightArm.zRot = 0.0F;
+        this.leftArm.xRot = 0.0F;
+        this.leftArm.yRot = 0.0F;
+        this.leftArm.zRot = 0.0F;
+        this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+        this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount;
+        animateZombieArms(this.leftArm, this.rightArm, entity.isAggressive(), this.attackTime, ageInTicks);
     }
 
     @Override

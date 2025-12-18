@@ -73,6 +73,7 @@
   "item.createcybernetics.eyeupgrades_targeting": "Targeting Module",
   "item.createcybernetics.eyeupgrades_underwatervision": "Watervision Module",
   "item.createcybernetics.eyeupgrades_zoom": "Optic Zoom Module",
+  "item.createcybernetics.eyeupgrades_zoomeyeupgrades_trajectorycalculator": "Trajectory Calculator Module",
 
   "item.createcybernetics.armupgrades_armcannon": "Arm Cannon",
   "item.createcybernetics.armupgrades_flywheel": "Quickdraw Flywheel",
@@ -134,6 +135,7 @@
   "item.createcybernetics.skinupgrades_solarskin": "SolarSkin",
   "item.createcybernetics.skinupgrades_subdermalarmor": "Subdermal Armor",
   "item.createcybernetics.skinupgrades_subdermalspikes": "Subdermal Spikes",
+  "item.createcybernetics.skinupgrades_syntheticsetules": "Synthetic Setules",
   "item.createcybernetics.skinupgrades_sweat": "Enhanced Sweat Glands",
 
   "item.createcybernetics.muscleupgrades_synthmuscle": "Synthetic Muscle",
@@ -163,6 +165,7 @@
   "item.createcybernetics.scavenged_targeting": "Targeting Module",
   "item.createcybernetics.scavenged_underwatervision": "Watervision Module",
   "item.createcybernetics.scavenged_zoom": "Optic Zoom Module",
+  "item.createcybernetics.scavenged_trajectorycalculator": "Trajectory Calculator Module",
   "item.createcybernetics.scavenged_armcannon": "Arm Cannon",
   "item.createcybernetics.scavenged_flywheel": "Quickdraw Flywheel",
   "item.createcybernetics.scavenged_claws": "Retractable Claws",
@@ -215,6 +218,7 @@
   "item.createcybernetics.scavenged_solarskin": "SolarSkin",
   "item.createcybernetics.scavenged_subdermalarmor": "Subdermal Armor",
   "item.createcybernetics.scavenged_subdermalspikes": "Subdermal Spikes",
+  "item.createcybernetics.scavenged_syntheticsetules": "Synthetic Setules",
   "item.createcybernetics.scavenged_sweat": "Enhanced Sweat Glands",
   "item.createcybernetics.scavenged_synthmuscle": "Synthetic Muscle",
   "item.createcybernetics.scavenged_wiredreflexes": "Wired Reflexes",
@@ -261,6 +265,7 @@
 
   "tooltip.createcybernetics.neuropozyne.tooltip": "§6Temporarily reduces §eCyberware Rejection§6 symptoms",
 
+                      "tooltip.createcybernetics.humanity": "Humanity Cost: %s",
 
                       "tooltip.createcybernetics.basiccomponent_tooltip": "§8§oBASIC COMPONENT",
                       "tooltip.createcybernetics.legendarycomponent_tooltip": "§e§oLEGENDARY COMPONENT",
@@ -304,6 +309,8 @@
           "tooltip.createcybernetics.eyeupgrades_underwatervision.tooltip2": "§7Requires §9Cybereyes",
       "tooltip.createcybernetics.eyeupgrades_zoom.tooltip1": "§1Allows the user to see distant objects",
           "tooltip.createcybernetics.eyeupgrades_zoom.tooltip2": "§7Requires §9Cybereyes",
+      "tooltip.createcybernetics.eyeupgrades_trajectorycalculator.tooltip1": "§1Displays a projected trajectory for a held projectile",
+          "tooltip.createcybernetics.eyeupgrades_trajectorycalculator.tooltip2": "§7Requires §9Cybereyes",
 
       "tooltip.createcybernetics.armupgrades_armcannon.tooltip1": "§1Can launch various items and projectiles",
           "tooltip.createcybernetics.armupgrades_armcannon.tooltip2": "§7Requires §9Cyberarm",
@@ -403,6 +410,7 @@
       "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip1": "§1Provides 1 armor levels",
           "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip2": "§3Stacks up to 5x",
       "tooltip.createcybernetics.skinupgrades_subdermalspikes.tooltip1": "§1Applies the Thorns effect when attacked",
+      "tooltip.createcybernetics.skinupgrades_syntheticsetules.tooltip1": "§1Allows the user to climb walls like a spider",
       "tooltip.createcybernetics.skinupgrades_sweat.tooltip1": "§1Releases large amounts of sweat to release heat",
 
       "tooltip.createcybernetics.muscleupgrades_synthmuscle.tooltip1": "§1Grants extra speed and strength",

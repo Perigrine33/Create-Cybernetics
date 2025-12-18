@@ -35,6 +35,7 @@ public class ModTags {
         public static final TagKey<Item> ORGAN_UPGRADES = createTag("organ_upgrades");
         public static final TagKey<Item> SKIN_UPGRADES = createTag("skin_upgrades");
         public static final TagKey<Item> MUSCLE_UPGRADES = createTag("muscle_upgrades");
+        public static final TagKey<Item> SCAVENGED_CYBERWARE = createTag("scavenged_cyberware");
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, name));

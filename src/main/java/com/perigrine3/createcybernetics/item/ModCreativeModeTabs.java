@@ -6,7 +6,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -68,12 +67,17 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_CYBEREYES);
                         output.accept(ModItems.SCAVENGED_LINEARFRAME);
                         output.accept(ModItems.SCAVENGED_HUDLENS);
-                        output.accept(ModItems.SCAVENGED_NAVIGATIONCHIP);
+
+                        if (ModItems.SCAVENGED_NAVIGATIONCHIP != null) {
+                            output.accept(ModItems.SCAVENGED_NAVIGATIONCHIP);
+                        }
+
                         output.accept(ModItems.SCAVENGED_HUDJACK);
                         output.accept(ModItems.SCAVENGED_NIGHTVISION);
                         output.accept(ModItems.SCAVENGED_TARGETING);
                         output.accept(ModItems.SCAVENGED_UNDERWATERVISION);
                         output.accept(ModItems.SCAVENGED_ZOOM);
+                        output.accept(ModItems.SCAVENGED_TRAJECTORYCALCULATOR);
                         output.accept(ModItems.SCAVENGED_ARMCANNON);
                         output.accept(ModItems.SCAVENGED_FLYWHEEL);
                         output.accept(ModItems.SCAVENGED_CLAWS);
@@ -95,8 +99,12 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_PIEZO);
                         output.accept(ModItems.SCAVENGED_SPINALINJECTOR);
                         output.accept(ModItems.SCAVENGED_EYEOFDEFENDER);
-                        output.accept(ModItems.SCAVENGED_CONCIOUSNESSTRANSMITTER);
-                        output.accept(ModItems.SCAVENGED_CORTICALSTACK);
+
+                        if (ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER != null && ModItems.SCAVENGED_CORTICALSTACK != null) {
+                            output.accept(ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER);
+                            output.accept(ModItems.SCAVENGED_CORTICALSTACK);
+                        }
+
                         output.accept(ModItems.SCAVENGED_ENDERJAMMER);
                         output.accept(ModItems.SCAVENGED_MATRIX);
                         output.accept(ModItems.SCAVENGED_NEURALCONTEXTUALIZER);
@@ -126,7 +134,12 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_SOLARSKIN);
                         output.accept(ModItems.SCAVENGED_SUBDERMALARMOR);
                         output.accept(ModItems.SCAVENGED_SUBDERMALSPIKES);
-                        output.accept(ModItems.SCAVENGED_SWEAT);
+                        output.accept(ModItems.SCAVENGED_SYNTHETICSETULES);
+
+                        if (ModItems.SCAVENGED_SWEAT != null) {
+                            output.accept(ModItems.SCAVENGED_SWEAT);
+                        }
+
                         output.accept(ModItems.SCAVENGED_SYNTHMUSCLE);
                         output.accept(ModItems.SCAVENGED_WIREDREFLEXES);
 
@@ -163,12 +176,17 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BASECYBERWARE_LINEARFRAME);
                     //EYE UPGRADES
                         output.accept(ModItems.EYEUPGRADES_HUDLENS);
-                        output.accept(ModItems.EYEUPGRADES_NAVIGATIONCHIP);
+
+                        if (ModItems.EYEUPGRADES_NAVIGATIONCHIP != null) {
+                            output.accept(ModItems.EYEUPGRADES_NAVIGATIONCHIP);
+                        }
+
                         output.accept(ModItems.EYEUPGRADES_HUDJACK);
                         output.accept(ModItems.EYEUPGRADES_NIGHTVISION);
                         output.accept(ModItems.EYEUPGRADES_UNDERWATERVISION);
                         output.accept(ModItems.EYEUPGRADES_TARGETING);
                         output.accept(ModItems.EYEUPGRADES_ZOOM);
+                        output.accept(ModItems.EYEUPGRADES_TRAJECTORYCALCULATOR);
                     //ARM UPGRADES
                         output.accept(ModItems.ARMUPGRADES_ARMCANNON);
                         output.accept(ModItems.ARMUPGRADES_CLAWS);
@@ -194,8 +212,12 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BONEUPGRADES_SPINALINJECTOR);
                     //BRAIN UPGRADES
                         output.accept(ModItems.BRAINUPGRADES_EYEOFDEFENDER);
-                        output.accept(ModItems.BRAINUPGRADES_CONCIOUSNESSTRANSMITTER);
-                        output.accept(ModItems.BRAINUPGRADES_CORTICALSTACK);
+
+                        if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
+                            output.accept(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER);
+                            output.accept(ModItems.BRAINUPGRADES_CORTICALSTACK);
+                        }
+
                         output.accept(ModItems.BRAINUPGRADES_ENDERJAMMER);
                         output.accept(ModItems.BRAINUPGRADES_MATRIX);
                         output.accept(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER);
@@ -230,12 +252,20 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SKINUPGRADES_SOLARSKIN);
                         output.accept(ModItems.SKINUPGRADES_SUBDERMALARMOR);
                         output.accept(ModItems.SKINUPGRADES_SUBDERMALSPIKES);
-                        output.accept(ModItems.SKINUPGRADES_SWEAT);
+                        output.accept(ModItems.SKINUPGRADES_SYNTHETICSETULES);
+
+                        if (ModItems.SKINUPGRADES_SWEAT != null) {
+                            output.accept(ModItems.SKINUPGRADES_SWEAT);
+                        }
+
                     //MUSCLE UPGRADES
                         output.accept(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE);
                         output.accept(ModItems.MUSCLEUPGRADES_WIREDREFLEXES);
                     //WETWARE UPGRADES
-                        output.accept(ModItems.WETWARE_BLUBBER);
+                        if (ModItems.WETWARE_BLUBBER != null) {
+                            output.accept(ModItems.WETWARE_BLUBBER);
+                        }
+
                         output.accept(ModItems.WETWARE_FIREBREATHINGGLAND);
                         output.accept(ModItems.WETWARE_GILLS);
                         output.accept(ModItems.WETWARE_GUARDIANEYE);

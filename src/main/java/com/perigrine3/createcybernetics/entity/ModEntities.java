@@ -16,16 +16,17 @@ public class ModEntities {
 
 
 
-    public static final Supplier<EntityType<SkinstackEntity>> SKINSTACK =
-            ENTITY_TYPES.register("skinstack", () -> EntityType.Builder.of(SkinstackEntity::new, MobCategory.MISC)
-                    .sized(0F, 0F).build("skinstack"));
-
     public static final Supplier<EntityType<SmasherEntity>> SMASHER =
             ENTITY_TYPES.register("smasher", () -> EntityType.Builder.of(SmasherEntity::new, MobCategory.MONSTER)
                     .sized(1.1F, 2.5F).build("smasher"));
+
     public static final Supplier<EntityType<CyberzombieEntity>> CYBERZOMBIE =
             ENTITY_TYPES.register("cyberzombie", () -> EntityType.Builder.of(CyberzombieEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.8F).build("cyberzombie"));
+
+    public static final Supplier<EntityType<CyberskeletonEntity>> CYBERSKELETON =
+            ENTITY_TYPES.register("cyberskeleton", () -> EntityType.Builder.of(CyberskeletonEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F).build("cyberskeleton"));
 
 
 

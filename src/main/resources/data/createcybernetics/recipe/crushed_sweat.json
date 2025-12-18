@@ -1,0 +1,40 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:skinupgrades_sweat"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:skinupgrades_synthskin"
+    },
+    {
+      "chance": 0.20,
+      "id": "cold_sweat:thermometer"
+    },
+    {
+      "chance": 0.20,
+      "id": "minecraft:dispenser"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_synthnerves"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:electron_tube"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

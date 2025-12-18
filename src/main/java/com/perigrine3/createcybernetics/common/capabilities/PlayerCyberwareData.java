@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.common.capabilities;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareData;
+import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -59,6 +60,28 @@ public class PlayerCyberwareData implements ICyberwareData {
         dirty = true;
     }
 
+    public boolean hasOrgan(CyberwareSlot slot) {
+        InstalledCyberware[] arr = slots.get(slot);
+        for (InstalledCyberware cw : arr) {
+            if (cw != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isOrganReplaced(CyberwareSlot slot) {
+        InstalledCyberware[] arr = slots.get(slot);
+        for (InstalledCyberware cw : arr) {
+            if (cw != null && cw.getItem().getItem() instanceof ICyberwareItem item) {
+                if (item.replacesOrgan() && item.getReplacedOrgans().contains(slot)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public void clear() {
         for (CyberwareSlot slot : CyberwareSlot.values()) {
@@ -79,6 +102,8 @@ public class PlayerCyberwareData implements ICyberwareData {
     public void clean() {
         dirty = false;
     }
+
+
 
     /* ---------------- NBT ---------------- */
 

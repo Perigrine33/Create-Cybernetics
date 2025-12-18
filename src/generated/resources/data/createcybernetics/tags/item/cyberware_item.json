@@ -26,6 +26,7 @@
     "createcybernetics:legupgrades_jumpboost",
     "createcybernetics:legupgrades_propellers",
     "createcybernetics:legupgrades_spurs",
+    "createcybernetics:legupgrades_ocelotpaws",
     "createcybernetics:boneupgrades_bonebattery",
     "createcybernetics:boneupgrades_boneflex",
     "createcybernetics:boneupgrades_bonelacing",
@@ -65,7 +66,9 @@
     "createcybernetics:skinupgrades_solarskin",
     "createcybernetics:skinupgrades_subdermalarmor",
     "createcybernetics:skinupgrades_subdermalspikes",
+    "createcybernetics:skinupgrades_syntheticsetules",
     "createcybernetics:muscleupgrades_synthmuscle",
-    "createcybernetics:muscleupgrades_wiredreflexes"
+    "createcybernetics:muscleupgrades_wiredreflexes",
+    "createcybernetics:skinupgrades_sweat"
   ]
 }

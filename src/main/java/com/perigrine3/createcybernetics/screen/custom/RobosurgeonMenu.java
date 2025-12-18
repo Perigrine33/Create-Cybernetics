@@ -77,6 +77,7 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
         addRobosurgeonSlots();
+        addRobosurgeonSlots();
     }
 
     public RobosurgeonMenu(int containerId, Inventory inv, BlockEntity blockEntity) {

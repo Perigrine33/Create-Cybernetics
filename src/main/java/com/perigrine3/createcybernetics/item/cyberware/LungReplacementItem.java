@@ -2,19 +2,35 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
+import java.util.List;
 import java.util.Set;
 
 public class LungReplacementItem extends Item implements ICyberwareItem {
-    public LungReplacementItem(Properties props) {
+    private final int humanityCost;
+
+    public LungReplacementItem(Properties props, int humanityCost) {
         super(props);
+        this.humanityCost = humanityCost;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        if (Screen.hasShiftDown()) {
+            tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+        }
     }
 
     @Override
     public int getHumanityCost() {
-        return 10;
+        return humanityCost;
     }
 
     @Override

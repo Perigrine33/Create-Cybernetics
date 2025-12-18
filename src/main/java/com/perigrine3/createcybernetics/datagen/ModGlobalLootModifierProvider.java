@@ -6,8 +6,6 @@ import com.perigrine3.createcybernetics.loot.AddItemModifier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
@@ -193,10 +191,12 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/end_city_treasure")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_BONELACING.get()));
-                this.add("end_city_treasure",
-                        new AddItemModifier(new LootItemCondition[]{
-                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/end_city_treasure")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_NAVIGATIONCHIP.get()));
+                if (ModItems.SCAVENGED_NAVIGATIONCHIP != null) {
+                    this.add("end_city_treasure",
+                            new AddItemModifier(new LootItemCondition[]{
+                                    new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/end_city_treasure")).build(),
+                                    LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.SCAVENGED_NAVIGATIONCHIP.get()));
+                }
                 this.add("end_city_treasure",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/end_city_treasure")).build(),
@@ -226,14 +226,16 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_NETHERITEPLATING.get()));
-                this.add("nether_bridge",
-                        new AddItemModifier(new LootItemCondition[]{
-                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_CONCIOUSNESSTRANSMITTER.get()));
-                this.add("nether_bridge",
-                        new AddItemModifier(new LootItemCondition[]{
-                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_CORTICALSTACK.get()));
+                if (ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER != null && ModItems.SCAVENGED_CORTICALSTACK != null) {
+                    this.add("nether_bridge",
+                            new AddItemModifier(new LootItemCondition[]{
+                                    new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
+                                    LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER.get()));
+                    this.add("nether_bridge",
+                            new AddItemModifier(new LootItemCondition[]{
+                                    new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
+                                    LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.SCAVENGED_CORTICALSTACK.get()));
+                }
                 this.add("nether_bridge",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
@@ -302,10 +304,12 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_FIRESTARTER.get()));
-                this.add("nether_bridge",
-                        new AddItemModifier(new LootItemCondition[]{
-                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_NAVIGATIONCHIP.get()));
+                if (ModItems.SCAVENGED_NAVIGATIONCHIP != null) {
+                    this.add("nether_bridge",
+                            new AddItemModifier(new LootItemCondition[]{
+                                    new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
+                                    LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.SCAVENGED_NAVIGATIONCHIP.get()));
+                }
                 this.add("nether_bridge",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
@@ -461,10 +465,12 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_HUDLENS.get()));
-                this.add("stronghold_corridor",
-                        new AddItemModifier(new LootItemCondition[]{
-                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_NAVIGATIONCHIP.get()));
+                if (ModItems.SCAVENGED_NAVIGATIONCHIP != null) {
+                    this.add("stronghold_corridor",
+                            new AddItemModifier(new LootItemCondition[]{
+                                    new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
+                                    LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.SCAVENGED_NAVIGATIONCHIP.get()));
+                }
                 this.add("stronghold_corridor",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
@@ -565,14 +571,16 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_EYEOFDEFENDER.get()));
-                this.add("stronghold_corridor",
-                        new AddItemModifier(new LootItemCondition[]{
-                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_CONCIOUSNESSTRANSMITTER.get()));
-                this.add("stronghold_corridor",
-                        new AddItemModifier(new LootItemCondition[]{
-                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.1f).build() }, ModItems.SCAVENGED_CORTICALSTACK.get()));
+                if (ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER != null && ModItems.SCAVENGED_CORTICALSTACK != null) {
+                    this.add("stronghold_corridor",
+                            new AddItemModifier(new LootItemCondition[]{
+                                    new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
+                                    LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER.get()));
+                    this.add("stronghold_corridor",
+                            new AddItemModifier(new LootItemCondition[]{
+                                    new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
+                                    LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.SCAVENGED_CORTICALSTACK.get()));
+                }
                 this.add("stronghold_corridor",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
@@ -1524,6 +1532,13 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/polar_bear")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.05f).build()
                         }, ModItems.WETWARE_POLARBEARFUR.get()));
+                if (ModItems.WETWARE_BLUBBER != null) {
+                    this.add("wetware_blubber_to_polar_bear",
+                            new AddItemModifier(new LootItemCondition[]{
+                                    new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/polar_bear")).build(),
+                                    LootItemRandomChanceCondition.randomChance(0.05f).build()
+                            }, ModItems.WETWARE_BLUBBER.get()));
+                }
             }
 
 //RABBIT LOOT ADDS

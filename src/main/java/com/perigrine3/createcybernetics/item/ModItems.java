@@ -8,11 +8,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreateCybernetics.MODID);
@@ -77,7 +79,10 @@ public class ModItems {
         () -> new DeferredSpawnEggItem(ModEntities.SMASHER, 0x7f7b7b, 0xf44336,
                 new Item.Properties()));
     public static final DeferredItem<Item> CYBERZOMBIE_SPAWN_EGG = ITEMS.register("cyberzombie_spawn_egg",
-        () -> new DeferredSpawnEggItem(ModEntities.CYBERZOMBIE, 0x2596be, 0x3c5740,
+        () -> new DeferredSpawnEggItem(ModEntities.CYBERZOMBIE, 0x00AFAF, 0xFFFF003C,
+                new Item.Properties()));
+    public static final DeferredItem<Item> CYBERSKELETON_SPAWN_EGG = ITEMS.register("cyberskeleton_spawn_egg",
+        () -> new DeferredSpawnEggItem(ModEntities.CYBERSKELETON, 0xC1C1C1, 0xFFFF003C,
                 new Item.Properties()));
 
 
@@ -293,7 +298,7 @@ public class ModItems {
 
 //BASE CYBERWARE
     public static final DeferredItem<Item> BASECYBERWARE_RIGHTLEG = ITEMS.register("basecyberware_rightleg",
-            () -> new CyberlegItem(new Item.Properties().stacksTo(1)) {
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 7) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -307,7 +312,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BASECYBERWARE_LEFTLEG = ITEMS.register("basecyberware_leftleg",
-            () -> new CyberlegItem(new Item.Properties().stacksTo(1)) {
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 7) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     if (Screen.hasShiftDown()) {
@@ -321,7 +326,7 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> BASECYBERWARE_RIGHTARM = ITEMS.register("basecyberware_rightarm",
-            () -> new CyberarmItem(new Item.Properties().stacksTo(1)) {
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 7) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -335,7 +340,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BASECYBERWARE_LEFTARM = ITEMS.register("basecyberware_leftarm",
-            () -> new CyberarmItem(new Item.Properties().stacksTo(1)) {
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 7) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     if (Screen.hasShiftDown()) {
@@ -349,7 +354,7 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> BASECYBERWARE_LINEARFRAME = ITEMS.register("basecyberware_linearframe",
-            () -> new LinearFrameItem(new Item.Properties().stacksTo(1)) {
+            () -> new LinearFrameItem(new Item.Properties().stacksTo(1), 15) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     if (Screen.hasShiftDown()) {
@@ -363,7 +368,7 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> BASECYBERWARE_CYBEREYES = ITEMS.register("basecyberware_cybereyes",
-            () -> new EyeUpgradeItem(new Item.Properties().stacksTo(1)) {
+            () -> new EyeUpgradeItem(new Item.Properties().stacksTo(1), 7) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     if (Screen.hasShiftDown()) {
@@ -379,7 +384,7 @@ public class ModItems {
 
 //EYE UPGRADES
     public static final DeferredItem<Item> EYEUPGRADES_HUDLENS = ITEMS.register("eyeupgrades_hudlens",
-        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1)) {
+        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1), 1) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -395,8 +400,8 @@ public class ModItems {
         });
 
     //Xaero's Minimap compat
-            public static final DeferredItem<Item> EYEUPGRADES_NAVIGATIONCHIP = ITEMS.register("eyeupgrades_navigationchip",
-                () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1)) {
+            public static final DeferredItem<Item> EYEUPGRADES_NAVIGATIONCHIP = registerIfLoaded("xaerominimap","eyeupgrades_navigationchip",
+                () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -412,7 +417,7 @@ public class ModItems {
         });
 
     public static final DeferredItem<Item> EYEUPGRADES_HUDJACK = ITEMS.register("eyeupgrades_hudjack",
-        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1)) {
+        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -427,7 +432,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> EYEUPGRADES_NIGHTVISION = ITEMS.register("eyeupgrades_nightvision",
-        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1)) {
+        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -442,7 +447,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> EYEUPGRADES_TARGETING = ITEMS.register("eyeupgrades_targeting",
-        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1)) {
+        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -457,7 +462,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> EYEUPGRADES_UNDERWATERVISION = ITEMS.register("eyeupgrades_underwatervision",
-        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1)) {
+        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -472,7 +477,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> EYEUPGRADES_ZOOM = ITEMS.register("eyeupgrades_zoom",
-        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1)) {
+        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -486,10 +491,25 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
+    public static final DeferredItem<Item> EYEUPGRADES_TRAJECTORYCALCULATOR = ITEMS.register("eyeupgrades_trajectorycalculator",
+        () -> new CybereyeModuleItem(new Item.Properties().stacksTo(1), 3) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.eyeupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.eyeupgrades_trajectorycalculator.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.eyeupgrades_trajectorycalculator.tooltip2"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.eyeupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
 
 //ARM UPGRADES
     public static final DeferredItem<Item> ARMUPGRADES_ARMCANNON = ITEMS.register("armupgrades_armcannon",
-        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1), 7) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -504,7 +524,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ARMUPGRADES_FLYWHEEL = ITEMS.register("armupgrades_flywheel",
-        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -519,7 +539,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ARMUPGRADES_CLAWS = ITEMS.register("armupgrades_claws",
-        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -534,7 +554,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ARMUPGRADES_CRAFTHANDS = ITEMS.register("armupgrades_crafthands",
-        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -549,7 +569,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ARMUPGRADES_DRILLFIST = ITEMS.register("armupgrades_drillfist",
-        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1), 7) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -564,7 +584,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ARMUPGRADES_FIRESTARTER = ITEMS.register("armupgrades_firestarter",
-        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1), 1) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -579,7 +599,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ARMUPGRADES_PNEUMATICWRIST = ITEMS.register("armupgrades_pneumaticwrist",
-        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -594,7 +614,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ARMUPGRADES_REINFORCEDKNUCKLES = ITEMS.register("armupgrades_reinforcedknuckles",
-        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new ArmUpgradeItem(new Item.Properties().stacksTo(1), 4) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -611,7 +631,7 @@ public class ModItems {
 
 //LEG UPGRADES
     public static final DeferredItem<Item> LEGUPGRADES_METALDETECTOR = ITEMS.register("legupgrades_metaldetector",
-        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -626,7 +646,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> LEGUPGRADES_ANKLEBRACERS = ITEMS.register("legupgrades_anklebracers",
-        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -641,7 +661,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> LEGUPGRADES_JUMPBOOST = ITEMS.register("legupgrades_jumpboost",
-        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -656,7 +676,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> LEGUPGRADES_PROPELLERS = ITEMS.register("legupgrades_propellers",
-        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -671,7 +691,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> LEGUPGRADES_SPURS = ITEMS.register("legupgrades_spurs",
-        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1), 2) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -686,7 +706,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> LEGUPGRADES_OCELOTPAWS = ITEMS.register("legupgrades_ocelotpaws",
-        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LegUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -703,7 +723,7 @@ public class ModItems {
 
 //BONE UPGRADES
     public static final DeferredItem<Item> BONEUPGRADES_BONEBATTERY = ITEMS.register("boneupgrades_bonebattery",
-        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1), 2) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -718,7 +738,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BONEUPGRADES_BONEFLEX = ITEMS.register("boneupgrades_boneflex",
-        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -733,7 +753,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BONEUPGRADES_BONELACING = ITEMS.register("boneupgrades_bonelacing",
-        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -748,7 +768,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BONEUPGRADES_ELYTRA = ITEMS.register("boneupgrades_elytra",
-        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1), 10) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -763,7 +783,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BONEUPGRADES_PIEZO = ITEMS.register("boneupgrades_piezo",
-        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -778,7 +798,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BONEUPGRADES_SPINALINJECTOR = ITEMS.register("boneupgrades_spinalinjector",
-        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BoneUpgradeItem(new Item.Properties().stacksTo(1), 10) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -795,7 +815,7 @@ public class ModItems {
 
 //BRAIN UPGRADES
     public static final DeferredItem<Item> BRAINUPGRADES_EYEOFDEFENDER = ITEMS.register("brainupgrade_eyeofdefender",
-        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -811,8 +831,8 @@ public class ModItems {
         });
 
     //Create: Enchantment Industry compat
-        public static final DeferredItem<Item> BRAINUPGRADES_CONCIOUSNESSTRANSMITTER = ITEMS.register("brainupgrades_consciousnesstransmitter",
-            () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1)) {
+        public static final DeferredItem<Item> BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER = registerIfLoaded("create_enchantment_industry","brainupgrades_consciousnesstransmitter",
+            () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -826,8 +846,8 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
-        public static final DeferredItem<Item> BRAINUPGRADES_CORTICALSTACK = ITEMS.register("brainupgrades_corticalstack",
-            () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1)) {
+        public static final DeferredItem<Item> BRAINUPGRADES_CORTICALSTACK = registerIfLoaded("create_enchantment_industry","brainupgrades_corticalstack",
+            () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1), 10) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -843,7 +863,7 @@ public class ModItems {
         });
 
     public static final DeferredItem<Item> BRAINUPGRADES_ENDERJAMMER = ITEMS.register("brainupgrades_enderjammer",
-        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1), 2) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -857,7 +877,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BRAINUPGRADES_MATRIX = ITEMS.register("brainupgrades_matrix",
-        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1), 4) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -872,7 +892,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BRAINUPGRADES_NEURALCONTEXTUALIZER = ITEMS.register("brainupgrades_neuralcontextualizer",
-        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -887,7 +907,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BRAINUPGRADES_CYBERDECK = ITEMS.register("brainupgrades_cyberdeck",
-        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -902,7 +922,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BRAINUPGRADES_IDEM = ITEMS.register("brainupgrades_idem",
-        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new BrainUpgradeItem(new Item.Properties().stacksTo(1), 6) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -919,7 +939,7 @@ public class ModItems {
 
 //HEART UPGRADES
     public static final DeferredItem<Item> HEARTUPGRADES_CYBERHEART = ITEMS.register("heartupgrades_cyberheart",
-        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -933,7 +953,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> HEARTUPGRADES_COUPLER = ITEMS.register("heartupgrades_coupler",
-        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -948,7 +968,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> HEARTUPGRADES_CREEPERHEART = ITEMS.register("heartupgrades_creeperheart",
-        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -963,7 +983,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> HEARTUPGRADES_DEFIBRILLATOR = ITEMS.register("heartupgrades_defibrillator",
-        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -978,7 +998,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> HEARTUPGRADES_STEMCELL = ITEMS.register("heartupgrades_stemcell",
-        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1), 6) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -992,7 +1012,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> HEARTUPGRADES_PLATELETS = ITEMS.register("heartupgrades_platelets",
-        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new HeartUpgradeItem(new Item.Properties().stacksTo(1), 6) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1008,7 +1028,7 @@ public class ModItems {
 
 //LUNG UPGRADES
     public static final DeferredItem<Item> LUNGSUPGRADES_HYPEROXYGENATION = ITEMS.register("lungsupgrades_hyperoxygenation",
-        () -> new LungUpgradeItem(new Item.Properties().stacksTo(1)){
+        () -> new LungUpgradeItem(new Item.Properties().stacksTo(1), 5){
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1024,7 +1044,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> LUNGSUPGRADES_OXYGEN = ITEMS.register("lungsupgrades_oxygen",
-        () -> new LungUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LungUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1041,7 +1061,7 @@ public class ModItems {
 
 //ORGAN UPGRADES
     public static final DeferredItem<Item> ORGANSUPGRADES_ADRENALINE = ITEMS.register("organsupgrades_adrenaline",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1055,7 +1075,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ORGANSUPGRADES_BATTERY = ITEMS.register("organsupgrades_battery",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1070,7 +1090,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ORGANSUPGRADES_DIAMONDWAFERSTACK = ITEMS.register("organsupgrades_diamondwaferstack",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 1) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1085,7 +1105,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ORGANSUPGRADES_DUALISTICCONVERTER = ITEMS.register("organsupgrades_dualisticconverter",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1099,7 +1119,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ORGANSUPGRADES_LIVERFILTER = ITEMS.register("organsupgrades_liverfilter",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1113,7 +1133,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ORGANSUPGRADES_MAGICCATALYST = ITEMS.register("organsupgrades_magiccatalyst",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 15) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1127,7 +1147,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ORGANSUPGRADES_METABOLIC = ITEMS.register("organsupgrades_metabolic",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 4) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1142,7 +1162,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> ORGANSUPGRADES_DENSEBATTERY = ITEMS.register("organsupgrade_densebattery",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1158,7 +1178,7 @@ public class ModItems {
 
 //SKIN UPGRADES
     public static final DeferredItem<Item> SKINUPGRADES_ARTERIALTURBINE = ITEMS.register("skinupgrades_arterialturbine",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1173,7 +1193,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> SKINUPGRADES_CHROMATOPHORES = ITEMS.register("skinupgrades_chromatophores",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1187,7 +1207,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> SKINUPGRADES_SYNTHSKIN = ITEMS.register("skinupgrades_synthskin",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 1) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1201,7 +1221,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> SKINUPGRADES_IMMUNO = ITEMS.register("skinupgrades_immuno",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), -25) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1215,7 +1235,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> SKINUPGRADES_FACEPLATE = ITEMS.register("skinupgrades_faceplate",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1229,7 +1249,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> SKINUPGRADES_NETHERITEPLATING = ITEMS.register("skinupgrades_netheriteplating",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 10) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1243,7 +1263,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> SKINUPGRADES_SOLARSKIN = ITEMS.register("skinupgrades_solarskin",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1257,7 +1277,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> SKINUPGRADES_SUBDERMALARMOR = ITEMS.register("skinupgrades_subdermalarmor",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 6) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1272,7 +1292,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> SKINUPGRADES_SUBDERMALSPIKES = ITEMS.register("skinupgrades_subdermalspikes",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 7) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1285,10 +1305,24 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
+    public static final DeferredItem<Item> SKINUPGRADES_SYNTHETICSETULES = ITEMS.register("skinupgrades_syntheticsetules",
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 4) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_syntheticsetules.tooltip1"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
 
     //COLD SWEAT COMPAT
-        public static final DeferredItem<Item> SKINUPGRADES_SWEAT = ITEMS.register("skinupgrades_sweat",
-            () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        public static final DeferredItem<Item> SKINUPGRADES_SWEAT = registerIfLoaded("cold_sweat","skinupgrades_sweat",
+            () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1304,7 +1338,7 @@ public class ModItems {
 
 //MUSCLE UPGRADES
     public static final DeferredItem<Item> MUSCLEUPGRADES_SYNTHMUSCLE = ITEMS.register("muscleupgrades_synthmuscle",
-        () -> new MuscleUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new MuscleUpgradeItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1318,7 +1352,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> MUSCLEUPGRADES_WIREDREFLEXES = ITEMS.register("muscleupgrades_wiredreflexes",
-        () -> new MuscleUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new MuscleUpgradeItem(new Item.Properties().stacksTo(1), 4) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1335,8 +1369,8 @@ public class ModItems {
 //WETWARE UPGRADES
 
     //COLD SWEAT COMPAT
-        public static final DeferredItem<Item> WETWARE_BLUBBER = ITEMS.register("wetware_blubber",
-                () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        public static final DeferredItem<Item> WETWARE_BLUBBER = registerIfLoaded("cold_sweat","wetware_blubber",
+                () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 3) {
                     @Override
                     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                         if (Screen.hasShiftDown()) {
@@ -1351,7 +1385,7 @@ public class ModItems {
                 });
 
     public static final DeferredItem<Item> WETWARE_FIREBREATHINGGLAND = ITEMS.register("wetware_firebreathinggland",
-        () -> new LungUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LungUpgradeItem(new Item.Properties().stacksTo(1), 15) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1365,7 +1399,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> WETWARE_GILLS = ITEMS.register("wetware_gills",
-        () -> new LungUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new LungUpgradeItem(new Item.Properties().stacksTo(1), 12) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1379,7 +1413,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> WETWARE_GUARDIANEYE = ITEMS.register("wetware_guardianeye",
-        () -> new EyeUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new EyeUpgradeItem(new Item.Properties().stacksTo(1), 15) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1393,7 +1427,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> WETWARE_POLARBEARFUR = ITEMS.register("wetware_polarbearfur",
-        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new SkinUpgradeItem(new Item.Properties().stacksTo(1), 12) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1407,7 +1441,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> WETWARE_RAVAGERTENDONS = ITEMS.register("wetware_ravagertendons",
-        () -> new MuscleUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new MuscleUpgradeItem(new Item.Properties().stacksTo(1), 15) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1421,7 +1455,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> WETWARE_SCULKLUNGS = ITEMS.register("wetware_sculklungs",
-        () -> new LungReplacementItem(new Item.Properties().stacksTo(1)) {
+        () -> new LungReplacementItem(new Item.Properties().stacksTo(1), 15) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1435,7 +1469,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> WETWARE_TACTICALINKSAC = ITEMS.register("wetware_tacticalinksac",
-        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1)) {
+        () -> new OrganUpgradeItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1449,7 +1483,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> WETWARE_AEROSTASISGYROBLADDER = ITEMS.register("wetware_aerostasisgyrobladder",
-        () -> new LungReplacementItem(new Item.Properties().stacksTo(1)) {
+        () -> new LungReplacementItem(new Item.Properties().stacksTo(1), 15) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -1522,7 +1556,8 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
-    public static final DeferredItem<Item> SCAVENGED_NAVIGATIONCHIP = ITEMS.register("scavenged_navigationchip",
+
+    public static final DeferredItem<Item> SCAVENGED_NAVIGATIONCHIP = registerIfLoaded("xaerominimap","scavenged_navigationchip",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -1530,6 +1565,7 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
+
     public static final DeferredItem<Item> SCAVENGED_HUDJACK = ITEMS.register("scavenged_hudjack",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
@@ -1563,6 +1599,14 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> SCAVENGED_ZOOM = ITEMS.register("scavenged_zoom",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_TRAJECTORYCALCULATOR = ITEMS.register("scavenged_trajectorycalculator",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -1738,7 +1782,8 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
-    public static final DeferredItem<Item> SCAVENGED_CONCIOUSNESSTRANSMITTER = ITEMS.register("scavenged_consciousnesstransmitter",
+
+    public static final DeferredItem<Item> SCAVENGED_CONSCIOUSNESSTRANSMITTER = registerIfLoaded("createenchantmentindustry","scavenged_consciousnesstransmitter",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -1746,7 +1791,7 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
-    public static final DeferredItem<Item> SCAVENGED_CORTICALSTACK = ITEMS.register("scavenged_corticalstack",
+    public static final DeferredItem<Item> SCAVENGED_CORTICALSTACK = registerIfLoaded("createenchantmentindustry","scavenged_corticalstack",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -1754,6 +1799,7 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
+
     public static final DeferredItem<Item> SCAVENGED_ENDERJAMMER = ITEMS.register("scavenged_enderjammer",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
@@ -1986,7 +2032,7 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
-    public static final DeferredItem<Item> SCAVENGED_SWEAT = ITEMS.register("scavenged_sweat",
+    public static final DeferredItem<Item> SCAVENGED_SYNTHETICSETULES = ITEMS.register("scavenged_syntheticsetules",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -1994,6 +2040,16 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
+
+    public static final DeferredItem<Item> SCAVENGED_SWEAT = registerIfLoaded("cold_sweat","scavenged_sweat",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+
     public static final DeferredItem<Item> SCAVENGED_SYNTHMUSCLE = ITEMS.register("scavenged_synthmuscle",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
@@ -2010,6 +2066,14 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
+
+
+    public static <T extends Item> DeferredItem<T> registerIfLoaded(String modid, String name, Supplier<T> supplier) {
+        if (ModList.get().isLoaded(modid)) {
+            return ModItems.ITEMS.register(name, supplier);
+        }
+        return null;
+    }
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

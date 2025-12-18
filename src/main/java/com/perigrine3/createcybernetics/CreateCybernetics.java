@@ -88,6 +88,7 @@ public class CreateCybernetics {
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.SMASHER_SPAWN_EGG);
             event.accept(ModItems.CYBERZOMBIE_SPAWN_EGG);
+            event.accept(ModItems.CYBERSKELETON_SPAWN_EGG);
         }
     }
 
@@ -102,6 +103,7 @@ public class CreateCybernetics {
         public static void onClientSetup(FMLClientSetupEvent event) {
             EntityRenderers.register(ModEntities.SMASHER.get(), SmasherRenderer::new);
             EntityRenderers.register(ModEntities.CYBERZOMBIE.get(), CyberzombieRenderer::new);
+            EntityRenderers.register(ModEntities.CYBERSKELETON.get(), CyberskeletonRenderer::new);
         }
 
         @SubscribeEvent

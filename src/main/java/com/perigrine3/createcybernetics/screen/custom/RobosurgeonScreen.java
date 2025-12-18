@@ -2,6 +2,10 @@ package com.perigrine3.createcybernetics.screen.custom;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,6 +19,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -37,6 +42,8 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private final int backY = 120;
     private final int backW = 20;
     private final int backH = 10;
+    private static final int HUMANITY_BAR_WIDTH = 10;
+    private static final int HUMANITY_BAR_HEIGHT = 75;
 
     private final ItemStack renderSkin = new ItemStack(ModItems.BODYPART_SKIN.get());
     private final ItemStack renderMuscle = new ItemStack(ModItems.BODYPART_MUSCLE.get());
@@ -215,6 +222,8 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         RenderSystem.setShaderTexture(0, GUI_TEXTURE);
         guiGraphics.blit(GUI_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight, 176, 222);
 
+        drawHumanityBar(guiGraphics);
+
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
@@ -247,6 +256,86 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         RenderSystem.disableBlend();
     }
 
+
+    // -----------------------
+    // Humanity Bar
+    // -----------------------
+    private void drawHumanityBar(GuiGraphics gui) {
+        Player player = minecraft.player;
+        if (player == null) return;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
+
+        int humanity = calculatePreviewHumanity();
+        int maxHumanity = 100;
+
+        float percent = Math.max(0f, Math.min(1f, humanity / (float) maxHumanity));
+
+        int x = leftPos + 10;
+        int y = topPos + 30;
+
+        // BACKGROUND
+        gui.fill(x, y, x + HUMANITY_BAR_WIDTH, y + HUMANITY_BAR_HEIGHT, 0xFF202020);
+
+        // FILLED HEIGHT (bottom-up)
+        int filled = (int)(HUMANITY_BAR_HEIGHT * percent);
+        int color = getHumanityColor(percent);
+
+        gui.fill(x, y + (HUMANITY_BAR_HEIGHT - filled), x + HUMANITY_BAR_WIDTH, y + HUMANITY_BAR_HEIGHT, color);
+
+        // LABEL
+        gui.pose().pushPose();
+        gui.pose().scale(0.5f, 0.5f, 1f);
+        gui.drawString(minecraft.font, "" + humanity, (int)(x * 2), (int)((y - 7) * 2), 0xFF34D5EB, false);
+        gui.pose().popPose();
+    }
+
+    private int getHumanityColor(float percent) {
+        if (percent > 0.66f) {
+            return 0xFF2AFF00;  // green
+        } else if (percent > 0.25f) {
+            return 0xFFFFAA00;  // orange
+        } else {
+            return 0xFFFF0000;  // red
+        }
+    }
+
+    private int calculatePreviewHumanity() {
+        Player player = minecraft.player;
+        if (player == null) return 100;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return 100;
+
+        int humanity = data.getHumanity();
+
+        for (Slot slot : menu.slots) {
+            if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
+
+            int handlerIndex = rsSlot.getSlotIndex();
+            ItemStack stack = rsSlot.getItem();
+
+            if (stack.isEmpty()) continue;
+            if (!(stack.getItem() instanceof ICyberwareItem cyberware)) continue;
+
+            int cost = cyberware.getHumanityCost();
+
+            if (menu.isInstalled(handlerIndex)) {
+                humanity -= cost;
+            }
+
+            if (menu.isStaged(handlerIndex)) {
+                humanity -= cost;
+            }
+
+            if (menu.isMarkedForRemoval(handlerIndex)) {
+                humanity += cost;
+            }
+        }
+
+        return Math.max(0, Math.min(100, humanity));
+    }
 
 
     // -----------------------
@@ -512,7 +601,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         return SLOT_ICON;
     }
-
 
 
     // -----------------------
@@ -813,7 +901,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
                 }
 
                 viewMode = viewMode.parent != null ? viewMode.parent : ViewMode.FULL_BODY;
-                modelViewer.triggerZoomReset(); // <-- keep this
+                modelViewer.triggerZoomReset();
                 return true;
             }
         }
@@ -833,11 +921,10 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         if (clicked != null) {
             viewMode = clicked;
-            modelViewer.triggerZoomReset(); // <-- keep this
+            modelViewer.triggerZoomReset();
             return true;
         }
 
-        // prevent clicks ONLY if the slot actually being clicked is hidden
         Slot hovered = this.getSlotUnderMouse();
         if (hovered != null && !isSlotVisible(hovered)) {
             return false;

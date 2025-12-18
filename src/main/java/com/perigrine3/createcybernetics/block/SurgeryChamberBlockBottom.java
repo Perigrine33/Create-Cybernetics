@@ -156,10 +156,5 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
         player.hurt(level.damageSources().generic(), 10.0f);
 
         level.setBlock(pos, state.setValue(SURGERY_DONE, true), 3);
-
-        System.out.println(
-                "READ INSTANCE = "
-                        + System.identityHashCode(player.getData(ModAttachments.CYBERWARE))
-        );
     }
 }

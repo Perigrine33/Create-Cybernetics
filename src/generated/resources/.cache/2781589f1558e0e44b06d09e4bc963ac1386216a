@@ -1,15 +1,16 @@
-// 1.21.1	2025-12-15T11:00:45.8387572	Tags for minecraft:item mod id createcybernetics
+// 1.21.1	2025-12-19T13:40:36.0077163	Tags for minecraft:item mod id createcybernetics
 0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
 c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
 22dd43158827f4d7cda7a49ec4b5120807881949 data/createcybernetics/tags/item/body_parts.json
 83df59694b0dd4c1d4de5e4b486f4a87f790ac1b data/createcybernetics/tags/item/bone_upgrades.json
-cde113c0dcc4652b6034b5d8dcc158f166769ff7 data/createcybernetics/tags/item/brain_upgrades.json
-840bab42521084126e0ec4a27b63874cba1002b7 data/createcybernetics/tags/item/cyberware_item.json
-caaf43881ba4d906fcca137efb7389246f0f7660 data/createcybernetics/tags/item/eye_upgrades.json
+80822d489a720b922a04ac8a71e300554e8593a5 data/createcybernetics/tags/item/brain_upgrades.json
+18e4ba7ea8e6704eb87c00637d176a814d9b840a data/createcybernetics/tags/item/cyberware_item.json
+10cbd2ad2508ca81df3cfe285a1a8cabadad9dfc data/createcybernetics/tags/item/eye_upgrades.json
 e1af38c781817bc5409595ced275f781bfbb55b8 data/createcybernetics/tags/item/heart_upgrades.json
 da7baffdd7686e61aae4892efa529dd0912da73a data/createcybernetics/tags/item/leg_upgrades.json
 03dfaa238950e6386e25b498ad4682b894ec3850 data/createcybernetics/tags/item/lung_upgrades.json
 57d5f1afed754bcee8e33afabe17c892ff80a49c data/createcybernetics/tags/item/muscle_upgrades.json
 21189b7057f39986677a3d65a0a16df49791a3de data/createcybernetics/tags/item/organ_upgrades.json
-bf0bce90c6471c3c38035c1d1bc0190d57af149c data/createcybernetics/tags/item/skin_upgrades.json
-e8c4e7911767147f662cc39704e38149b6ffd008 data/createcybernetics/tags/item/wetware_item.json
+1d8a4fd6ba9cea549a0636e7929fe079a9480219 data/createcybernetics/tags/item/scavenged_cyberware.json
+7f1ae841979b7c7ce97796d290c31b7b38364e2c data/createcybernetics/tags/item/skin_upgrades.json
+1474f9e6e2dabbaa61dd37779ba7c54aad0bcf00 data/createcybernetics/tags/item/wetware_item.json

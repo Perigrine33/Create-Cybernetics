@@ -46,13 +46,11 @@ public class RobosurgeonBlockEntity extends BlockEntity implements MenuProvider 
                 return;
             }
 
-// Do NOT re-stage during surgery resolution
             if (surgeryInProgress) {
                 setChanged();
                 return;
             }
 
-// Normal behavior: item manually inserted
             if (!installed[slot]) {
                 staged[slot] = true;
                 markedForRemoval[slot] = false;
@@ -138,15 +136,24 @@ public class RobosurgeonBlockEntity extends BlockEntity implements MenuProvider 
     }
 
     public void drops() {
-        SimpleContainer inv = new SimpleContainer(inventory.getSlots());
+        if (level == null || level.isClientSide) return;
+
         for (int i = 0; i < inventory.getSlots(); i++) {
+
+            if (!staged[i]) continue;
+
             ItemStack stack = inventory.getStackInSlot(i);
-            if (!stack.isEmpty() && !isDefaultOrgan(stack)) {
-                inv.setItem(i, stack);
-            }
+            if (stack.isEmpty()) continue;
+
+            Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), stack);
+
+            inventory.setStackInSlot(i, ItemStack.EMPTY);
+            staged[i] = false;
         }
-        Containers.dropContents(this.level, this.worldPosition, inv);
+
+        setChanged();
     }
+
 
     private boolean isDefaultOrgan(ItemStack stack) {
         if (stack.isEmpty()) return false;

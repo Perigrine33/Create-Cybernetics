@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -20,6 +21,7 @@ public class SmasherEntity extends AbstractIllager {
 
 public SmasherEntity(EntityType<? extends AbstractIllager> entityType, Level level) {
         super(entityType, level);
+        this.setCanJoinRaid(true);
         this.xpReward = 50;
     }
 
@@ -31,13 +33,13 @@ public SmasherEntity(EntityType<? extends AbstractIllager> entityType, Level lev
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 25.0F));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, false, false, target -> !(target instanceof AbstractIllager) && !(target instanceof Ravager) && !(target instanceof Monster)));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, true));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 300.0D)
+                .add(Attributes.MAX_HEALTH, 150.0D)
                 .add(Attributes.ATTACK_DAMAGE, 18.0D)
                 .add(Attributes.ATTACK_KNOCKBACK, 2.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.30D)
@@ -51,7 +53,13 @@ public SmasherEntity(EntityType<? extends AbstractIllager> entityType, Level lev
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return null;
+        return net.minecraft.sounds.SoundEvents.VINDICATOR_CELEBRATE;
+    }
+
+    @Override
+    public float getVoicePitch() {
+        // Lower = deeper, higher = squeakier
+        return 0.5F + (this.random.nextFloat() - 0.5F) * 0.05F;
     }
 
     @Override
@@ -67,18 +75,14 @@ public SmasherEntity(EntityType<? extends AbstractIllager> entityType, Level lev
 
     @Override
     public boolean isAlliedTo(Entity entity) {
-        if (super.isAlliedTo(entity)) {
-            return true;
-        }
-        if (entity instanceof AbstractIllager || entity instanceof Ravager) {
-            return true;
-        }
-        return false;
+        if (entity instanceof net.minecraft.world.entity.raid.Raider) return true;
+        if (entity instanceof net.minecraft.world.entity.monster.Ravager) return true;
+        return super.isAlliedTo(entity);
     }
 
     @Override
     public boolean canBeSeenAsEnemy() {
-        return false;
+        return true;
     }
 
     private void setupAnimationStates() {

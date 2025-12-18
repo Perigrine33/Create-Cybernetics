@@ -9,10 +9,10 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class SmasherRenderer extends MobRenderer<SmasherEntity, SmasherModel<SmasherEntity>> {
-
-
     public SmasherRenderer(EntityRendererProvider.Context context) {
         super(context, new SmasherModel<>(context.bakeLayer(SmasherModel.LAYER_LOCATION)), 0.5f);
+        this.addLayer(new SmasherHighlightLayer(this));
+
     }
 
     @Override

@@ -48,8 +48,8 @@ authors="${mod_authors}" #optional
 description='''${mod_description}'''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
-#[[mixins]]
-#config="${mod_id}.mixins.json"
+[[mixins]]
+config="createcybernetics.mixins.json"
 
 # The [[accessTransformers]] block allows you to declare where your AT file is.
 # If this block is omitted, a fallback attempt will be made to load an AT from META-INF/accesstransformer.cfg
@@ -76,16 +76,39 @@ description='''${mod_description}'''
 [[dependencies.${mod_id}]]
     modId="jei"
     type="optional"
-    versionRange="[19.21.1,19.25.1]"
+    versionRange="[0,]"
     ordering="NONE"
     side="CLIENT"
+
 
 [[dependencies.${mod_id}]]
     modId="farmersdelight"
     type="optional"
-    versionRange="[1.2.9]"
+    versionRange="[1.2.9,]"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="xaerominimap"
+    type="optional"
+    versionRange="[0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="create_enchantment_industry"
+    type="optional"
+    versionRange="[2.1.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="cold_sweat"
+    type="optional"
+    versionRange="[0,)"
+    ordering="NONE"
+    side="BOTH"
+
 
 # Here's another dependency
 [[dependencies.${mod_id}]]
