@@ -47,7 +47,6 @@ public final class DefaultOrgans {
                 ItemStack.EMPTY
         });
 
-        // 👇 Liver + Intestines, adjacent
         DEFAULTS.put(CyberwareSlot.ORGANS, new ItemStack[] {
                 new ItemStack(ModItems.BODYPART_LIVER.get()),
                 new ItemStack(ModItems.BODYPART_INTESTINES.get()),

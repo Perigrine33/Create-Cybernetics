@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.api;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -46,11 +47,11 @@ public class InstalledCyberware {
 
     /* ---------------- NBT ---------------- */
 
-    public CompoundTag save() {
+    public CompoundTag save(net.minecraft.core.HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
 
         if (!item.isEmpty()) {
-            tag.put("Item", item.save(null));
+            tag.put("Item", item.save(provider));
         }
 
         if (slot != null) {
@@ -63,17 +64,22 @@ public class InstalledCyberware {
         return tag;
     }
 
-    public static InstalledCyberware load(CompoundTag tag) {
+    public static InstalledCyberware load(CompoundTag tag, net.minecraft.core.HolderLookup.Provider provider) {
         InstalledCyberware c = new InstalledCyberware();
 
-        if (tag.contains("Item")) {
-            c.item = ItemStack.parse(null, tag.getCompound("Item"))
+        if (tag.contains("Item", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
+            c.item = ItemStack.parse(provider, tag.getCompound("Item"))
                     .orElse(ItemStack.EMPTY);
+        } else {
+            c.item = ItemStack.EMPTY;
         }
 
-        if (tag.contains("Slot")) {
+        if (tag.contains("Slot", net.minecraft.nbt.Tag.TAG_STRING)) {
             c.slot = CyberwareSlot.valueOf(tag.getString("Slot"));
             c.index = tag.getInt("Index");
+        } else {
+            c.slot = null;
+            c.index = -1;
         }
 
         c.humanityCost = tag.getInt("Humanity");

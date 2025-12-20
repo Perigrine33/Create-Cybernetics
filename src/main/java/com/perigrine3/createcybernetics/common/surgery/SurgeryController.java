@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.common.surgery;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.block.entity.RobosurgeonBlockEntity;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
@@ -17,7 +18,6 @@ public final class SurgeryController {
     }
 
     public static void performSurgery(Player player, RobosurgeonBlockEntity surgeon, boolean[] staged, boolean[] markedForRemoval) {
-
         if (player.level().isClientSide) return;
 
         // -------------------------------------------------
@@ -26,14 +26,8 @@ public final class SurgeryController {
         surgeon.beginSurgery();
 
         try {
-            // -------------------------------------------------
-            // GET PLAYER CYBERWARE DATA
-            // -------------------------------------------------
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-
-            if (data == null) {
-                return;
-            }
+            if (data == null) return;
 
             // -------------------------------------------------
             // PROCESS ALL SLOTS
@@ -46,7 +40,7 @@ public final class SurgeryController {
                         continue;
                     }
 
-                    ItemStack stack = surgeon.inventory.getStackInSlot(invIndex);
+                    ItemStack stackInGui = surgeon.inventory.getStackInSlot(invIndex);
 
                     boolean isStaged =
                             staged != null
@@ -59,18 +53,27 @@ public final class SurgeryController {
                                     && markedForRemoval[invIndex];
 
                     // =================================================
-                    // MARKED FOR REMOVAL → GIVE BACK TO PLAYER
+                    // MARKED FOR REMOVAL → REMOVE FROM ATTACHMENT, GIVE BACK TO PLAYER
                     // =================================================
                     if (isMarked) {
 
-                        if (!stack.isEmpty()) {
-                            ItemStack removed = stack.copy();
-                            surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
+                        InstalledCyberware removed = data.remove(slot, i);
 
-                            if (!player.getInventory().add(removed)) {
-                                player.drop(removed, false);
+                        if (removed != null && removed.getItem() != null && !removed.getItem().isEmpty()) {
+                            ItemStack giveBack = removed.getItem().copy();
+                            if (!player.getInventory().add(giveBack)) {
+                                player.drop(giveBack, false);
+                            }
+                        } else {
+                            if (!stackInGui.isEmpty()) {
+                                ItemStack giveBack = stackInGui.copy();
+                                if (!player.getInventory().add(giveBack)) {
+                                    player.drop(giveBack, false);
+                                }
                             }
                         }
+
+                        surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
 
                         surgeon.installed[invIndex] = false;
                         surgeon.staged[invIndex] = false;
@@ -85,34 +88,40 @@ public final class SurgeryController {
                         continue;
                     }
 
-                    // Staged flag but empty stack → cleanup
-                    if (stack.isEmpty()) {
+                    if (stackInGui.isEmpty()) {
                         surgeon.staged[invIndex] = false;
                         continue;
                     }
 
                     // =================================================
-                    // INSTALL STAGED ITEM
+                    // INSTALL STAGED ITEM → WRITE TO ATTACHMENT
                     // =================================================
-                    InstalledCyberware installed =
-                            new InstalledCyberware(stack.copy(), slot, i, 0);
+                    int humanityCost = 0;
+                    if (stackInGui.getItem() instanceof ICyberwareItem cyberwareItem) {
+                        humanityCost = cyberwareItem.getHumanityCost();
+                    }
+
+                    InstalledCyberware installed = new InstalledCyberware(stackInGui.copy(), slot, i, humanityCost);
+                    installed.setPowered(true);
 
                     data.set(slot, i, installed);
 
                     surgeon.installed[invIndex] = true;
                     surgeon.staged[invIndex] = false;
                     surgeon.markedForRemoval[invIndex] = false;
-
                 }
             }
 
+            // -------------------------------------------------
+            // COMMIT + SYNC
+            // -------------------------------------------------
             data.setDirty();
+            player.syncData(ModAttachments.CYBERWARE);
+
             surgeon.clearSlotStates();
             surgeon.setChanged();
 
-            if (!player.level().isClientSide) {
-                player.level().sendBlockUpdated(surgeon.getBlockPos(), surgeon.getBlockState(), surgeon.getBlockState(), 3);
-            }
+            player.level().sendBlockUpdated(surgeon.getBlockPos(), surgeon.getBlockState(), surgeon.getBlockState(), 3);
 
         } finally {
             surgeon.endSurgery();

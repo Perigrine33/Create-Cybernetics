@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -114,12 +115,17 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.WETWARE_FIREBREATHINGGLAND.get())
                 .add(ModItems.WETWARE_GILLS.get())
                 .add(ModItems.WETWARE_GUARDIANEYE.get())
-                .add(ModItems.WETWARE_BLUBBER.get())
                 .add(ModItems.WETWARE_SCULKLUNGS.get())
                 .add(ModItems.WETWARE_TACTICALINKSAC.get())
                 .add(ModItems.WETWARE_AEROSTASISGYROBLADDER.get())
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
-                .add(ModItems.WETWARE_RAVAGERTENDONS.get());
+                .add(ModItems.WETWARE_RAVAGERTENDONS.get())
+                .add(ModItems.WETWARE_GRASSFEDSTOMACH.get());
+
+            if (ModItems.WETWARE_BLUBBER != null) {
+                tag(ModTags.Items.WETWARE_ITEM)
+                        .add(ModItems.WETWARE_BLUBBER.get());
+            }
 //BODY PARTS
         tag(ModTags.Items.BODY_PARTS)
                 .add(ModItems.BODYPART_RIGHTLEG.get())
@@ -331,5 +337,70 @@ public class ModItemTagProvider extends ItemTagsProvider {
             tag(ModTags.Items.SCAVENGED_CYBERWARE)
                     .add(ModItems.SCAVENGED_SWEAT.get());
         }
+
+
+
+        tag(ModTags.Items.BRAIN_ITEMS)
+                .add(ModItems.BODYPART_BRAIN.get());
+
+        tag(ModTags.Items.EYE_ITEMS)
+                .add(ModItems.BASECYBERWARE_CYBEREYES.get())
+                .add(ModItems.WETWARE_GUARDIANEYE.get())
+                .add(Items.SPIDER_EYE)
+                .add(ModItems.BODYPART_EYEBALLS.get());
+
+        tag(ModTags.Items.SKIN_ITEMS)
+                .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get())
+                .add(ModItems.SKINUPGRADES_SUBDERMALARMOR.get())
+                .add(ModItems.SKINUPGRADES_SOLARSKIN.get())
+                .add(ModItems.SKINUPGRADES_NETHERITEPLATING.get())
+                .add(ModItems.SKINUPGRADES_SYNTHSKIN.get())
+                .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
+                .add(ModItems.WETWARE_POLARBEARFUR.get())
+                .add(ModItems.BODYPART_SKIN.get());
+
+        tag(ModTags.Items.MUSCLE_ITEMS)
+                .add(ModItems.WETWARE_RAVAGERTENDONS.get())
+                .add(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get())
+                .add(ModItems.BODYPART_MUSCLE.get());
+
+        tag(ModTags.Items.BONE_ITEMS)
+                .add(ModItems.BASECYBERWARE_LINEARFRAME.get())
+                .add(ModItems.BODYPART_SKELETON.get());
+
+        tag(ModTags.Items.HEART_ITEMS)
+                .add(ModItems.HEARTUPGRADES_CYBERHEART.get())
+                .add(ModItems.BODYPART_HEART.get());
+
+        tag(ModTags.Items.LUNGS_ITEMS)
+                .add(ModItems.WETWARE_SCULKLUNGS.get())
+                .add(ModItems.WETWARE_AEROSTASISGYROBLADDER.get())
+                .add(ModItems.BODYPART_LUNGS.get());
+
+        tag(ModTags.Items.LIVER_ITEMS)
+                .add(ModItems.ORGANSUPGRADES_LIVERFILTER.get())
+                .add(ModItems.BODYPART_LIVER.get());
+
+        tag(ModTags.Items.INTESTINES_ITEMS)
+                .add(ModItems.WETWARE_TACTICALINKSAC.get())
+                .add(ModItems.WETWARE_GRASSFEDSTOMACH.get())
+                .add(ModItems.BODYPART_INTESTINES.get());
+
+        tag(ModTags.Items.LEFTARM_ITEMS)
+                .add(ModItems.BASECYBERWARE_LEFTARM.get())
+                .add(ModItems.BODYPART_LEFTARM.get());
+
+        tag(ModTags.Items.RIGHTARM_ITEMS)
+                .add(ModItems.BASECYBERWARE_RIGHTARM.get())
+                .add(ModItems.BODYPART_RIGHTARM.get());
+
+        tag(ModTags.Items.LEFTLEG_ITEMS)
+                .add(ModItems.BASECYBERWARE_LEFTLEG.get())
+                .add(ModItems.BODYPART_LEFTLEG.get());
+
+        tag(ModTags.Items.RIGHTLEG_ITEMS)
+                .add(ModItems.BASECYBERWARE_RIGHTLEG.get())
+                .add(ModItems.BODYPART_RIGHTLEG.get());
+
     }
 }

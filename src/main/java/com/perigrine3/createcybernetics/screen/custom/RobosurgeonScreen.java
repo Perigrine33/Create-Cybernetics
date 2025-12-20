@@ -4,9 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.client.ClientRenderFlags;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -17,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -44,6 +47,12 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private final int backH = 10;
     private static final int HUMANITY_BAR_WIDTH = 10;
     private static final int HUMANITY_BAR_HEIGHT = 75;
+    private static final int WARNING_W = 12;
+    private static final int WARNING_H = 12;
+    private static final int WARNING_X = -15;
+    private static final int WARNING_Y = 8;
+
+
 
     private final ItemStack renderSkin = new ItemStack(ModItems.BODYPART_SKIN.get());
     private final ItemStack renderMuscle = new ItemStack(ModItems.BODYPART_MUSCLE.get());
@@ -310,27 +319,26 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         int humanity = data.getHumanity();
 
+        boolean[] seen = new boolean[65];
+
         for (Slot slot : menu.slots) {
             if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
 
             int handlerIndex = rsSlot.getSlotIndex();
-            ItemStack stack = rsSlot.getItem();
+            if (handlerIndex < 0 || handlerIndex >= seen.length) continue;
+            if (seen[handlerIndex]) continue;
+            seen[handlerIndex] = true;
 
+            ItemStack stack = rsSlot.getItem();
             if (stack.isEmpty()) continue;
             if (!(stack.getItem() instanceof ICyberwareItem cyberware)) continue;
 
             int cost = cyberware.getHumanityCost();
 
-            if (menu.isInstalled(handlerIndex)) {
-                humanity -= cost;
-            }
-
-            if (menu.isStaged(handlerIndex)) {
-                humanity -= cost;
-            }
-
             if (menu.isMarkedForRemoval(handlerIndex)) {
                 humanity += cost;
+            } else if (menu.isStaged(handlerIndex)) {
+                humanity -= cost;
             }
         }
 
@@ -618,7 +626,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
 
     // -----------------------
-    // Main Render Pass
+    // Renderer Methods
     // -----------------------
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
@@ -740,6 +748,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         markerManager.render(gui, modelX, modelY, mouseX, mouseY,
                 viewMode, modelViewer.getRotationPhase(), this.font);
 
+        renderRemovalWarning(gui, mouseX, mouseY);
         this.renderTooltip(gui, mouseX, mouseY);
 
     }
@@ -887,6 +896,79 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
 
     // -----------------------
+    // Warning Icon Helper
+    // -----------------------
+
+    private int countMarkedForRemovalTotal() {
+        int count = 0;
+        for (SlotView view : slotViews) {
+            if (menu.isMarkedForRemoval(view.slotIndex)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private int countMarkedForRemovalVisible() {
+        int count = 0;
+        for (SlotView view : slotViews) {
+            if (!matchesView(view.viewMode)) continue;
+            if (menu.isMarkedForRemoval(view.slotIndex)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private boolean hasAnyMarkedForRemoval() {
+
+        for (Slot slot : menu.slots) {
+            if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
+
+            int handlerIndex = rsSlot.getSlotIndex();
+            if (menu.isMarkedForRemoval(handlerIndex)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void renderRemovalWarning(GuiGraphics gui, int mouseX, int mouseY) {
+
+        if (!hasAnyMarkedForRemoval()) return;
+
+        int x = leftPos + WARNING_X;
+        int y = topPos + WARNING_Y;
+
+        gui.pose().pushPose();
+        gui.pose().translate(0, 0, 400);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        gui.blit(WARNING_ICON, x, y, 0, 0, WARNING_W, WARNING_H, WARNING_W, WARNING_H);
+
+        boolean hovering = isMouseOverRect(x, y, WARNING_W, WARNING_H, mouseX, mouseY);
+        if (hovering) {
+
+            List<Component> tip = List.of(
+                    Component.literal("Warning!").withStyle(ChatFormatting.RED),
+                    Component.literal("One or more vital organs are marked for removal!").withStyle(ChatFormatting.RED),
+                    Component.literal("Removal could have negative repercussions...").withStyle(ChatFormatting.RED));
+
+            gui.renderComponentTooltip(this.font, tip, mouseX, mouseY);
+        }
+
+        RenderSystem.disableBlend();
+        gui.pose().popPose();
+    }
+
+
+
+
+    // -----------------------
     // Mouse Interaction
     // -----------------------
     @Override
@@ -947,5 +1029,10 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         int y = topPos + slot.y;
         return mouseX >= x && mouseX < x + 16
                 && mouseY >= y && mouseY < y + 16;
+    }
+
+    private boolean isMouseOverRect(int x, int y, int w, int h, int mouseX, int mouseY) {
+        return mouseX >= x && mouseX < x + w
+                && mouseY >= y && mouseY < y + h;
     }
 }

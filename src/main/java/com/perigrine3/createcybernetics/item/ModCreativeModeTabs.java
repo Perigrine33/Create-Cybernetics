@@ -274,6 +274,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WETWARE_SCULKLUNGS);
                         output.accept(ModItems.WETWARE_TACTICALINKSAC);
                         output.accept(ModItems.WETWARE_AEROSTASISGYROBLADDER);
+                        output.accept(ModItems.WETWARE_GRASSFEDSTOMACH);
 
 
 

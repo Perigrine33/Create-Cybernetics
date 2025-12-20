@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-19T13:40:35.9995312	Item Models: createcybernetics
+// 1.21.1	2025-12-20T00:49:32.6088986	Item Models: createcybernetics
 ae78f051d9328e5a204530b7fc2e3d88362b4e68 assets/createcybernetics/models/item/armupgrades_armcannon.json
 37f82cc0ca47be7b60c54ef6d3b7059b9b671846 assets/createcybernetics/models/item/armupgrades_claws.json
 43386cbc8a036270c3eb218724a7a5cdf12b5fbf assets/createcybernetics/models/item/armupgrades_crafthands.json
@@ -185,6 +185,7 @@ a4efa65adc67e4d2b4a8621a9e2eb06aa86dbb0c assets/createcybernetics/models/item/we
 34f80259e22af25b29c60642709b6bd66c541470 assets/createcybernetics/models/item/wetware_blubber.json
 dfa807f6fa4bf5c26587295e454ed0a40f22a841 assets/createcybernetics/models/item/wetware_firebreathinggland.json
 2f9a5e1cd32c439f92bd32b32aac0e62b23e81ce assets/createcybernetics/models/item/wetware_gills.json
+c857c46289d73f5c4603a4c9267798124de66422 assets/createcybernetics/models/item/wetware_grassfedstomach.json
 cdcee74edaebc04cbae8cfae4f07f033f6bafa73 assets/createcybernetics/models/item/wetware_guardianeye.json
 b963f1bc016e19dfe3ee60f106dc57f0af5eed0d assets/createcybernetics/models/item/wetware_polarbearfur.json
 34fba54fe59ac380f2f74748eab89a786f95eff2 assets/createcybernetics/models/item/wetware_ravagertendons.json

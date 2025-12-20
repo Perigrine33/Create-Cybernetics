@@ -37,6 +37,20 @@ public class ModTags {
         public static final TagKey<Item> MUSCLE_UPGRADES = createTag("muscle_upgrades");
         public static final TagKey<Item> SCAVENGED_CYBERWARE = createTag("scavenged_cyberware");
 
+        public static final TagKey<Item> BRAIN_ITEMS = createTag("brain_items");
+        public static final TagKey<Item> EYE_ITEMS = createTag("eye_items");
+        public static final TagKey<Item> SKIN_ITEMS = createTag("skin_items");
+        public static final TagKey<Item> MUSCLE_ITEMS = createTag("muscle_items");
+        public static final TagKey<Item> BONE_ITEMS = createTag("bone_items");
+        public static final TagKey<Item> HEART_ITEMS = createTag("heart_items");
+        public static final TagKey<Item> LUNGS_ITEMS = createTag("lungs_items");
+        public static final TagKey<Item> LIVER_ITEMS = createTag("liver_items");
+        public static final TagKey<Item> INTESTINES_ITEMS = createTag("intestines_items");
+        public static final TagKey<Item> LEFTARM_ITEMS = createTag("leftarm_items");
+        public static final TagKey<Item> RIGHTARM_ITEMS = createTag("rightarm_items");
+        public static final TagKey<Item> LEFTLEG_ITEMS = createTag("leftleg_items");
+        public static final TagKey<Item> RIGHTLEG_ITEMS = createTag("rightleg_items");
+
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, name));
         }

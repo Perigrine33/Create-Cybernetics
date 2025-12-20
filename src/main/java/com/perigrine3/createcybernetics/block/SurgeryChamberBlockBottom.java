@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -45,6 +46,38 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     private static final VoxelShape SHAPE_OPEN = Shapes.or(BACKWALL, WESTWALL, EASTWALL, BOTTOMWALL);
     private static final VoxelShape SHAPE_CLOSED = Shapes.or(BACKWALL, WESTWALL, EASTWALL, BOTTOMWALL, DOOR_CLOSED);
 
+    private static VoxelShape rotateShapeFromNorth(Direction facing, VoxelShape shapeNorth) {
+        return switch (facing) {
+            case NORTH -> rotateYCounterClockwise(shapeNorth);
+            case EAST  -> shapeNorth;
+            case SOUTH -> rotateYClockwise(shapeNorth);
+            case WEST  -> rotateYClockwise(rotateYClockwise(shapeNorth));
+            default    -> shapeNorth;
+        };
+    }
+
+    private static VoxelShape rotateYClockwise(VoxelShape shape) {
+        final VoxelShape[] out = new VoxelShape[]{Shapes.empty()};
+        shape.forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> {
+            // coords are 0..1 here, so rotate around 1.0
+            out[0] = Shapes.or(out[0], Shapes.box(
+                    1.0D - maxZ, minY, minX,
+                    1.0D - minZ, maxY, maxX
+            ));
+        });
+        return out[0];
+    }
+
+    private static VoxelShape rotateYCounterClockwise(VoxelShape shape) {
+        final VoxelShape[] out = new VoxelShape[]{Shapes.empty()};
+        shape.forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> {
+            out[0] = Shapes.or(out[0], Shapes.box(
+                    minZ, minY, 1.0D - maxX,
+                    maxZ, maxY, 1.0D - minX
+            ));
+        });
+        return out[0];
+    }
 
 
     public SurgeryChamberBlockBottom(Properties properties) {
@@ -58,9 +91,10 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        boolean opened = state.getValue(OPENED);
-        return opened ? SHAPE_OPEN : SHAPE_CLOSED;
+        VoxelShape baseShape = state.getValue(OPENED) ? SHAPE_OPEN : SHAPE_CLOSED;
+        return rotateShapeFromNorth(state.getValue(FACING), baseShape);
     }
+
 
     @Override
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
@@ -112,10 +146,21 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     //Thanks, TwistedGate, you're a lifesaver :D
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+        if (brokenByCreativePlayer(builder)) {
+            return List.of();
+        }
+
         if (state.getValue(SLAVE)) {
             return List.of();
         }
+
         return List.of(new ItemStack(ModBlocks.SURGERY_CHAMBER_BOTTOM.get()));
+    }
+
+
+    private static boolean brokenByCreativePlayer(LootParams.Builder builder) {
+        Entity e = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        return e instanceof Player p && p.getAbilities().instabuild;
     }
 
     @Override

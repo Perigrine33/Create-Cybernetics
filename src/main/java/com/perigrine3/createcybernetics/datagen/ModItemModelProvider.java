@@ -213,6 +213,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.WETWARE_SCULKLUNGS.get());
             basicItem(ModItems.WETWARE_TACTICALINKSAC.get());
             basicItem(ModItems.WETWARE_AEROSTASISGYROBLADDER.get());
+            basicItem(ModItems.WETWARE_GRASSFEDSTOMACH.get());
         }
 
 

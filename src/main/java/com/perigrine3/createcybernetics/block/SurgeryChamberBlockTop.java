@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -37,6 +39,38 @@ public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
     private static final VoxelShape SHAPE_OPEN = Shapes.or(BACKWALL, WESTWALL, EASTWALL, TOPWALL);
     private static final VoxelShape SHAPE_CLOSED = Shapes.or(BACKWALL, WESTWALL, EASTWALL, TOPWALL, DOOR_CLOSED);
 
+    private static VoxelShape rotateShapeFromNorth(Direction facing, VoxelShape shapeNorth) {
+        return switch (facing) {
+            case NORTH -> rotateYCounterClockwise(shapeNorth);
+            case EAST  -> shapeNorth;
+            case SOUTH -> rotateYClockwise(shapeNorth);
+            case WEST  -> rotateYClockwise(rotateYClockwise(shapeNorth));
+            default    -> shapeNorth;
+        };
+    }
+
+    private static VoxelShape rotateYClockwise(VoxelShape shape) {
+        final VoxelShape[] out = new VoxelShape[]{Shapes.empty()};
+        shape.forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> {
+            // coords are 0..1 here, so rotate around 1.0
+            out[0] = Shapes.or(out[0], Shapes.box(
+                    1.0D - maxZ, minY, minX,
+                    1.0D - minZ, maxY, maxX
+            ));
+        });
+        return out[0];
+    }
+
+    private static VoxelShape rotateYCounterClockwise(VoxelShape shape) {
+        final VoxelShape[] out = new VoxelShape[]{Shapes.empty()};
+        shape.forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> {
+            out[0] = Shapes.or(out[0], Shapes.box(
+                    minZ, minY, 1.0D - maxX,
+                    maxZ, maxY, 1.0D - minX
+            ));
+        });
+        return out[0];
+    }
 
 
     public SurgeryChamberBlockTop(Properties properties) {
@@ -50,8 +84,10 @@ public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        boolean opened = state.getValue(OPENED);
-        return opened ? SHAPE_OPEN : SHAPE_CLOSED;    }
+        VoxelShape baseShape = state.getValue(OPENED) ? SHAPE_OPEN : SHAPE_CLOSED;
+        return rotateShapeFromNorth(state.getValue(FACING), baseShape);
+    }
+
 
     @Override
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
@@ -93,10 +129,25 @@ public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
     }
 
 
-
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return List.of();
+    }
+
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide) {
+            boolean drop = !player.getAbilities().instabuild;
+
+            BlockPos bottomPos = pos.below();
+            BlockState bottomState = level.getBlockState(bottomPos);
+
+            if (bottomState.is(ModBlocks.SURGERY_CHAMBER_BOTTOM.get())) {
+                level.destroyBlock(bottomPos, drop, player);
+            }
+        }
+
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -106,8 +157,9 @@ public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
             BlockState bottomState = level.getBlockState(bottomPos);
 
             if (bottomState.is(ModBlocks.SURGERY_CHAMBER_BOTTOM.get())) {
-                level.destroyBlock(bottomPos, true);
+                level.destroyBlock(bottomPos, false);
             }
+
             super.onRemove(state, level, pos, newState, isMoving);
         }
     }

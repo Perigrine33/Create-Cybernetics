@@ -2,11 +2,13 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.perigrine3.createcybernetics.mixin",
+  "refmap": "createcybernetics.refmap.json",
   "mixins": [
     "VillagerHostilesSensorMixin"
   ],
-  "client": [],
-  "server": [],
+  "client": [
+    "PlayerEyeHeightMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

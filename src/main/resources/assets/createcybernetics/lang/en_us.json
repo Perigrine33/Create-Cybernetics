@@ -150,6 +150,7 @@
   "item.createcybernetics.wetware_sculklungs": "Sculk Lungs",
   "item.createcybernetics.wetware_tacticalinksac": "Tactical Ink Sac",
   "item.createcybernetics.wetware_aerostasisgyrobladder": "Aerostatic Gryobladder",
+  "item.createcybernetics.wetware_grassfedstomach": "Grassfed Stomach",
 
 
   "item.createcybernetics.scavenged_rightleg": "Right Cyberleg",
@@ -424,7 +425,8 @@
       "tooltip.createcybernetics.wetware_ravagertendons.tooltip1": "§cProvides strength and durability to the user",
       "tooltip.createcybernetics.wetware_sculklungs.tooltip1": "§cAllows the user to emit a sonic shriek attack",
       "tooltip.createcybernetics.wetware_tacticalinksac.tooltip1": "§cUser inflicts blindness on attackers",
-      "tooltip.createcybernetics.wetware_aerostasisgyrobladder.tooltip1": "§cUser gains some flight abilities"
+      "tooltip.createcybernetics.wetware_aerostasisgyrobladder.tooltip1": "§cUser gains some flight abilities",
+      "tooltip.createcybernetics.wetware_grassfedstomach.tooltip1": "§cUser gains the ability to eat grass and wheat"
 
 
 }
