@@ -3,8 +3,6 @@ package com.perigrine3.createcybernetics.screen.custom;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.api.InstalledCyberware;
-import com.perigrine3.createcybernetics.client.ClientRenderFlags;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
@@ -19,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -335,10 +332,14 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
             int cost = cyberware.getHumanityCost();
 
+            if (menu.isInstalled(handlerIndex)) {
+                humanity -= cost;
+            }
+            if (menu.isStaged(handlerIndex)) {
+                humanity -= cost;
+            }
             if (menu.isMarkedForRemoval(handlerIndex)) {
                 humanity += cost;
-            } else if (menu.isStaged(handlerIndex)) {
-                humanity -= cost;
             }
         }
 
@@ -898,7 +899,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     // -----------------------
     // Warning Icon Helper
     // -----------------------
-
     private int countMarkedForRemovalTotal() {
         int count = 0;
         for (SlotView view : slotViews) {

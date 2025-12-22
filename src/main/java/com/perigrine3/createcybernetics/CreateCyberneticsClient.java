@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics;
 
+import com.perigrine3.createcybernetics.client.model.ModelModifierManager;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -24,6 +25,10 @@ public class CreateCyberneticsClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
+        // Register model modifiers here
+        //ModelModifierManager.registerModifier(new ExampleModelModifierClass());
+
+
         // Some client setup code
         CreateCybernetics.LOGGER.info("HELLO FROM CLIENT SETUP");
         CreateCybernetics.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());

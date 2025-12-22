@@ -20,18 +20,12 @@ public final class SurgeryController {
     public static void performSurgery(Player player, RobosurgeonBlockEntity surgeon, boolean[] staged, boolean[] markedForRemoval) {
         if (player.level().isClientSide) return;
 
-        // -------------------------------------------------
-        // BEGIN SURGERY
-        // -------------------------------------------------
         surgeon.beginSurgery();
 
         try {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            // -------------------------------------------------
-            // PROCESS ALL SLOTS
-            // -------------------------------------------------
             for (CyberwareSlot slot : CyberwareSlot.values()) {
                 for (int i = 0; i < slot.size; i++) {
 
@@ -52,50 +46,57 @@ public final class SurgeryController {
                                     && invIndex < markedForRemoval.length
                                     && markedForRemoval[invIndex];
 
-                    // =================================================
-                    // MARKED FOR REMOVAL → REMOVE FROM ATTACHMENT, GIVE BACK TO PLAYER
-                    // =================================================
-                    if (isMarked) {
+                    boolean willRemove = isMarked;
+                    boolean willInstall = isStaged && !stackInGui.isEmpty();
 
+                    // -------------------------------------------------
+                    // 1) REMOVAL (including replacement cases)
+                    // -------------------------------------------------
+                    if (willRemove) {
                         InstalledCyberware removed = data.remove(slot, i);
 
+                        // hook
+                        if (removed != null && removed.getItem() != null && !removed.getItem().isEmpty()) {
+                            if (removed.getItem().getItem() instanceof ICyberwareItem cw) {
+                                cw.onRemoved(player);
+                            }
+                        }
+
+                        // give back removed item at surgery time
                         if (removed != null && removed.getItem() != null && !removed.getItem().isEmpty()) {
                             ItemStack giveBack = removed.getItem().copy();
                             if (!player.getInventory().add(giveBack)) {
                                 player.drop(giveBack, false);
                             }
-                        } else {
-                            if (!stackInGui.isEmpty()) {
-                                ItemStack giveBack = stackInGui.copy();
-                                if (!player.getInventory().add(giveBack)) {
-                                    player.drop(giveBack, false);
-                                }
-                            }
                         }
 
-                        surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
+                        // If this is not a replacement install, clear the GUI slot now and finish this slot
+                        if (!willInstall) {
+                            surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
 
-                        surgeon.installed[invIndex] = false;
-                        surgeon.staged[invIndex] = false;
-                        surgeon.markedForRemoval[invIndex] = false;
+                            surgeon.installed[invIndex] = false;
+                            surgeon.staged[invIndex] = false;
+                            surgeon.markedForRemoval[invIndex] = false;
+                            continue;
+                        }
+
+                        // Else: replacement. Do NOT continue; fall through into install step.
+                    }
+
+                    // -------------------------------------------------
+                    // 2) NOT STAGED => nothing else to do
+                    // -------------------------------------------------
+                    if (!willInstall) {
+                        // if GUI is empty but staged flag got left on, clear it
+                        if (isStaged && stackInGui.isEmpty()) {
+                            surgeon.staged[invIndex] = false;
+                        }
                         continue;
                     }
 
-                    // =================================================
-                    // NOT STAGED → IGNORE
-                    // =================================================
-                    if (!isStaged) {
-                        continue;
-                    }
-
-                    if (stackInGui.isEmpty()) {
-                        surgeon.staged[invIndex] = false;
-                        continue;
-                    }
-
-                    // =================================================
-                    // INSTALL STAGED ITEM → WRITE TO ATTACHMENT
-                    // =================================================
+                    // -------------------------------------------------
+                    // 3) INSTALL STAGED ITEM
+                    // -------------------------------------------------
                     int humanityCost = 0;
                     if (stackInGui.getItem() instanceof ICyberwareItem cyberwareItem) {
                         humanityCost = cyberwareItem.getHumanityCost();
@@ -103,8 +104,12 @@ public final class SurgeryController {
 
                     InstalledCyberware installed = new InstalledCyberware(stackInGui.copy(), slot, i, humanityCost);
                     installed.setPowered(true);
-
                     data.set(slot, i, installed);
+
+                    // hook
+                    if (stackInGui.getItem() instanceof ICyberwareItem cw) {
+                        cw.onInstalled(player);
+                    }
 
                     surgeon.installed[invIndex] = true;
                     surgeon.staged[invIndex] = false;
@@ -112,16 +117,19 @@ public final class SurgeryController {
                 }
             }
 
-            // -------------------------------------------------
-            // COMMIT + SYNC
-            // -------------------------------------------------
+            // commit + sync
             data.setDirty();
             player.syncData(ModAttachments.CYBERWARE);
 
             surgeon.clearSlotStates();
             surgeon.setChanged();
 
-            player.level().sendBlockUpdated(surgeon.getBlockPos(), surgeon.getBlockState(), surgeon.getBlockState(), 3);
+            player.level().sendBlockUpdated(
+                    surgeon.getBlockPos(),
+                    surgeon.getBlockState(),
+                    surgeon.getBlockState(),
+                    3
+            );
 
         } finally {
             surgeon.endSurgery();

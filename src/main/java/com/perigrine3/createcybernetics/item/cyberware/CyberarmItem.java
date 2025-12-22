@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -14,17 +15,21 @@ import java.util.List;
 import java.util.Set;
 
 public class CyberarmItem extends Item implements ICyberwareItem {
-    private final int humanityCost;
 
-    public CyberarmItem(Properties props, int humanityCost) {
+    private final int humanityCost;
+    private final CyberwareSlot side;
+
+    public CyberarmItem(Properties props, int humanityCost, CyberwareSlot side) {
         super(props);
         this.humanityCost = humanityCost;
+        this.side = side;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
-            tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
+                    .withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -35,7 +40,7 @@ public class CyberarmItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<CyberwareSlot> getSupportedSlots() {
-        return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
+        return Set.of(side);
     }
 
     @Override
@@ -45,17 +50,17 @@ public class CyberarmItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<CyberwareSlot> getReplacedOrgans() {
-        return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
+        return Set.of(side);
     }
 
     @Override
     public void onInstalled(Player player) {
-        // grant strength modifier
+        CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength");
     }
 
     @Override
     public void onRemoved(Player player) {
-        // remove strength modifier
+        CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength");
     }
 
     @Override

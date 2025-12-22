@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.item.cyberware;
+package com.perigrine3.createcybernetics.item.cyberware.upgrade_items;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;

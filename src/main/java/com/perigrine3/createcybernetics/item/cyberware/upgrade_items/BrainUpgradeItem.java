@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.item.cyberware;
+package com.perigrine3.createcybernetics.item.cyberware.upgrade_items;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
@@ -14,10 +14,10 @@ import net.minecraft.world.item.TooltipFlag;
 import java.util.List;
 import java.util.Set;
 
-public class CybereyeModuleItem extends Item implements ICyberwareItem {
+public class BrainUpgradeItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
-    public CybereyeModuleItem(Properties props, int humanityCost) {
+    public BrainUpgradeItem(Properties props, int humanityCost) {
         super(props);
         this.humanityCost = humanityCost;
     }
@@ -36,7 +36,7 @@ public class CybereyeModuleItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<CyberwareSlot> getSupportedSlots() {
-        return Set.of(CyberwareSlot.EYES);
+        return Set.of(CyberwareSlot.BRAIN);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class CybereyeModuleItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<CyberwareSlot> getReplacedOrgans() {
-        return Set.of(CyberwareSlot.EYES);
+        return Set.of(CyberwareSlot.BRAIN);
     }
 
     @Override
@@ -62,9 +62,9 @@ public class CybereyeModuleItem extends Item implements ICyberwareItem {
     @Override
     public void onTick(Player player) {
         if (!player.level().isClientSide) return;
-        if (ModItems.EYEUPGRADES_NAVIGATIONCHIP != null) {
-            if (net.neoforged.fml.ModList.get().isLoaded("xaerominimap")) {
-                // interact with minimap indirectly (capabilities, packets, etc.)
+        if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
+            if (net.neoforged.fml.ModList.get().isLoaded("createenchantmentindustry")) {
+                // functionality
             }
         }
 

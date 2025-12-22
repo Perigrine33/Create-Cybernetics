@@ -237,4 +237,8 @@ public class RobosurgeonBlockEntity extends BlockEntity implements MenuProvider 
     public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
         return new RobosurgeonMenu(i, inventory, this);
     }
+
+    public AbstractContainerMenu getMenu(int containerId, Inventory inventory, Player player) {
+        return new RobosurgeonMenu(containerId, inventory, this);
+    }
 }

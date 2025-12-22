@@ -1,8 +1,10 @@
 package com.perigrine3.createcybernetics.item;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.entity.ModEntities;
 import com.perigrine3.createcybernetics.item.cyberware.*;
+import com.perigrine3.createcybernetics.item.cyberware.upgrade_items.*;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -298,7 +300,7 @@ public class ModItems {
 
 //BASE CYBERWARE
     public static final DeferredItem<Item> BASECYBERWARE_RIGHTLEG = ITEMS.register("basecyberware_rightleg",
-            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 7) {
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 7, CyberwareSlot.RLEG) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -312,7 +314,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BASECYBERWARE_LEFTLEG = ITEMS.register("basecyberware_leftleg",
-            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 7) {
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 7, CyberwareSlot.LLEG) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     if (Screen.hasShiftDown()) {
@@ -326,7 +328,7 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> BASECYBERWARE_RIGHTARM = ITEMS.register("basecyberware_rightarm",
-            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 7) {
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 7, CyberwareSlot.RARM) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
@@ -340,7 +342,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BASECYBERWARE_LEFTARM = ITEMS.register("basecyberware_leftarm",
-            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 7) {
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 7, CyberwareSlot.LARM) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     if (Screen.hasShiftDown()) {

@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.item.cyberware;
+package com.perigrine3.createcybernetics.item.cyberware.upgrade_items;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
@@ -13,10 +13,10 @@ import net.minecraft.world.item.TooltipFlag;
 import java.util.List;
 import java.util.Set;
 
-public class EyeUpgradeItem extends Item implements ICyberwareItem {
+public class LungUpgradeItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
-    public EyeUpgradeItem(Properties props, int humanityCost) {
+    public LungUpgradeItem(Properties props, int humanityCost) {
         super(props);
         this.humanityCost = humanityCost;
     }
@@ -35,17 +35,17 @@ public class EyeUpgradeItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<CyberwareSlot> getSupportedSlots() {
-        return Set.of(CyberwareSlot.EYES);
+        return Set.of(CyberwareSlot.LUNGS);
     }
 
     @Override
     public boolean replacesOrgan() {
-        return true;
+        return false;
     }
 
     @Override
     public Set<CyberwareSlot> getReplacedOrgans() {
-        return Set.of(CyberwareSlot.EYES);
+        return Set.of(CyberwareSlot.LUNGS);
     }
 
     @Override

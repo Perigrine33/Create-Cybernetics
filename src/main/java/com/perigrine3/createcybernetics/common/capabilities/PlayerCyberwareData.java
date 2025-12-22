@@ -117,6 +117,23 @@ public class PlayerCyberwareData implements ICyberwareData {
         return false;
     }
 
+    public boolean hasSpecificItem(Item item, CyberwareSlot... slotsToCheck) {
+        for (CyberwareSlot slot : slotsToCheck) {
+            InstalledCyberware[] arr = slots.get(slot);
+            if (arr == null) continue;
+
+            for (InstalledCyberware cw : arr) {
+                if (cw == null) continue;
+
+                ItemStack stack = cw.getItem();
+                if (stack.isEmpty()) continue;
+
+                if (stack.is(item)) return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void clear() {
         for (CyberwareSlot slot : CyberwareSlot.values()) {
