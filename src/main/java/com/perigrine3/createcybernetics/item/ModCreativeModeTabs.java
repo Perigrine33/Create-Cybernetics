@@ -153,11 +153,11 @@ public class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
 
                     //LIMBS
-                        output.accept(ModItems.BODYPART_LEFTARM);
                         output.accept(ModItems.BODYPART_RIGHTARM);
-                        output.accept(ModItems.BODYPART_LEFTLEG);
+                        output.accept(ModItems.BODYPART_LEFTARM);
                         output.accept(ModItems.BODYPART_RIGHTLEG);
-                    //INTERNAL WETWARE
+                        output.accept(ModItems.BODYPART_LEFTLEG);
+                        //INTERNAL WETWARE
                         output.accept(ModItems.BODYPART_SKELETON);
                         output.accept(ModItems.BODYPART_BRAIN);
                         output.accept(ModItems.BODYPART_EYEBALLS);
@@ -168,10 +168,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BODYPART_MUSCLE);
                         output.accept(ModItems.BODYPART_SKIN);
                     //BASE CYBERWARE
-                        output.accept(ModItems.BASECYBERWARE_LEFTARM);
                         output.accept(ModItems.BASECYBERWARE_RIGHTARM);
-                        output.accept(ModItems.BASECYBERWARE_LEFTLEG);
+                        output.accept(ModItems.BASECYBERWARE_LEFTARM);
                         output.accept(ModItems.BASECYBERWARE_RIGHTLEG);
+                        output.accept(ModItems.BASECYBERWARE_LEFTLEG);
                         output.accept(ModItems.BASECYBERWARE_CYBEREYES);
                         output.accept(ModItems.BASECYBERWARE_LINEARFRAME);
                     //EYE UPGRADES
