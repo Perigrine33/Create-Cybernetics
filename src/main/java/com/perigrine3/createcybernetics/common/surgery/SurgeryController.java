@@ -36,15 +36,9 @@ public final class SurgeryController {
 
                     ItemStack stackInGui = surgeon.inventory.getStackInSlot(invIndex);
 
-                    boolean isStaged =
-                            staged != null
-                                    && invIndex < staged.length
-                                    && staged[invIndex];
+                    boolean isStaged = staged != null && invIndex < staged.length && staged[invIndex];
 
-                    boolean isMarked =
-                            markedForRemoval != null
-                                    && invIndex < markedForRemoval.length
-                                    && markedForRemoval[invIndex];
+                    boolean isMarked = markedForRemoval != null && invIndex < markedForRemoval.length && markedForRemoval[invIndex];
 
                     boolean willRemove = isMarked;
                     boolean willInstall = isStaged && !stackInGui.isEmpty();
@@ -55,14 +49,12 @@ public final class SurgeryController {
                     if (willRemove) {
                         InstalledCyberware removed = data.remove(slot, i);
 
-                        // hook
                         if (removed != null && removed.getItem() != null && !removed.getItem().isEmpty()) {
                             if (removed.getItem().getItem() instanceof ICyberwareItem cw) {
                                 cw.onRemoved(player);
                             }
                         }
 
-                        // give back removed item at surgery time
                         if (removed != null && removed.getItem() != null && !removed.getItem().isEmpty()) {
                             ItemStack giveBack = removed.getItem().copy();
                             if (!player.getInventory().add(giveBack)) {
@@ -70,7 +62,6 @@ public final class SurgeryController {
                             }
                         }
 
-                        // If this is not a replacement install, clear the GUI slot now and finish this slot
                         if (!willInstall) {
                             surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
 
@@ -79,19 +70,43 @@ public final class SurgeryController {
                             surgeon.markedForRemoval[invIndex] = false;
                             continue;
                         }
-
-                        // Else: replacement. Do NOT continue; fall through into install step.
                     }
 
                     // -------------------------------------------------
                     // 2) NOT STAGED => nothing else to do
                     // -------------------------------------------------
                     if (!willInstall) {
-                        // if GUI is empty but staged flag got left on, clear it
                         if (isStaged && stackInGui.isEmpty()) {
                             surgeon.staged[invIndex] = false;
                         }
                         continue;
+                    }
+
+                    // -------------------------------------------------
+                    // 2.5) STACK CAP ENFORCEMENT (NEW)
+                    // -------------------------------------------------
+                    if (stackInGui.getItem() instanceof ICyberwareItem cw) {
+                        int cap = Math.max(1, cw.maxStacksPerSlotType(stackInGui, slot));
+
+                        int currentlyInstalledSame = countInstalledSameInSlotType(data, slot, stackInGui);
+                        int plannedRemovedSame = countPlannedRemovalsSameInSlotType(data, slot, surgeon, markedForRemoval, stackInGui);
+
+                        int effectiveSameAfterAllRemovals = currentlyInstalledSame - plannedRemovedSame;
+
+                        if (effectiveSameAfterAllRemovals >= cap) {
+                            ItemStack giveBack = stackInGui.copy();
+                            if (!player.getInventory().add(giveBack)) {
+                                player.drop(giveBack, false);
+                            }
+
+                            surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
+
+                            surgeon.installed[invIndex] = false;
+                            surgeon.staged[invIndex] = false;
+                            surgeon.markedForRemoval[invIndex] = false;
+
+                            continue;
+                        }
                     }
 
                     // -------------------------------------------------
@@ -106,7 +121,6 @@ public final class SurgeryController {
                     installed.setPowered(true);
                     data.set(slot, i, installed);
 
-                    // hook
                     if (stackInGui.getItem() instanceof ICyberwareItem cw) {
                         cw.onInstalled(player);
                     }
@@ -117,22 +131,52 @@ public final class SurgeryController {
                 }
             }
 
-            // commit + sync
             data.setDirty();
             player.syncData(ModAttachments.CYBERWARE);
 
             surgeon.clearSlotStates();
             surgeon.setChanged();
 
-            player.level().sendBlockUpdated(
-                    surgeon.getBlockPos(),
-                    surgeon.getBlockState(),
-                    surgeon.getBlockState(),
-                    3
-            );
+            player.level().sendBlockUpdated(surgeon.getBlockPos(), surgeon.getBlockState(), surgeon.getBlockState(), 3);
 
         } finally {
             surgeon.endSurgery();
         }
+    }
+
+    private static int countInstalledSameInSlotType(PlayerCyberwareData data, CyberwareSlot slotType, ItemStack needle) {
+        int count = 0;
+        for (int i = 0; i < slotType.size; i++) {
+            InstalledCyberware inst = data.get(slotType, i);
+            if (inst == null || inst.getItem() == null || inst.getItem().isEmpty()) continue;
+
+            if (ItemStack.isSameItemSameComponents(inst.getItem(), needle)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int countPlannedRemovalsSameInSlotType(PlayerCyberwareData data, CyberwareSlot slotType, RobosurgeonBlockEntity surgeon, boolean[] markedForRemoval, ItemStack needle) {
+        if (markedForRemoval == null) return 0;
+
+        int count = 0;
+
+        for (int i = 0; i < slotType.size; i++) {
+            int invIndex = RobosurgeonSlotMap.toInventoryIndex(slotType, i);
+            if (invIndex < 0 || invIndex >= surgeon.inventory.getSlots()) continue;
+            if (invIndex >= markedForRemoval.length) continue;
+
+            if (!markedForRemoval[invIndex]) continue;
+
+            InstalledCyberware inst = data.get(slotType, i);
+            if (inst == null || inst.getItem() == null || inst.getItem().isEmpty()) continue;
+
+            if (ItemStack.isSameItemSameComponents(inst.getItem(), needle)) {
+                count++;
+            }
+        }
+
+        return count;
     }
 }

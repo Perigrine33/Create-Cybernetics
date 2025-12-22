@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.api;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Set;
 
@@ -15,6 +16,10 @@ public interface ICyberwareItem {
     boolean replacesOrgan();
 
     Set<CyberwareSlot> getReplacedOrgans();
+
+    default int maxStacksPerSlotType(ItemStack stack, CyberwareSlot slotType) {
+        return 1;
+    }
 
     int getHumanityCost();
 

@@ -2,12 +2,19 @@ package com.perigrine3.createcybernetics.common.organs;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
+import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -44,7 +51,40 @@ public final class CyberwareDeathReset {
         }
 
         player.syncData(ModAttachments.CYBERWARE);
-
     }
 
+    @SubscribeEvent
+    public static void onPlayerDeath(LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) return;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
+
+        var random = player.getRandom();
+
+        for (CyberwareSlot slot : CyberwareSlot.values()) {
+            int mappedSize = RobosurgeonSlotMap.mappedSize(slot);
+
+            for (int i = 0; i < mappedSize; i++) {
+                InstalledCyberware installed = data.get(slot, i);
+                ItemStack installedStack = (installed != null && installed.getItem() != null) ? installed.getItem() : ItemStack.EMPTY;
+
+                ItemStack def = DefaultOrgans.get(slot, i);
+                if (def == null) def = ItemStack.EMPTY;
+
+                if (!installedStack.isEmpty()) {
+                    boolean isDefault = !def.isEmpty() && ItemStack.isSameItemSameComponents(installedStack, def);
+
+                    if (!isDefault) {
+                        player.spawnAtLocation(installedStack.copy());
+                    }
+                }
+
+                if (!def.isEmpty() && random.nextFloat() < 0.10f) {
+                    player.spawnAtLocation(def.copy());
+                }
+            }
+        }
+    }
 }
