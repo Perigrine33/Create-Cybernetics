@@ -30,5 +30,13 @@
         "stream": true
       }
     ]
+  },
+  "metal_detector_beeps": {
+    "subtitle": "sounds.createcybernetics.metal_detector_beeps",
+    "sounds": [
+      {
+        "name": "createcybernetics:metal_detector_beeps"
+      }
+    ]
   }
 }

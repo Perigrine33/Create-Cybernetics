@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.screen.custom;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.block.entity.RobosurgeonBlockEntity;
@@ -11,12 +12,14 @@ import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -49,6 +52,7 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
         addRobosurgeonSlots();
+        populateFromPlayer(inv.player);
     }
 
     public RobosurgeonMenu(int containerId, Inventory inv, BlockEntity blockEntity) {
@@ -130,52 +134,33 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
-        boolean hasContents = false;
-        for (int i = 0; i < blockEntity.inventory.getSlots(); i++) {
-            if (!blockEntity.inventory.getStackInSlot(i).isEmpty()) {
-                hasContents = true;
-                break;
-            }
-        }
-
-        if (hasContents) {
-            if (!keepInventoryActive()
-                    && playerHasOnlyDefaultOrgans(data)
-                    && robosurgeonHasAnyNonDefaultStacks()) {
-
-                clearRobosurgeonInventoryAndFlags();
-            } else {
-                for (int i = 0; i < blockEntity.inventory.getSlots(); i++) {
-                    if (!blockEntity.inventory.getStackInSlot(i).isEmpty()) {
-                        setInstalled(i, true);
-                    }
-                }
-                return;
-            }
-        }
-
         for (CyberwareSlot slot : CyberwareSlot.values()) {
             InstalledCyberware[] installedData = data.getAll().get(slot);
-            if (installedData == null) continue;
-
             int mappedSize = RobosurgeonSlotMap.mappedSize(slot);
 
             for (int i = 0; i < mappedSize; i++) {
                 int invIndex = RobosurgeonSlotMap.toInventoryIndex(slot, i);
-                if (invIndex < 0) continue;
+                if (invIndex < 0 || invIndex >= blockEntity.inventory.getSlots()) continue;
 
-                ItemStack stack;
-                if (i < installedData.length && installedData[i] != null) {
-                    stack = installedData[i].getItem().copy();
-                } else {
-                    stack = DefaultOrgans.get(slot, i);
+                if (isStaged(invIndex)) continue;
+                if (isMarkedForRemoval(invIndex)) continue;
+
+                ItemStack stack = ItemStack.EMPTY;
+
+                if (installedData != null && i < installedData.length && installedData[i] != null) {
+                    ItemStack inst = installedData[i].getItem();
+                    if (inst != null) stack = inst.copy();
                 }
 
-                if (!stack.isEmpty()) {
-                    blockEntity.inventory.setStackInSlot(invIndex, stack);
-                    setInstalled(invIndex, true);
-                    setStaged(invIndex, false);
+                if (stack.isEmpty()) {
+                    ItemStack def = DefaultOrgans.get(slot, i);
+                    if (def != null) stack = def.copy();
                 }
+
+                blockEntity.inventory.setStackInSlot(invIndex, stack);
+                setInstalled(invIndex, !stack.isEmpty());
+                setStaged(invIndex, false);
+                setMarkedForRemoval(invIndex, false);
             }
         }
     }
@@ -294,6 +279,7 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
 
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copy = sourceStack.copy();
+        boolean replacesOrgan = stackReplacesOrgan(sourceStack);
 
         if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
 
@@ -345,12 +331,8 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
                         if (!targetSlot.hasItem()) continue;
                         if (staged) continue;
 
-                        if (!stackReplacesOrgan(sourceStack)) {
-                            SlotRef ref = resolveSlotRef(handlerIndex);
-                            if (ref != null && isDefaultOrganStack(targetSlot.getItem(), ref.slot(), ref.idx())) {
-                                continue;
-                            }
-                        }
+                        if (!replacesOrgan) continue;
+                        if (!canReplaceExisting(sourceStack, targetSlot.getItem(), targetType)) continue;
 
                         ItemStack moved = sourceStack.split(1);
                         targetSlot.set(moved);
@@ -370,6 +352,20 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
 
         return ItemStack.EMPTY;
     }
+
+    private static TagKey<Item> getReplacementTag(ItemStack incoming, CyberwareSlot targetType) {
+        if (!(incoming.getItem() instanceof ICyberwareItem cw)) return null;
+        return cw.getReplacedOrganItemTag(incoming, targetType);
+    }
+
+    private static boolean canReplaceExisting(ItemStack incoming, ItemStack existing, CyberwareSlot targetType) {
+        if (existing.isEmpty()) return false;
+
+        TagKey<Item> tag = getReplacementTag(incoming, targetType);
+        if (tag == null) return true;
+        return existing.is(tag);
+    }
+
 
     @Override
     public boolean stillValid(Player player) {
@@ -404,7 +400,7 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
     }
 
     private static boolean stackReplacesOrgan(ItemStack stack) {
-        if (!(stack.getItem() instanceof com.perigrine3.createcybernetics.api.ICyberwareItem cw)) return true;
+        if (!(stack.getItem() instanceof com.perigrine3.createcybernetics.api.ICyberwareItem cw)) return false;
         return cw.replacesOrgan();
     }
 

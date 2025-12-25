@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.datagen;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.enchantment.ModEnchantments;
 import com.perigrine3.createcybernetics.worldgen.ModBiomeModifiers;
 import com.perigrine3.createcybernetics.worldgen.ModConfiguredFeatures;
 import com.perigrine3.createcybernetics.worldgen.ModPlacedFeatures;
@@ -16,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ModDatapackProvider extends DatapackBuiltinEntriesProvider {
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
+            .add(Registries.ENCHANTMENT, ModEnchantments::bootstrap)
 
 
             .add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)

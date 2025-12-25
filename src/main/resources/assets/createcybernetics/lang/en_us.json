@@ -9,6 +9,7 @@
   "item.createcybernetics.titanium_hand": "Titanium Hand",
   "item.createcybernetics.neuropozyne": "Neuropozyne Autoinjector",
   "item.createcybernetics.expcapsule": "Cortical Stack Capsule",
+  "item.createcybernetics.faceplate": "Faceplate",
   "item.createcybernetics.netherite_qpu": "Netherite Quantum Processor",
 
   "item.createcybernetics.music_disc_cyberpsycho": "§bMusic Disc",
@@ -137,6 +138,7 @@
   "item.createcybernetics.skinupgrades_subdermalspikes": "Subdermal Spikes",
   "item.createcybernetics.skinupgrades_syntheticsetules": "Synthetic Setules",
   "item.createcybernetics.skinupgrades_sweat": "Enhanced Sweat Glands",
+  "item.createcybernetics.skinupgrades_metalplating": "Metal Plating",
 
   "item.createcybernetics.muscleupgrades_synthmuscle": "Synthetic Muscle",
   "item.createcybernetics.muscleupgrades_wiredreflexes": "Wired Reflexes",
@@ -221,6 +223,7 @@
   "item.createcybernetics.scavenged_subdermalspikes": "Subdermal Spikes",
   "item.createcybernetics.scavenged_syntheticsetules": "Synthetic Setules",
   "item.createcybernetics.scavenged_sweat": "Enhanced Sweat Glands",
+  "item.createcybernetics.scavenged_metalplating": "Metal Plating",
   "item.createcybernetics.scavenged_synthmuscle": "Synthetic Muscle",
   "item.createcybernetics.scavenged_wiredreflexes": "Wired Reflexes",
 
@@ -241,7 +244,12 @@
   "entity.mccourse.hogboy": "HogBoy",
 
 
+  "enchantment.createcybernetics.harvester": "Harvester",
+
+
   "effect.createcybernetics.cyberware_rejection": "Cyberware Rejection",
+  "effect.createcybernetics.synthetic_setules_effect": "Synthetic Setules",
+  "effect.createcybernetics.aerostasis_gyrobladder_effect": "Aerostasis Gyrobladder",
 
   "painting.createcybernetics.technomancer.title": "Technomancer 1",
   "painting.createcybernetics.technomancer.author": "Perigrine3",
@@ -332,23 +340,23 @@
 
       "tooltip.createcybernetics.legupgrades_metaldetector.tooltip1": "§1Can detect magnetic blocks up to 15 blocks below the user",
           "tooltip.createcybernetics.legupgrades_metaldetector.tooltip2": "§7Requires §9Cyberleg",
-      "tooltip.createcybernetics.legupgrades_anklebracers.tooltip1": "§1Negates damage taken from falling up to 25 blocks",
+      "tooltip.createcybernetics.legupgrades_anklebracers.tooltip1": "§1Negates damage taken from falling up to 25 blocks when installed into both legs",
           "tooltip.createcybernetics.legupgrades_anklebracers.tooltip2": "§7Requires §9Cyberleg",
-      "tooltip.createcybernetics.legupgrades_jumpboost.tooltip1": "§1Allows the user to jump up to 5 blocks by running and holding jump",
+      "tooltip.createcybernetics.legupgrades_jumpboost.tooltip1": "§1Allows the user to jump further and higher when sprinting or crouching",
           "tooltip.createcybernetics.legupgrades_jumpboost.tooltip2": "§7Requires §9Cyberleg",
       "tooltip.createcybernetics.legupgrades_propellers.tooltip1": "§1Grants the user Dolphins Grace when swimming",
           "tooltip.createcybernetics.legupgrades_propellers.tooltip2": "§7Requires §9Cyberleg",
       "tooltip.createcybernetics.legupgrades_spurs.tooltip1": "§1Increases the speed of creatures the user is riding",
           "tooltip.createcybernetics.legupgrades_spurs.tooltip2": "§7Requires §9Cyberleg",
-      "tooltip.createcybernetics.legupgrades_ocelotpaws.tooltip1": "§1Makes all player movement silent",
+      "tooltip.createcybernetics.legupgrades_ocelotpaws.tooltip1": "§1Makes player footsteps and jumps silent if installed into both legs",
           "tooltip.createcybernetics.legupgrades_ocelotpaws.tooltip2": "§7Requires §9Cyberleg",
 
       "tooltip.createcybernetics.boneupgrades_bonebattery.tooltip1": "§1Stores energy",
           "tooltip.createcybernetics.boneupgrades_bonebattery.tooltip2": "§3Stacks up to 3x",
-      "tooltip.createcybernetics.boneupgrades_boneflex.tooltip1": "§1Negates damage taken from falling up to 10 blocks",
-          "tooltip.createcybernetics.boneupgrades_boneflex.tooltip2": "§3Stacks up to 2x",
-      "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip1": "§1Adds 5 health to the user",
-          "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip2": "§3Stacks up to 4x",
+      "tooltip.createcybernetics.boneupgrades_boneflex.tooltip1": "§1Negates damage taken from falling +3 blocks per stack",
+          "tooltip.createcybernetics.boneupgrades_boneflex.tooltip2": "§3Stacks up to 3x",
+      "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip1": "§1Adds 2 hearts of health to the user per stack",
+          "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip2": "§3Stacks up to 3x",
       "tooltip.createcybernetics.boneupgrades_elytra.tooltip1": "§1An elytra fused to the user's spine",
           "tooltip.createcybernetics.boneupgrades_elytra.tooltip2": "§7Requires §9Linear Frame",
       "tooltip.createcybernetics.boneupgrades_piezo.tooltip1": "§1Provides energy from movement at the risk of incurring occasional damage",
@@ -358,7 +366,7 @@
 
       "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip1": "§1Teleports the user out of the way of projectiles",
           "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip2": "§7Requires §cBrain",
-      "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip1": "§1Sends up to 14 experience to the user's new body when killed",
+      "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip1": "§1Sends up to 14 experience levels to the user's new body when killed",
           "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip2": "§7Requires §cBrain",
       "tooltip.createcybernetics.brainupgrades_corticalstack.tooltip1": "§1Stores experience in a Capsule when the user is killed",
           "tooltip.createcybernetics.brainupgrades_corticalstack.tooltip2": "§7Requires §cBrain",
@@ -379,7 +387,7 @@
           "tooltip.createcybernetics.heartupgrades_creeperheart.tooltip2": "§7Requires §cHeart",
       "tooltip.createcybernetics.heartupgrades_defibrillator.tooltip1": "§1Revives the user 1 time when killed",
           "tooltip.createcybernetics.heartupgrades_defibrillator.tooltip2": "§7Requires §cHeart",
-      "tooltip.createcybernetics.heartupgrades_stemcell.tooltip1": "§1Provides regeneration when health drops below 10",
+      "tooltip.createcybernetics.heartupgrades_stemcell.tooltip1": "§1Provides regeneration when health drops below 5",
       "tooltip.createcybernetics.heartupgrades_platelets.tooltip1": "§1Provides ambient regeneration when the user is at rest",
 
       "tooltip.createcybernetics.lungsupgrades_hyperoxygenation.tooltip1": "§1Provides a boost to running speed",
@@ -394,7 +402,7 @@
       "tooltip.createcybernetics.organsupgrades_diamondwaferstack.tooltip1": "§1Generates a slow trickle of energy",
           "tooltip.createcybernetics.organsupgrades_diamondwaferstack.tooltip2": "§3Stacks up to 3x",
       "tooltip.createcybernetics.organsupgrades_dualisticconverter.tooltip1": "§1Generates energy from conflicting Redstone and Lapis wavelengths",
-      "tooltip.createcybernetics.organsupgrades_liverfilter.tooltip1": "§1Negates all negative status effects",
+      "tooltip.createcybernetics.organsupgrades_liverfilter.tooltip1": "§1Negates most negative status effects",
       "tooltip.createcybernetics.organsupgrades_magiccatalyst.tooltip1": "§1Generates a large amount of energy from conflicting Redstone and Lapis wavelengths",
       "tooltip.createcybernetics.organsupgrades_metabolic.tooltip1": "§1Generates energy from metabolic function",
           "tooltip.createcybernetics.organsupgrades_metabolic.tooltip2": "§7Requires §cIntestines",
@@ -409,9 +417,10 @@
       "tooltip.createcybernetics.skinupgrades_netheriteplating.tooltip1": "§1Grants the user immunity to fire and lava",
       "tooltip.createcybernetics.skinupgrades_solarskin.tooltip1": "§1Generates energy when the user is in sunlight",
       "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip1": "§1Provides 1 armor levels",
-          "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip2": "§3Stacks up to 5x",
+          "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip2": "§3Stacks up to 3x",
       "tooltip.createcybernetics.skinupgrades_subdermalspikes.tooltip1": "§1Applies the Thorns effect when attacked",
       "tooltip.createcybernetics.skinupgrades_syntheticsetules.tooltip1": "§1Allows the user to climb walls like a spider",
+      "tooltip.createcybernetics.skinupgrades_metalplating.tooltip1": "§1Titanium plate skin replacement",
       "tooltip.createcybernetics.skinupgrades_sweat.tooltip1": "§1Releases large amounts of sweat to release heat",
 
       "tooltip.createcybernetics.muscleupgrades_synthmuscle.tooltip1": "§1Grants extra speed and strength",

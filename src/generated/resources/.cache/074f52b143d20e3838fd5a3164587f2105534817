@@ -1,3 +1,4 @@
-// 1.21.1	2025-11-30T22:47:45.4566861	Tags for minecraft:block mod id createcybernetics
+// 1.21.1	2025-12-23T17:21:12.7449769	Tags for minecraft:block mod id createcybernetics
+73565ceb86cb6f53c7d8966893fb681997820533 data/createcybernetics/tags/block/metal_detectable.json
 09217a7da45d0805a0e4087e74b276240a6fb8bf data/minecraft/tags/block/mineable/pickaxe.json
 09217a7da45d0805a0e4087e74b276240a6fb8bf data/minecraft/tags/block/needs_iron_tool.json

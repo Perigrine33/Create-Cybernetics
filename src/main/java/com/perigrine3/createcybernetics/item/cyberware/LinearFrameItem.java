@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -29,6 +30,16 @@ public class LinearFrameItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return 10;
+    }
+
+    @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
     public int getHumanityCost() {
         return humanityCost;
     }
@@ -50,12 +61,18 @@ public class LinearFrameItem extends Item implements ICyberwareItem {
 
     @Override
     public void onInstalled(Player player) {
-        // grant strength modifier
+        CyberwareAttributeHelper.applyModifier(player, "linear_frame_health");
+        CyberwareAttributeHelper.applyModifier(player, "linear_frame_knockback_resist");
+        CyberwareAttributeHelper.applyModifier(player, "linear_frame_blockbreak");
+        CyberwareAttributeHelper.applyModifier(player, "linear_frame_speed");
     }
 
     @Override
     public void onRemoved(Player player) {
-        // remove strength modifier
+        CyberwareAttributeHelper.removeModifier(player, "linear_frame_health");
+        CyberwareAttributeHelper.removeModifier(player, "linear_frame_knockback_resist");
+        CyberwareAttributeHelper.removeModifier(player, "linear_frame_blockbreak");
+        CyberwareAttributeHelper.removeModifier(player, "linear_frame_speed");
     }
 
     @Override

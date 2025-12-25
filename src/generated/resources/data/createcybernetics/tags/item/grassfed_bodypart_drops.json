@@ -1,0 +1,12 @@
+{
+  "values": [
+    "createcybernetics:bodypart_skeleton",
+    "createcybernetics:bodypart_brain",
+    "createcybernetics:bodypart_eyeballs",
+    "createcybernetics:bodypart_heart",
+    "createcybernetics:bodypart_lungs",
+    "createcybernetics:bodypart_liver",
+    "createcybernetics:wetware_grassfedstomach",
+    "createcybernetics:bodypart_muscle"
+  ]
+}

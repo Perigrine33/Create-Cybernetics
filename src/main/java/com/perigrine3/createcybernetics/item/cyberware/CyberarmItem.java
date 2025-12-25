@@ -34,6 +34,16 @@ public class CyberarmItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return 10;
+    }
+
+    @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
     public int getHumanityCost() {
         return humanityCost;
     }
@@ -56,11 +66,13 @@ public class CyberarmItem extends Item implements ICyberwareItem {
     @Override
     public void onInstalled(Player player) {
         CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength");
+        CyberwareAttributeHelper.applyModifier(player, "cyberarm_blockbreak");
     }
 
     @Override
     public void onRemoved(Player player) {
         CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength");
+        CyberwareAttributeHelper.removeModifier(player, "cyberarm_blockbreak");
     }
 
     @Override

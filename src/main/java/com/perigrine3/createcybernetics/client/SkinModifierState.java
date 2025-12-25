@@ -24,6 +24,15 @@ public class SkinModifierState {
         }
     }
 
+    public boolean removeModifier(SkinModifier modifier) {
+        boolean removed = modifiers.remove(modifier);
+        if (removed && modifier.shouldHideVanillaLayers()) {
+            hideVanillaLayers = modifiers.stream()
+                    .anyMatch(SkinModifier::shouldHideVanillaLayers);
+        }
+        return removed;
+    }
+
     public void clearModifiers() {
         modifiers.clear();
         hideVanillaLayers = false;

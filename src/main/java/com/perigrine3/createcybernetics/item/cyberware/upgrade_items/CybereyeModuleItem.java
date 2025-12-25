@@ -16,6 +16,8 @@ import java.util.Set;
 
 public class CybereyeModuleItem extends Item implements ICyberwareItem {
     private final int humanityCost;
+    private boolean nightVisionModule;
+    private boolean underwaterVisionModule;
 
     public CybereyeModuleItem(Properties props, int humanityCost) {
         super(props);
@@ -51,7 +53,7 @@ public class CybereyeModuleItem extends Item implements ICyberwareItem {
 
     @Override
     public void onInstalled(Player player) {
-        // grant strength modifier
+
     }
 
     @Override

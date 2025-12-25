@@ -17,9 +17,11 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, CreateCybernetics.MODID);
 
+//GAME SOUNDS
+    public static final Supplier<SoundEvent> METAL_DETECTOR_BEEPS = registerSoundEvent("metal_detector_beeps");
 
 
-
+//MUSIC DISCS
     public static final Supplier<SoundEvent> CYBERPSYCHO = registerSoundEvent("cyberpsycho");
     public static final ResourceKey<JukeboxSong> CYBERPSYCHO_KEY = createSong("cyberpsycho");
     public static final Supplier<SoundEvent> NEON_OVERLORDS = registerSoundEvent("neon_overlords");

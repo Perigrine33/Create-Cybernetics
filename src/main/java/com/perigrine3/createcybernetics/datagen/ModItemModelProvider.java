@@ -22,7 +22,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.EYEUPGRADEBASE.get());
         basicItem(ModItems.TITANIUM_HAND.get());
         basicItem(ModItems.NEUROPOZYNE.get());
-        basicItem(ModItems.EXPCAPSULE.get());
+        basicItem(ModItems.XP_CAPSULE.get());
+        basicItem(ModItems.FACEPLATE.get());
         basicItem(ModItems.NETHERITE_QPU.get());
 
         basicItem(ModItems.MUSIC_DISC_CYBERPSYCHO.get());
@@ -187,6 +188,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SKINUPGRADES_SUBDERMALARMOR.get());
         basicItem(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get());
         basicItem(ModItems.SKINUPGRADES_SYNTHETICSETULES.get());
+        basicItem(ModItems.SKINUPGRADES_METALPLATING.get());
 
             if (ModItems.SKINUPGRADES_SWEAT != null) {
                 basicItem(ModItems.SKINUPGRADES_SWEAT.get());
@@ -295,6 +297,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.SCAVENGED_SUBDERMALARMOR.get());
             basicItem(ModItems.SCAVENGED_SUBDERMALSPIKES.get());
             basicItem(ModItems.SCAVENGED_SYNTHETICSETULES.get());
+            basicItem(ModItems.SCAVENGED_METALPLATING.get());
 
             if (ModItems.SCAVENGED_SWEAT != null) {
                 basicItem(ModItems.SCAVENGED_SWEAT.get());

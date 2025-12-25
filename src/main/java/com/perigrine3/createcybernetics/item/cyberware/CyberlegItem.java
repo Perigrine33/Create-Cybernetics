@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.item.cyberware;
 
+import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
@@ -34,6 +35,16 @@ public class CyberlegItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return 10;
+    }
+
+    @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
     public int getHumanityCost() {
         return humanityCost;
     }
@@ -60,7 +71,6 @@ public class CyberlegItem extends Item implements ICyberwareItem {
         CyberwareAttributeHelper.applyModifier(player, "cyberleg_jump");
     }
 
-    @Override
     public void onRemoved(Player player) {
         CyberwareAttributeHelper.removeModifier(player, "cyberleg_speed");
         CyberwareAttributeHelper.removeModifier(player, "cyberleg_jump");

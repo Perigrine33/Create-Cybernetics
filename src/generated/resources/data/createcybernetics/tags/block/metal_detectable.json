@@ -1,0 +1,27 @@
+{
+  "values": [
+    "createcybernetics:titanium_block",
+    "createcybernetics:raw_titanium_block",
+    "createcybernetics:titaniumore_block",
+    "createcybernetics:deepslate_titaniumore_block",
+    "minecraft:iron_ore",
+    "minecraft:deepslate_iron_ore",
+    "minecraft:gold_ore",
+    "minecraft:deepslate_gold_ore",
+    "minecraft:copper_ore",
+    "minecraft:deepslate_copper_ore",
+    "minecraft:nether_gold_ore",
+    "minecraft:iron_block",
+    "minecraft:gold_block",
+    "minecraft:copper_block",
+    "minecraft:raw_iron_block",
+    "minecraft:raw_gold_block",
+    "minecraft:raw_copper_block",
+    "minecraft:netherite_block",
+    "create:zinc_ore",
+    "create:zinc_block",
+    "create:raw_zinc_block",
+    "create:brass_block",
+    "create:industrial_iron_block"
+  ]
+}

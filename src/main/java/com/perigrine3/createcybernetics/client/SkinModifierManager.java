@@ -8,7 +8,6 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,13 +73,38 @@ import java.util.UUID;
  */
 public class SkinModifierManager {
     private static final Map<UUID, SkinModifierState> PLAYER_STATES = new HashMap<>();
-    
-    private static final ResourceLocation MISSING_SKIN_TEXTURE = 
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/playermuscles.png");
-    private static final ResourceLocation SYNTHSKIN_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/playermuscles.png");
-    private static final ResourceLocation NETHERPLATED_SKIN_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/playermuscles.png");
+
+//INTERCHANGEABLES
+    private static final ResourceLocation MISSING_SKIN_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/playermuscles_wide.png");
+    private static final ResourceLocation RIGHT_CYBERLEG_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberleg.png");
+    private static final ResourceLocation LEFT_CYBERLEG_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberleg.png");
+
+//WIDE VARIANTS
+    private static final ResourceLocation LEFT_CYBERARM_TEXTURE_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_wide.png");
+    private static final ResourceLocation RIGHT_CYBERARM_TEXTURE_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_wide.png");
+    private static final ResourceLocation FULLBODYCONVERSION_TEXTURE_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/full_body_conversion_wide.png");
+    private static final ResourceLocation SYNTHSKIN_TEXTURE_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/synthskin_wide.png");
+    private static final ResourceLocation NETHERPLATED_SKIN_TEXTURE_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/isothermal_skin_wide.png");
+
+//SLIM VARIANTS
+    private static final ResourceLocation LEFT_CYBERARM_TEXTURE_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_slim.png");
+    private static final ResourceLocation RIGHT_CYBERARM_TEXTURE_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_slim.png");
+    private static final ResourceLocation FULLBODYCONVERSION_TEXTURE_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/full_body_conversion_slim.png");
+    private static final ResourceLocation SYNTHSKIN_TEXTURE_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/synthskin_slim.png");
+    private static final ResourceLocation NETHERPLATED_SKIN_TEXTURE_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/isothermal_skin_slim.png");
 
 
     public static SkinModifierState getPlayerSkinState(AbstractClientPlayer player) {
@@ -92,21 +116,68 @@ public class SkinModifierManager {
         UUID playerId = player.getUUID();
         SkinModifierState state = PLAYER_STATES.computeIfAbsent(playerId, k -> new SkinModifierState());
         state.clearModifiers();
-        
-// MISSING SKIN
-        if (!data.hasAnyTagged(ModTags.Items.SKIN_ITEMS, CyberwareSlot.SKIN)) {
-            state.addModifier(new SkinModifier(MISSING_SKIN_TEXTURE));
+
+
+
+
+// NETHERITE PLATING
+        if (data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN)) {
+            state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(FULLBODYCONVERSION_TEXTURE_WIDE, FULLBODYCONVERSION_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM));
+
+            state.addModifier(new SkinModifier(NETHERPLATED_SKIN_TEXTURE_WIDE, NETHERPLATED_SKIN_TEXTURE_SLIM));
+
+            return state;
         }
 // SYNTHSKIN
         if (data.hasSpecificItem(ModItems.SKINUPGRADES_SYNTHSKIN.get(), CyberwareSlot.SKIN)) {
-            state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE));
+            state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(FULLBODYCONVERSION_TEXTURE_WIDE, FULLBODYCONVERSION_TEXTURE_SLIM));
+
+            state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM));
             return state;
         }
-// NETHERITE PLATING
-        if (data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN)) {
-            state.addModifier(new SkinModifier(NETHERPLATED_SKIN_TEXTURE));
-            return state;
+// MISSING SKIN
+        if (!data.hasAnyTagged(ModTags.Items.SKIN_ITEMS, CyberwareSlot.SKIN)) {
+            state.addModifier(new SkinModifier(MISSING_SKIN_TEXTURE, MISSING_SKIN_TEXTURE));
         }
+// LEFT CYBERLEG
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
+            state.addModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
+        }
+// RIGHT CYBERLEG
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
+            state.addModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
+        }
+// LEFT CYBERARM
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM)) {
+            state.addModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
+        }
+// RIGHT CYBERARM
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM)) {
+            state.addModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM));
+        }
+// FULL BODY
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM) && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM) &&
+                data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG) && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG) &&
+                data.hasSpecificItem(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN) && !data.hasSpecificItem(ModItems.BODYPART_SKIN.get(), CyberwareSlot.SKIN) &&
+                data.hasSpecificItem(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get(), CyberwareSlot.MUSCLE) && !data.hasSpecificItem(ModItems.BODYPART_MUSCLE.get(), CyberwareSlot.MUSCLE) &&
+                data.hasSpecificItem(ModItems.HEARTUPGRADES_CYBERHEART.get(), CyberwareSlot.HEART) && !data.hasSpecificItem(ModItems.BODYPART_HEART.get(), CyberwareSlot.HEART) &&
+                data.hasSpecificItem(ModItems.BASECYBERWARE_LINEARFRAME.get(), CyberwareSlot.BONE) && !data.hasSpecificItem(ModItems.BODYPART_SKELETON.get(), CyberwareSlot.BONE) &&
+                data.hasSpecificItem(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES) && !data.hasSpecificItem(ModItems.BODYPART_EYEBALLS.get(), CyberwareSlot.EYES) &&
+                data.hasSpecificItem(ModItems.BONEUPGRADES_BONELACING.get(), CyberwareSlot.BONE)) {
+            state.addModifier(new SkinModifier(FULLBODYCONVERSION_TEXTURE_WIDE, FULLBODYCONVERSION_TEXTURE_SLIM));
+        }
+
+
+
         
         return state;
     }

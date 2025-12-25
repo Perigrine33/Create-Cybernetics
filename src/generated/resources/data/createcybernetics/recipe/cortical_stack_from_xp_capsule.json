@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "createcybernetics:component_wiring"
+  },
+  "base": {
+    "item": "createcybernetics:expcapsule"
+  },
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_corticalstack"
+  },
+  "template": {
+    "item": "createcybernetics:titaniumsheet"
+  }
+}

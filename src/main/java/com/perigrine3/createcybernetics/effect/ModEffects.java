@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.effect;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.item.cyberware.SubdermalSpikesItem;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +22,62 @@ public class ModEffects {
                 () -> new CyberwareRejectionEffect(MobEffectCategory.NEUTRAL, 0X36ebab)
                         .addAttributeModifier(Attributes.MOVEMENT_SPEED,
                                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_rejection"), -0.25f,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+
+        public static final Holder<MobEffect> SYNTHETIC_SETULES_EFFECT = MOB_EFFECTS.register("synthetic_setules_effect",
+                () -> new SyntheticSetulesEffect(MobEffectCategory.NEUTRAL, 0x000000)
+                        .addAttributeModifier(Attributes.MOVEMENT_SPEED,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "synthetic_setules_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> AEROSTASIS_GYROBLADDER_EFFECT = MOB_EFFECTS.register("aerostasis_gyrobladder_effect",
+                () -> new AerostasisGyrobladderEffect(MobEffectCategory.NEUTRAL, 0x000000)
+                        .addAttributeModifier(Attributes.MOVEMENT_SPEED,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "aerostasis_gyrobladder_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> PNEUMATIC_CALVES_EFFECT = MOB_EFFECTS.register("pneumatic_calves_effect",
+                () -> new PneumaticCalvesEffect(MobEffectCategory.NEUTRAL, 0x000000)
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_calves_effect"), 0.1,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> SPURS_EFFECT = MOB_EFFECTS.register("spurs_effect",
+                () -> new SpursEffect()
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "spurs_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> NEURAL_CONTEXTUALIZER_EFFECT = MOB_EFFECTS.register("neural_contextualizer_effect",
+                () -> new NeuralContextualizerEffect(MobEffectCategory.NEUTRAL, 0x000000)
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "neural_contextualizer_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> SUBDERMAL_SPIKES_EFFECT = MOB_EFFECTS.register("subdermal_spikes_effect",
+                () -> new SubdermalSpikesEffect()
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "subdermal_spikes_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> GUARDIAN_EYE_EFFECT = MOB_EFFECTS.register("guardian_eye_effect",
+                () -> new GuardianEyeEffect(MobEffectCategory.NEUTRAL, 0x000000)
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "guardian_eye_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> PROJECTILE_DODGE_EFFECT = MOB_EFFECTS.register("projectile_dodge_effect",
+                () -> new ProjectileDodgeEffect()
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "projectile_dodge_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> SCULK_LUNGS_EFFECT = MOB_EFFECTS.register("sculk_lungs_effect",
+                () -> new SculkLungsEffect(MobEffectCategory.NEUTRAL, 0x000000)
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "sculk_lungs_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> INKED_EFFECT = MOB_EFFECTS.register("inked_effect",
+                () -> new InkedEffect()
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "inked_effect"), 0,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> BREATHLESS_EFFECT = MOB_EFFECTS.register("breathless_effect",
+                () -> new InkedEffect()
+                        .addAttributeModifier(Attributes.JUMP_STRENGTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "breathless_effect"), 0,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
 

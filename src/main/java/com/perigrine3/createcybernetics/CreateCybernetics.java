@@ -2,9 +2,12 @@ package com.perigrine3.createcybernetics;
 
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.block.entity.ModBlockEntities;
+import com.perigrine3.createcybernetics.common.attributes.ModAttributes;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.component.ModDataComponents;
 import com.perigrine3.createcybernetics.effect.ModEffects;
+import com.perigrine3.createcybernetics.effect.PneumaticCalvesEffect;
+import com.perigrine3.createcybernetics.enchantment.ModEnchantmentEffects;
 import com.perigrine3.createcybernetics.entity.ModEntities;
 import com.perigrine3.createcybernetics.entity.client.*;
 import com.perigrine3.createcybernetics.item.ModCreativeModeTabs;
@@ -14,6 +17,7 @@ import com.perigrine3.createcybernetics.screen.ModMenuTypes;
 import com.perigrine3.createcybernetics.screen.custom.RobosurgeonScreen;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -50,6 +54,10 @@ public class CreateCybernetics {
         eventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
 
+        NeoForge.EVENT_BUS.addListener(PneumaticCalvesEffect.Events::onLivingJump);
+        NeoForge.EVENT_BUS.register(PneumaticCalvesEffect.Events.class);
+
+
         eventBus.addListener(this::addCreative);
 
         ModCreativeModeTabs.register(eventBus);
@@ -60,11 +68,13 @@ public class CreateCybernetics {
         ModEntities.register(eventBus);
         ModEffects.register(eventBus);
         ModMenuTypes.register(eventBus);
+        ModEnchantmentEffects.register(eventBus);
 
         ModLootModifiers.register(eventBus);
         ModDataComponents.register(eventBus);
 
         ModAttachments.register(eventBus);
+        ModAttributes.register(eventBus);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
@@ -104,6 +114,7 @@ public class CreateCybernetics {
             EntityRenderers.register(ModEntities.SMASHER.get(), SmasherRenderer::new);
             EntityRenderers.register(ModEntities.CYBERZOMBIE.get(), CyberzombieRenderer::new);
             EntityRenderers.register(ModEntities.CYBERSKELETON.get(), CyberskeletonRenderer::new);
+            EntityRenderers.register(ModEntities.GUARDIAN_BEAM.get(), GuardianBeamRenderer::new);
         }
 
         @SubscribeEvent

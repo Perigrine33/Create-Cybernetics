@@ -13,6 +13,7 @@ public class ModTags {
 
         public static final TagKey<Block> METAL_DETECTABLE = createTag("metal_detectable");
 
+
         private static TagKey<Block> createTag(String name) {
             return BlockTags.create(ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, name));
         }
@@ -22,6 +23,10 @@ public class ModTags {
 
         public static final TagKey<Item> CYBERWARE_ITEM = createTag("cyberware_item");
         public static final TagKey<Item> WETWARE_ITEM = createTag("wetware_item");
+        public static final TagKey<Item> BODYPART_DROPS = createTag("bodypart_drops");
+        public static final TagKey<Item> HUMANOID_BODYPART_DROPS = createTag("humanoid_bodypart_drops");
+        public static final TagKey<Item> GRASSFED_BODYPART_DROPS = createTag("grassfed_bodypart_drops");
+        public static final TagKey<Item> FISH_BODYPART_DROPS = createTag("fish_bodypart_drops");
 
         public static final TagKey<Item> BODY_PARTS = createTag("body_parts");
         public static final TagKey<Item> BASE_CYBERWARE = createTag("base_cyberware");

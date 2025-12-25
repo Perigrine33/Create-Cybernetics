@@ -34,6 +34,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TITANIUMSHEET);
                         output.accept(ModItems.EYEUPGRADEBASE);
                         output.accept(ModItems.TITANIUM_HAND);
+                        output.accept(ModItems.FACEPLATE);
 
                         output.accept(ModItems.MUSIC_DISC_CYBERPSYCHO);
                         output.accept(ModItems.MUSIC_DISC_NEON_OVERLORDS);
@@ -135,6 +136,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_SUBDERMALARMOR);
                         output.accept(ModItems.SCAVENGED_SUBDERMALSPIKES);
                         output.accept(ModItems.SCAVENGED_SYNTHETICSETULES);
+                        output.accept(ModItems.SCAVENGED_METALPLATING);
 
                         if (ModItems.SCAVENGED_SWEAT != null) {
                             output.accept(ModItems.SCAVENGED_SWEAT);
@@ -253,6 +255,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SKINUPGRADES_SUBDERMALARMOR);
                         output.accept(ModItems.SKINUPGRADES_SUBDERMALSPIKES);
                         output.accept(ModItems.SKINUPGRADES_SYNTHETICSETULES);
+                        output.accept(ModItems.SKINUPGRADES_METALPLATING);
 
                         if (ModItems.SKINUPGRADES_SWEAT != null) {
                             output.accept(ModItems.SKINUPGRADES_SWEAT);

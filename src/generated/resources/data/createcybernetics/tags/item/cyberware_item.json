@@ -7,7 +7,6 @@
     "createcybernetics:basecyberware_cybereyes",
     "createcybernetics:basecyberware_linearframe",
     "createcybernetics:eyeupgrades_hudlens",
-    "createcybernetics:eyeupgrades_navigationchip",
     "createcybernetics:eyeupgrades_hudjack",
     "createcybernetics:eyeupgrades_nightvision",
     "createcybernetics:eyeupgrades_targeting",
@@ -34,8 +33,6 @@
     "createcybernetics:boneupgrades_piezo",
     "createcybernetics:boneupgrades_spinalinjector",
     "createcybernetics:brainupgrade_eyeofdefender",
-    "createcybernetics:brainupgrades_consciousnesstransmitter",
-    "createcybernetics:brainupgrades_corticalstack",
     "createcybernetics:brainupgrades_enderjammer",
     "createcybernetics:brainupgrades_matrix",
     "createcybernetics:brainupgrades_neuralcontextualizer",
@@ -67,8 +64,12 @@
     "createcybernetics:skinupgrades_subdermalarmor",
     "createcybernetics:skinupgrades_subdermalspikes",
     "createcybernetics:skinupgrades_syntheticsetules",
+    "createcybernetics:skinupgrades_metalplating",
     "createcybernetics:muscleupgrades_synthmuscle",
     "createcybernetics:muscleupgrades_wiredreflexes",
-    "createcybernetics:skinupgrades_sweat"
+    "createcybernetics:skinupgrades_sweat",
+    "createcybernetics:eyeupgrades_navigationchip",
+    "createcybernetics:brainupgrades_consciousnesstransmitter",
+    "createcybernetics:brainupgrades_corticalstack"
   ]
 }

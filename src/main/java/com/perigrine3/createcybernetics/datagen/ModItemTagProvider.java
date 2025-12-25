@@ -29,7 +29,6 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_CYBEREYES.get())
                 .add(ModItems.BASECYBERWARE_LINEARFRAME.get())
                 .add(ModItems.EYEUPGRADES_HUDLENS.get())
-                .add(ModItems.EYEUPGRADES_NAVIGATIONCHIP.get())
                 .add(ModItems.EYEUPGRADES_HUDJACK.get())
                 .add(ModItems.EYEUPGRADES_NIGHTVISION.get())
                 .add(ModItems.EYEUPGRADES_TARGETING.get())
@@ -56,8 +55,6 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_PIEZO.get())
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
                 .add(ModItems.BRAINUPGRADES_EYEOFDEFENDER.get())
-                .add(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get())
-                .add(ModItems.BRAINUPGRADES_CORTICALSTACK.get())
                 .add(ModItems.BRAINUPGRADES_ENDERJAMMER.get())
                 .add(ModItems.BRAINUPGRADES_MATRIX.get())
                 .add(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER.get())
@@ -89,9 +86,72 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SUBDERMALARMOR.get())
                 .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get())
                 .add(ModItems.SKINUPGRADES_SYNTHETICSETULES.get())
+                .add(ModItems.SKINUPGRADES_METALPLATING.get())
                 .add(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get())
-                .add(ModItems.MUSCLEUPGRADES_WIREDREFLEXES.get())
-                .add(ModItems.SKINUPGRADES_SWEAT.get());
+                .add(ModItems.MUSCLEUPGRADES_WIREDREFLEXES.get());
+
+        if (ModItems.SKINUPGRADES_SWEAT != null) {
+            tag(ModTags.Items.CYBERWARE_ITEM)
+                    .add(ModItems.SKINUPGRADES_SWEAT.get());
+        }
+
+        if (ModItems.EYEUPGRADES_NAVIGATIONCHIP != null) {
+            tag(ModTags.Items.CYBERWARE_ITEM)
+                    .add(ModItems.EYEUPGRADES_NAVIGATIONCHIP.get());
+        }
+
+        if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
+            tag(ModTags.Items.CYBERWARE_ITEM)
+                    .add(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get())
+                    .add(ModItems.BRAINUPGRADES_CORTICALSTACK.get());
+        }
+
+
+//BODYPART DROPS
+        tag(ModTags.Items.BODYPART_DROPS)
+                .add(ModItems.BODYPART_SKELETON.get())
+                .add(ModItems.BODYPART_BRAIN.get())
+                .add(ModItems.BODYPART_EYEBALLS.get())
+                .add(ModItems.BODYPART_HEART.get())
+                .add(ModItems.BODYPART_LUNGS.get())
+                .add(ModItems.BODYPART_LIVER.get())
+                .add(ModItems.BODYPART_INTESTINES.get())
+                .add(ModItems.BODYPART_MUSCLE.get());
+
+//GRASSFED BODYPART DROPS
+        tag(ModTags.Items.GRASSFED_BODYPART_DROPS)
+                .add(ModItems.BODYPART_SKELETON.get())
+                .add(ModItems.BODYPART_BRAIN.get())
+                .add(ModItems.BODYPART_EYEBALLS.get())
+                .add(ModItems.BODYPART_HEART.get())
+                .add(ModItems.BODYPART_LUNGS.get())
+                .add(ModItems.BODYPART_LIVER.get())
+                .add(ModItems.WETWARE_GRASSFEDSTOMACH.get())
+                .add(ModItems.BODYPART_MUSCLE.get());
+
+//FISH BODYPART DROPS
+        tag(ModTags.Items.FISH_BODYPART_DROPS)
+                .add(ModItems.BODYPART_SKELETON.get())
+                .add(ModItems.BODYPART_EYEBALLS.get())
+                .add(ModItems.WETWARE_GILLS.get())
+                .add(ModItems.BODYPART_MUSCLE.get());
+
+//HUMANOID BODYPART DROPS
+        tag(ModTags.Items.HUMANOID_BODYPART_DROPS)
+                .add(ModItems.BODYPART_RIGHTLEG.get())
+                .add(ModItems.BODYPART_LEFTLEG.get())
+                .add(ModItems.BODYPART_RIGHTARM.get())
+                .add(ModItems.BODYPART_LEFTARM.get())
+                .add(ModItems.BODYPART_SKELETON.get())
+                .add(ModItems.BODYPART_BRAIN.get())
+                .add(ModItems.BODYPART_EYEBALLS.get())
+                .add(ModItems.BODYPART_HEART.get())
+                .add(ModItems.BODYPART_LUNGS.get())
+                .add(ModItems.BODYPART_LIVER.get())
+                .add(ModItems.BODYPART_INTESTINES.get())
+                .add(ModItems.BODYPART_MUSCLE.get())
+                .add(ModItems.BODYPART_SKIN.get());
+
 
 //WETWARE/BODY PARTS
         tag(ModTags.Items.WETWARE_ITEM)
@@ -185,7 +245,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_NETHERITEPLATING.get())
                 .add(ModItems.SKINUPGRADES_SOLARSKIN.get())
                 .add(ModItems.SKINUPGRADES_SUBDERMALARMOR.get())
-                .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get());
+                .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get())
+                .add(ModItems.SKINUPGRADES_METALPLATING.get());
 
         if (ModItems.SKINUPGRADES_SWEAT != null) {
             tag(ModTags.Items.SKIN_UPGRADES)
@@ -321,6 +382,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_SUBDERMALARMOR.get())
                 .add(ModItems.SCAVENGED_SUBDERMALSPIKES.get())
                 .add(ModItems.SCAVENGED_SYNTHETICSETULES.get())
+                .add(ModItems.SCAVENGED_METALPLATING.get())
                 .add(ModItems.SCAVENGED_SYNTHMUSCLE.get())
                 .add(ModItems.SCAVENGED_WIREDREFLEXES.get());
 
@@ -350,6 +412,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BODYPART_EYEBALLS.get());
 
         tag(ModTags.Items.SKIN_ITEMS)
+                .add(ModItems.SKINUPGRADES_METALPLATING.get())
                 .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get())
                 .add(ModItems.SKINUPGRADES_SUBDERMALARMOR.get())
                 .add(ModItems.SKINUPGRADES_SOLARSKIN.get())

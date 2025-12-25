@@ -5,6 +5,8 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
@@ -70,5 +72,17 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 //TITANIUM BLASTING
         oreBlasting(recipeOutput, TITANIUM_SMELTABLES, RecipeCategory.MISC,
                 ModItems.TITANIUMINGOT.get(), 0.25f, 100, "titanium");
+
+
+//CORTICAL STACK SMITHING
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.TITANIUMSHEET),
+                        Ingredient.of(ModItems.XP_CAPSULE.get()),
+                        Ingredient.of(ModItems.COMPONENT_WIRING.get()),
+                        RecipeCategory.MISC,
+                        ModItems.BRAINUPGRADES_CORTICALSTACK.get())
+                .unlocks("has_xp_capsule", has(ModItems.XP_CAPSULE.get()))
+                .save(recipeOutput, "createcybernetics:cortical_stack_from_xp_capsule");
+
     }
 }

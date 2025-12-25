@@ -134,6 +134,24 @@ public class PlayerCyberwareData implements ICyberwareData {
         return false;
     }
 
+    public boolean isInstalled(Item item, CyberwareSlot slot, int index) {
+        InstalledCyberware[] arr = slots.get(slot);
+        if (arr == null) return false;
+        if (index < 0 || index >= arr.length) return false;
+
+        InstalledCyberware cw = arr[index];
+        if (cw == null) return false;
+
+        ItemStack stack = cw.getItem();
+        if (stack == null || stack.isEmpty()) return false;
+
+        return stack.is(item);
+    }
+
+    public boolean isInstalled(Item item, CyberwareSlot slot) {
+        return hasSpecificItem(item, slot);
+    }
+
     @Override
     public void clear() {
         for (CyberwareSlot slot : CyberwareSlot.values()) {
@@ -154,10 +172,6 @@ public class PlayerCyberwareData implements ICyberwareData {
     public void clean() {
         dirty = false;
     }
-
-
-
-
 
     public void resetToDefaultOrgans() {
 

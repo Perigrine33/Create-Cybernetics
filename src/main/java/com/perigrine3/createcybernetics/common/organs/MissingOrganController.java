@@ -4,6 +4,7 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -115,22 +116,32 @@ public final class MissingOrganController {
         }
 
         /* -------------------- LUNGS -------------------- */
+        boolean hasGills = data.hasSpecificItem(ModItems.WETWARE_GILLS.get(), CyberwareSlot.LUNGS);
+        boolean underwater = player.isUnderWater();
+
         if (!hasLungs) {
-            CompoundTag pd = player.getPersistentData();
+            if (hasGills && !underwater) {
+                CompoundTag pd = player.getPersistentData();
 
-            int air = pd.contains(NO_LUNGS_AIR, Tag.TAG_INT)
-                    ? pd.getInt(NO_LUNGS_AIR)
-                    : player.getAirSupply();
+                int air = pd.contains(NO_LUNGS_AIR, Tag.TAG_INT)
+                        ? pd.getInt(NO_LUNGS_AIR)
+                        : player.getAirSupply();
 
-            air -= 1;
+                air -= 1;
 
-            if (air <= -20) {
-                player.hurt(player.damageSources().drown(), 2.0F);
-                air = 0;
+                if (air <= -20) {
+                    player.hurt(player.damageSources().drown(), 2.0F);
+                    air = 0;
+                }
+
+                pd.putInt(NO_LUNGS_AIR, air);
+                player.setAirSupply(air);
+            } else {
+                player.getPersistentData().remove(NO_LUNGS_AIR);
+                player.setAirSupply(player.getMaxAirSupply());
             }
-
-            pd.putInt(NO_LUNGS_AIR, air);
-            player.setAirSupply(air);
+        } else if (data.isInstalled(ModItems.LUNGSUPGRADES_HYPEROXYGENATION.get(), CyberwareSlot.LUNGS)) {
+            player.getPersistentData().remove(NO_LUNGS_AIR);
         } else {
             player.getPersistentData().remove(NO_LUNGS_AIR);
         }
