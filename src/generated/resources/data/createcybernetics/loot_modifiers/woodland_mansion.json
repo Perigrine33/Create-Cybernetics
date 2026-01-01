@@ -6,9 +6,9 @@
       "loot_table_id": "minecraft:chests/woodland_mansion"
     },
     {
-      "chance": 0.1,
+      "chance": 0.75,
       "condition": "minecraft:random_chance"
     }
   ],
-  "item": "createcybernetics:heartupgrades_cyberheart"
+  "item": "createcybernetics:neuropozyne_autoinjector"
 }

@@ -9,6 +9,7 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag; // ADDED
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +23,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 
 import java.util.List;
@@ -34,6 +34,9 @@ public class EnderJammerItem extends Item implements ICyberwareItem {
     private static final double JAM_RADIUS = 10.0D;
     private static final double JAM_RADIUS_SQ = JAM_RADIUS * JAM_RADIUS;
 
+    private static final int ENERGY_PER_TICK = 5;
+    private static final String NBT_POWERED = "cc_enderjammer_powered";
+
     public EnderJammerItem(Properties props, int humanityCost) {
         super(props);
         this.humanityCost = humanityCost;
@@ -44,12 +47,24 @@ public class EnderJammerItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 5 Energy").withStyle(ChatFormatting.RED));
         }
     }
 
     @Override
     public int getHumanityCost() {
         return humanityCost;
+    }
+
+    @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
+    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return ENERGY_PER_TICK;
     }
 
     @Override
@@ -73,19 +88,59 @@ public class EnderJammerItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) { }
+    public void onInstalled(Player player) {
+        if (!player.level().isClientSide) {
+            player.getPersistentData().putBoolean(NBT_POWERED, false);
+        }
+    }
 
     @Override
-    public void onRemoved(Player player) { }
+    public void onRemoved(Player player) {
+        if (!player.level().isClientSide) {
+            player.getPersistentData().remove(NBT_POWERED);
+        }
+    }
 
     @Override
     public void onTick(Player player) {
-        if (player.level().isClientSide) return;
+    }
+
+    @Override
+    public void onPowerLost(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        if (!player.level().isClientSide) {
+            player.getPersistentData().putBoolean(NBT_POWERED, false);
+        }
+    }
+
+    @Override
+    public void onPowerRestored(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        if (!player.level().isClientSide) {
+            player.getPersistentData().putBoolean(NBT_POWERED, true);
+        }
+    }
+
+    @Override
+    public void onUnpoweredTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        if (!player.level().isClientSide) {
+            player.getPersistentData().putBoolean(NBT_POWERED, false);
+        }
+    }
+
+    @Override
+    public void onPoweredTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        if (!player.level().isClientSide) {
+            player.getPersistentData().putBoolean(NBT_POWERED, true);
+        }
     }
 
     private static boolean hasEnderJammerInstalled(ServerPlayer player) {
+        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return false;
+
+        CompoundTag ptag = player.getPersistentData();
+        if (!ptag.getBoolean(NBT_POWERED)) return false;
 
         return data.hasSpecificItem(ModItems.BRAINUPGRADES_ENDERJAMMER.get(), CyberwareSlot.BRAIN);
     }
@@ -95,8 +150,7 @@ public class EnderJammerItem extends Item implements ICyberwareItem {
 
         AABB box = new AABB(
                 point.x - JAM_RADIUS, point.y - JAM_RADIUS, point.z - JAM_RADIUS,
-                point.x + JAM_RADIUS, point.y + JAM_RADIUS, point.z + JAM_RADIUS
-        );
+                point.x + JAM_RADIUS, point.y + JAM_RADIUS, point.z + JAM_RADIUS);
 
         List<ServerPlayer> players =
                 level.getEntitiesOfClass(ServerPlayer.class, box, EnderJammerItem::hasEnderJammerInstalled);

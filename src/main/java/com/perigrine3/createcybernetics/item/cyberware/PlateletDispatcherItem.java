@@ -3,6 +3,9 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,16 +18,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.List;
 import java.util.Set;
 
 public class PlateletDispatcherItem extends Item implements ICyberwareItem {
     private final int humanityCost;
+
+    private static final String NBT_LAST_COMBAT_TICK = "cc_platelet_lastCombatTick";
+    private static final String NBT_ACTIVE = "cc_platelet_active";
+
+    private static final int OUT_OF_COMBAT_TICKS = 20 * 120;
+    private static final int REGEN_TICKS = 20 * 30;
+
+    private static final int ENERGY_PER_TICK_WHEN_ACTIVE = 5;
 
     public PlateletDispatcherItem(Properties props, int humanityCost) {
         super(props);
@@ -35,6 +45,8 @@ public class PlateletDispatcherItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 5 Energy").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -64,47 +76,102 @@ public class PlateletDispatcherItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
+    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        if (player == null) return 0;
+        if (player.level().isClientSide) return 0;
+        if (!player.isAlive()) return 0;
+        if (player.isCreative() || player.isSpectator()) return 0;
+
+        long now = player.level().getGameTime();
+        long lastCombat = player.getPersistentData().getLong(NBT_LAST_COMBAT_TICK);
+        boolean inCombatWindow = lastCombat != 0L && (now - lastCombat) < OUT_OF_COMBAT_TICKS;
+        if (inCombatWindow) return 0;
+
+        boolean active = player.getPersistentData().getBoolean(NBT_ACTIVE);
+        boolean needsHeal = player.getHealth() < player.getMaxHealth();
+
+        return (active || needsHeal) ? ENERGY_PER_TICK_WHEN_ACTIVE : 0;
+    }
+
+    @Override
     public void onInstalled(Player player) {
+        if (!player.level().isClientSide) {
+            player.getPersistentData().remove(NBT_ACTIVE);
+        }
     }
 
     @Override
     public void onRemoved(Player player) {
+        if (!player.level().isClientSide) {
+            player.getPersistentData().remove(NBT_ACTIVE);
+            player.removeEffect(MobEffects.REGENERATION);
+        }
     }
-
-    private static final String NBT_LAST_COMBAT_TICK = "cc_platelet_lastCombatTick";
-    private static final int OUT_OF_COMBAT_TICKS = 20 * 120;
-    private static final int REGEN_TICKS = 20 * 30;
 
     @Override
     public void onTick(Player player) {
+    }
+
+    @Override
+    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
         if (player.level().isClientSide) return;
         if (!player.isAlive()) return;
         if (player.isCreative() || player.isSpectator()) return;
 
+        if (!player.hasData(ModAttachments.CYBERWARE)) return;
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
+
+        InstalledCyberware cw = data.get(slot, index);
+        if (cw == null) return;
+
         long now = player.level().getGameTime();
         long lastCombat = player.getPersistentData().getLong(NBT_LAST_COMBAT_TICK);
-
         boolean inCombatWindow = lastCombat != 0L && (now - lastCombat) < OUT_OF_COMBAT_TICKS;
 
         if (inCombatWindow) {
             if (player.hasEffect(MobEffects.REGENERATION)) {
                 player.removeEffect(MobEffects.REGENERATION);
             }
+            player.getPersistentData().putBoolean(NBT_ACTIVE, false);
             return;
         }
 
-        if (player.getHealth() >= player.getMaxHealth()) return;
-
+        boolean active = player.getPersistentData().getBoolean(NBT_ACTIVE);
         MobEffectInstance existing = player.getEffect(MobEffects.REGENERATION);
+
+        if (active && existing == null) {
+            player.getPersistentData().putBoolean(NBT_ACTIVE, false);
+            active = false;
+        }
+
+        if (!cw.isPowered()) {
+            if (player.hasEffect(MobEffects.REGENERATION)) {
+                player.removeEffect(MobEffects.REGENERATION);
+            }
+            player.getPersistentData().putBoolean(NBT_ACTIVE, false);
+            return;
+        }
+
+        if (player.getHealth() >= player.getMaxHealth()) {
+            return;
+        }
+
         if (existing == null || existing.getDuration() < 40) {
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, REGEN_TICKS, 0, false, true, true));
+            player.getPersistentData().putBoolean(NBT_ACTIVE, true);
         }
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class Events {
 
-        @SubscribeEvent
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onLivingDamagePost(net.neoforged.neoforge.event.entity.living.LivingDamageEvent.Post event) {
             if (!(event.getEntity() instanceof Player victim)) return;
             if (victim.level().isClientSide) return;
@@ -115,6 +182,7 @@ public class PlateletDispatcherItem extends Item implements ICyberwareItem {
             if (victim.hasEffect(MobEffects.REGENERATION)) {
                 victim.removeEffect(MobEffects.REGENERATION);
             }
+            victim.getPersistentData().putBoolean(NBT_ACTIVE, false);
 
             Entity src = event.getSource().getEntity();
             if (src instanceof Player attacker && !attacker.level().isClientSide) {
@@ -123,6 +191,7 @@ public class PlateletDispatcherItem extends Item implements ICyberwareItem {
                 if (attacker.hasEffect(MobEffects.REGENERATION)) {
                     attacker.removeEffect(MobEffects.REGENERATION);
                 }
+                attacker.getPersistentData().putBoolean(NBT_ACTIVE, false);
             }
         }
 

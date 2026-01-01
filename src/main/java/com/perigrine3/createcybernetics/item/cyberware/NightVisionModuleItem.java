@@ -2,8 +2,10 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -20,6 +22,8 @@ import java.util.Set;
 public class NightVisionModuleItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
+    private static final int ENERGY_PER_TICK = 5;
+
     public NightVisionModuleItem(Properties props, int humanityCost) {
         super(props);
         this.humanityCost = humanityCost;
@@ -28,7 +32,10 @@ public class NightVisionModuleItem extends Item implements ICyberwareItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
-            tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
+                    .withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 5 Energy").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -58,17 +65,49 @@ public class NightVisionModuleItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return isEnabledByWheel(player) ? ENERGY_PER_TICK : 0;
     }
 
     @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
+    public void onInstalled(Player player) { }
+
+    @Override
     public void onRemoved(Player player) {
+        if (!player.level().isClientSide) {
+            player.removeEffect(MobEffects.NIGHT_VISION);
+        }
+    }
+
+    @Override
+    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (player.level().isClientSide) return;
+        if (!player.isAlive()) return;
+
+        if (!player.hasData(ModAttachments.CYBERWARE)) return;
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
+
+        InstalledCyberware cw = data.get(slot, index);
+        if (cw == null) return;
+
+        boolean wantsOn = isEnabledByWheel(player);
+
+        if (!wantsOn || !cw.isPowered()) {
+            player.removeEffect(MobEffects.NIGHT_VISION);
+            return;
+        }
+
+        player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 220, 0, false, false, false));
     }
 
     @Override
     public void onTick(Player player) {
-        if (!player.level().isClientSide) {
-            player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 20, 0, true, false, false));
-        }
+        if (player.level().isClientSide) return;
     }
 }

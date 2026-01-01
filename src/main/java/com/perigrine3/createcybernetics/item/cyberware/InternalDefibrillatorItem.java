@@ -43,6 +43,8 @@ import java.util.Set;
 public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
+    private static final int DEFIB_ENERGY_COST = 50;
+
     public InternalDefibrillatorItem(Properties props, int humanityCost) {
         super(props);
         this.humanityCost = humanityCost;
@@ -52,6 +54,8 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 50 Energy").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -146,10 +150,18 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
                     ? inst.getItem().copy()
                     : ModItems.HEARTUPGRADES_DEFIBRILLATOR.get().getDefaultInstance();
 
-            if (!tryTotemRevive(player)) return;
+            if (!data.tryConsumeEnergy(DEFIB_ENERGY_COST)) {
+                return;
+            }
+
+            if (!tryTotemRevive(player)) {
+                data.receiveEnergy(player, DEFIB_ENERGY_COST);
+                data.setDirty();
+                player.syncData(ModAttachments.CYBERWARE);
+                return;
+            }
 
             PacketDistributor.sendToPlayer(player, new DefibPopPayload(display));
-
             removeInstalledDefib(data, idx[0], idx[1]);
 
             data.setDirty();
@@ -157,6 +169,8 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
 
             event.setCanceled(true);
         }
+
+
 
         private static boolean tryTotemRevive(ServerPlayer player) {
             if (player.getHealth() > 0.0F) return false;

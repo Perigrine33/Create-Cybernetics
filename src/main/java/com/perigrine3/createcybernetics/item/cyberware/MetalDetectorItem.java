@@ -2,6 +2,9 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware; // ADDED
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments; // ADDED
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData; // ADDED
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.sound.MetalDetectorLoopSound;
 import com.perigrine3.createcybernetics.sound.ModSounds;
@@ -24,6 +27,7 @@ import java.util.Set;
 public class MetalDetectorItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
+    private static final int ENERGY_PER_TICK = 3; // ADDED
     private static MetalDetectorLoopSound activeLoop;
 
     public MetalDetectorItem(Properties props, int humanityCost) {
@@ -36,12 +40,24 @@ public class MetalDetectorItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 3 Energy").withStyle(ChatFormatting.RED));
         }
     }
 
     @Override
     public int getHumanityCost() {
         return humanityCost;
+    }
+
+    @Override
+    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return ENERGY_PER_TICK;
+    }
+
+    @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
     }
 
     @Override
@@ -84,6 +100,11 @@ public class MetalDetectorItem extends Item implements ICyberwareItem {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.player != player) return;
+
+        if (!isAnyMetalDetectorPowered(player)) {
+            stopLoopIfPlaying();
+            return;
+        }
 
         BlockPos onPos = BlockPos.containing(player.getX(), player.getY() - 0.05D, player.getZ());
 
@@ -141,6 +162,28 @@ public class MetalDetectorItem extends Item implements ICyberwareItem {
         } else {
             stopLoopIfPlaying();
         }
+    }
+
+    private boolean isAnyMetalDetectorPowered(Player player) {
+        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return false;
+
+        for (CyberwareSlot slot : getSupportedSlots()) {
+            for (int i = 0; i < slot.size; i++) {
+                InstalledCyberware cw = data.get(slot, i);
+                if (cw == null) continue;
+
+                ItemStack st = cw.getItem();
+                if (st == null || st.isEmpty()) continue;
+
+                if (st.getItem() != this) continue;
+
+                if (cw.isPowered()) return true;
+            }
+        }
+
+        return false;
     }
 
     private static void startLoopIfNeeded(Player player) {

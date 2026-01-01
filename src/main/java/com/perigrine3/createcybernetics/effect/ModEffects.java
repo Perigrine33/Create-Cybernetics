@@ -1,7 +1,6 @@
 package com.perigrine3.createcybernetics.effect;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.item.cyberware.SubdermalSpikesItem;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,16 +11,19 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import javax.print.attribute.Attribute;
-
 public class ModEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS =
             DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, CreateCybernetics.MODID);
 
         public static final Holder<MobEffect> CYBERWARE_REJECTION = MOB_EFFECTS.register("cyberware_rejection",
-                () -> new CyberwareRejectionEffect(MobEffectCategory.NEUTRAL, 0X36ebab)
+                () -> new CyberwareRejectionEffect(MobEffectCategory.NEUTRAL, 0xA11F05)
                         .addAttributeModifier(Attributes.MOVEMENT_SPEED,
-                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_rejection"), -0.25f,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_rejection"), -0.17f,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> NEUROPOZYNE = MOB_EFFECTS.register("neuropozyne",
+                () -> new NeuropozyneEffect(MobEffectCategory.BENEFICIAL, 0xC4D925)
+                        .addAttributeModifier(Attributes.MOVEMENT_SPEED,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "neuropozyne_speed"), 0.001D,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         public static final Holder<MobEffect> SYNTHETIC_SETULES_EFFECT = MOB_EFFECTS.register("synthetic_setules_effect",

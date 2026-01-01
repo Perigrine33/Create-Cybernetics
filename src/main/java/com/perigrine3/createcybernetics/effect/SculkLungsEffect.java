@@ -182,22 +182,6 @@ public class SculkLungsEffect extends MobEffect {
         }
     }
 
-    @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.MOD)
-    public static final class Payloads {
-        private Payloads() {}
-
-        @SubscribeEvent
-        public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-            PayloadRegistrar r = event.registrar(CreateCybernetics.MODID);
-
-            r.playToServer(SonicUseHeldPayload.TYPE, SonicUseHeldPayload.STREAM_CODEC, (payload, ctx) -> {
-                if (ctx.player() instanceof ServerPlayer sp) {
-                    setUseHeld(sp, payload.held());
-                }
-            });
-        }
-    }
-
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
     public static final class ClientInput {
         private static boolean lastSentHeld = false;

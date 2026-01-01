@@ -5,6 +5,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.compat.coldsweat.ColdSweatCompat;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
@@ -76,10 +77,19 @@ public class PolarBearFurItem extends Item implements ICyberwareItem {
         @SubscribeEvent
         public static void onPlayerTickPost(PlayerTickEvent.Post event) {
             Player player = event.getEntity();
+            if (player.level().isClientSide) return;
 
-            if (!hasPolarBearFurInstalled(player)) return;
-            if (player.getTicksFrozen() > 0 || player.isFullyFrozen()) {
+            boolean installed = hasPolarBearFurInstalled(player);
+
+            if (installed && (player.getTicksFrozen() > 0 || player.isFullyFrozen())) {
                 player.setTicksFrozen(0);
+            }
+
+            if (installed) {
+                ColdSweatCompat.applyColdResistance(player, 0.60);
+                ColdSweatCompat.applyColdDampening(player, 0.30);
+            } else {
+                ColdSweatCompat.clearCold(player);
             }
         }
 

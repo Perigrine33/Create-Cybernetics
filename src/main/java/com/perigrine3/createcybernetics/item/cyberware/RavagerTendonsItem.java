@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -49,6 +50,11 @@ public class RavagerTendonsItem extends Item implements ICyberwareItem {
     @Override
     public Set<CyberwareSlot> getReplacedOrgans() {
         return Set.of(CyberwareSlot.MUSCLE);
+    }
+
+    @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get());
     }
 
     @Override

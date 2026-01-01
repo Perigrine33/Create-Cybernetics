@@ -144,27 +144,14 @@ public class AerostasisGyrobladderEffect extends MobEffect {
         }
     }
 
-    @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.MOD)
-    public static final class NetworkRegistration {
-        @SubscribeEvent
-        public static void onRegisterPayloadHandlers(RegisterPayloadHandlersEvent event) {
-            PayloadRegistrar registrar = event.registrar("1");
+    public static void handleJumpHeldPayload(net.minecraft.server.level.ServerPlayer player, boolean held) {
+        if (player == null) return;
 
-            registrar.playToServer(
-                    GyroJumpHeldPayload.TYPE,
-                    GyroJumpHeldPayload.STREAM_CODEC,
-                    (payload, context) -> context.enqueueWork(() -> {
-                        Player player = context.player();
-                        if (player != null && hasThisEffect(player)) {
-                            setJumpHeldServer(player, payload.held());
-                        } else if (player != null) {
-                            setJumpHeldServer(player, false);
-                        }
-                    })
-            );
+        if (player.hasEffect(ModEffects.AEROSTASIS_GYROBLADDER_EFFECT)) {
+            setJumpHeldServer(player, held);
+        } else {
+            setJumpHeldServer(player, false);
         }
-
-        private NetworkRegistration() {}
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)

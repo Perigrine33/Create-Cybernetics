@@ -19,6 +19,9 @@ public class ModSounds {
 
 //GAME SOUNDS
     public static final Supplier<SoundEvent> METAL_DETECTOR_BEEPS = registerSoundEvent("metal_detector_beeps");
+    public static final Supplier<SoundEvent> RETRACTABLE_CLAWS_SNIKT = registerSoundEvent("retractable_claws_snikt");
+
+    public static final Supplier<SoundEvent> GLITCHY = registerSoundEvent("glitchy");
 
 
 //MUSIC DISCS

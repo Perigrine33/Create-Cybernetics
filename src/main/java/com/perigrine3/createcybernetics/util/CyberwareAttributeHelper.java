@@ -252,6 +252,10 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gyrobladder_speed_stifle"),
                 -0.75, AttributeModifier.Operation.ADD_VALUE));
 
+        registerModifier("claws_attack", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "claws_attack_boost"),
+                5, AttributeModifier.Operation.ADD_VALUE));
+
     }
 
     public static void registerModifier(String id, AttributeModifierData data) {

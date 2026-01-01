@@ -13,7 +13,9 @@ import com.perigrine3.createcybernetics.entity.client.*;
 import com.perigrine3.createcybernetics.item.ModCreativeModeTabs;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.loot.ModLootModifiers;
+import com.perigrine3.createcybernetics.potion.ModPotions;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
+import com.perigrine3.createcybernetics.screen.custom.ExpandedInventoryScreen;
 import com.perigrine3.createcybernetics.screen.custom.RobosurgeonScreen;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -69,6 +71,7 @@ public class CreateCybernetics {
         ModEffects.register(eventBus);
         ModMenuTypes.register(eventBus);
         ModEnchantmentEffects.register(eventBus);
+        ModPotions.register(eventBus);
 
         ModLootModifiers.register(eventBus);
         ModDataComponents.register(eventBus);
@@ -86,6 +89,8 @@ public class CreateCybernetics {
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
+            event.accept(ModItems.DATURA_FLOWER);
+
             event.accept(ModBlocks.TITANIUMORE_BLOCK);
             event.accept(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK);
             event.accept(ModBlocks.RAW_TITANIUM_BLOCK);
@@ -120,6 +125,7 @@ public class CreateCybernetics {
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(ModMenuTypes.ROBOSURGEON_MENU.get(), RobosurgeonScreen::new);
+            event.register(ModMenuTypes.EXPANDED_INVENTORY_MENU.get(), ExpandedInventoryScreen::new);
         }
     }
 

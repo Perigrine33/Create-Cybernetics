@@ -1,6 +1,5 @@
 package com.perigrine3.createcybernetics;
 
-import com.perigrine3.createcybernetics.client.model.ModelModifierManager;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

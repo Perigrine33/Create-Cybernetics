@@ -6,9 +6,9 @@
       "loot_table_id": "minecraft:chests/nether_bridge"
     },
     {
-      "chance": 0.1,
+      "chance": 0.65,
       "condition": "minecraft:random_chance"
     }
   ],
-  "item": "createcybernetics:scavenged_zoom"
+  "item": "createcybernetics:neuropozyne_autoinjector"
 }

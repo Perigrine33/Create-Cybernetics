@@ -1,0 +1,27 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "createcybernetics:empty_autoinjector"
+    },
+    {
+      "type": "fluid_stack",
+      "fluid": "create:potion",
+      "amount": 50,
+      "components":
+      {
+        "create:potion_fluid_bottle_type": "regular",
+        "minecraft:potion_contents":
+        {
+          "potion": "createcybernetics:neuropozyne_potion"
+        }
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "createcybernetics:neuropozyne_autoinjector",
+      "count": 1
+    }
+  ]
+}

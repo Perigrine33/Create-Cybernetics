@@ -3,6 +3,7 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.effect.ModEffects;
+import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -48,6 +49,11 @@ public class SculkLungsItem extends Item implements ICyberwareItem {
     @Override
     public Set<CyberwareSlot> getReplacedOrgans() {
         return Set.of(CyberwareSlot.LUNGS);
+    }
+
+    @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.WETWARE_AEROSTASISGYROBLADDER.get(), ModItems.BODYPART_LUNGS.get());
     }
 
     @Override

@@ -7,10 +7,12 @@
 
   "item.createcybernetics.eyeupgradebase": "Cybereye Module Base",
   "item.createcybernetics.titanium_hand": "Titanium Hand",
-  "item.createcybernetics.neuropozyne": "Neuropozyne Autoinjector",
+  "item.createcybernetics.neuropozyne_autoinjector": "Neuropozyne Autoinjector",
+  "item.createcybernetics.empty_autoinjector": "Empty Autoinjector",
   "item.createcybernetics.expcapsule": "Cortical Stack Capsule",
   "item.createcybernetics.faceplate": "Faceplate",
   "item.createcybernetics.netherite_qpu": "Netherite Quantum Processor",
+  "item.createcybernetics.datura_flower": "Datura Flower",
 
   "item.createcybernetics.music_disc_cyberpsycho": "§bMusic Disc",
   "item.createcybernetics.music_disc_cyberpsycho.desc": "Cyberpsycho - Perigrine3",
@@ -79,7 +81,7 @@
   "item.createcybernetics.armupgrades_armcannon": "Arm Cannon",
   "item.createcybernetics.armupgrades_flywheel": "Quickdraw Flywheel",
   "item.createcybernetics.armupgrades_claws": "Retractable Claws",
-  "item.createcybernetics.armupgrades_crafthands": "Crafting Hands",
+  "item.createcybernetics.armupgrades_crafthands": "Fine Manipulators",
   "item.createcybernetics.armupgrades_drillfist": "Drillfist",
   "item.createcybernetics.armupgrades_firestarter": "Firestarter",
   "item.createcybernetics.armupgrades_pneumaticwrist": "Pneumatic Wrist",
@@ -236,6 +238,9 @@
 
   "block.createcybernetics.robosurgeon": "Robosurgeon",
   "block.createcybernetics.surgery_chamber": "Surgery Chamber",
+  "block.createcybernetics.charging_block": "Charging Block",
+
+  "block.createcybernetics.datura_bush": "Datura Bush",
 
 
   "entity.mccourse.smasher": "Smasher",
@@ -244,9 +249,17 @@
   "entity.mccourse.hogboy": "HogBoy",
 
 
+  "key.categories.createcybernetics": "Create Cybernetics",
+  "key.createcybernetics.cyberware_wheel": "Open Radial Toggle Menu",
+
+
   "enchantment.createcybernetics.harvester": "Harvester",
 
+  "item.minecraft.potion.effect.neuropozyne_potion": "Potion of Neuropozyne",
+  "item.minecraft.splash_potion.effect.neuropozyne_potion": "Splash Potion of Neuropozyne",
+  "item.minecraft.lingering_potion.effect.neuropozyne_potion": "Lingering Potion of Neuropozyne",
 
+  "effect.createcybernetics.neuropozyne": "Neuropozyne",
   "effect.createcybernetics.cyberware_rejection": "Cyberware Rejection",
   "effect.createcybernetics.synthetic_setules_effect": "Synthetic Setules",
   "effect.createcybernetics.aerostasis_gyrobladder_effect": "Aerostasis Gyrobladder",

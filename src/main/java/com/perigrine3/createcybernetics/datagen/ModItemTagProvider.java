@@ -20,6 +20,21 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+//TOGGLEABLE CYBERWARE
+        tag(ModTags.Items.TOGGLEABLE_CYBERWARE)
+                .add(ModItems.EYEUPGRADES_ZOOM.get())
+                .add(ModItems.EYEUPGRADES_NIGHTVISION.get())
+                .add(ModItems.ARMUPGRADES_CLAWS.get())
+                .add(ModItems.ARMUPGRADES_FIRESTARTER.get())
+                .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
+                .add(ModItems.BRAINUPGRADES_IDEM.get());
+
+        if (ModItems.BONEUPGRADES_ELYTRA != null) {
+            tag(ModTags.Items.TOGGLEABLE_CYBERWARE)
+                    .add(ModItems.BONEUPGRADES_ELYTRA.get());
+        }
+
+
 //CYBERWARE
         tag(ModTags.Items.CYBERWARE_ITEM)
                 .add(ModItems.BASECYBERWARE_RIGHTLEG.get())
@@ -51,7 +66,6 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_BONEBATTERY.get())
                 .add(ModItems.BONEUPGRADES_BONEFLEX.get())
                 .add(ModItems.BONEUPGRADES_BONELACING.get())
-                .add(ModItems.BONEUPGRADES_ELYTRA.get())
                 .add(ModItems.BONEUPGRADES_PIEZO.get())
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
                 .add(ModItems.BRAINUPGRADES_EYEOFDEFENDER.get())
@@ -104,6 +118,11 @@ public class ModItemTagProvider extends ItemTagsProvider {
             tag(ModTags.Items.CYBERWARE_ITEM)
                     .add(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get())
                     .add(ModItems.BRAINUPGRADES_CORTICALSTACK.get());
+        }
+
+        if (ModItems.BONEUPGRADES_ELYTRA != null) {
+            tag(ModTags.Items.CYBERWARE_ITEM)
+                    .add(ModItems.BONEUPGRADES_ELYTRA.get());
         }
 
 
@@ -232,9 +251,14 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_BONEBATTERY.get())
                 .add(ModItems.BONEUPGRADES_BONEFLEX.get())
                 .add(ModItems.BONEUPGRADES_BONELACING.get())
-                .add(ModItems.BONEUPGRADES_ELYTRA.get())
                 .add(ModItems.BONEUPGRADES_PIEZO.get())
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get());
+
+        if (ModItems.BONEUPGRADES_ELYTRA != null) {
+            tag(ModTags.Items.BONE_UPGRADES)
+                    .add(ModItems.BONEUPGRADES_ELYTRA.get());
+        }
+
 //SKIN UPGRADES
         tag(ModTags.Items.SKIN_UPGRADES)
                 .add(ModItems.SKINUPGRADES_ARTERIALTURBINE.get())
@@ -343,7 +367,6 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_BONEBATTERY.get())
                 .add(ModItems.SCAVENGED_BONEFLEX.get())
                 .add(ModItems.SCAVENGED_BONELACING.get())
-                .add(ModItems.SCAVENGED_ELYTRA.get())
                 .add(ModItems.SCAVENGED_PIEZO.get())
                 .add(ModItems.SCAVENGED_SPINALINJECTOR.get())
 
@@ -400,9 +423,14 @@ public class ModItemTagProvider extends ItemTagsProvider {
                     .add(ModItems.SCAVENGED_SWEAT.get());
         }
 
+        if (ModItems.SCAVENGED_ELYTRA != null) {
+            tag(ModTags.Items.SCAVENGED_CYBERWARE)
+                    .add(ModItems.SCAVENGED_ELYTRA.get());
+
+        }
 
 
-        tag(ModTags.Items.BRAIN_ITEMS)
+            tag(ModTags.Items.BRAIN_ITEMS)
                 .add(ModItems.BODYPART_BRAIN.get());
 
         tag(ModTags.Items.EYE_ITEMS)

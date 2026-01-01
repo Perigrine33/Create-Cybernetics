@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "createcybernetics:block/blankmachine",
+    "up": "createcybernetics:block/chargertop",
+    "north": "createcybernetics:block/chargerside",
+    "east": "createcybernetics:block/chargerside",
+    "south": "createcybernetics:block/chargerside",
+    "west": "createcybernetics:block/chargerside",
+    "particle": "createcybernetics:block/blankmachine"
+  },
+  "render_type": "solid"
+}

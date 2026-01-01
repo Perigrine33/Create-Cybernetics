@@ -3,6 +3,8 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;      // ADDED
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData; // ADDED
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -26,18 +28,18 @@ import java.util.Set;
 public class AdrenalPumpItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
-    // ADDED
     private static final String NBT_INSTALLED = "cc_adrenal_installed";
     private static final String NBT_ACTIVE_UNTIL = "cc_adrenal_active_until";
     private static final String NBT_NEXT_TRIGGER = "cc_adrenal_next_trigger";
     private static final String NBT_WAS_ACTIVE = "cc_adrenal_was_active";
 
-    // ADDED
     private static final int BUFF_TICKS = 4 * 60 * 20;          // 4 minutes
     private static final int COOLDOWN_TICKS = 5 * 60 * 20;      // 5 minutes
     private static final int WEAKNESS_TICKS = 2 * 60 * 20;      // 2 minutes
     private static final int SPEED_AMP = 0;                     // Speed I
     private static final int STRENGTH_AMP = 0;                  // Strength I
+
+    private static final int ENERGY_ACTIVATION_COST = 10;
 
     public AdrenalPumpItem(Properties props, int humanityCost) {
         super(props);
@@ -48,7 +50,19 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 10 Energy").withStyle(ChatFormatting.RED));
         }
+    }
+
+    @Override
+    public int getEnergyActivationCost(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return ENERGY_ACTIVATION_COST;
+    }
+
+    @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
     }
 
     @Override
@@ -144,6 +158,11 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
             long now = player.level().getGameTime();
             long next = tag.getLong(NBT_NEXT_TRIGGER);
             if (next != 0L && now < next) return;
+
+            if (!player.hasData(ModAttachments.CYBERWARE)) return;
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return;
+            if (!data.tryConsumeEnergy(ENERGY_ACTIVATION_COST)) return;
 
             tag.putLong(NBT_ACTIVE_UNTIL, now + BUFF_TICKS);
             tag.putLong(NBT_NEXT_TRIGGER, now + COOLDOWN_TICKS);

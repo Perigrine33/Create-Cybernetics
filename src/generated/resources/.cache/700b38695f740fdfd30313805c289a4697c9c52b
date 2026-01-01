@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-25T19:21:48.5274964	Item Models: createcybernetics
+// 1.21.1	2025-12-31T04:07:40.2479161	Item Models: createcybernetics
 ae78f051d9328e5a204530b7fc2e3d88362b4e68 assets/createcybernetics/models/item/armupgrades_armcannon.json
 37f82cc0ca47be7b60c54ef6d3b7059b9b671846 assets/createcybernetics/models/item/armupgrades_claws.json
 43386cbc8a036270c3eb218724a7a5cdf12b5fbf assets/createcybernetics/models/item/armupgrades_crafthands.json
@@ -56,6 +56,8 @@ bc389f7cc0945a0f1cf3181d5c84dff1f7a14255 assets/createcybernetics/models/item/co
 07e0c8f61c05a60639a951bffb659d9f8b828f77 assets/createcybernetics/models/item/crushedtitanium.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/createcybernetics/models/item/cyberskeleton_spawn_egg.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/createcybernetics/models/item/cyberzombie_spawn_egg.json
+116c55b4f8a6fd8f110180c06f40f7c8f2864e0a assets/createcybernetics/models/item/datura_flower.json
+bb9acdd71ee3e06cb061728186392eadfa6d4276 assets/createcybernetics/models/item/empty_autoinjector.json
 ffd40357a12a04f79a8538bdac0c6fa460a321db assets/createcybernetics/models/item/expcapsule.json
 f1cc850efb4103d8d6be7baf99423c489b24d612 assets/createcybernetics/models/item/eyeupgradebase.json
 dd5ab28eddda38a121eba4e7e4d3c97c790bf851 assets/createcybernetics/models/item/eyeupgrades_hudjack.json
@@ -88,7 +90,7 @@ bd10ec3ad54def70730f90b47cee619c6560ef57 assets/createcybernetics/models/item/mu
 404f3f37dc972bc0d95b82ea7b9d92fc5c4f81d2 assets/createcybernetics/models/item/music_disc_neurohack.json
 b97f610dc6d6759befcc7adb8152a28ac38147ec assets/createcybernetics/models/item/music_disc_the_grid.json
 4c4c7128a9ffef83dbf5b6f7c6b5455044398068 assets/createcybernetics/models/item/netherite_qpu.json
-85f1848be9f432641fbafa7da8d821e54f7ce155 assets/createcybernetics/models/item/neuropozyne.json
+be803acbd4239f1d4075e76e31c5bbc3480b5f28 assets/createcybernetics/models/item/neuropozyne_autoinjector.json
 8a971455af3c0e18e21bd41d5c31f29e645ab638 assets/createcybernetics/models/item/organsupgrades_adrenaline.json
 04ef0a74852dac36dcd7a5e37a02152cb16ecaf2 assets/createcybernetics/models/item/organsupgrades_battery.json
 0fa001f85536c09ddf975bee07782f0ee5c846b9 assets/createcybernetics/models/item/organsupgrades_diamondwaferstack.json

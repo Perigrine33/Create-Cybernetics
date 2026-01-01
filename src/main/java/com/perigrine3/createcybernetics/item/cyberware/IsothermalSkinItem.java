@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.compat.coldsweat.ColdSweatCompat;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -68,5 +69,14 @@ public class IsothermalSkinItem extends Item implements ICyberwareItem {
         if (!player.level().isClientSide) {
             player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 0, false, false, false));
         }
+    }
+
+    @Override
+    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (player.level().isClientSide) return;
+
+        ColdSweatCompat.applyHeatResistance(player, 1.0);
+        ColdSweatCompat.applyHeatDampening(player, 0.0);
+
     }
 }

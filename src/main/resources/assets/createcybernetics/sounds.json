@@ -38,5 +38,29 @@
         "name": "createcybernetics:metal_detector_beeps"
       }
     ]
+  },
+  "retractable_claws_snikt": {
+    "subtitle": "sounds.createcybernetics.retractable_claws_snikt",
+    "sounds": [
+      {
+        "name": "createcybernetics:retractable_claws_snikt"
+      }
+    ]
+  },
+  "glitchy": {
+    "subtitle": "sounds.createcybernetics.glitchy",
+    "sounds": [
+      {"name": "createcybernetics:glitch1"},
+      {"name": "createcybernetics:glitch2"},
+      {"name": "createcybernetics:glitch3"},
+      {"name": "createcybernetics:glitch4"},
+      {"name": "createcybernetics:glitch5"},
+      {"name": "createcybernetics:glitch6"},
+      {"name": "createcybernetics:glitch7"},
+      {"name": "createcybernetics:glitch8"},
+      {"name": "createcybernetics:glitch9"},
+      {"name": "createcybernetics:glitch10"},
+      {"name": "createcybernetics:glitch11"}
+    ]
   }
 }

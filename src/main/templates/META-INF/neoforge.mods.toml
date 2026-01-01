@@ -74,6 +74,13 @@ config="createcybernetics.mixins.json"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
+    modId="caelus"
+    type="optional"
+    versionRange="[7.0.1+1.21.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
     modId="jei"
     type="optional"
     versionRange="[0,]"

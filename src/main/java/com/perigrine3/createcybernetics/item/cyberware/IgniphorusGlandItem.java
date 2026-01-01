@@ -90,6 +90,11 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.WETWARE_SCULKLUNGS.get(), ModItems.WETWARE_GUARDIANEYE.get());
+    }
+
+    @Override
     public void onInstalled(Player player) { }
 
     @Override

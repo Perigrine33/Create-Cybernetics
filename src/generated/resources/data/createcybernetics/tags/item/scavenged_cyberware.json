@@ -30,7 +30,6 @@
     "createcybernetics:scavenged_bonebattery",
     "createcybernetics:scavenged_boneflex",
     "createcybernetics:scavenged_bonelacing",
-    "createcybernetics:scavenged_elytra",
     "createcybernetics:scavenged_piezo",
     "createcybernetics:scavenged_spinalinjector",
     "createcybernetics:scavenged_eyeofdefender",
@@ -68,6 +67,7 @@
     "createcybernetics:scavenged_synthmuscle",
     "createcybernetics:scavenged_wiredreflexes",
     "createcybernetics:scavenged_navigationchip",
-    "createcybernetics:scavenged_sweat"
+    "createcybernetics:scavenged_sweat",
+    "createcybernetics:scavenged_elytra"
   ]
 }

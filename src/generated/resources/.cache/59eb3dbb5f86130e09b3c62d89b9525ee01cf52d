@@ -1,4 +1,6 @@
-// 1.21.1	2025-12-03T12:12:09.3315371	Loot Tables
+// 1.21.1	2025-12-31T02:35:35.3113788	Loot Tables
+20cceb562536be68c850c9590b8e4208cc23cfe8 data/createcybernetics/loot_table/blocks/charging_block.json
+a0501f7a36a8cde71e467fd206aa46f5e0f6510e data/createcybernetics/loot_table/blocks/datura_bush.json
 c8a4d3132b2416fe46c16482b8eac45044f7f755 data/createcybernetics/loot_table/blocks/deepslate_titaniumore_block.json
 9aaf5d4aa3e77b3db8a2e448152e5b2508ee6631 data/createcybernetics/loot_table/blocks/raw_titanium_block.json
 55ad66f16b807ca67f154b3f87fc95f744b5740f data/createcybernetics/loot_table/blocks/robosurgeon.json

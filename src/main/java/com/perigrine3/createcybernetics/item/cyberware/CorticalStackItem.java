@@ -67,6 +67,11 @@ public class CorticalStackItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get());
+    }
+
+    @Override
     public void onInstalled(Player player) {
 
     }

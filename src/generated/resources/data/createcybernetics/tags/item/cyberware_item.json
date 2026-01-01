@@ -29,7 +29,6 @@
     "createcybernetics:boneupgrades_bonebattery",
     "createcybernetics:boneupgrades_boneflex",
     "createcybernetics:boneupgrades_bonelacing",
-    "createcybernetics:boneupgrades_elytra",
     "createcybernetics:boneupgrades_piezo",
     "createcybernetics:boneupgrades_spinalinjector",
     "createcybernetics:brainupgrade_eyeofdefender",
@@ -70,6 +69,7 @@
     "createcybernetics:skinupgrades_sweat",
     "createcybernetics:eyeupgrades_navigationchip",
     "createcybernetics:brainupgrades_consciousnesstransmitter",
-    "createcybernetics:brainupgrades_corticalstack"
+    "createcybernetics:brainupgrades_corticalstack",
+    "createcybernetics:boneupgrades_elytra"
   ]
 }

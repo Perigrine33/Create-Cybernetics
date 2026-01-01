@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "createcybernetics:empty_autoinjector"
+    },
+    {
+      "item": "createcybernetics:empty_autoinjector"
+    },
+    {
+      "item": "createcybernetics:empty_autoinjector"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "minecraft:potion",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "createcybernetics:neuropozyne_potion"
+        }
+      },
+      "strict": false
+    }
+  ],
+  "result": {
+    "id": "createcybernetics:neuropozyne_autoinjector",
+    "count": 3
+  },
+  "show_notification": false
+}

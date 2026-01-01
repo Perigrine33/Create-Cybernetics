@@ -149,15 +149,11 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
 
                 if (installedData != null && i < installedData.length && installedData[i] != null) {
                     ItemStack inst = installedData[i].getItem();
-                    if (inst != null) stack = inst.copy();
-                }
-
-                if (stack.isEmpty()) {
-                    ItemStack def = DefaultOrgans.get(slot, i);
-                    if (def != null) stack = def.copy();
+                    if (inst != null && !inst.isEmpty()) stack = inst.copy();
                 }
 
                 blockEntity.inventory.setStackInSlot(invIndex, stack);
+
                 setInstalled(invIndex, !stack.isEmpty());
                 setStaged(invIndex, false);
                 setMarkedForRemoval(invIndex, false);

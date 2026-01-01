@@ -7,6 +7,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -48,8 +49,13 @@ public class ModBlocks {
     public static final DeferredBlock<Block> ROBOSURGEON = registerBlock("robosurgeon",
             () -> new RobosurgeonBlock(BlockBehaviour.Properties.of()
                     .noOcclusion().sound(SoundType.METAL)), true);
+    public static final DeferredBlock<Block> CHARGING_BLOCK = registerBlock("charging_block",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .noOcclusion().sound(SoundType.METAL)), true);
 
-
+//PLANT BLOCKS
+    public static final DeferredBlock<Block> DATURA_BUSH = BLOCKS.register("datura_bush",
+            () -> new DaturaBushBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SWEET_BERRY_BUSH)));
 
 //setup registerItem at a later date
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block, boolean registerItem) {

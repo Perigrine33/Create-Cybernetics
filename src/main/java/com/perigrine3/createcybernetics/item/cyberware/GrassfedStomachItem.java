@@ -106,6 +106,7 @@ public class GrassfedStomachItem extends Item implements ICyberwareItem {
     public static void onUseItemStart(LivingEntityUseItemEvent.Start event) {
         LivingEntity entity = event.getEntity();
         if (!(entity instanceof Player player)) return;
+        if (!isInstalled(player)) return;
 
         ItemStack using = event.getItem();
         boolean edible = using.getItem().getFoodProperties(using, player) != null;
@@ -120,6 +121,7 @@ public class GrassfedStomachItem extends Item implements ICyberwareItem {
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         Player player = event.getEntity();
+        if (!isInstalled(player)) return;
 
         ItemStack stack = event.getItemStack();
         if (!stack.is(Items.WHEAT)) return;
@@ -152,6 +154,7 @@ public class GrassfedStomachItem extends Item implements ICyberwareItem {
     public static void onUseItemFinish(LivingEntityUseItemEvent.Finish event) {
         LivingEntity entity = event.getEntity();
         if (!(entity instanceof Player player)) return;
+        if (!isInstalled(player)) return;
 
         ItemStack used = event.getItem();
         if (!used.is(Items.WHEAT)) return;
@@ -168,6 +171,8 @@ public class GrassfedStomachItem extends Item implements ICyberwareItem {
         BlockPos pos = event.getPos();
 
         if (player.isCreative()) return;
+        if (!isInstalled(player)) return;
+
         if (!player.getMainHandItem().isEmpty()) return;
         if (!level.getBlockState(pos).is(Blocks.GRASS_BLOCK)) return;
         if (!player.canEat(false)) return;

@@ -72,6 +72,11 @@ public class NeedlecasterItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.BRAINUPGRADES_CORTICALSTACK.get());
+    }
+
+    @Override
     public void onInstalled(Player player) { }
 
     @Override

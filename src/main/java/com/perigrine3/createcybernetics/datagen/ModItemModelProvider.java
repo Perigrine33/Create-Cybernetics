@@ -21,10 +21,12 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         basicItem(ModItems.EYEUPGRADEBASE.get());
         basicItem(ModItems.TITANIUM_HAND.get());
-        basicItem(ModItems.NEUROPOZYNE.get());
+        basicItem(ModItems.NEUROPOZYNE_AUTOINJECTOR.get());
+        basicItem(ModItems.EMPTY_AUTOINJECTOR.get());
         basicItem(ModItems.XP_CAPSULE.get());
         basicItem(ModItems.FACEPLATE.get());
         basicItem(ModItems.NETHERITE_QPU.get());
+        basicItem(ModItems.DATURA_FLOWER.get());
 
         basicItem(ModItems.MUSIC_DISC_CYBERPSYCHO.get());
         basicItem(ModItems.MUSIC_DISC_NEON_OVERLORDS.get());
@@ -127,7 +129,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BONEUPGRADES_BONEBATTERY.get());
         basicItem(ModItems.BONEUPGRADES_BONEFLEX.get());
         basicItem(ModItems.BONEUPGRADES_BONELACING.get());
-        basicItem(ModItems.BONEUPGRADES_ELYTRA.get());
+
+            if (ModItems.BONEUPGRADES_ELYTRA != null) {
+                basicItem(ModItems.BONEUPGRADES_ELYTRA.get());
+            }
+
         basicItem(ModItems.BONEUPGRADES_PIEZO.get());
         basicItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get());
     }
@@ -257,7 +263,11 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.SCAVENGED_BONEBATTERY.get());
             basicItem(ModItems.SCAVENGED_BONEFLEX.get());
             basicItem(ModItems.SCAVENGED_BONELACING.get());
-            basicItem(ModItems.SCAVENGED_ELYTRA.get());
+
+            if (ModItems.SCAVENGED_ELYTRA != null) {
+                basicItem(ModItems.SCAVENGED_ELYTRA.get());
+            }
+
             basicItem(ModItems.SCAVENGED_PIEZO.get());
             basicItem(ModItems.SCAVENGED_SPINALINJECTOR.get());
             basicItem(ModItems.SCAVENGED_EYEOFDEFENDER.get());

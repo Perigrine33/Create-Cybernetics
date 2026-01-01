@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.common.effects;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
@@ -25,27 +26,27 @@ public final class CyberwareTickDispatcher {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
 
+        if (!player.hasData(ModAttachments.CYBERWARE)) return;
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
 
-        Set<Item> ticked = new HashSet<>();
+        for (var entry : data.getAll().entrySet()) {
+            CyberwareSlot slot = entry.getKey();
+            InstalledCyberware[] arr = entry.getValue();
+            if (arr == null) continue;
 
-        for (Map.Entry<?, InstalledCyberware[]> entry : data.getAll().entrySet()) {
-            InstalledCyberware[] installedArray = entry.getValue();
-            if (installedArray == null) continue;
-
-            for (InstalledCyberware installed : installedArray) {
+            for (int index = 0; index < arr.length; index++) {
+                InstalledCyberware installed = arr[index];
                 if (installed == null) continue;
 
                 ItemStack stack = installed.getItem();
-                if (stack.isEmpty()) continue;
+                if (stack == null || stack.isEmpty()) continue;
 
-                Item item = stack.getItem();
-                if (!(item instanceof ICyberwareItem cyberItem)) continue;
-
-                if (ticked.add(item)) {
-                    cyberItem.onTick(player);
+                if (stack.getItem() instanceof ICyberwareItem cyberItem) {
+                    cyberItem.onTick(player, stack, slot, index);
                 }
             }
         }
     }
 }
+

@@ -3,6 +3,7 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
@@ -28,6 +29,8 @@ import java.util.Set;
 public class OxygenTankItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
+    private static final int ENERGY_PER_TICK_UNDERWATER = 3;
+
     public OxygenTankItem(Properties props, int humanityCost) {
         super(props);
         this.humanityCost = humanityCost;
@@ -38,6 +41,8 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 3 Energy").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -67,6 +72,16 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return (player != null && player.isEyeInFluid(FluidTags.WATER)) ? ENERGY_PER_TICK_UNDERWATER : 0;
+    }
+
+    @Override
+    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
     public void onInstalled(Player player) {
         if (!player.level().isClientSide) {
             AirHandler.resetOxygenTankTracking(player);
@@ -91,7 +106,6 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
         @SubscribeEvent
         public static void onPlayerTick(PlayerTickEvent.Post event) {
             Player player = event.getEntity();
-
             if (player.level().isClientSide) return;
 
             if (!hasOxygenTankInstalled(player)) {
@@ -100,12 +114,21 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
             }
 
             boolean eyesInWater = player.isEyeInFluid(FluidTags.WATER);
+
+            if (!eyesInWater || !isOxygenTankPowered(player)) {
+                CompoundTag data = player.getPersistentData();
+                data.putBoolean(KEY_HAS_PREV, true);
+                data.putInt(KEY_PREV_AIR, player.getAirSupply());
+                data.putInt(KEY_DECREMENT_COUNT, 0);
+                return;
+            }
+
             int air = player.getAirSupply();
             int maxAir = player.getMaxAirSupply();
 
             CompoundTag data = player.getPersistentData();
 
-            if (!eyesInWater || air >= maxAir) {
+            if (air >= maxAir) {
                 data.putBoolean(KEY_HAS_PREV, true);
                 data.putInt(KEY_PREV_AIR, air);
                 data.putInt(KEY_DECREMENT_COUNT, 0);
@@ -157,6 +180,29 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
             if (data == null) return false;
 
             return data.hasSpecificItem(ModItems.LUNGSUPGRADES_OXYGEN.get(), CyberwareSlot.LUNGS);
+        }
+
+        private static boolean isOxygenTankPowered(Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return false;
+
+            Item target = ModItems.LUNGSUPGRADES_OXYGEN.get();
+
+            for (int i = 0; i < CyberwareSlot.LUNGS.size; i++) {
+                InstalledCyberware cw = data.get(CyberwareSlot.LUNGS, i);
+                if (cw == null) continue;
+
+                ItemStack st = cw.getItem();
+                if (st == null || st.isEmpty()) continue;
+
+                if (st.getItem() != target) continue;
+
+                return cw.isPowered();
+            }
+
+            return false;
         }
     }
 }

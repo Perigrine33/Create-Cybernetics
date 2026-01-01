@@ -2,6 +2,10 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,6 +30,8 @@ public class SynthMuscleItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 3 Energy").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -60,28 +66,58 @@ public class SynthMuscleItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.WETWARE_RAVAGERTENDONS.get());
+    }
+
+    @Override
     public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "synthmuscle_strength");
-        CyberwareAttributeHelper.applyModifier(player, "synthmuscle_size");
-        CyberwareAttributeHelper.applyModifier(player, "synthmuscle_knockback_resist");
-        CyberwareAttributeHelper.applyModifier(player, "synthmuscle_knockback");
-        CyberwareAttributeHelper.applyModifier(player, "synthmuscle_jump");
+        if (player.level().isClientSide) return;
+        setBaseModifiers(player, false);
+        setSprintModifier(player, false);
     }
 
     @Override
     public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "synthmuscle_strength");
-        CyberwareAttributeHelper.removeModifier(player, "synthmuscle_size");
-        CyberwareAttributeHelper.removeModifier(player, "synthmuscle_knockback_resist");
-        CyberwareAttributeHelper.removeModifier(player, "synthmuscle_knockback");
-        CyberwareAttributeHelper.removeModifier(player, "synthmuscle_jump");
+        setBaseModifiers(player, false);
+        setSprintModifier(player, false);
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(Player player) { }
+
+    @Override
+    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
         if (player.level().isClientSide) return;
 
-        if (player.isSprinting()) {
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
+
+        InstalledCyberware cw = data.get(slot, index);
+        boolean powered = cw != null && cw.isPowered();
+
+        setBaseModifiers(player, powered);
+        setSprintModifier(player, powered && player.isSprinting());
+    }
+
+    private static void setBaseModifiers(Player player, boolean on) {
+        if (on) {
+            CyberwareAttributeHelper.applyModifier(player, "synthmuscle_strength");
+            CyberwareAttributeHelper.applyModifier(player, "synthmuscle_size");
+            CyberwareAttributeHelper.applyModifier(player, "synthmuscle_knockback_resist");
+            CyberwareAttributeHelper.applyModifier(player, "synthmuscle_knockback");
+            CyberwareAttributeHelper.applyModifier(player, "synthmuscle_jump");
+        } else {
+            CyberwareAttributeHelper.removeModifier(player, "synthmuscle_strength");
+            CyberwareAttributeHelper.removeModifier(player, "synthmuscle_size");
+            CyberwareAttributeHelper.removeModifier(player, "synthmuscle_knockback_resist");
+            CyberwareAttributeHelper.removeModifier(player, "synthmuscle_knockback");
+            CyberwareAttributeHelper.removeModifier(player, "synthmuscle_jump");
+        }
+    }
+
+    private static void setSprintModifier(Player player, boolean on) {
+        if (on) {
             CyberwareAttributeHelper.applyModifier(player, "synthmuscle_speed");
         } else {
             CyberwareAttributeHelper.removeModifier(player, "synthmuscle_speed");

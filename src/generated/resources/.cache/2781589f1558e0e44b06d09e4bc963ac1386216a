@@ -1,13 +1,13 @@
-// 1.21.1	2025-12-27T01:44:40.430561	Tags for minecraft:item mod id createcybernetics
+// 1.21.1	2025-12-31T02:35:35.3113788	Tags for minecraft:item mod id createcybernetics
 0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
 c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
 28f3195c841d6e4d0679ee73ca4d47e344d7331e data/createcybernetics/tags/item/bodypart_drops.json
 22dd43158827f4d7cda7a49ec4b5120807881949 data/createcybernetics/tags/item/body_parts.json
 2d7af27172af4d41b4cc22a5243b9b321bfe02fe data/createcybernetics/tags/item/bone_items.json
-83df59694b0dd4c1d4de5e4b486f4a87f790ac1b data/createcybernetics/tags/item/bone_upgrades.json
+d6baa4499c135a72579abe82a06462decd539cb3 data/createcybernetics/tags/item/bone_upgrades.json
 1e68d04984dd6eb269f8470938a360db319533fb data/createcybernetics/tags/item/brain_items.json
 80822d489a720b922a04ac8a71e300554e8593a5 data/createcybernetics/tags/item/brain_upgrades.json
-dfa927dc3f81ddc6ef7eadf57e318a0cab83b7d1 data/createcybernetics/tags/item/cyberware_item.json
+2f05a7d8ef01f635a520ecf8128d783fe5eddbea data/createcybernetics/tags/item/cyberware_item.json
 a1c77dbd3d8d652b7697a043d7d45264cbc77862 data/createcybernetics/tags/item/eye_items.json
 10cbd2ad2508ca81df3cfe285a1a8cabadad9dfc data/createcybernetics/tags/item/eye_upgrades.json
 5819eaaed63628ac9b191c387d9b59ac582a61a3 data/createcybernetics/tags/item/fish_bodypart_drops.json
@@ -27,7 +27,8 @@ e9266d2fa183c603158a34606b582a1deaa77fc0 data/createcybernetics/tags/item/lungs_
 21189b7057f39986677a3d65a0a16df49791a3de data/createcybernetics/tags/item/organ_upgrades.json
 390c6920c80265134a0b560d8e7ec9dc711e25bd data/createcybernetics/tags/item/rightarm_items.json
 fbddf84ded3f1122e79f3bceb64df7be268576c0 data/createcybernetics/tags/item/rightleg_items.json
-aa5eee5235d98886f3e8b21542388c3d13bcc877 data/createcybernetics/tags/item/scavenged_cyberware.json
+425a6cfb707307196b8dee1dd413092505d3f9a1 data/createcybernetics/tags/item/scavenged_cyberware.json
 2bf33c6025d6343005e3f87a177578ae1e97dce9 data/createcybernetics/tags/item/skin_items.json
 625e1eb4fb250ff5f88eef9a7d00ccdb13a9f6bb data/createcybernetics/tags/item/skin_upgrades.json
+9a0e080b08377104b79f44f7536c817ed309de29 data/createcybernetics/tags/item/toggleable_cyberware.json
 a5b1de6107a336cc816993fdd705f449d0872558 data/createcybernetics/tags/item/wetware_item.json

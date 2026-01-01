@@ -71,6 +71,11 @@ public class GuardianEyeItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.WETWARE_SCULKLUNGS.get(), ModItems.WETWARE_FIREBREATHINGGLAND.get());
+    }
+
+    @Override
     public void onInstalled(Player player) {
         // grant strength modifier
     }

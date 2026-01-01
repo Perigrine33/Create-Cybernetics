@@ -2,10 +2,15 @@ package com.perigrine3.createcybernetics.screen.custom;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
+import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Inventory;
@@ -274,7 +280,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         if (data == null) return;
 
         int humanity = calculatePreviewHumanity();
-        int maxHumanity = 100;
+        int maxHumanity = Math.max(100, humanity);
 
         float percent = Math.max(0f, Math.min(1f, humanity / (float) maxHumanity));
 
@@ -297,6 +303,17 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         gui.pose().popPose();
     }
 
+    private static final int NEUROPOZYNE_HUMANITY_PER_LEVEL = 25;
+
+    private int getNeuropozyneBonusClient(Player player) {
+        for (MobEffectInstance inst : player.getActiveEffects()) {
+            if (inst.is(ModEffects.NEUROPOZYNE)) {
+                return (inst.getAmplifier() + 1) * NEUROPOZYNE_HUMANITY_PER_LEVEL;
+            }
+        }
+        return 0;
+    }
+
     private int getHumanityColor(float percent) {
         if (percent > 0.66f) {
             return 0xFF2AFF00;  // green
@@ -314,38 +331,50 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return 100;
 
-        int humanity = data.getHumanity();
+        int humanity = data.getHumanityBase() + getNeuropozyneBonusClient(player);
 
-        boolean[] seen = new boolean[65];
+        ItemStack[] guiStacks = new ItemStack[65];
+        for (Slot s : menu.slots) {
+            if (!(s instanceof RobosurgeonSlotItemHandler rs)) continue;
+            int idx = rs.getSlotIndex();
+            if (idx < 0 || idx >= guiStacks.length) continue;
+            guiStacks[idx] = rs.getItem();
+        }
 
-        for (Slot slot : menu.slots) {
-            if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
+        for (CyberwareSlot slotType : CyberwareSlot.values()) {
+            for (int i = 0; i < slotType.size; i++) {
 
-            int handlerIndex = rsSlot.getSlotIndex();
-            if (handlerIndex < 0 || handlerIndex >= seen.length) continue;
-            if (seen[handlerIndex]) continue;
-            seen[handlerIndex] = true;
+                int invIndex = RobosurgeonSlotMap.toInventoryIndex(slotType, i);
+                if (invIndex < 0 || invIndex >= 65) continue;
 
-            ItemStack stack = rsSlot.getItem();
-            if (stack.isEmpty()) continue;
-            if (!(stack.getItem() instanceof ICyberwareItem cyberware)) continue;
+                boolean staged = menu.isStaged(invIndex);
+                boolean marked = menu.isMarkedForRemoval(invIndex);
 
-            int cost = cyberware.getHumanityCost();
+                InstalledCyberware installed = data.get(slotType, i);
+                ItemStack installedStack = (installed != null && installed.getItem() != null)
+                        ? installed.getItem()
+                        : ItemStack.EMPTY;
 
-            if (menu.isInstalled(handlerIndex)) {
-                humanity -= cost;
-            }
-            if (menu.isStaged(handlerIndex)) {
-                humanity -= cost;
-            }
-            if (menu.isMarkedForRemoval(handlerIndex)) {
-                humanity += cost;
+                if (marked && !installedStack.isEmpty() && installedStack.getItem() instanceof ICyberwareItem instItem) {
+                    humanity += instItem.getHumanityCost();
+                }
+
+                if (staged) {
+                    ItemStack stagedStack = guiStacks[invIndex];
+                    if (!stagedStack.isEmpty() && stagedStack.getItem() instanceof ICyberwareItem stagedItem) {
+
+                        if (!marked && !installedStack.isEmpty() && installedStack.getItem() instanceof ICyberwareItem instItem) {
+                            humanity += instItem.getHumanityCost();
+                        }
+
+                        humanity -= stagedItem.getHumanityCost();
+                    }
+                }
             }
         }
 
-        return Math.max(0, Math.min(100, humanity));
+        return Math.max(0, humanity);
     }
-
 
     // -----------------------
     // Slot Handling
@@ -921,23 +950,24 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         return count;
     }
 
-    private boolean hasAnyMarkedForRemoval() {
-
+    private boolean hasDefaultOrganMarkedForRemoval() {
         for (Slot slot : menu.slots) {
             if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
 
             int handlerIndex = rsSlot.getSlotIndex();
-            if (menu.isMarkedForRemoval(handlerIndex)) {
+            if (!menu.isMarkedForRemoval(handlerIndex)) continue;
+
+            ItemStack stack = rsSlot.getItem();
+            if (!stack.isEmpty() && stack.is(ModTags.Items.BODY_PARTS)) {
                 return true;
             }
         }
-
         return false;
     }
 
     private void renderRemovalWarning(GuiGraphics gui, int mouseX, int mouseY) {
 
-        if (!hasAnyMarkedForRemoval()) return;
+        if (!hasDefaultOrganMarkedForRemoval()) return;
 
         int x = leftPos + WARNING_X;
         int y = topPos + WARNING_Y;

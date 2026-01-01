@@ -115,6 +115,10 @@ repositories {
     maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
     maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
     maven { url = "https://cursemaven.com" }
+    maven {
+        name = "C4's Maven"
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
@@ -123,6 +127,10 @@ dependencies {
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
+
+    localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:7.0.1+1.21.1"
+    compileOnly  "com.illusivesoulworks.caelus:caelus-neoforge:7.0.1+1.21.1:api"
+
 
 //optional dependencies
     implementation ("curse.maven:jei-238222:6589027")

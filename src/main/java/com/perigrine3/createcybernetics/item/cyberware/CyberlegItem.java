@@ -18,7 +18,7 @@ import java.util.Set;
 public class CyberlegItem extends Item implements ICyberwareItem {
 
     private final int humanityCost;
-    private final CyberwareSlot side; // MUST be LLEG or RLEG
+    private final CyberwareSlot side;
 
     public CyberlegItem(Properties props, int humanityCost, CyberwareSlot side) {
         super(props);
@@ -31,6 +31,8 @@ public class CyberlegItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
+
+            tooltip.add(Component.literal("Costs 10 Energy").withStyle(ChatFormatting.RED));
         }
     }
 

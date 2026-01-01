@@ -25,7 +25,9 @@ public class ModCreativeModeTabs {
                         //Adds items to the creative mode tab
                         output.accept(ModBlocks.ROBOSURGEON);
                         output.accept(ModBlocks.SURGERY_CHAMBER_BOTTOM);
-                        output.accept(ModItems.NEUROPOZYNE);
+                        output.accept(ModBlocks.CHARGING_BLOCK);
+                        output.accept(ModItems.NEUROPOZYNE_AUTOINJECTOR);
+                        output.accept(ModItems.EMPTY_AUTOINJECTOR);
 
                         output.accept(ModItems.RAWTITANIUM);
                         output.accept(ModItems.CRUSHEDTITANIUM);
@@ -96,7 +98,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_BONEBATTERY);
                         output.accept(ModItems.SCAVENGED_BONEFLEX);
                         output.accept(ModItems.SCAVENGED_BONELACING);
-                        output.accept(ModItems.SCAVENGED_ELYTRA);
                         output.accept(ModItems.SCAVENGED_PIEZO);
                         output.accept(ModItems.SCAVENGED_SPINALINJECTOR);
                         output.accept(ModItems.SCAVENGED_EYEOFDEFENDER);
@@ -106,7 +107,12 @@ public class ModCreativeModeTabs {
                             output.accept(ModItems.SCAVENGED_CORTICALSTACK);
                         }
 
-                        output.accept(ModItems.SCAVENGED_ENDERJAMMER);
+                        if (ModItems.SCAVENGED_ELYTRA != null) {
+                            output.accept(ModItems.SCAVENGED_ELYTRA);
+                        }
+
+
+                            output.accept(ModItems.SCAVENGED_ENDERJAMMER);
                         output.accept(ModItems.SCAVENGED_MATRIX);
                         output.accept(ModItems.SCAVENGED_NEURALCONTEXTUALIZER);
                         output.accept(ModItems.SCAVENGED_CYBERDECK);
@@ -209,7 +215,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BONEUPGRADES_BONEBATTERY);
                         output.accept(ModItems.BONEUPGRADES_BONEFLEX);
                         output.accept(ModItems.BONEUPGRADES_BONELACING);
-                        output.accept(ModItems.BONEUPGRADES_ELYTRA);
                         output.accept(ModItems.BONEUPGRADES_PIEZO);
                         output.accept(ModItems.BONEUPGRADES_SPINALINJECTOR);
                     //BRAIN UPGRADES
@@ -218,6 +223,10 @@ public class ModCreativeModeTabs {
                         if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
                             output.accept(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER);
                             output.accept(ModItems.BRAINUPGRADES_CORTICALSTACK);
+                        }
+
+                        if (ModItems.BONEUPGRADES_ELYTRA != null) {
+                            output.accept(ModItems.BONEUPGRADES_ELYTRA);
                         }
 
                         output.accept(ModItems.BRAINUPGRADES_ENDERJAMMER);

@@ -21,6 +21,8 @@ public class ModTags {
 
     public static class Items {
 
+        public static final TagKey<Item> TOGGLEABLE_CYBERWARE = createTag("toggleable_cyberware");
+
         public static final TagKey<Item> CYBERWARE_ITEM = createTag("cyberware_item");
         public static final TagKey<Item> WETWARE_ITEM = createTag("wetware_item");
         public static final TagKey<Item> BODYPART_DROPS = createTag("bodypart_drops");

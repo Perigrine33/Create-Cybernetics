@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " TB",
+    "TGT",
+    "NT "
+  ],
+  "key": {
+    "G": {
+      "item": "glass"
+    },
+    "B": {
+      "tag": "minecraft:buttons"
+    },
+    "N": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "T": {
+      "item": "createcybernetics:titaniumsheet"
+    }
+  },
+  "result": {
+    "id": "createcybernetics:empty_autoinjector",
+    "count": 3
+  },
+  "show_notification": false
+}

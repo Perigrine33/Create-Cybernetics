@@ -6,9 +6,9 @@
       "loot_table_id": "minecraft:chests/simple_dungeon"
     },
     {
-      "chance": 0.4,
+      "chance": 0.2,
       "condition": "minecraft:random_chance"
     }
   ],
-  "item": "createcybernetics:scavenged_battery"
+  "item": "createcybernetics:neuropozyne_autoinjector"
 }

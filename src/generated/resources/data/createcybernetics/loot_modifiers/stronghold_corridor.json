@@ -6,9 +6,9 @@
       "loot_table_id": "minecraft:chests/stronghold_corridor"
     },
     {
-      "chance": 0.1,
+      "chance": 0.55,
       "condition": "minecraft:random_chance"
     }
   ],
-  "item": "createcybernetics:scavenged_wiredreflexes"
+  "item": "createcybernetics:neuropozyne_autoinjector"
 }

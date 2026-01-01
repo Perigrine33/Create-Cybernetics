@@ -3,8 +3,8 @@
     "createcybernetics:boneupgrades_bonebattery",
     "createcybernetics:boneupgrades_boneflex",
     "createcybernetics:boneupgrades_bonelacing",
-    "createcybernetics:boneupgrades_elytra",
     "createcybernetics:boneupgrades_piezo",
-    "createcybernetics:boneupgrades_spinalinjector"
+    "createcybernetics:boneupgrades_spinalinjector",
+    "createcybernetics:boneupgrades_elytra"
   ]
 }

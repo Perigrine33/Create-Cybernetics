@@ -97,7 +97,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 this.add("abandoned_mineshaft",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.NEUROPOZYNE.get()));
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.NEUROPOZYNE_AUTOINJECTOR.get()));
             }
 
 //ANCIENT CITY
@@ -137,7 +137,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 this.add("ancient_city",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/ancient_city")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.15f).build() }, ModItems.NEUROPOZYNE.get()));
+                                LootItemRandomChanceCondition.randomChance(0.15f).build() }, ModItems.NEUROPOZYNE_AUTOINJECTOR.get()));
 
             }
 
@@ -228,7 +228,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 this.add("end_city_treasure",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/end_city_treasure")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.45f).build() }, ModItems.NEUROPOZYNE.get()));
+                                LootItemRandomChanceCondition.randomChance(0.45f).build() }, ModItems.NEUROPOZYNE_AUTOINJECTOR.get()));
 
             }
 
@@ -333,7 +333,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 this.add("nether_bridge",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.65f).build() }, ModItems.NEUROPOZYNE.get()));
+                                LootItemRandomChanceCondition.randomChance(0.65f).build() }, ModItems.NEUROPOZYNE_AUTOINJECTOR.get()));
 
             }
 
@@ -374,7 +374,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 this.add("simple_dungeon",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/simple_dungeon")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.2f).build() }, ModItems.NEUROPOZYNE.get()));
+                                LootItemRandomChanceCondition.randomChance(0.2f).build() }, ModItems.NEUROPOZYNE_AUTOINJECTOR.get()));
 
             }
 
@@ -455,7 +455,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 this.add("woodland_mansion",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/woodland_mansion")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.75f).build() }, ModItems.NEUROPOZYNE.get()));
+                                LootItemRandomChanceCondition.randomChance(0.75f).build() }, ModItems.NEUROPOZYNE_AUTOINJECTOR.get()));
 
             }
 
@@ -732,7 +732,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 this.add("stronghold_corridor",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/stronghold_corridor")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.55f).build() }, ModItems.NEUROPOZYNE.get()));
+                                LootItemRandomChanceCondition.randomChance(0.55f).build() }, ModItems.NEUROPOZYNE_AUTOINJECTOR.get()));
 
             }
 

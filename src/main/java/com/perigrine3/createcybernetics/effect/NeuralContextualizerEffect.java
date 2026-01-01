@@ -80,37 +80,16 @@ public class NeuralContextualizerEffect extends MobEffect {
         }
     }
 
-    @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.MOD)
-    public static final class NetworkRegistration {
-        @SubscribeEvent
-        public static void onRegisterPayloadHandlers(RegisterPayloadHandlersEvent event) {
-            PayloadRegistrar registrar = event.registrar("1");
+    public static void handleSwapHotbarPayload(net.minecraft.server.level.ServerPlayer player, int slot) {
+        if (player == null) return;
+        if (!player.hasEffect(ModEffects.NEURAL_CONTEXTUALIZER_EFFECT)) return;
 
-            registrar.playToServer(
-                    SwapHotbarPayload.TYPE,
-                    SwapHotbarPayload.STREAM_CODEC,
-                    (payload, context) -> context.enqueueWork(() -> {
-                        Player player = context.player();
-                        if (player == null) return;
-                        if (!hasThisEffect(player)) return;
+        if (slot < 0 || slot > 8) return;
+        if (player.isSpectator()) return;
 
-                        int slot = payload.slot();
-                        if (slot < 0 || slot > 8) return;
-
-                        if (player.isSpectator()) return;
-
-                        player.getInventory().selected = slot;
-
-                        if (player instanceof ServerPlayer sp) {
-                            sp.connection.send(new ClientboundSetCarriedItemPacket(slot));
-                        }
-
-                        player.inventoryMenu.broadcastChanges();
-                    })
-            );
-        }
-
-        private NetworkRegistration() {}
+        player.getInventory().selected = slot;
+        player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket(slot));
+        player.inventoryMenu.broadcastChanges();
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)

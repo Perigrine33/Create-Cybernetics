@@ -26,7 +26,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.TITANIUM_BLOCK.get())
                 .add(ModBlocks.RAW_TITANIUM_BLOCK.get())
                 .add(ModBlocks.TITANIUMORE_BLOCK.get())
-                .add(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK.get());
+                .add(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK.get())
+                .add(ModBlocks.CHARGING_BLOCK.get());
 
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.TITANIUM_BLOCK.get())

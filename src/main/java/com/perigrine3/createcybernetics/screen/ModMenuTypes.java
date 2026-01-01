@@ -1,7 +1,10 @@
 package com.perigrine3.createcybernetics.screen;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.screen.custom.ExpandedInventoryMenu;
+import com.perigrine3.createcybernetics.screen.custom.ExpandedInventoryScreen;
 import com.perigrine3.createcybernetics.screen.custom.RobosurgeonMenu;
+import com.perigrine3.createcybernetics.screen.custom.hud.CyberwareHudLayer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -18,6 +21,9 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<RobosurgeonMenu>> ROBOSURGEON_MENU =
             registerMenuType("robosurgeon_menu", RobosurgeonMenu::new);
+
+    public static final DeferredHolder<MenuType<?>, MenuType<ExpandedInventoryMenu>> EXPANDED_INVENTORY_MENU =
+            registerMenuType("expanded_inventory_menu", ExpandedInventoryMenu::new);
 
 
     private static <T extends AbstractContainerMenu>DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {

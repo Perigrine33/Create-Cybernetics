@@ -6,9 +6,9 @@
       "loot_table_id": "minecraft:chests/end_city_treasure"
     },
     {
-      "chance": 0.1,
+      "chance": 0.45,
       "condition": "minecraft:random_chance"
     }
   ],
-  "item": "createcybernetics:scavenged_leftleg"
+  "item": "createcybernetics:neuropozyne_autoinjector"
 }
