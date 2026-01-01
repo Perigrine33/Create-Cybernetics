@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "createcybernetics:item/basecyberware_cybereyes",
+    "tints": [
+      { "type": "minecraft:constant", "value": 16777215 },
+      { "type": "minecraft:dye", "default": 16777215 }
+    ]
+  }
+}

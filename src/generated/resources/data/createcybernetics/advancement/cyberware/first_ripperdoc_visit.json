@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "first_ripperdoc_visit": {
+      "trigger": "createcybernetics:first_ripperdoc_visit"
+    }
+  },
+  "display": {
+    "description": "Installed Cyberware",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:robosurgeon"
+    },
+    "title": "I Want This Fused Here"
+  },
+  "requirements": [
+    [
+      "first_ripperdoc_visit"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

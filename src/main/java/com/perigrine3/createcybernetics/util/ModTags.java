@@ -22,6 +22,7 @@ public class ModTags {
     public static class Items {
 
         public static final TagKey<Item> TOGGLEABLE_CYBERWARE = createTag("toggleable_cyberware");
+        public static final TagKey<Item> ARM_CANNON_AMMO = createTag("arm_cannon_ammo");
 
         public static final TagKey<Item> CYBERWARE_ITEM = createTag("cyberware_item");
         public static final TagKey<Item> WETWARE_ITEM = createTag("wetware_item");
@@ -57,6 +58,18 @@ public class ModTags {
         public static final TagKey<Item> RIGHTARM_ITEMS = createTag("rightarm_items");
         public static final TagKey<Item> LEFTLEG_ITEMS = createTag("leftleg_items");
         public static final TagKey<Item> RIGHTLEG_ITEMS = createTag("rightleg_items");
+
+        public static final TagKey<Item> EYE_REPLACEMENTS = createTag("eye_replacements");
+        public static final TagKey<Item> SKIN_REPLACEMENTS = createTag("skin_replacements");
+        public static final TagKey<Item> MUSCLE_REPLACEMENTS = createTag("muscle_replacements");
+        public static final TagKey<Item> BONE_REPLACEMENTS = createTag("bone_replacements");
+        public static final TagKey<Item> HEART_REPLACEMENTS = createTag("heart_replacements");
+        public static final TagKey<Item> LIVER_REPLACEMENTS = createTag("liver_replacements");
+        public static final TagKey<Item> LEFTARM_REPLACEMENTS = createTag("leftarm_replacements");
+        public static final TagKey<Item> RIGHTARM_REPLACEMENTS = createTag("rightarm_replacements");
+        public static final TagKey<Item> LEFTLEG_REPLACEMENTS = createTag("leftleg_replacements");
+        public static final TagKey<Item> RIGHTLEG_REPLACEMENTS = createTag("rightleg_replacements");
+        public static final TagKey<Item> DEFAULTS_FAIL_AS_MISSING_WHEN_UNPOWERED = createTag("defaults_fail_as_missing_when_unpowered");
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, name));

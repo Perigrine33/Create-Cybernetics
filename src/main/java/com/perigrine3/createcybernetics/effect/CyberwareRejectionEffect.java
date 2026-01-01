@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.effect;
 
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.common.damage.ModDamageSources;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -60,8 +61,7 @@ public class CyberwareRejectionEffect extends MobEffect {
         if (player.getRandom().nextFloat() < DAMAGE_CHANCE_PER_TICK) {
             float base = (float) (1 << Math.min(30, amplifier));
             float scaled = base * (0.25f + 0.75f * progress);
-            DamageSource src = player.damageSources().generic();
-            player.hurt(src, scaled);
+            player.hurt(ModDamageSources.cyberwareRejection(player.level(), player, null), scaled);
         }
 
         return true;

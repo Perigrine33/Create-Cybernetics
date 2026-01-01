@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.entity;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.entity.custom.*;
+import com.perigrine3.createcybernetics.entity.projectile.NuggetProjectile;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -20,6 +21,9 @@ public class ModEntities {
     public static final Supplier<EntityType<GuardianBeamEntity>> GUARDIAN_BEAM =
             ENTITY_TYPES.register("guardian_beam", () -> EntityType.Builder.<GuardianBeamEntity>of(GuardianBeamEntity::new, MobCategory.MISC)
                     .sized(0.1F, 0.1F).clientTrackingRange(64).updateInterval(1).build("guardian_beam"));
+    public static final Supplier<EntityType<NuggetProjectile>> NUGGET_PROJECTILE =
+            ENTITY_TYPES.register("nugget_projectile", () -> EntityType.Builder.<NuggetProjectile>of(NuggetProjectile::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(10).build("nugget_projectile"));
 
 
 

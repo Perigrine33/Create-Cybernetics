@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "first_scavenged_cyberware": {
+      "trigger": "createcybernetics:first_scavenged_cyberware"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Obtained Scavenged Cyberware",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:scavenged_leftarm"
+    },
+    "title": "I Don't Think I Want To Put That In My Body..."
+  },
+  "requirements": [
+    [
+      "first_scavenged_cyberware"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

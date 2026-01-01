@@ -84,8 +84,18 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberleg.png");
     private static final ResourceLocation LEFT_CYBERLEG_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberleg.png");
+    private static final ResourceLocation FULL_BODY_HIGHLIGHT_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/full_body_highlight.png");
     private static final ResourceLocation POLAR_BEAR_FUR_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/polar_bear_fur.png");
+    private static final ResourceLocation SPINAL_INJECTOR_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/spinal_injector.png");
+    private static final ResourceLocation SPINAL_INJECTOR_HIGHLIGHT_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/spinal_injector_highlight.png");
+    private static final ResourceLocation SANDEVISTAN_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sandevistan.png");
+    private static final ResourceLocation SANDEVISTAN_HIGHLIGHT_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sandevistan_highlight.png");
 
 //WIDE VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_WIDE =
@@ -121,7 +131,6 @@ public class SkinModifierManager {
         UUID playerId = player.getUUID();
         SkinModifierState state = PLAYER_STATES.computeIfAbsent(playerId, k -> new SkinModifierState());
         state.clearModifiers();
-
 
 
 
@@ -185,6 +194,20 @@ public class SkinModifierManager {
             state.addModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM,
                     0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE), EnumSet.of(HumanoidArm.RIGHT)));
         }
+// SPINAL INJECTOR
+        if (data.hasSpecificItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get(), CyberwareSlot.BONE)) {
+            state.addModifier(new SkinModifier(SPINAL_INJECTOR_TEXTURE, SPINAL_INJECTOR_TEXTURE,
+                    0xFFFFFFFF, false));
+            SkinHighlightRender.apply(state, true, SPINAL_INJECTOR_HIGHLIGHT_TEXTURE, SPINAL_INJECTOR_HIGHLIGHT_TEXTURE,
+                    0xFFFFFFFF, true);
+        }
+// SANDEVISTAN
+        if (data.hasSpecificItem(ModItems.BONEUPGRADES_SANDEVISTAN.get(), CyberwareSlot.BONE)) {
+            state.addModifier(new SkinModifier(SANDEVISTAN_TEXTURE, SANDEVISTAN_TEXTURE,
+                    0xFFFFFFFF, false));
+            SkinHighlightRender.apply(state, true, SANDEVISTAN_HIGHLIGHT_TEXTURE, SANDEVISTAN_HIGHLIGHT_TEXTURE,
+                    0xFFFFFFFF, true);
+        }
 // FULL BODY
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM) && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM) &&
                 data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG) && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG) &&
@@ -196,6 +219,8 @@ public class SkinModifierManager {
                 data.hasSpecificItem(ModItems.BONEUPGRADES_BONELACING.get(), CyberwareSlot.BONE)) {
             state.addModifier(new SkinModifier(FULLBODYCONVERSION_TEXTURE_WIDE, FULLBODYCONVERSION_TEXTURE_SLIM,
                     0xFFFFFFFF, true));
+            SkinHighlightRender.apply(state, true, FULL_BODY_HIGHLIGHT_TEXTURE, FULL_BODY_HIGHLIGHT_TEXTURE,
+                    0xFFFFFFFF, true);
         }
 
 

@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "missing_muscle": {
+      "trigger": "createcybernetics:boneless"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Removed The Muscle",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bodypart_muscle"
+    },
+    "title": "Well, Sh**..."
+  },
+  "requirements": [
+    [
+      "missing_muscle"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

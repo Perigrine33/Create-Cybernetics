@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "lungs_removed": {
+      "trigger": "createcybernetics:lungs_removed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Removed The Lungs",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bodypart_lungs"
+    },
+    "title": "Respiratoryn’t"
+  },
+  "requirements": [
+    [
+      "lungs_removed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

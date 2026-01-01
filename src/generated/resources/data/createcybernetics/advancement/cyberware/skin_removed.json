@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "skin_removed": {
+      "trigger": "createcybernetics:skin_removed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Removed The Skin",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bodypart_skin"
+    },
+    "title": "I Have No Skin And I Must Scream. So I Will."
+  },
+  "requirements": [
+    [
+      "skin_removed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -8,6 +8,9 @@ public class SkinModifierState {
     private final List<SkinModifier> modifiers = new ArrayList<>();
     private boolean hideVanillaLayers = false;
 
+    // MULTI-HIGHLIGHT SUPPORT
+    private final List<SkinHighlight> highlights = new ArrayList<>();
+
     public void addModifier(SkinModifier modifier) {
         modifiers.add(modifier);
         if (modifier.shouldHideVanillaLayers()) {
@@ -26,6 +29,7 @@ public class SkinModifierState {
     public void clearModifiers() {
         modifiers.clear();
         hideVanillaLayers = false;
+        highlights.clear();
     }
 
     public boolean hasModifiers() {
@@ -50,5 +54,25 @@ public class SkinModifierState {
             mask.addAll(m.getHideMask());
         }
         return mask;
+    }
+
+    /* -------------------- HIGHLIGHTS (MULTI) -------------------- */
+
+    public void addHighlight(SkinHighlight highlight) {
+        if (highlight != null) {
+            this.highlights.add(highlight);
+        }
+    }
+
+    public void clearHighlights() {
+        this.highlights.clear();
+    }
+
+    public boolean hasHighlights() {
+        return !this.highlights.isEmpty();
+    }
+
+    public List<SkinHighlight> getHighlights() {
+        return this.highlights;
     }
 }

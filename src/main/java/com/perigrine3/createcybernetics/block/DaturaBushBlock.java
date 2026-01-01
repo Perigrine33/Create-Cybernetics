@@ -12,7 +12,10 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
+
+import java.util.List;
 
 public class DaturaBushBlock extends SweetBerryBushBlock {
     public DaturaBushBlock(Properties properties) {
@@ -40,4 +43,5 @@ public class DaturaBushBlock extends SweetBerryBushBlock {
             return super.useWithoutItem(state, level, pos, player, hitResult);
         }
     }
+
 }

@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "chest_pains": {
+      "trigger": "createcybernetics:chest_pains"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Removed The Heart",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bodypart_heart"
+    },
+    "title": "Chest Pains"
+  },
+  "requirements": [
+    [
+      "chest_pains"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

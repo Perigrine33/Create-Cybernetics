@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "over_the_edge": {
+      "trigger": "createcybernetics:over_the_edge"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Died From Cyberpsychosis",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:surgery_chamber"
+    },
+    "title": "You Fell Over The Edge, Punk"
+  },
+  "requirements": [
+    [
+      "over_the_edge"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

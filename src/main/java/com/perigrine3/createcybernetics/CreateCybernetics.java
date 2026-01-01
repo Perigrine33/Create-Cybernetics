@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics;
 
+import com.perigrine3.createcybernetics.advancement.ModCriteria;
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.block.entity.ModBlockEntities;
 import com.perigrine3.createcybernetics.common.attributes.ModAttributes;
@@ -15,8 +16,10 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.loot.ModLootModifiers;
 import com.perigrine3.createcybernetics.potion.ModPotions;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
+import com.perigrine3.createcybernetics.screen.custom.ArmCannonScreen;
 import com.perigrine3.createcybernetics.screen.custom.ExpandedInventoryScreen;
 import com.perigrine3.createcybernetics.screen.custom.RobosurgeonScreen;
+import com.perigrine3.createcybernetics.screen.custom.SpinalInjectorScreen;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
@@ -74,6 +77,7 @@ public class CreateCybernetics {
         ModPotions.register(eventBus);
 
         ModLootModifiers.register(eventBus);
+        ModCriteria.register(eventBus);
         ModDataComponents.register(eventBus);
 
         ModAttachments.register(eventBus);
@@ -89,7 +93,7 @@ public class CreateCybernetics {
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
-            event.accept(ModItems.DATURA_FLOWER);
+            event.accept(ModItems.DATURA_SEED_POD);
 
             event.accept(ModBlocks.TITANIUMORE_BLOCK);
             event.accept(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK);
@@ -105,6 +109,10 @@ public class CreateCybernetics {
             event.accept(ModItems.CYBERZOMBIE_SPAWN_EGG);
             event.accept(ModItems.CYBERSKELETON_SPAWN_EGG);
         }
+
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItems.DATURA_FLOWER);
+        }
     }
 
     @SubscribeEvent
@@ -116,6 +124,8 @@ public class CreateCybernetics {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            EntityRenderers.register(ModEntities.NUGGET_PROJECTILE.get(), NuggetProjectileRenderer::new);
+
             EntityRenderers.register(ModEntities.SMASHER.get(), SmasherRenderer::new);
             EntityRenderers.register(ModEntities.CYBERZOMBIE.get(), CyberzombieRenderer::new);
             EntityRenderers.register(ModEntities.CYBERSKELETON.get(), CyberskeletonRenderer::new);
@@ -126,6 +136,8 @@ public class CreateCybernetics {
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(ModMenuTypes.ROBOSURGEON_MENU.get(), RobosurgeonScreen::new);
             event.register(ModMenuTypes.EXPANDED_INVENTORY_MENU.get(), ExpandedInventoryScreen::new);
+            event.register(ModMenuTypes.SPINAL_INJECTOR_MENU.get(), SpinalInjectorScreen::new);
+            event.register(ModMenuTypes.ARM_CANNON_MENU.get(), ArmCannonScreen::new);
         }
     }
 

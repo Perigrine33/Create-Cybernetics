@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:torchflower_seeds" },
+        { "type": "minecraft:item", "name": "minecraft:pitcher_pod" },
+        { "type": "minecraft:item", "name": "createcybernetics:datura_seed_pod"}
+      ]
+    }
+  ],
+  "random_sequence": "minecraft:gameplay/sniffer_digging"
+}

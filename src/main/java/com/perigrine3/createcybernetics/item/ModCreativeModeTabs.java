@@ -100,6 +100,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_BONELACING);
                         output.accept(ModItems.SCAVENGED_PIEZO);
                         output.accept(ModItems.SCAVENGED_SPINALINJECTOR);
+                        output.accept(ModItems.SCAVENGED_SANDEVISTAN);
                         output.accept(ModItems.SCAVENGED_EYEOFDEFENDER);
 
                         if (ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER != null && ModItems.SCAVENGED_CORTICALSTACK != null) {
@@ -112,7 +113,7 @@ public class ModCreativeModeTabs {
                         }
 
 
-                            output.accept(ModItems.SCAVENGED_ENDERJAMMER);
+                        output.accept(ModItems.SCAVENGED_ENDERJAMMER);
                         output.accept(ModItems.SCAVENGED_MATRIX);
                         output.accept(ModItems.SCAVENGED_NEURALCONTEXTUALIZER);
                         output.accept(ModItems.SCAVENGED_CYBERDECK);
@@ -217,6 +218,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BONEUPGRADES_BONELACING);
                         output.accept(ModItems.BONEUPGRADES_PIEZO);
                         output.accept(ModItems.BONEUPGRADES_SPINALINJECTOR);
+                        output.accept(ModItems.BONEUPGRADES_SANDEVISTAN);
                     //BRAIN UPGRADES
                         output.accept(ModItems.BRAINUPGRADES_EYEOFDEFENDER);
 
@@ -287,6 +289,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WETWARE_TACTICALINKSAC);
                         output.accept(ModItems.WETWARE_AEROSTASISGYROBLADDER);
                         output.accept(ModItems.WETWARE_GRASSFEDSTOMACH);
+                        output.accept(ModItems.WETWARE_SPINNERETTE);
 
 
 

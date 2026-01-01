@@ -5,6 +5,9 @@ import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
+import com.perigrine3.createcybernetics.item.cyberware.ArmCannonItem;
+import com.perigrine3.createcybernetics.item.cyberware.SpinalInjectorItem;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -23,6 +26,20 @@ public class PlayerCyberwareData implements ICyberwareData {
     private static final String NBT_HUMANITY = "Humanity";
     private static final String NBT_ENERGY = "Energy";
 
+    private static final String NBT_NEUROPOZYNE_APPLY_COUNT = "NeuropozyneApplyCount";
+    private int neuropozyneApplyCount = 0;
+
+    // Persisted inventories
+    private static final String NBT_SPINAL_INJECTOR_INV = "SpinalInjectorInv";
+    private final ItemStack[] spinalInjectorInv = new ItemStack[SpinalInjectorItem.SLOT_COUNT];
+
+    private static final String NBT_ARM_CANNON_INV = "ArmCannonInv";
+    private final ItemStack[] armCannonInv = new ItemStack[ArmCannonItem.SLOT_COUNT];
+
+    // NEW: persisted selected ammo slot for Arm Cannon wheel/firing
+    private static final String NBT_ARM_CANNON_SELECTED = "ArmCannonSelected";
+    private int armCannonSelected = 0;
+
     private final EnumMap<CyberwareSlot, InstalledCyberware[]> slots =
             new EnumMap<>(CyberwareSlot.class);
 
@@ -33,7 +50,6 @@ public class PlayerCyberwareData implements ICyberwareData {
     private int humanity = 100;
     private int humanityBonus = 0;
 
-    /* ---------------- ENERGY (ADDED) ---------------- */
     private int energyStored = 0;
 
     public PlayerCyberwareData() {
@@ -44,6 +60,15 @@ public class PlayerCyberwareData implements ICyberwareData {
             for (int i = 0; i < en.length; i++) en[i] = true;
             enabled.put(slot, en);
         }
+
+        for (int i = 0; i < spinalInjectorInv.length; i++) {
+            spinalInjectorInv[i] = ItemStack.EMPTY;
+        }
+        for (int i = 0; i < armCannonInv.length; i++) {
+            armCannonInv[i] = ItemStack.EMPTY;
+        }
+
+        armCannonSelected = 0;
     }
 
     @Override
@@ -101,7 +126,6 @@ public class PlayerCyberwareData implements ICyberwareData {
         return humanityBonus;
     }
 
-
     public void setHumanityBonus(int bonus) {
         int clamped = Mth.clamp(bonus, 0, 1000);
         if (clamped != humanityBonus) {
@@ -137,6 +161,19 @@ public class PlayerCyberwareData implements ICyberwareData {
         dirty = true;
     }
 
+    /* ---------------- ARM CANNON SELECTED SLOT ---------------- */
+
+    public int getArmCannonSelected() {
+        return Mth.clamp(armCannonSelected, 0, ArmCannonItem.SLOT_COUNT - 1);
+    }
+
+    public void setArmCannonSelected(int idx) {
+        int clamped = Mth.clamp(idx, 0, ArmCannonItem.SLOT_COUNT - 1);
+        if (clamped != armCannonSelected) {
+            armCannonSelected = clamped;
+            dirty = true;
+        }
+    }
 
     /* ---------------- ENABLED HELPERS ---------------- */
 
@@ -187,7 +224,6 @@ public class PlayerCyberwareData implements ICyberwareData {
     }
 
     public boolean hasAnyInSlots(CyberwareSlot slot) {
-
         InstalledCyberware[] arr = slots.get(slot);
         if (arr == null) return false;
 
@@ -251,6 +287,71 @@ public class PlayerCyberwareData implements ICyberwareData {
         return hasSpecificItem(item, slot);
     }
 
+    /* ---------------- SPINAL INJECTOR INVENTORY ---------------- */
+
+    public ItemStack getSpinalInjectorStack(int slot) {
+        if (slot < 0 || slot >= spinalInjectorInv.length) return ItemStack.EMPTY;
+        ItemStack st = spinalInjectorInv[slot];
+        return st == null ? ItemStack.EMPTY : st;
+    }
+
+    public void setSpinalInjectorStack(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= spinalInjectorInv.length) return;
+
+        if (stack == null || stack.isEmpty() || !SpinalInjectorItem.isInjectable(stack)) {
+            spinalInjectorInv[slot] = ItemStack.EMPTY;
+            dirty = true;
+            return;
+        }
+
+        ItemStack copy = stack.copy();
+        int cap = SpinalInjectorItem.maxStackFor(copy);
+        if (copy.getCount() > cap) copy.setCount(cap);
+
+        spinalInjectorInv[slot] = copy;
+        dirty = true;
+    }
+
+    public void clearSpinalInjectorInventory() {
+        for (int i = 0; i < spinalInjectorInv.length; i++) {
+            spinalInjectorInv[i] = ItemStack.EMPTY;
+        }
+        dirty = true;
+    }
+
+    /* ---------------- ARM CANNON 4-SLOT INVENTORY ---------------- */
+
+    public ItemStack getArmCannonStack(int slot) {
+        if (slot < 0 || slot >= armCannonInv.length) return ItemStack.EMPTY;
+        ItemStack st = armCannonInv[slot];
+        return st == null ? ItemStack.EMPTY : st;
+    }
+
+    public void setArmCannonStack(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= armCannonInv.length) return;
+
+        if (stack == null || stack.isEmpty() || !ArmCannonItem.isValidStoredItem(stack)) {
+            armCannonInv[slot] = ItemStack.EMPTY;
+            dirty = true;
+            return;
+        }
+
+        ItemStack copy = stack.copy();
+
+        int cap = Math.max(1, copy.getMaxStackSize());
+        if (copy.getCount() > cap) copy.setCount(cap);
+
+        armCannonInv[slot] = copy;
+        dirty = true;
+    }
+
+    public void clearArmCannonInventory() {
+        for (int i = 0; i < armCannonInv.length; i++) {
+            armCannonInv[i] = ItemStack.EMPTY;
+        }
+        dirty = true;
+    }
+
     @Override
     public void clear() {
         for (CyberwareSlot slot : CyberwareSlot.values()) {
@@ -263,6 +364,16 @@ public class PlayerCyberwareData implements ICyberwareData {
             }
             for (int i = 0; i < en.length; i++) en[i] = true;
         }
+
+        for (int i = 0; i < spinalInjectorInv.length; i++) {
+            spinalInjectorInv[i] = ItemStack.EMPTY;
+        }
+        for (int i = 0; i < armCannonInv.length; i++) {
+            armCannonInv[i] = ItemStack.EMPTY;
+        }
+
+        armCannonSelected = 0;
+
         dirty = true;
     }
 
@@ -280,7 +391,6 @@ public class PlayerCyberwareData implements ICyberwareData {
     }
 
     public void resetToDefaultOrgans() {
-
         for (CyberwareSlot slot : CyberwareSlot.values()) {
 
             InstalledCyberware[] arr = getAll().get(slot);
@@ -311,7 +421,7 @@ public class PlayerCyberwareData implements ICyberwareData {
         dirty = true;
     }
 
-    /* ---------------- ENERGY HELPERS (ADDED) ---------------- */
+    /* ---------------- ENERGY HELPERS ---------------- */
 
     public int getEnergyStored() {
         return energyStored;
@@ -399,9 +509,25 @@ public class PlayerCyberwareData implements ICyberwareData {
         }
     }
 
+    public int getNeuropozyneApplyCount() {
+        return Math.max(0, neuropozyneApplyCount);
+    }
+
+    public int incrementNeuropozyneApplyCount() {
+        neuropozyneApplyCount = Math.max(0, neuropozyneApplyCount) + 1;
+        dirty = true;
+        return neuropozyneApplyCount;
+    }
+
+    public void resetNeuropozyneApplyCount() {
+        neuropozyneApplyCount = 0;
+        dirty = true;
+    }
+
+
     /* ---------------- NBT ---------------- */
 
-    public CompoundTag serializeNBT(net.minecraft.core.HolderLookup.Provider provider) {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         ListTag list = new ListTag();
 
@@ -431,10 +557,45 @@ public class PlayerCyberwareData implements ICyberwareData {
         tag.putInt(NBT_HUMANITY, humanity);
         tag.putInt(NBT_ENERGY, energyStored);
 
+        // NEW: persist selected arm cannon ammo slot
+        tag.putInt(NBT_ARM_CANNON_SELECTED, getArmCannonSelected());
+
+        ListTag inj = new ListTag();
+        for (int i = 0; i < spinalInjectorInv.length; i++) {
+            CompoundTag c = new CompoundTag();
+            ItemStack st = spinalInjectorInv[i];
+            if (st != null && !st.isEmpty() && SpinalInjectorItem.isInjectable(st)) {
+                ItemStack copy = st.copy();
+                int cap = SpinalInjectorItem.maxStackFor(copy);
+                if (copy.getCount() > cap) copy.setCount(cap);
+                copy.save(provider, c);
+            }
+            inj.add(c);
+        }
+        tag.put(NBT_SPINAL_INJECTOR_INV, inj);
+
+        ListTag arm = new ListTag();
+        for (int i = 0; i < armCannonInv.length; i++) {
+            CompoundTag c = new CompoundTag();
+            ItemStack st = armCannonInv[i];
+
+            if (st != null && !st.isEmpty()) {
+                ItemStack copy = st.copy();
+                int cap = Math.max(1, copy.getMaxStackSize());
+                if (copy.getCount() > cap) copy.setCount(cap);
+                copy.save(provider, c);
+            }
+
+            arm.add(c);
+        }
+        tag.put(NBT_ARM_CANNON_INV, arm);
+
+        tag.putInt(NBT_NEUROPOZYNE_APPLY_COUNT, neuropozyneApplyCount);
+
         return tag;
     }
 
-    public void deserializeNBT(CompoundTag tag, net.minecraft.core.HolderLookup.Provider provider) {
+    public void deserializeNBT(CompoundTag tag, HolderLookup.Provider provider) {
         clear();
 
         ListTag list = tag.getList(NBT_CYBERWARE, Tag.TAG_COMPOUND);
@@ -467,6 +628,55 @@ public class PlayerCyberwareData implements ICyberwareData {
 
         humanityBonus = 0;
         energyStored = tag.contains(NBT_ENERGY, Tag.TAG_INT) ? tag.getInt(NBT_ENERGY) : 0;
+
+        // NEW: load selected arm cannon ammo slot
+        armCannonSelected = tag.contains(NBT_ARM_CANNON_SELECTED, Tag.TAG_INT)
+                ? Mth.clamp(tag.getInt(NBT_ARM_CANNON_SELECTED), 0, ArmCannonItem.SLOT_COUNT - 1)
+                : 0;
+
+        for (int i = 0; i < spinalInjectorInv.length; i++) spinalInjectorInv[i] = ItemStack.EMPTY;
+
+        if (tag.contains(NBT_SPINAL_INJECTOR_INV, Tag.TAG_LIST)) {
+            ListTag inj = tag.getList(NBT_SPINAL_INJECTOR_INV, Tag.TAG_COMPOUND);
+            for (int i = 0; i < spinalInjectorInv.length && i < inj.size(); i++) {
+                CompoundTag c = inj.getCompound(i);
+                ItemStack st = ItemStack.parseOptional(provider, c);
+
+                if (st.isEmpty() || !SpinalInjectorItem.isInjectable(st)) {
+                    spinalInjectorInv[i] = ItemStack.EMPTY;
+                    continue;
+                }
+
+                int cap = SpinalInjectorItem.maxStackFor(st);
+                if (st.getCount() > cap) st.setCount(cap);
+
+                spinalInjectorInv[i] = st;
+            }
+        }
+
+        if (tag.contains(NBT_ARM_CANNON_INV, Tag.TAG_LIST)) {
+            ListTag arm = tag.getList(NBT_ARM_CANNON_INV, Tag.TAG_COMPOUND);
+
+            for (int i = 0; i < armCannonInv.length && i < arm.size(); i++) {
+                CompoundTag c = arm.getCompound(i);
+                ItemStack st = ItemStack.parseOptional(provider, c);
+
+                if (st.isEmpty()) {
+                    armCannonInv[i] = ItemStack.EMPTY;
+                    continue;
+                }
+
+                int cap = Math.max(1, st.getMaxStackSize());
+                if (st.getCount() > cap) st.setCount(cap);
+
+                armCannonInv[i] = st;
+            }
+        }
+
+        neuropozyneApplyCount = tag.contains(NBT_NEUROPOZYNE_APPLY_COUNT, Tag.TAG_INT)
+                ? Math.max(0, tag.getInt(NBT_NEUROPOZYNE_APPLY_COUNT))
+                : 0;
+
         dirty = false;
     }
 }

@@ -1,0 +1,28 @@
+{
+  "type": "farmersdelight:cutting",
+  "ingredients": [
+    {
+      "item": "createcybernetics:bodypart_rightarm"
+    }
+  ],
+  "tool": {
+    "tag": "forge:tools/knives"
+  },
+  "result": [
+    {
+      "item": "createcybernetics:bodypart_skin",
+      "chance": 0.5,
+      "count": 1
+    },
+    {
+      "item": "createcybernetics:bodypart_muscle",
+      "chance": 0.5,
+      "count": 1
+    },
+    {
+      "item": "minecraft:bone",
+      "chance": 0.15,
+      "count": 1
+    }
+  ]
+}

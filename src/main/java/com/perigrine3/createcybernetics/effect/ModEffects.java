@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.effect;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.item.cyberware.SandevistanItem;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +25,11 @@ public class ModEffects {
                 () -> new NeuropozyneEffect(MobEffectCategory.BENEFICIAL, 0xC4D925)
                         .addAttributeModifier(Attributes.MOVEMENT_SPEED,
                                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "neuropozyne_speed"), 0.001D,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> EMP = MOB_EFFECTS.register("emp",
+                () -> new EmpEffect()
+                        .addAttributeModifier(Attributes.MOVEMENT_SPEED,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "emp_speed"), 0.0D,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         public static final Holder<MobEffect> SYNTHETIC_SETULES_EFFECT = MOB_EFFECTS.register("synthetic_setules_effect",
@@ -77,10 +83,12 @@ public class ModEffects {
                                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "inked_effect"), 0,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         public static final Holder<MobEffect> BREATHLESS_EFFECT = MOB_EFFECTS.register("breathless_effect",
-                () -> new InkedEffect()
+                () -> new BreathlessEffect()
                         .addAttributeModifier(Attributes.JUMP_STRENGTH,
                                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "breathless_effect"), 0,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        public static final Holder<MobEffect> SANDEVISTAN_EFFECT = MOB_EFFECTS.register("sandevistan_effect",
+                () -> new SandevistanEffect());
 
 
     public static void register(IEventBus eventBus) {

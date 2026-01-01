@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.event;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.event.custom.CyberwareSurgeryEvent;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.potion.ModPotions;
 import net.minecraft.world.item.alchemy.PotionBrewing;
@@ -17,5 +18,10 @@ public class ModEvents {
         PotionBrewing.Builder builder = event.getBuilder();
 
         builder.addMix(Potions.AWKWARD, ModItems.DATURA_FLOWER.get(), ModPotions.NEUROPOZYNE);
+    }
+
+    @SubscribeEvent
+    public static void onCyberwareInstalled(CyberwareSurgeryEvent event) {
+
     }
 }

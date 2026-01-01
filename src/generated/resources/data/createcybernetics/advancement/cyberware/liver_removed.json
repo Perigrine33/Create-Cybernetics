@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "liver_removed": {
+      "trigger": "createcybernetics:liver_removed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Removed The Liver",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bodypart_liver"
+    },
+    "title": "Liver? I Hardly Know Her..."
+  },
+  "requirements": [
+    [
+      "liver_removed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

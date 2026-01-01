@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "boneless": {
+      "trigger": "createcybernetics:boneless"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Removed The Skeleton",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bodypart_skeleton"
+    },
+    "title": "My Skeleton Hatched..."
+  },
+  "requirements": [
+    [
+      "boneless"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

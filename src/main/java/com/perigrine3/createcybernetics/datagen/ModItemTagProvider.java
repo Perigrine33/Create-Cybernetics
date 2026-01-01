@@ -8,6 +8,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,12 +28,32 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.ARMUPGRADES_CLAWS.get())
                 .add(ModItems.ARMUPGRADES_FIRESTARTER.get())
                 .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
-                .add(ModItems.BRAINUPGRADES_IDEM.get());
+                .add(ModItems.BRAINUPGRADES_IDEM.get())
+                .add(ModItems.BRAINUPGRADES_MATRIX.get())
+                .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
+                .add(ModItems.BONEUPGRADES_SANDEVISTAN.get())
+                .add(ModItems.ARMUPGRADES_ARMCANNON.get());
 
         if (ModItems.BONEUPGRADES_ELYTRA != null) {
             tag(ModTags.Items.TOGGLEABLE_CYBERWARE)
                     .add(ModItems.BONEUPGRADES_ELYTRA.get());
         }
+
+//ARM CANNON AMMO
+        tag(ModTags.Items.ARM_CANNON_AMMO)
+                .addTag(Tags.Items.NUGGETS)
+                .add(Items.ARROW)
+                .add(Items.SPECTRAL_ARROW)
+                .add(Items.TIPPED_ARROW)
+                .add(Items.TNT)
+                .add(Items.SNOWBALL)
+                .add(Items.ENDER_PEARL)
+                .add(Items.EGG)
+                .add(Items.FIRE_CHARGE)
+                .add(Items.FIREWORK_ROCKET)
+                .add(Items.WIND_CHARGE);
+
+
 
 
 //CYBERWARE
@@ -68,6 +89,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_BONELACING.get())
                 .add(ModItems.BONEUPGRADES_PIEZO.get())
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
+                .add(ModItems.BONEUPGRADES_SANDEVISTAN.get())
                 .add(ModItems.BRAINUPGRADES_EYEOFDEFENDER.get())
                 .add(ModItems.BRAINUPGRADES_ENDERJAMMER.get())
                 .add(ModItems.BRAINUPGRADES_MATRIX.get())
@@ -199,7 +221,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.WETWARE_AEROSTASISGYROBLADDER.get())
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
                 .add(ModItems.WETWARE_RAVAGERTENDONS.get())
-                .add(ModItems.WETWARE_GRASSFEDSTOMACH.get());
+                .add(ModItems.WETWARE_GRASSFEDSTOMACH.get())
+                .add(ModItems.WETWARE_SPINNERETTE.get());
 
             if (ModItems.WETWARE_BLUBBER != null) {
                 tag(ModTags.Items.WETWARE_ITEM)
@@ -252,7 +275,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_BONEFLEX.get())
                 .add(ModItems.BONEUPGRADES_BONELACING.get())
                 .add(ModItems.BONEUPGRADES_PIEZO.get())
-                .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get());
+                .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
+                .add(ModItems.BONEUPGRADES_SANDEVISTAN.get());
 
         if (ModItems.BONEUPGRADES_ELYTRA != null) {
             tag(ModTags.Items.BONE_UPGRADES)
@@ -369,6 +393,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_BONELACING.get())
                 .add(ModItems.SCAVENGED_PIEZO.get())
                 .add(ModItems.SCAVENGED_SPINALINJECTOR.get())
+                .add(ModItems.SCAVENGED_SANDEVISTAN.get())
 
                 .add(ModItems.SCAVENGED_EYEOFDEFENDER.get())
                 .add(ModItems.SCAVENGED_ENDERJAMMER.get())
@@ -430,7 +455,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
         }
 
 
-            tag(ModTags.Items.BRAIN_ITEMS)
+        tag(ModTags.Items.BRAIN_ITEMS)
                 .add(ModItems.BODYPART_BRAIN.get());
 
         tag(ModTags.Items.EYE_ITEMS)
@@ -492,6 +517,64 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.RIGHTLEG_ITEMS)
                 .add(ModItems.BASECYBERWARE_RIGHTLEG.get())
                 .add(ModItems.BODYPART_RIGHTLEG.get());
+
+
+
+        tag(ModTags.Items.EYE_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_CYBEREYES.get());
+
+        tag(ModTags.Items.SKIN_REPLACEMENTS)
+                .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get());
+
+        tag(ModTags.Items.MUSCLE_REPLACEMENTS)
+                .add(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get());
+
+        tag(ModTags.Items.BONE_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_LINEARFRAME.get());
+
+        tag(ModTags.Items.HEART_REPLACEMENTS)
+                .add(ModItems.HEARTUPGRADES_CYBERHEART.get());
+
+        tag(ModTags.Items.LIVER_REPLACEMENTS)
+                .add(ModItems.ORGANSUPGRADES_LIVERFILTER.get());
+
+        tag(ModTags.Items.LEFTARM_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_LEFTARM.get());
+
+        tag(ModTags.Items.RIGHTARM_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_RIGHTARM.get());
+
+        tag(ModTags.Items.LEFTLEG_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_LEFTLEG.get());
+
+        tag(ModTags.Items.RIGHTLEG_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_RIGHTLEG.get());
+
+
+        tag(ModTags.Items.DEFAULTS_FAIL_AS_MISSING_WHEN_UNPOWERED)
+                .add(ModItems.BASECYBERWARE_CYBEREYES.get())
+                .add(ModItems.HEARTUPGRADES_CYBERHEART.get());
+
+
+
+
+// VANILLA
+        tag(Tags.Items.POTIONS)
+                .add(ModItems.NEUROPOZYNE_AUTOINJECTOR.get());
+
+        tag(Tags.Items.NUGGETS)
+                .add(ModItems.TITANIUMNUGGET.get());
+
+        tag(Tags.Items.INGOTS)
+                .add(ModItems.TITANIUMINGOT.get());
+
+        tag(Tags.Items.MUSIC_DISCS)
+                .add(ModItems.MUSIC_DISC_CYBERPSYCHO.get())
+                .add(ModItems.MUSIC_DISC_THE_GRID.get())
+                .add(ModItems.MUSIC_DISC_NEON_OVERLORDS.get())
+                .add(ModItems.MUSIC_DISC_CYBERPSYCHO.get());
+
+
 
     }
 }

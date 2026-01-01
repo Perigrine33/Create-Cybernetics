@@ -7,6 +7,7 @@ import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.effect.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -386,5 +387,9 @@ public final class EnergyController {
     private static final class MutableInt {
         int value;
         MutableInt(int value) { this.value = value; }
+    }
+
+    private static boolean hasEmpEffect(Player player) {
+        return player.hasEffect(ModEffects.EMP);
     }
 }

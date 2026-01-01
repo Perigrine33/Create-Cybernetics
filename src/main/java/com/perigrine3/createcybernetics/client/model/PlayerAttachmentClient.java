@@ -16,6 +16,7 @@ public final class PlayerAttachmentClient {
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ClawAttachmentModel.LAYER, ClawAttachmentModel::createLayer);
+        event.registerLayerDefinition(DrillFistAttachmentModel.LAYER, DrillFistAttachmentModel::createLayer);
     }
 
     @SubscribeEvent

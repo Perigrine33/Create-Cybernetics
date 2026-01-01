@@ -4,6 +4,7 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.common.damage.ModDamageSources;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.Holder;
@@ -96,7 +97,7 @@ public final class MissingOrganController {
 
         /* -------------------- BRAIN -------------------- */
         if (!hasBrain) {
-            player.kill();
+            player.hurt(ModDamageSources.brainDamage(player.level(), player, null), 500000);
             return;
         }
 
@@ -112,7 +113,7 @@ public final class MissingOrganController {
 
         /* -------------------- HEART -------------------- */
         if (!hasHeart && player.tickCount % 20 == 0) {
-            player.hurt(player.damageSources().generic(), 4.0F);
+            player.hurt(ModDamageSources.heartAttack(player.level(), player, null), 4);
         }
 
         /* -------------------- LUNGS -------------------- */
@@ -130,7 +131,7 @@ public final class MissingOrganController {
                 air -= 1;
 
                 if (air <= -20) {
-                    player.hurt(player.damageSources().drown(), 2.0F);
+                    player.hurt(ModDamageSources.missingLungs(player.level(), player, null), 2);
                     air = 0;
                 }
 
@@ -151,6 +152,7 @@ public final class MissingOrganController {
             player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 60, 1, true, false));
             player.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0, true, false));
             player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 60, 0, true, false));
+            player.hurt(ModDamageSources.liverFailure(player.level(), player, null), 6);
         }
 
         /* -------------------- INTESTINES -------------------- */
@@ -163,6 +165,8 @@ public final class MissingOrganController {
 
             player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 40, 4, true, false));
             player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 40, 1, true, false));
+
+            player.hurt(ModDamageSources.boneless(player.level(), player, null), 8);
 
             forceProneLike(player);
         } else {
@@ -181,7 +185,7 @@ public final class MissingOrganController {
             player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 40, 4, true, false));
             player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 40, 1, true, false));
 
-            player.hurt(player.damageSources().generic(), 3.0F);
+            player.hurt(ModDamageSources.missingMuscle(player.level(), player, null), 11);
 
             forceProneLike(player);
         } else {
@@ -195,7 +199,7 @@ public final class MissingOrganController {
         /* -------------------- SKIN -------------------- */
         if (!hasSkin) {
             if (player.horizontalCollision || player.verticalCollision || player.tickCount % 100 == 0) {
-                player.hurt(player.damageSources().generic(), 1.0F);
+                player.hurt(ModDamageSources.missingSkin(player.level(), player, null), 2f);
             }
         }
 

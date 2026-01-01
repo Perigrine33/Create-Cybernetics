@@ -256,6 +256,16 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "claws_attack_boost"),
                 5, AttributeModifier.Operation.ADD_VALUE));
 
+        registerModifier("sandevistan_speed", new AttributeModifierData(speedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "sandevistan_speed_boost"),
+                0.5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("sandevistan_stepheight", new AttributeModifierData(stepHeightAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "sandevistan_stepheight_boost"),
+                2, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("sandevistan_jump", new AttributeModifierData(stepHeightAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "sandevistan_jump_boost"),
+                2, AttributeModifier.Operation.ADD_VALUE));
+
     }
 
     public static void registerModifier(String id, AttributeModifierData data) {

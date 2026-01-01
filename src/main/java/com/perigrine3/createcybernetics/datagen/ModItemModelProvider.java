@@ -27,6 +27,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.FACEPLATE.get());
         basicItem(ModItems.NETHERITE_QPU.get());
         basicItem(ModItems.DATURA_FLOWER.get());
+        basicItem(ModItems.DATURA_SEED_POD.get());
+
+        //basicItem(ModItems.QUICKHACK_BURNING.get());
+        //basicItem(ModItems.QUICKHACK_REBOOT.get());
+        //basicItem(ModItems.QUICKHACK_ITEM.get());
 
         basicItem(ModItems.MUSIC_DISC_CYBERPSYCHO.get());
         basicItem(ModItems.MUSIC_DISC_NEON_OVERLORDS.get());
@@ -136,6 +141,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         basicItem(ModItems.BONEUPGRADES_PIEZO.get());
         basicItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get());
+        basicItem(ModItems.BONEUPGRADES_SANDEVISTAN.get());
     }
 
 //BRAIN
@@ -222,6 +228,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.WETWARE_TACTICALINKSAC.get());
             basicItem(ModItems.WETWARE_AEROSTASISGYROBLADDER.get());
             basicItem(ModItems.WETWARE_GRASSFEDSTOMACH.get());
+            basicItem(ModItems.WETWARE_SPINNERETTE.get());
         }
 
 
@@ -270,6 +277,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
             basicItem(ModItems.SCAVENGED_PIEZO.get());
             basicItem(ModItems.SCAVENGED_SPINALINJECTOR.get());
+            basicItem(ModItems.SCAVENGED_SANDEVISTAN.get());
             basicItem(ModItems.SCAVENGED_EYEOFDEFENDER.get());
 
             if (ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER != null && ModItems.SCAVENGED_CORTICALSTACK != null) {

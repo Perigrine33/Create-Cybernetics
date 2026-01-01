@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "thoughtless": {
+      "trigger": "createcybernetics:thoughtless"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Removed The Brain",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bodypart_brain"
+    },
+    "title": "That Was Pretty Thoughtless..."
+  },
+  "requirements": [
+    [
+      "thoughtless"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

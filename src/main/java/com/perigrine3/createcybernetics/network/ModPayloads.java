@@ -5,9 +5,8 @@ import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.*;
-import com.perigrine3.createcybernetics.network.payload.CyberwareEnabledStatePayload;
-import com.perigrine3.createcybernetics.network.payload.CyberwareTogglePayloads;
-import com.perigrine3.createcybernetics.network.payload.EnergyHudSnapshotPayload;
+import com.perigrine3.createcybernetics.network.handler.*;
+import com.perigrine3.createcybernetics.network.payload.*;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -57,6 +56,12 @@ public final class ModPayloads {
                 })
         );
 
+        r.playToClient(
+                TargetingHighlightPayload.TYPE,
+                TargetingHighlightPayload.STREAM_CODEC,
+                TargetingHighlightPayload::handle
+        );
+
 
 
 
@@ -68,10 +73,50 @@ public final class ModPayloads {
                 )
         );
 
+        r.playToServer(
+                OpenSpinalInjectorPayload.TYPE,
+                OpenSpinalInjectorPayload.STREAM_CODEC,
+                OpenSpinalInjectorHandler::handle
+        );
+
+        r.playToServer(
+                OpenArmCannonPayload.TYPE,
+                OpenArmCannonPayload.STREAM_CODEC,
+                OpenArmCannonHandler::handle
+        );
+
         r.playToClient(
                 EnergyHudSnapshotPayload.TYPE,
                 EnergyHudSnapshotPayload.STREAM_CODEC,
                 EnergyHudSnapshotPayload::handle
+        );
+
+
+
+        r.playToServer(
+                ArmCannonWheelPayloads.RequestOpenArmCannonWheelPayload.TYPE,
+                ArmCannonWheelPayloads.RequestOpenArmCannonWheelPayload.STREAM_CODEC,
+                ArmCannonWheelHandlers::handleOpen
+        );
+
+        r.playToClient(
+                ArmCannonWheelPayloads.OpenArmCannonWheelClientPayload.TYPE,
+                ArmCannonWheelPayloads.OpenArmCannonWheelClientPayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> {
+                    ArmCannonWheelClientHandlers.handleOpen(payload, ctx);
+                })
+        );
+
+        r.playToServer(
+                ArmCannonWheelPayloads.SelectArmCannonAmmoSlotPayload.TYPE,
+                ArmCannonWheelPayloads.SelectArmCannonAmmoSlotPayload.STREAM_CODEC,
+                ArmCannonWheelHandlers::handleSelect
+        );
+
+        r.playToServer(
+                ArmCannonFirePayload.TYPE,
+                ArmCannonFirePayload.STREAM_CODEC,
+                ArmCannonFireHandler::handle
         );
 
 

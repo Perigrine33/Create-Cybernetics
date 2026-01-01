@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.advancement.ModCriteria;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
@@ -186,6 +187,8 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
                     60, 0.6D, 0.8D, 0.6D, 0.15D);
 
             player.level().playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            ModCriteria.DEUS_EX_MACHINA.get().trigger(player);
 
             return true;
         }

@@ -63,7 +63,7 @@ public final class CyberwareHudLayer {
     private static final boolean OVERLAY_DRAW_BEHIND_BATTERY = true;
     // Spinner tuning
     private static final float SPINNER_MAX_SCREEN_FRACTION = 1.25f;
-    private static final float SPINNER_ALPHA = 0.4f;
+    private static final float SPINNER_ALPHA = 0.1f;
     private static float SPINNER_OFFSET_X_PX = -0.5f;
     private static float SPINNER_OFFSET_Y_PX = -0.5f;
 

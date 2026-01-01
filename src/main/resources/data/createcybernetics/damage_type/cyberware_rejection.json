@@ -1,0 +1,7 @@
+{
+  "message_id": "createcybernetics.cyberware_rejection",
+  "scaling": "when_caused_by_living_non_player",
+  "exhaustion": 0.2,
+  "effects": "hurt",
+  "death_message_type": "default"
+}

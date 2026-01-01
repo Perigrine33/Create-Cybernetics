@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "cyberpsychosis": {
+      "trigger": "createcybernetics:cyberpsychosis"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Incurred Cyberware Rejection",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:armupgrades_crafthands"
+    },
+    "title": "Ya Best Lift Ya Pedal Off The Metal, Choom!"
+  },
+  "requirements": [
+    [
+      "cyberpsychosis"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

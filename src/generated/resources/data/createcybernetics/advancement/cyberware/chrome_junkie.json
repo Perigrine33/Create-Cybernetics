@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "chrome_junkie": {
+      "trigger": "createcybernetics:chrome_junkie"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Used Neuropozyne 100 Times",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:neuropozyne_autoinjector"
+    },
+    "title": "Chrome Junkie"
+  },
+  "requirements": [
+    [
+      "chrome_junkie"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

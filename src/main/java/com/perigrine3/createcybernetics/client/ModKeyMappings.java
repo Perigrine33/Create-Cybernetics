@@ -19,8 +19,19 @@ public final class ModKeyMappings {
     public static final Lazy<KeyMapping> CYBERWARE_WHEEL = Lazy.of(() ->
             new KeyMapping("key.createcybernetics.cyberware_wheel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY));
 
+    public static final Lazy<KeyMapping> SPINAL_INJECTOR = Lazy.of(() ->
+            new KeyMapping("key.createcybernetics.spinal_injector", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_N, CATEGORY));
+
+    public static final Lazy<KeyMapping> ARM_CANNON = Lazy.of(() ->
+            new KeyMapping("key.createcybernetics.arm_cannon", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY));
+    public static final Lazy<KeyMapping> ARM_CANNON_WHEEL = Lazy.of(() ->
+            new KeyMapping("key.createcybernetics.arm_cannon_wheel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY));
+
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(CYBERWARE_WHEEL.get());
+        event.register(SPINAL_INJECTOR.get());
+        event.register(ARM_CANNON.get());
+        event.register(ARM_CANNON_WHEEL.get());
     }
 }

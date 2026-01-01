@@ -13,6 +13,7 @@
   "item.createcybernetics.faceplate": "Faceplate",
   "item.createcybernetics.netherite_qpu": "Netherite Quantum Processor",
   "item.createcybernetics.datura_flower": "Datura Flower",
+  "item.createcybernetics.datura_seed_pod": "Datura Seed Pod",
 
   "item.createcybernetics.music_disc_cyberpsycho": "§bMusic Disc",
   "item.createcybernetics.music_disc_cyberpsycho.desc": "Cyberpsycho - Perigrine3",
@@ -76,7 +77,7 @@
   "item.createcybernetics.eyeupgrades_targeting": "Targeting Module",
   "item.createcybernetics.eyeupgrades_underwatervision": "Watervision Module",
   "item.createcybernetics.eyeupgrades_zoom": "Optic Zoom Module",
-  "item.createcybernetics.eyeupgrades_zoomeyeupgrades_trajectorycalculator": "Trajectory Calculator Module",
+  "item.createcybernetics.eyeupgrades_trajectorycalculator": "Trajectory Calculator Module",
 
   "item.createcybernetics.armupgrades_armcannon": "Arm Cannon",
   "item.createcybernetics.armupgrades_flywheel": "Quickdraw Flywheel",
@@ -100,6 +101,7 @@
   "item.createcybernetics.boneupgrades_elytra": "Deployable Elytra",
   "item.createcybernetics.boneupgrades_piezo": "Piezoelectric Energy Generator",
   "item.createcybernetics.boneupgrades_spinalinjector": "Spinal Injector",
+  "item.createcybernetics.boneupgrades_sandevistan": "Sandevistan",
 
   "item.createcybernetics.brainupgrade_eyeofdefender": "Eye of Defender",
   "item.createcybernetics.brainupgrades_consciousnesstransmitter": "Needlecaster",
@@ -155,6 +157,7 @@
   "item.createcybernetics.wetware_tacticalinksac": "Tactical Ink Sac",
   "item.createcybernetics.wetware_aerostasisgyrobladder": "Aerostatic Gryobladder",
   "item.createcybernetics.wetware_grassfedstomach": "Grassfed Stomach",
+  "item.createcybernetics.wetware_spinnerette": "Spider's Spinneret",
 
 
   "item.createcybernetics.scavenged_rightleg": "Right Cyberleg",
@@ -191,6 +194,7 @@
   "item.createcybernetics.scavenged_elytra": "Deployable Elytra",
   "item.createcybernetics.scavenged_piezo": "Piezoelectric Energy Generator",
   "item.createcybernetics.scavenged_spinalinjector": "Spinal Injector",
+  "item.createcybernetics.scavenged_sandevistan": "Sandevistan",
   "item.createcybernetics.scavenged_eyeofdefender": "Eye of Defender",
   "item.createcybernetics.scavenged_consciousnesstransmitter": "Needlecaster",
   "item.createcybernetics.scavenged_corticalstack": "Cortical Stack",
@@ -243,14 +247,42 @@
   "block.createcybernetics.datura_bush": "Datura Bush",
 
 
-  "entity.mccourse.smasher": "Smasher",
-  "entity.mccourse.punklin": "Punklin",
-  "entity.mccourse.pigstrom": "Pigstrom",
-  "entity.mccourse.hogboy": "HogBoy",
+  "entity.createcybernetics.smasher": "Smasher",
+  "entity.createcybernetics.cyberzombie": "Cyberzombie",
+  "entity.createcybernetics.cyberskeleton": "Cyberskeleton",
+
+  "entity.createcybernetics.punklin": "Punklin",
+  "entity.createcybernetics.pigstrom": "Pigstrom",
+  "entity.createcybernetics.hogboy": "HogBoy",
 
 
   "key.categories.createcybernetics": "Create Cybernetics",
   "key.createcybernetics.cyberware_wheel": "Open Radial Toggle Menu",
+  "key.createcybernetics.spinal_injector": "Open Spinal Injector",
+  "key.createcybernetics.arm_cannon": "Open Arm Cannon",
+  "key.createcybernetics.arm_cannon_wheel": "Open Arm Cannon Wheel",
+
+
+  "death.attack.createcybernetics.cyberware_surgery": "%1$s didn’t survive the procedure...",
+  "death.attack.createcybernetics.cyberware_surgery.player": "%2$s stopped %1$s's recovery.",
+  "death.attack.createcybernetics.cyberware_rejection": "%1$s’s body rejected their implants.",
+  "death.attack.createcybernetics.cyberware_rejection.player": "%1$s’s body rejected their implants after %2$s caused critical failures.",
+  "death.attack.createcybernetics.brain_damage": "%1$s went brain dead...",
+  "death.attack.createcybernetics.heart_attack": "%1$s suffered a major cardiac event...",
+  "death.attack.createcybernetics.heart_attack.player": "%1$s suffered a heart attack while being beaten by %2$s",
+  "death.attack.createcybernetics.liver_failure": "%1$s's liver failed and they experienced multiple organ failure.",
+  "death.attack.createcybernetics.liver_failure.player": "%1$s was slaughtered by %2$s while suffering from multiple organ failure.",
+  "death.attack.createcybernetics.missing_skin": "%1$s peeled off their skin.",
+  "death.attack.createcybernetics.missing_skin.player": "%1$s peeled off their skin and was tortured by %2$s.",
+  "death.attack.createcybernetics.missing_lungs": "%1$s couldn't catch their breath.",
+  "death.attack.createcybernetics.missing_lungs.player": "%1$s couldn't catch their breath while %2$s watched.",
+  "death.attack.createcybernetics.boneless": "%1$s became an invertebrate.",
+  "death.attack.createcybernetics.boneless.player": "%1$s became an invertebrate and couldn't defend themselves against %2$s.",
+  "death.attack.createcybernetics.missing_muscle": "%1$s reduced themselves to a pile of bones.",
+  "death.attack.createcybernetics.missing_muscle.player": "%1$s reduced themselves to a pile of bones and couldn't defend themselves against %2$s.",
+
+  "death.attack.createcybernetics.davids_demise": "%1$s pushed their body to it's limits with their sandevistan.",
+  "death.attack.createcybernetics.davids_demise.player": "%1$s was torn apart by %2$s while trying to escape with their sandevistan.",
 
 
   "enchantment.createcybernetics.harvester": "Harvester",
@@ -376,8 +408,10 @@
           "tooltip.createcybernetics.boneupgrades_piezo.tooltip2": "§3Stacks up to 3x",
       "tooltip.createcybernetics.boneupgrades_spinalinjector.tooltip1": "§1Allows the user to store and use up to 4 potions with extra duration",
           "tooltip.createcybernetics.boneupgrades_spinalinjector.tooltip2": "§7Requires §9Linear Frame",
+      "tooltip.createcybernetics.boneupgrades_sandevistan.tooltip1": "§1Grants the user immense speed for a short time",
 
-      "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip1": "§1Teleports the user out of the way of projectiles",
+
+  "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip1": "§1Teleports the user out of the way of projectiles",
           "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip2": "§7Requires §cBrain",
       "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip1": "§1Sends up to 14 experience levels to the user's new body when killed",
           "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip2": "§7Requires §cBrain",
@@ -448,7 +482,8 @@
       "tooltip.createcybernetics.wetware_sculklungs.tooltip1": "§cAllows the user to emit a sonic shriek attack",
       "tooltip.createcybernetics.wetware_tacticalinksac.tooltip1": "§cUser inflicts blindness on attackers",
       "tooltip.createcybernetics.wetware_aerostasisgyrobladder.tooltip1": "§cUser gains some flight abilities",
-      "tooltip.createcybernetics.wetware_grassfedstomach.tooltip1": "§cUser gains the ability to eat grass and wheat"
+      "tooltip.createcybernetics.wetware_grassfedstomach.tooltip1": "§cUser gains the ability to eat grass and wheat",
+      "tooltip.createcybernetics.wetware_spinnerette.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey"
 
 
 }

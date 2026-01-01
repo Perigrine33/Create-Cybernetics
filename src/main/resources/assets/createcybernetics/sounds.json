@@ -47,6 +47,14 @@
       }
     ]
   },
+  "sandy_startup": {
+    "subtitle": "sounds.createcybernetics.sandy_startup",
+    "sounds": [
+      {
+        "name": "createcybernetics:sandy_startup"
+      }
+    ]
+  },
   "glitchy": {
     "subtitle": "sounds.createcybernetics.glitchy",
     "sounds": [

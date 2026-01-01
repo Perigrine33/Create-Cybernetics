@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public final class ModAttachments {
 
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
-            DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CreateCybernetics.MODID);
+            DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, CreateCybernetics.MODID);
 
     public static final AttachmentType<PlayerCyberwareData> CYBERWARE =
             AttachmentType.builder(PlayerCyberwareData::new)

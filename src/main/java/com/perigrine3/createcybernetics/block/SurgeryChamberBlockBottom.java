@@ -198,7 +198,6 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
 
         SurgeryController.performSurgery(player, surgeon);
-        player.hurt(level.damageSources().generic(), 10.0f);
 
         level.setBlock(pos, state.setValue(SURGERY_DONE, true), 3);
     }

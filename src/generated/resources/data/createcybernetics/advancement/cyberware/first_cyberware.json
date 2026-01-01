@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "first_cyberware": {
+      "trigger": "createcybernetics:first_cyberware"
+    }
+  },
+  "display": {
+    "description": "Obtained Cyberware",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:basecyberware_cybereyes"
+    },
+    "title": "Time To Chrome"
+  },
+  "requirements": [
+    [
+      "first_cyberware"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

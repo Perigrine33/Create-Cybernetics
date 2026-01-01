@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "createcybernetics:item/basecyberware_cybereyes"
+    "layer0": "createcybernetics:item/basecyberware_cybereyes_tint",
+    "layer1": "createcybernetics:item/basecyberware_cybereyes"
   }
 }

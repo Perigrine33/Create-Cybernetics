@@ -41,19 +41,6 @@ public final class SkinLayerRender {
     private static final Map<UUID, Boolean> FP_HIDE_SLEEVE_RIGHT = new HashMap<>();
     private static final Map<UUID, Boolean> FP_HIDE_SLEEVE_LEFT  = new HashMap<>();
 
-
-    @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
-    public static final class Layers {
-        @SubscribeEvent
-        public static void addLayers(EntityRenderersEvent.AddLayers event) {
-            PlayerRenderer wide = event.getSkin(PlayerSkin.Model.WIDE);
-            if (wide != null) wide.addLayer(new SkinLayerHandler(wide));
-
-            PlayerRenderer slim = event.getSkin(PlayerSkin.Model.SLIM);
-            if (slim != null) slim.addLayer(new SkinLayerHandler(slim));
-        }
-    }
-
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT)
     public static final class Wear {
 

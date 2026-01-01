@@ -2506,6 +2506,16 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         }, ModItems.BODYPART_SKELETON.get()));
             }
 
+//SPIDER LOOT ADDS
+            {
+                this.add("bodypart_spinnerette_to_spider",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/spider")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.05f).build()
+                        }, ModItems.WETWARE_SPINNERETTE.get()));
+            }
+
+
 
 //ENDER DRAGON LOOT ADDS
             {
