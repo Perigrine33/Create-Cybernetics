@@ -1,0 +1,45 @@
+{
+  "neoforge:conditions": [
+    {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "R": {
+      "item": "minecraft:lightning_rod"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "F": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    }
+  },
+
+  "pattern": [
+    " E   ",
+    " ROO ",
+    " OFO ",
+    "  O  ",
+    " WNW "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_idem"
+  }
+}

@@ -38,6 +38,7 @@
     "createcybernetics:scavenged_matrix",
     "createcybernetics:scavenged_neuralcontextualizer",
     "createcybernetics:scavenged_cyberdeck",
+    "createcybernetics:scavenged_chipwareslots",
     "createcybernetics:scavenged_idem",
     "createcybernetics:scavenged_cyberheart",
     "createcybernetics:scavenged_coupler",
@@ -67,7 +68,6 @@
     "createcybernetics:scavenged_metalplating",
     "createcybernetics:scavenged_synthmuscle",
     "createcybernetics:scavenged_wiredreflexes",
-    "createcybernetics:scavenged_navigationchip",
     "createcybernetics:scavenged_sweat",
     "createcybernetics:scavenged_elytra"
   ]

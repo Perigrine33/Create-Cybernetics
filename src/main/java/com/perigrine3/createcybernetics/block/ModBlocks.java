@@ -52,12 +52,14 @@ public class ModBlocks {
     public static final DeferredBlock<Block> CHARGING_BLOCK = registerBlock("charging_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .noOcclusion().sound(SoundType.METAL)), true);
+    public static final DeferredBlock<Block> ENGINEERING_TABLE = registerBlock("engineering_table",
+            () -> new EngineeringTableBlock(BlockBehaviour.Properties.of()
+                    .noOcclusion().sound(SoundType.METAL)), true);
 
 //PLANT BLOCKS
     public static final DeferredBlock<Block> DATURA_BUSH = BLOCKS.register("datura_bush",
             () -> new DaturaBushBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SWEET_BERRY_BUSH)));
 
-//setup registerItem at a later date
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block, boolean registerItem) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
@@ -68,7 +70,6 @@ public class ModBlocks {
     private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block) {
         ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
-
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);

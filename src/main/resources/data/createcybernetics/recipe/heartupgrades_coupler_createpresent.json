@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "S": {
+      "item": "createcybernetics:component_storage"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "N": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    " NPPE",
+    "  PSP",
+    "  PPP",
+    " N  N"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:heartupgrades_coupler"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "type": "create:mechanical_crafting",
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
@@ -32,6 +32,5 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:skinupgrades_solarskin"
-  },
-  "show_notification": false
+  }
 }

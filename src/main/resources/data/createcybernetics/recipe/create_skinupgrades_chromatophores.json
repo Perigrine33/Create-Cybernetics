@@ -1,0 +1,82 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "1": {
+      "item": "minecraft:white_dye"
+    },
+    "2": {
+      "item": "minecraft:light_gray_dye"
+    },
+    "3": {
+      "item": "minecraft:gray_dye"
+    },
+    "4": {
+      "item": "minecraft:black_dye"
+    },
+    "5": {
+      "item": "minecraft:brown_dye"
+    },
+    "6": {
+      "item": "minecraft:red_dye"
+    },
+    "7": {
+      "item": "minecraft:orange_dye"
+    },
+    "8": {
+      "item": "minecraft:yellow_dye"
+    },
+    "9": {
+      "item": "minecraft:lime_dye"
+    },
+    "A": {
+      "item": "minecraft:green_dye"
+    },
+    "B": {
+      "item": "minecraft:cyan_dye"
+    },
+    "C": {
+      "item": "minecraft:light_blue_dye"
+    },
+    "D": {
+      "item": "minecraft:blue_dye"
+    },
+    "E": {
+      "item": "minecraft:purple_dye"
+    },
+    "F": {
+      "item": "minecraft:magenta_dye"
+    },
+    "G": {
+      "item": "minecraft:pink_dye"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "O": {
+      "item": "createcybernetics:component_fiberoptics"
+    },
+    "V": {
+      "item": "createcybernetics:component_actuator"
+    }
+  },
+
+  "pattern": [
+    "12345",
+    "GSSS6",
+    "FOVO7",
+    "ENNN8",
+    "DCBA9"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:skinupgrades_chromatophores"
+  },
+  "show_notification": false
+}

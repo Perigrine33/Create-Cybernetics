@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "cortical_stack": {
+      "trigger": "createcybernetics:cortical_stack"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Persisted Through Death In A Cortical Stack",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:cobweb"
+    },
+    "title": "We Aren't Meant To Live Forever. It Corrupts Even The Best Of Us"
+  },
+  "requirements": [
+    [
+      "cortical_stack"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

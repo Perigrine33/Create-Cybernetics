@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "kung_fu": {
+      "trigger": "createcybernetics:snikt"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Installed Retractable Claws",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:armupgrades_claws"
+    },
+    "title": "When They Come Out... Does It Hurt? Every Time."
+  },
+  "requirements": [
+    [
+      "kung_fu"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

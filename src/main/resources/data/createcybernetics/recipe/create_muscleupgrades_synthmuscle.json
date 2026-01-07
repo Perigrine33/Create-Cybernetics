@@ -1,0 +1,31 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "B": {
+      "item": "createcybernetics:bodypart_muscle"
+    },
+    "M": {
+      "item": "createcybernetics:component_mesh"
+    },
+    "T": {
+      "item": "minecraft:ghast_tear"
+    }
+  },
+
+  "pattern": [
+    "   BM",
+    " MBMB",
+    " BTB ",
+    "BMBM ",
+    "MB   "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:muscleupgrades_synthmuscle"
+  },
+  "show_notification": false
+}

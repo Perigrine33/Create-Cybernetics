@@ -16,6 +16,12 @@
   "item.createcybernetics.datura_flower": "Datura Flower",
   "item.createcybernetics.datura_seed_pod": "Datura Seed Pod",
 
+  "item.createcybernetics.frontal_lobe": "Frontal Lobe",
+  "item.createcybernetics.parietal_lobe": "Parietal Lobe",
+  "item.createcybernetics.occipital_lobe": "Occipital Lobe",
+  "item.createcybernetics.temporal_lobe": "Temporal Lobe",
+  "item.createcybernetics.cerebellum": "Cerebellum",
+
   "item.createcybernetics.music_disc_cyberpsycho": "§bMusic Disc",
   "item.createcybernetics.music_disc_cyberpsycho.desc": "Cyberpsycho - Perigrine3",
   "item.createcybernetics.music_disc_neon_overlords": "§bMusic Disc",
@@ -24,6 +30,19 @@
   "item.createcybernetics.music_disc_neurohack.desc": "Neurohack - Perigrine3",
   "item.createcybernetics.music_disc_the_grid": "§bMusic Disc",
   "item.createcybernetics.music_disc_the_grid.desc": "The Grid - Perigrine3",
+
+  "item.createcybernetics.data_shard_red": "Data Shard",
+  "item.createcybernetics.data_shard_orange": "Data Shard",
+  "item.createcybernetics.data_shard_yellow": "Data Shard",
+  "item.createcybernetics.data_shard_green": "Data Shard",
+  "item.createcybernetics.data_shard_cyan": "Data Shard",
+  "item.createcybernetics.data_shard_blue": "Data Shard",
+  "item.createcybernetics.data_shard_purple": "Data Shard",
+  "item.createcybernetics.data_shard_pink": "Data Shard",
+  "item.createcybernetics.data_shard_brown": "Data Shard",
+  "item.createcybernetics.data_shard_gray": "Data Shard",
+  "item.createcybernetics.data_shard_black": "Data Shard",
+  "item.createcybernetics.data_shard_biochip": "§bBiochip Data Shard",
 
   "item.createcybernetics.cyberzombie_spawn_egg": "Cyberzombie Spawn Egg",
   "item.createcybernetics.cyberskeleton_spawn_egg": "Cyberskeleton Spawn Egg",
@@ -43,6 +62,8 @@
   "item.createcybernetics.component_storage": "Storage Tank",
   "item.createcybernetics.component_synthnerves": "SynthNerves",
   "item.createcybernetics.component_mesh": "Titanium Mesh",
+  "item.createcybernetics.component_led": "LED",
+  "item.createcybernetics.component_titaniumrod": "Titanium Rod",
 
 
   "item.createcybernetics.bodypart_rightleg": "Right Leg",
@@ -104,7 +125,8 @@
   "item.createcybernetics.boneupgrades_spinalinjector": "Spinal Injector",
   "item.createcybernetics.boneupgrades_sandevistan": "Sandevistan",
 
-  "item.createcybernetics.brainupgrade_eyeofdefender": "Eye of Defender",
+  "item.createcybernetics.brainupgrades_cyberbrain": "Cerebral Processing Unit",
+  "item.createcybernetics.brainupgrades_eyeofdefender": "Eye of Defender",
   "item.createcybernetics.brainupgrades_consciousnesstransmitter": "Needlecaster",
   "item.createcybernetics.brainupgrades_corticalstack": "Cortical Stack",
   "item.createcybernetics.brainupgrades_enderjammer": "Enderjammer",
@@ -112,6 +134,7 @@
   "item.createcybernetics.brainupgrades_neuralcontextualizer": "Neural Contextualizer",
   "item.createcybernetics.brainupgrades_cyberdeck": "Cyberdeck",
   "item.createcybernetics.brainupgrades_idem": "I.D.E.M.",
+  "item.createcybernetics.brainupgrades_chipwareslots": "Chipware Slots",
 
   "item.createcybernetics.heartupgrades_cyberheart": "Mechanical Heart",
   "item.createcybernetics.heartupgrades_coupler": "Cardiovascular Coupler",
@@ -204,6 +227,7 @@
   "item.createcybernetics.scavenged_neuralcontextualizer": "Neural Contextualizer",
   "item.createcybernetics.scavenged_cyberdeck": "Cyberdeck",
   "item.createcybernetics.scavenged_idem": "I.D.E.M.",
+  "item.createcybernetics.scavenged_chipwareslots": "Chipware Slots",
   "item.createcybernetics.scavenged_cyberheart": "Mechanical Heart",
   "item.createcybernetics.scavenged_coupler": "Cardiovascular Coupler",
   "item.createcybernetics.scavenged_creeperheart": "Creeperheart",
@@ -243,6 +267,7 @@
 
   "block.createcybernetics.robosurgeon": "Robosurgeon",
   "block.createcybernetics.surgery_chamber": "Surgery Chamber",
+  "block.createcybernetics.engineering_table": "Engineering Table",
   "block.createcybernetics.charging_block": "Charging Block",
 
   "block.createcybernetics.datura_bush": "Datura Bush",
@@ -325,6 +350,7 @@
 
                       "tooltip.createcybernetics.basiccomponent_tooltip": "§8§oBASIC COMPONENT",
                       "tooltip.createcybernetics.legendarycomponent_tooltip": "§e§oLEGENDARY COMPONENT",
+                      "tooltip.createcybernetics.datashard_tooltip": "§e§oDATA SHARD",
 
                       "tooltip.createcybernetics.wetware_tooltip": "§c§lWETWARE",
                       "tooltip.createcybernetics.basecyberware_tooltip": "§9§lBASE CYBERWARE",
@@ -413,8 +439,10 @@
       "tooltip.createcybernetics.boneupgrades_sandevistan.tooltip1": "§1Grants the user immense speed for a short time",
 
 
-  "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip1": "§1Teleports the user out of the way of projectiles",
-          "tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip2": "§7Requires §cBrain",
+  "tooltip.createcybernetics.brainupgrades_cyberbrain.tooltip1": "§1Grants the user 3x experience, and prevents insomnia for 6 days",
+          "tooltip.createcybernetics.brainupgrades_cyberbrain.tooltip2": "§7Replaces §cBrain",
+  "tooltip.createcybernetics.brainupgrades_eyeofdefender.tooltip1": "§1Teleports the user out of the way of projectiles",
+          "tooltip.createcybernetics.brainupgrades_eyeofdefender.tooltip2": "§7Requires §cBrain",
       "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip1": "§1Sends up to 14 experience levels to the user's new body when killed",
           "tooltip.createcybernetics.brainupgrades_consciousnesstransmitter.tooltip2": "§7Requires §cBrain",
       "tooltip.createcybernetics.brainupgrades_corticalstack.tooltip1": "§1Stores experience in a Capsule when the user is killed",
@@ -428,6 +456,8 @@
           "tooltip.createcybernetics.brainupgrades_cyberdeck.tooltip2": "§7Requires §cBrain",
       "tooltip.createcybernetics.brainupgrades_idem.tooltip1": "§1(InterDimensional Escape Module) Allows the user to escape to another dimension for 15 seconds",
           "tooltip.createcybernetics.brainupgrades_idem.tooltip2": "§7Requires §cBrain",
+      "tooltip.createcybernetics.brainupgrades_chipwareslots.tooltip1": "§1Allows the user to install Data Shards to upgrade basic skills",
+          "tooltip.createcybernetics.brainupgrades_chipwareslots.tooltip2": "§7Requires §cBrain",
 
       "tooltip.createcybernetics.heartupgrades_cyberheart.tooltip1": "§1Negates weakness status effects",
       "tooltip.createcybernetics.heartupgrades_coupler.tooltip1": "§1Generates energy from the beating of an organic heart",

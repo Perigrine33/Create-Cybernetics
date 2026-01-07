@@ -1,5 +1,5 @@
 {
-  "type": "create:mechanical_crafting",
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
@@ -26,7 +26,7 @@
       "item": "minecraft:redstone"
     },
     "V": {
-      "item": "create:framed_glass"
+      "item": "minecraft:glass"
     },
     "M": {
       "item": "minecraft:phantom_membrane"
@@ -43,6 +43,5 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:eyeupgrades_underwatervision"
-  },
-  "show_notification": false
+  }
 }

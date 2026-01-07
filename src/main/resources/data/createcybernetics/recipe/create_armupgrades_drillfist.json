@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "M": {
+      "item": "create:mechanical_drill"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "S": {
+      "item": "create:shaft"
+    },
+    "A": {
+      "item": "create:andesite_alloy"
+    }
+  },
+
+  "pattern": [
+    "  D  ",
+    " DMD ",
+    "DMTMD",
+    "DPSPD",
+    " AAA "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:armupgrades_drillfist"
+  },
+  "show_notification": false
+}

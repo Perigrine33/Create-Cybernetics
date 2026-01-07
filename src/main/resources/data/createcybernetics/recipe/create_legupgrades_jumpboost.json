@@ -1,0 +1,37 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "E": {
+      "item": "create:piston_extension_pole"
+    },
+    "V": {
+      "item": "create:mechanical_piston"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    }
+  },
+
+  "pattern": [
+    "  N  ",
+    " PEP ",
+    " PVP ",
+    " PNP ",
+    "  T  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:legupgrades_jumpboost"
+  },
+  "show_notification": false
+}

@@ -32,6 +32,8 @@ public final class ModCriteria {
             TRIGGER_TYPES.register("spider_man", SpiderManTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, CorticalStackTrigger> CORTICAL_STACK =
             TRIGGER_TYPES.register("cortical_stack", CorticalStackTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, CogitoErgoSumTrigger> COGITO_ERGO_SUM =
+            TRIGGER_TYPES.register("cogito_ergo_sum", CogitoErgoSumTrigger::new);
 
     public static final DeferredHolder<CriterionTrigger<?>, TooMuchTooFastTrigger> TOO_MUCH_TOO_FAST =
             TRIGGER_TYPES.register("too_much_too_fast", TooMuchTooFastTrigger::new);
@@ -53,6 +55,14 @@ public final class ModCriteria {
             TRIGGER_TYPES.register("missing_muscle", MissingMuscleTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, DavidMartinezSpecialTrigger> DAVID_SPECIAL =
             TRIGGER_TYPES.register("david_special", DavidMartinezSpecialTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, KungFuTrigger> KUNG_FU =
+            TRIGGER_TYPES.register("kung_fu", KungFuTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, UpgradedTrigger> UPGRADED =
+            TRIGGER_TYPES.register("upgraded", UpgradedTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, SniktTrigger> SNIKT =
+            TRIGGER_TYPES.register("snikt", SniktTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, ThoughtsNotFoundTrigger> THOUGHTS_NOT_FOUND =
+            TRIGGER_TYPES.register("thoughts_not_found", ThoughtsNotFoundTrigger::new);
 
     public static void register(IEventBus modEventBus) {
         TRIGGER_TYPES.register(modEventBus);

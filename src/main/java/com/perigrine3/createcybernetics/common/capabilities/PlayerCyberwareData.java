@@ -7,6 +7,7 @@ import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
 import com.perigrine3.createcybernetics.item.cyberware.ArmCannonItem;
 import com.perigrine3.createcybernetics.item.cyberware.SpinalInjectorItem;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -29,16 +30,18 @@ public class PlayerCyberwareData implements ICyberwareData {
     private static final String NBT_NEUROPOZYNE_APPLY_COUNT = "NeuropozyneApplyCount";
     private int neuropozyneApplyCount = 0;
 
-    // Persisted inventories
     private static final String NBT_SPINAL_INJECTOR_INV = "SpinalInjectorInv";
     private final ItemStack[] spinalInjectorInv = new ItemStack[SpinalInjectorItem.SLOT_COUNT];
 
     private static final String NBT_ARM_CANNON_INV = "ArmCannonInv";
     private final ItemStack[] armCannonInv = new ItemStack[ArmCannonItem.SLOT_COUNT];
 
-    // NEW: persisted selected ammo slot for Arm Cannon wheel/firing
     private static final String NBT_ARM_CANNON_SELECTED = "ArmCannonSelected";
     private int armCannonSelected = 0;
+
+    public static final int CHIPWARE_SLOT_COUNT = 2;
+    private static final String NBT_CHIPWARE_INV = "ChipwareInv";
+    private final ItemStack[] chipwareInv = new ItemStack[CHIPWARE_SLOT_COUNT];
 
     private final EnumMap<CyberwareSlot, InstalledCyberware[]> slots =
             new EnumMap<>(CyberwareSlot.class);
@@ -66,6 +69,9 @@ public class PlayerCyberwareData implements ICyberwareData {
         }
         for (int i = 0; i < armCannonInv.length; i++) {
             armCannonInv[i] = ItemStack.EMPTY;
+        }
+        for (int i = 0; i < chipwareInv.length; i++) {
+            chipwareInv[i] = ItemStack.EMPTY;
         }
 
         armCannonSelected = 0;
@@ -173,6 +179,64 @@ public class PlayerCyberwareData implements ICyberwareData {
             armCannonSelected = clamped;
             dirty = true;
         }
+    }
+
+    /* ---------------- CHIPWARE INVENTORY (2 SLOTS) ---------------- */
+
+    public ItemStack getChipwareStack(int slot) {
+        if (slot < 0 || slot >= chipwareInv.length) return ItemStack.EMPTY;
+        ItemStack st = chipwareInv[slot];
+        return st == null ? ItemStack.EMPTY : st;
+    }
+
+    public void setChipwareStack(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= chipwareInv.length) return;
+
+        if (stack == null || stack.isEmpty()) {
+            chipwareInv[slot] = ItemStack.EMPTY;
+            dirty = true;
+            return;
+        }
+
+        // Only allow DATA_SHARDS
+        if (!stack.is(ModTags.Items.DATA_SHARDS)) {
+            chipwareInv[slot] = ItemStack.EMPTY;
+            dirty = true;
+            return;
+        }
+
+        ItemStack copy = stack.copy();
+        copy.setCount(1); // "installed shard" semantics
+
+        chipwareInv[slot] = copy;
+        dirty = true;
+    }
+
+    public void clearChipwareInventory() {
+        for (int i = 0; i < chipwareInv.length; i++) {
+            chipwareInv[i] = ItemStack.EMPTY;
+        }
+        dirty = true;
+    }
+
+    public boolean hasChipwareShard(TagKey<Item> tag) {
+        for (int i = 0; i < CHIPWARE_SLOT_COUNT; i++) {
+            ItemStack st = getChipwareStack(i);
+            if (!st.isEmpty() && st.is(tag)) return true;
+        }
+        return false;
+    }
+
+    public boolean hasChipwareShardExact(Item shardItem) {
+        if (shardItem == null) return false;
+
+        for (int i = 0; i < CHIPWARE_SLOT_COUNT; i++) {
+            ItemStack st = getChipwareStack(i);
+            if (!st.isEmpty() && st.is(shardItem)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /* ---------------- ENABLED HELPERS ---------------- */
@@ -287,6 +351,73 @@ public class PlayerCyberwareData implements ICyberwareData {
         return hasSpecificItem(item, slot);
     }
 
+
+    public boolean isDyed(CyberwareSlot slot, int index) {
+        InstalledCyberware installed = get(slot, index);
+        if (installed == null) return false;
+
+        ItemStack st = installed.getItem();
+        if (st == null || st.isEmpty()) return false;
+
+        if (!(st.getItem() instanceof ICyberwareItem item)) return false;
+
+        return item.isDyed(st, slot);
+    }
+
+    public int dyeColor(CyberwareSlot slot, int index) {
+        InstalledCyberware installed = get(slot, index);
+        if (installed == null) return 0xFFFFFFFF;
+
+        ItemStack st = installed.getItem();
+        if (st == null || st.isEmpty()) return 0xFFFFFFFF;
+
+        if (!(st.getItem() instanceof ICyberwareItem item)) return 0xFFFFFFFF;
+
+        return item.dyeColor(st, slot);
+    }
+
+    public boolean isDyed(Item item, CyberwareSlot slotToCheck) {
+        InstalledCyberware[] arr = slots.get(slotToCheck);
+        if (arr == null) return false;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+
+            if (!st.is(item)) continue;
+
+            if (st.getItem() instanceof ICyberwareItem cw) {
+                return cw.isDyed(st, slotToCheck);
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public int dyeColor(Item item, CyberwareSlot slotToCheck) {
+        InstalledCyberware[] arr = slots.get(slotToCheck);
+        if (arr == null) return 0xFFFFFFFF;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+
+            if (!st.is(item)) continue;
+
+            if (st.getItem() instanceof ICyberwareItem cw) {
+                return cw.dyeColor(st, slotToCheck);
+            }
+            return 0xFFFFFFFF;
+        }
+        return 0xFFFFFFFF;
+    }
+
     /* ---------------- SPINAL INJECTOR INVENTORY ---------------- */
 
     public ItemStack getSpinalInjectorStack(int slot) {
@@ -370,6 +501,9 @@ public class PlayerCyberwareData implements ICyberwareData {
         }
         for (int i = 0; i < armCannonInv.length; i++) {
             armCannonInv[i] = ItemStack.EMPTY;
+        }
+        for (int i = 0; i < chipwareInv.length; i++) {
+            chipwareInv[i] = ItemStack.EMPTY;
         }
 
         armCannonSelected = 0;
@@ -524,8 +658,11 @@ public class PlayerCyberwareData implements ICyberwareData {
         dirty = true;
     }
 
-
     /* ---------------- NBT ---------------- */
+    private static CompoundTag cc$saveStackToCompound(HolderLookup.Provider provider, ItemStack stack) {
+        Tag t = stack.save(provider);
+        return (t instanceof CompoundTag ct) ? ct : new CompoundTag();
+    }
 
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
@@ -557,7 +694,7 @@ public class PlayerCyberwareData implements ICyberwareData {
         tag.putInt(NBT_HUMANITY, humanity);
         tag.putInt(NBT_ENERGY, energyStored);
 
-        // NEW: persist selected arm cannon ammo slot
+        // persist selected arm cannon ammo slot
         tag.putInt(NBT_ARM_CANNON_SELECTED, getArmCannonSelected());
 
         ListTag inj = new ListTag();
@@ -589,6 +726,22 @@ public class PlayerCyberwareData implements ICyberwareData {
             arm.add(c);
         }
         tag.put(NBT_ARM_CANNON_INV, arm);
+
+        ListTag chip = new ListTag();
+        for (int i = 0; i < chipwareInv.length; i++) {
+            ItemStack st = chipwareInv[i];
+
+            if (st != null && !st.isEmpty() && st.is(ModTags.Items.DATA_SHARDS)) {
+                ItemStack copy = st.copy();
+                copy.setCount(1);
+
+                chip.add(cc$saveStackToCompound(provider, copy));
+            } else {
+                chip.add(new CompoundTag());
+            }
+        }
+        tag.put(NBT_CHIPWARE_INV, chip);
+
 
         tag.putInt(NBT_NEUROPOZYNE_APPLY_COUNT, neuropozyneApplyCount);
 
@@ -629,7 +782,6 @@ public class PlayerCyberwareData implements ICyberwareData {
         humanityBonus = 0;
         energyStored = tag.contains(NBT_ENERGY, Tag.TAG_INT) ? tag.getInt(NBT_ENERGY) : 0;
 
-        // NEW: load selected arm cannon ammo slot
         armCannonSelected = tag.contains(NBT_ARM_CANNON_SELECTED, Tag.TAG_INT)
                 ? Mth.clamp(tag.getInt(NBT_ARM_CANNON_SELECTED), 0, ArmCannonItem.SLOT_COUNT - 1)
                 : 0;
@@ -670,6 +822,24 @@ public class PlayerCyberwareData implements ICyberwareData {
                 if (st.getCount() > cap) st.setCount(cap);
 
                 armCannonInv[i] = st;
+            }
+        }
+
+        for (int i = 0; i < chipwareInv.length; i++) chipwareInv[i] = ItemStack.EMPTY;
+
+        if (tag.contains(NBT_CHIPWARE_INV, Tag.TAG_LIST)) {
+            ListTag chip = tag.getList(NBT_CHIPWARE_INV, Tag.TAG_COMPOUND);
+            for (int i = 0; i < chipwareInv.length && i < chip.size(); i++) {
+                CompoundTag c = chip.getCompound(i);
+                ItemStack st = ItemStack.parseOptional(provider, c);
+
+                if (st.isEmpty() || !st.is(ModTags.Items.DATA_SHARDS)) {
+                    chipwareInv[i] = ItemStack.EMPTY;
+                    continue;
+                }
+
+                st.setCount(1);
+                chipwareInv[i] = st;
             }
         }
 

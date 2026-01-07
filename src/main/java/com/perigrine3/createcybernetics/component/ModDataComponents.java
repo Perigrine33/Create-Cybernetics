@@ -19,8 +19,7 @@ public class ModDataComponents {
 
 
 
-    private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name,
-                                                                                          UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+    private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());
     }
 

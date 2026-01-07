@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.cyberware.CerebralProcessingUnitItem;
 import com.perigrine3.createcybernetics.item.cyberware.CybereyeItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -32,10 +33,9 @@ public final class MissingEyesOverlayClient {
         PlayerCyberwareData data = mc.player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
-        // Only show this overlay if the player actually has cybereyes installed+enabled
-        if (!hasCybereyesInstalledAndEnabled(data)) return;
+        boolean eyesEnabled = hasCybereyesInstalledAndEnabled(data);
+        if (!eyesEnabled) return;
 
-        // Effects are synced to client; this is reliable.
         boolean blinded = mc.player.hasEffect(MobEffects.BLINDNESS);
         boolean darkened = mc.player.hasEffect(MobEffects.DARKNESS);
         if (!blinded && !darkened) return;

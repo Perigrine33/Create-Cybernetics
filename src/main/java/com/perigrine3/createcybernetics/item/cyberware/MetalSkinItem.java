@@ -69,5 +69,25 @@ public class MetalSkinItem extends Item implements ICyberwareItem {
 
     @Override
     public void onTick(Player player) {
+        ICyberwareItem.super.onTick(player);
+        if (player.level().isClientSide) return;
+        if (player.getRandom().nextInt(60) != 0) return;
+
+        double px = player.getX();
+        double py = player.getY() + 0.9D;
+        double pz = player.getZ();
+
+        double ox = (player.getRandom().nextDouble() - 0.5D) * 1.2D;
+        double oy = (player.getRandom().nextDouble() - 0.5D) * 0.9D;
+        double oz = (player.getRandom().nextDouble() - 0.5D) * 1.2D;
+
+        double mx = (player.getRandom().nextDouble() - 0.5D) * 0.02D;
+        double my = player.getRandom().nextDouble() * 0.02D;
+        double mz = (player.getRandom().nextDouble() - 0.5D) * 0.02D;
+
+        if (player.level() instanceof net.minecraft.server.level.ServerLevel sl) {
+            sl.sendParticles(net.minecraft.core.particles.ParticleTypes.ELECTRIC_SPARK, px + ox, py + oy, pz + oz, 1, mx, my, mz, 0.02D);
+        }
     }
+
 }

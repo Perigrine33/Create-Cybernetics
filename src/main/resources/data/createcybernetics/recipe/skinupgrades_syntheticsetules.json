@@ -1,0 +1,30 @@
+{
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "T T T",
+    "SSSSS",
+    " N N ",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:skinupgrades_syntheticsetules"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "createcybernetics:engineering_table",
   "category": "misc",
   "key": {
     "T": {
@@ -13,9 +13,11 @@
     }
   },
   "pattern": [
-    " NT",
-    "PPN",
-    "PP "
+    "     ",
+    "  NT ",
+    " PPN ",
+    " PP  ",
+    "     "
   ],
   "result": {
     "count": 1,

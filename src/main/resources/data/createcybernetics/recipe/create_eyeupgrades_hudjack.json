@@ -1,0 +1,42 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "F": {
+      "item": "createcybernetics:component_fiberoptics"
+    },
+    "P": {
+      "item": "minecraft:purple_dye"
+    },
+    "B": {
+      "item": "createcybernetics:eyeupgradebase"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+
+  "pattern": [
+    " NRN ",
+    " FFF ",
+    "PGBSP",
+    " FFF "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:eyeupgrades_hudjack"
+  },
+  "show_notification": false
+}

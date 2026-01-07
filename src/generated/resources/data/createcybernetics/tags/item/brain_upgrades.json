@@ -1,11 +1,13 @@
 {
   "values": [
-    "createcybernetics:brainupgrade_eyeofdefender",
+    "createcybernetics:brainupgrades_cyberbrain",
+    "createcybernetics:brainupgrades_eyeofdefender",
     "createcybernetics:brainupgrades_enderjammer",
     "createcybernetics:brainupgrades_matrix",
     "createcybernetics:brainupgrades_neuralcontextualizer",
     "createcybernetics:brainupgrades_cyberdeck",
     "createcybernetics:brainupgrades_idem",
+    "createcybernetics:brainupgrades_chipwareslots",
     "createcybernetics:brainupgrades_consciousnesstransmitter",
     "createcybernetics:brainupgrades_corticalstack"
   ]

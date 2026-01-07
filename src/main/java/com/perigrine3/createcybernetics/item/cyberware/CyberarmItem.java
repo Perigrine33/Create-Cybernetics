@@ -53,6 +53,16 @@ public class CyberarmItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean isDyeable(ItemStack stack, CyberwareSlot slot) {
+        return slot == this.side;
+    }
+
+    @Override
+    public boolean isDyeable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
         return 10;
     }

@@ -1,0 +1,31 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "B": {
+      "item": "minecraft:breeze_rod"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "M": {
+      "item": "createcybernetics:component_mesh"
+    }
+  },
+
+  "pattern": [
+    "  P  ",
+    " PBP ",
+    "PBMBP",
+    " PBP ",
+    "  P  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:lungsupgrades_hyperoxygenation"
+  },
+  "show_notification": false
+}

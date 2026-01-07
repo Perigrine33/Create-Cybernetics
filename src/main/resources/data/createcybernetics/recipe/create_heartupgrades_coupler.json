@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "S": {
+      "item": "createcybernetics:component_storage"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "N": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    " NPPE",
+    "  PSP",
+    "  PPP",
+    " N  N"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:heartupgrades_coupler"
+  },
+  "show_notification": false
+}

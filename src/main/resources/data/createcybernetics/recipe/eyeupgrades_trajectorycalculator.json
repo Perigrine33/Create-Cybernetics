@@ -1,0 +1,44 @@
+{
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "F": {
+      "item": "createcybernetics:component_fiberoptics"
+    },
+    "P": {
+      "item": "minecraft:orange_dye"
+    },
+    "B": {
+      "item": "createcybernetics:eyeupgradebase"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "M": {
+      "item": "minecraft:spectral_arrow"
+    }
+  },
+
+  "pattern": [
+    " NRN ",
+    " FMF ",
+    "PGBSP",
+    " FGF "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:eyeupgrades_trajectorycalculator"
+  }
+}

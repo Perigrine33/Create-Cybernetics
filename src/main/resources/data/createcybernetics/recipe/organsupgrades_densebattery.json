@@ -1,5 +1,5 @@
 {
-  "type": "create:mechanical_crafting",
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
@@ -38,6 +38,5 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:organsupgrade_densebattery"
-  },
-  "show_notification": false
+  }
 }

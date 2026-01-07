@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "deus_ex_machina": {
+      "trigger": "createcybernetics:deus_ex_machina"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Used Cyberware To Escape Death",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:heartupgrades_defibrillator"
+    },
+    "title": "Deus Ex Machina"
+  },
+  "requirements": [
+    [
+      "deus_ex_machina"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

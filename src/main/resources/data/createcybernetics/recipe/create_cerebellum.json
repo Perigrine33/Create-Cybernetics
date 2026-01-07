@@ -1,0 +1,43 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "Q": {
+      "item": "createcybernetics:netherite_qpu"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "X": {
+      "item": "minecraft:comparator"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+
+  "pattern": [
+    " NNN ",
+    "NRXRN",
+    "NSQGN",
+    "NRCRN",
+    " NNN "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:cerebellum"
+  },
+  "show_notification": false
+}

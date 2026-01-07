@@ -1,0 +1,33 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "D": {
+      "item": "createcybernetics:component_storage"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "C": {
+      "item": "createcybernetics:component_ssd"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    " PPP ",
+    " PDDP",
+    "NCPPP",
+    " N   "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_chipwareslots"
+  }
+}

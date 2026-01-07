@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "G": {
+      "item": "minecraft:ghast_tear"
+    },
+    "M": {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    },
+    "B": {
+      "item": "minecraft:blue_dye"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    }
+  },
+
+  "pattern": [
+    " PPP ",
+    "WPMPW",
+    "RPGPB",
+    "WPMPW",
+    " PPP "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:heartupgrades_platelets"
+  },
+  "show_notification": false
+}

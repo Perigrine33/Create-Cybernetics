@@ -3,6 +3,7 @@ package com.perigrine3.createcybernetics.datagen;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.loot.AddItemModifier;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -98,6 +99,50 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.NEUROPOZYNE_AUTOINJECTOR.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_RED.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_ORANGE.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_YELLOW.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_GREEN.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_CYAN.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_BLUE.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_PURPLE.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_PINK.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_BROWN.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_GRAY.get()));
+                this.add("abandoned_mineshaft",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_BLACK.get()));
             }
 
 //ANCIENT CITY
@@ -234,6 +279,10 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
 
 //NETHER BRIDGE
             {
+                this.add("nether_bridge",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.05f).build() }, ModItems.NETHERITE_QPU.get()));
                 this.add("nether_bridge",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/nether_bridge")).build(),

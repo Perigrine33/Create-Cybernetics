@@ -10,5 +10,5 @@
       "condition": "minecraft:random_chance"
     }
   ],
-  "item": "createcybernetics:neuropozyne_autoinjector"
+  "item": "createcybernetics:data_shard_black"
 }

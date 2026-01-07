@@ -1,0 +1,42 @@
+{
+  "neoforge:conditions": [
+    {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "D": {
+      "item": "minecraft:dispenser"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "T": {
+      "item": "cold_sweat:thermometer"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "     ",
+    "SDSDS",
+    "NETEN",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:skinupgrades_sweat"
+  }
+}

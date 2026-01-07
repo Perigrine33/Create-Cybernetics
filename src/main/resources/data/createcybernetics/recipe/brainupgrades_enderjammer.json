@@ -1,11 +1,20 @@
 {
-  "type": "create:mechanical_crafting",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+      }
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
   "key": {
     "T": {
-      "item": "create:electron_tube"
+      "item": "createcybernetics:component_led"
     },
     "P": {
       "item": "minecraft:ender_pearl"
@@ -32,6 +41,5 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:brainupgrades_enderjammer"
-  },
-  "show_notification": false
+  }
 }

@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "S": {
+      "item": "minecraft:sugar"
+    },
+    "D": {
+      "item": "createcybernetics:component_diodes"
+    },
+    "C": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "B": {
+      "item": "minecraft:bone"
+    },
+    "G": {
+      "item": "minecraft:green_dye"
+    }
+  },
+
+  "pattern": [
+    "DP   ",
+    "PSCG ",
+    " CBC ",
+    " GC  ",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:boneupgrades_boneflex"
+  },
+  "show_notification": false
+}

@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "spider_man": {
+      "trigger": "createcybernetics:deus_ex_machina"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Became A Cyborg Spider-Man",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:cobweb"
+    },
+    "title": "Spider-Man: 2099"
+  },
+  "requirements": [
+    [
+      "spider_man"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

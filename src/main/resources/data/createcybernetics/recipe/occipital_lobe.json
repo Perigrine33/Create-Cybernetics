@@ -1,0 +1,44 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+      }
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+
+  "key": {
+    "Q": {
+      "item": "createcybernetics:netherite_qpu"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+
+  "pattern": [
+    " NNN ",
+    "NRGGN",
+    "NSQGN",
+    "NRGGN",
+    " NNN "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:occipital_lobe"
+  }
+}

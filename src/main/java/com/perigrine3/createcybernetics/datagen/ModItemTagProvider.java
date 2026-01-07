@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
@@ -53,7 +54,20 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(Items.FIREWORK_ROCKET)
                 .add(Items.WIND_CHARGE);
 
-
+//DATA SHARDS
+        tag(ModTags.Items.DATA_SHARDS)
+                .add(ModItems.DATA_SHARD_RED.get())
+                .add(ModItems.DATA_SHARD_ORANGE.get())
+                .add(ModItems.DATA_SHARD_YELLOW.get())
+                .add(ModItems.DATA_SHARD_GREEN.get())
+                .add(ModItems.DATA_SHARD_CYAN.get())
+                .add(ModItems.DATA_SHARD_BLUE.get())
+                .add(ModItems.DATA_SHARD_PURPLE.get())
+                .add(ModItems.DATA_SHARD_PINK.get())
+                .add(ModItems.DATA_SHARD_BROWN.get())
+                .add(ModItems.DATA_SHARD_GRAY.get())
+                .add(ModItems.DATA_SHARD_BLACK.get())
+                .add(ModItems.DATA_SHARD_BIOCHIP.get());
 
 
 //CYBERWARE
@@ -96,6 +110,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER.get())
                 .add(ModItems.BRAINUPGRADES_CYBERDECK.get())
                 .add(ModItems.BRAINUPGRADES_IDEM.get())
+                .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get())
                 .add(ModItems.HEARTUPGRADES_COUPLER.get())
                 .add(ModItems.HEARTUPGRADES_CREEPERHEART.get())
@@ -294,6 +309,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SOLARSKIN.get())
                 .add(ModItems.SKINUPGRADES_SUBDERMALARMOR.get())
                 .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get())
+                .add(ModItems.SKINUPGRADES_SYNTHETICSETULES.get())
                 .add(ModItems.SKINUPGRADES_METALPLATING.get());
 
         if (ModItems.SKINUPGRADES_SWEAT != null) {
@@ -338,12 +354,14 @@ public class ModItemTagProvider extends ItemTagsProvider {
         }
 //BRAIN UPGRADES
         tag(ModTags.Items.BRAIN_UPGRADES)
+                .add(ModItems.BRAINUPGRADES_CYBERBRAIN.get())
                 .add(ModItems.BRAINUPGRADES_EYEOFDEFENDER.get())
                 .add(ModItems.BRAINUPGRADES_ENDERJAMMER.get())
                 .add(ModItems.BRAINUPGRADES_MATRIX.get())
                 .add(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER.get())
                 .add(ModItems.BRAINUPGRADES_CYBERDECK.get())
-                .add(ModItems.BRAINUPGRADES_IDEM.get());
+                .add(ModItems.BRAINUPGRADES_IDEM.get())
+                .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get());
 
         if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
             tag(ModTags.Items.BRAIN_UPGRADES)
@@ -400,6 +418,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_MATRIX.get())
                 .add(ModItems.SCAVENGED_NEURALCONTEXTUALIZER.get())
                 .add(ModItems.SCAVENGED_CYBERDECK.get())
+                .add(ModItems.SCAVENGED_CHIPWARESLOTS.get())
                 .add(ModItems.SCAVENGED_IDEM.get())
 
                 .add(ModItems.SCAVENGED_CYBERHEART.get())
@@ -456,11 +475,11 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
 
         tag(ModTags.Items.BRAIN_ITEMS)
+                .add(ModItems.BRAINUPGRADES_CYBERBRAIN.get())
                 .add(ModItems.BODYPART_BRAIN.get());
 
         tag(ModTags.Items.EYE_ITEMS)
                 .add(ModItems.BASECYBERWARE_CYBEREYES.get())
-                .add(ModItems.WETWARE_GUARDIANEYE.get())
                 .add(Items.SPIDER_EYE)
                 .add(ModItems.BODYPART_EYEBALLS.get());
 
@@ -520,6 +539,9 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
 
 
+        tag(ModTags.Items.BRAIN_REPLACEMENTS)
+                .add(ModItems.BRAINUPGRADES_CYBERBRAIN.get());
+
         tag(ModTags.Items.EYE_REPLACEMENTS)
                 .add(ModItems.BASECYBERWARE_CYBEREYES.get());
 
@@ -574,7 +596,11 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.MUSIC_DISC_NEON_OVERLORDS.get())
                 .add(ModItems.MUSIC_DISC_CYBERPSYCHO.get());
 
-
+        tag(ItemTags.TRIMMABLE_ARMOR)
+                .add(ModItems.BASECYBERWARE_RIGHTLEG.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM.get());
 
     }
 }

@@ -1,0 +1,42 @@
+{
+  "neoforge:conditions": [
+    {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "T": {
+      "item": "create:electron_tube"
+    },
+    "P": {
+      "item": "minecraft:ender_pearl"
+    },
+    "L": {
+      "item": "minecraft:lightning_rod"
+    },
+    "E": {
+      "item": "minecraft:end_rod"
+    },
+    "C": {
+      "item": "minecraft:chorus_flower"
+    }
+  },
+
+  "pattern": [
+    "  C P",
+    "  PP ",
+    "CPEPC",
+    "PLP  ",
+    "TPC  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_enderjammer"
+  }
+}

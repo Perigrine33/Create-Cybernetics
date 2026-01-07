@@ -1,0 +1,46 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "I": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+
+  "pattern": [
+    "II   ",
+    "I    ",
+    "TTTTT",
+    "TSCST",
+    "RTWTR"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:engineering_table"
+  },
+  "show_notification": false
+}

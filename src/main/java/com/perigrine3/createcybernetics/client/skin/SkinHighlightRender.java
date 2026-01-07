@@ -59,6 +59,10 @@ public final class SkinHighlightRender {
         }
     }
 
+    private static boolean cc$allowTintOnEmissive(ResourceLocation tex) {
+        return tex != null && tex.getPath().contains("cybereyes_dye_primary");
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
     public static void onRenderArm(RenderArmEvent event) {
         AbstractClientPlayer player = event.getPlayer();
@@ -124,7 +128,6 @@ public final class SkinHighlightRender {
                 int light = highlight.isEmissive() ? 0x00F000F0 : event.getPackedLight();
                 RenderType rt = RenderType.entityTranslucent(tex);
 
-                // IMPORTANT:
                 // For emissive highlights, use WHITE so the texture's OWN color shows.
                 // For non-emissive highlights, respect highlight.getColor().
                 int color = highlight.isEmissive() ? 0xFFFFFFFF : highlight.getColor();

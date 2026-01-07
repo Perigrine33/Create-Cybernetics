@@ -1,5 +1,14 @@
 {
-  "type": "create:mechanical_crafting",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+      }
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
@@ -11,7 +20,7 @@
       "item": "createcybernetics:component_plating"
     },
     "T": {
-      "item": "create:electron_tube"
+      "item": "minecraft:comparator"
     },
     "E": {
       "item": "minecraft:ender_eye"
@@ -29,6 +38,5 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:brainupgrade_eyeofdefender"
-  },
-  "show_notification": false
+  }
 }

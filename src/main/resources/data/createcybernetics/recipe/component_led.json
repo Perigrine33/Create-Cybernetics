@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "G": {
+      "tag": "minecraft:impermeable"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "GNG",
+    "N N"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:component_led"
+  }
+}

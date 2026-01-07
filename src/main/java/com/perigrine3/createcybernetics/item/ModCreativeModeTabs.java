@@ -6,7 +6,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -16,15 +19,14 @@ public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CreateCybernetics.MODID);
 
-    //Adds custom creative mode tab
     public static final Supplier<CreativeModeTab> CREATE_CYBERNETICS_TAB = CREATIVE_MODE_TAB.register("create_cybernetics_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.TITANIUMINGOT.get()))
                     .title(Component.translatable("creativetab.createcybernetics.create_cybernetics_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
 
-                        //Adds items to the creative mode tab
                         output.accept(ModBlocks.ROBOSURGEON);
                         output.accept(ModBlocks.SURGERY_CHAMBER_BOTTOM);
+                        output.accept(ModBlocks.ENGINEERING_TABLE);
                         output.accept(ModBlocks.CHARGING_BLOCK);
                         output.accept(ModItems.NEUROPOZYNE_AUTOINJECTOR);
                         output.accept(ModItems.EMPTY_AUTOINJECTOR);
@@ -36,6 +38,11 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TITANIUMSHEET);
                         output.accept(ModItems.EYEUPGRADEBASE);
                         output.accept(ModItems.TITANIUM_HAND);
+                        output.accept(ModItems.FRONTAL_LOBE);
+                        output.accept(ModItems.PARIETAL_LOBE);
+                        output.accept(ModItems.TEMPORAL_LOBE);
+                        output.accept(ModItems.OCCIPITAL_LOBE);
+                        output.accept(ModItems.CEREBELLUM);
                         output.accept(ModItems.FACEPLATE);
                         output.accept(ModItems.EMP_GRENADE);
 
@@ -43,6 +50,20 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.MUSIC_DISC_NEON_OVERLORDS);
                         output.accept(ModItems.MUSIC_DISC_NEUROHACK);
                         output.accept(ModItems.MUSIC_DISC_THE_GRID);
+
+                        //DATA SHARDS
+                        output.accept(ModItems.DATA_SHARD_RED);
+                        output.accept(ModItems.DATA_SHARD_ORANGE);
+                        output.accept(ModItems.DATA_SHARD_YELLOW);
+                        output.accept(ModItems.DATA_SHARD_GREEN);
+                        output.accept(ModItems.DATA_SHARD_CYAN);
+                        output.accept(ModItems.DATA_SHARD_BLUE);
+                        output.accept(ModItems.DATA_SHARD_PURPLE);
+                        output.accept(ModItems.DATA_SHARD_PINK);
+                        output.accept(ModItems.DATA_SHARD_BROWN);
+                        output.accept(ModItems.DATA_SHARD_GRAY);
+                        output.accept(ModItems.DATA_SHARD_BLACK);
+                        output.accept(ModItems.DATA_SHARD_BIOCHIP);
 
                         //COMPONENTS
                         output.accept(ModItems.COMPONENT_ACTUATOR);
@@ -55,6 +76,11 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.COMPONENT_STORAGE);
                         output.accept(ModItems.COMPONENT_SYNTHNERVES);
                         output.accept(ModItems.COMPONENT_MESH);
+
+                        if (ModItems.COMPONENT_LED != null && ModItems.COMPONENT_TITANIUMROD != null) {
+                            output.accept(ModItems.COMPONENT_LED);
+                            output.accept(ModItems.COMPONENT_TITANIUMROD);
+                        }
 
                         output.accept(ModItems.NETHERITE_QPU);
 
@@ -119,6 +145,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_NEURALCONTEXTUALIZER);
                         output.accept(ModItems.SCAVENGED_CYBERDECK);
                         output.accept(ModItems.SCAVENGED_IDEM);
+                        output.accept(ModItems.SCAVENGED_CHIPWARESLOTS);
                         output.accept(ModItems.SCAVENGED_CYBERHEART);
                         output.accept(ModItems.SCAVENGED_COUPLER);
                         output.accept(ModItems.SCAVENGED_CREEPERHEART);
@@ -221,6 +248,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BONEUPGRADES_SPINALINJECTOR);
                         output.accept(ModItems.BONEUPGRADES_SANDEVISTAN);
                     //BRAIN UPGRADES
+                        output.accept(ModItems.BRAINUPGRADES_CYBERBRAIN);
                         output.accept(ModItems.BRAINUPGRADES_EYEOFDEFENDER);
 
                         if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
@@ -237,6 +265,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER);
                         output.accept(ModItems.BRAINUPGRADES_CYBERDECK);
                         output.accept(ModItems.BRAINUPGRADES_IDEM);
+                        output.accept(ModItems.BRAINUPGRADES_CHIPWARESLOTS);
                     //HEART UPGRADES
                         output.accept(ModItems.HEARTUPGRADES_CYBERHEART);
                         output.accept(ModItems.HEARTUPGRADES_COUPLER);

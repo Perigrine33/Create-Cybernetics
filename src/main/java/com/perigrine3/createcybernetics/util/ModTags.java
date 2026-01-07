@@ -23,6 +23,7 @@ public class ModTags {
 
         public static final TagKey<Item> TOGGLEABLE_CYBERWARE = createTag("toggleable_cyberware");
         public static final TagKey<Item> ARM_CANNON_AMMO = createTag("arm_cannon_ammo");
+        public static final TagKey<Item> DATA_SHARDS = createTag("data_shards");
 
         public static final TagKey<Item> CYBERWARE_ITEM = createTag("cyberware_item");
         public static final TagKey<Item> WETWARE_ITEM = createTag("wetware_item");
@@ -59,6 +60,7 @@ public class ModTags {
         public static final TagKey<Item> LEFTLEG_ITEMS = createTag("leftleg_items");
         public static final TagKey<Item> RIGHTLEG_ITEMS = createTag("rightleg_items");
 
+        public static final TagKey<Item> BRAIN_REPLACEMENTS = createTag("brain_replacements");
         public static final TagKey<Item> EYE_REPLACEMENTS = createTag("eye_replacements");
         public static final TagKey<Item> SKIN_REPLACEMENTS = createTag("skin_replacements");
         public static final TagKey<Item> MUSCLE_REPLACEMENTS = createTag("muscle_replacements");

@@ -18,9 +18,13 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<RobosurgeonMenu>> ROBOSURGEON_MENU =
             registerMenuType("robosurgeon_menu", RobosurgeonMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<EngineeringTableMenu>> ENGINEERING_TABLE_MENU =
+            registerMenuType("engineering_table_menu", EngineeringTableMenu::new);
 
     public static final DeferredHolder<MenuType<?>, MenuType<ExpandedInventoryMenu>> EXPANDED_INVENTORY_MENU =
             registerMenuType("expanded_inventory_menu", ExpandedInventoryMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<ChipwareMiniMenu>> CHIPWARE_MINI_MENU =
+            registerMenuType("chipware_mini_menu", ChipwareMiniMenu::new);
 
     public static final DeferredHolder<MenuType<?>, MenuType<SpinalInjectorMenu>> SPINAL_INJECTOR_MENU =
             registerMenuType("spinal_injector_menu", SpinalInjectorMenu::new);

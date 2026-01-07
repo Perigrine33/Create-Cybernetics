@@ -17,6 +17,10 @@ public final class PlayerAttachmentClient {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ClawAttachmentModel.LAYER, ClawAttachmentModel::createLayer);
         event.registerLayerDefinition(DrillFistAttachmentModel.LAYER, DrillFistAttachmentModel::createLayer);
+        event.registerLayerDefinition(OcelotPawsAttachmentModel.LAYER, OcelotPawsAttachmentModel::createLayer);
+        event.registerLayerDefinition(CalfPropellerAttachmentModel.LAYER, CalfPropellerAttachmentModel::createLayer);
+        event.registerLayerDefinition(SpursAttachmentModel.LAYER, SpursAttachmentModel::createLayer);
+        event.registerLayerDefinition(GuardianEyeAttachmentModel.LAYER, GuardianEyeAttachmentModel::createLayer);
     }
 
     @SubscribeEvent

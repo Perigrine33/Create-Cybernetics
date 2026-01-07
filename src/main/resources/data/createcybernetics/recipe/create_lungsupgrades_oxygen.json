@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "D": {
+      "item": "minecraft:dispenser"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "B": {
+      "item": "create:copper_backtank"
+    },
+    "C": {
+      "item": "create:copper_sheet"
+    }
+  },
+
+  "pattern": [
+    "   PD",
+    "  PCP",
+    " PBP ",
+    "PCP  ",
+    "PP   "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:lungsupgrades_oxygen"
+  },
+  "show_notification": false
+}

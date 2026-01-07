@@ -18,7 +18,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -100,8 +102,11 @@ public class DeployableElytraItem extends Item implements ICyberwareItem {
         public static void onPlayerTick(PlayerTickEvent.Post event) {
             Player player = event.getEntity();
             if (player.level().isClientSide()) return;
-
             if (!CaelusCompat.isLoaded()) return;
+            if (cc$hasRealChestElytra(player)) {
+                CaelusCompat.removeFallFlyingModifier(player, CC_CAELUS_FLIGHT_ID);
+                return;
+            }
 
             boolean allow = shouldAllowCyberFallFlyingAndPayEnergy(player);
 
@@ -109,16 +114,42 @@ public class DeployableElytraItem extends Item implements ICyberwareItem {
                 CaelusCompat.addOrUpdateFallFlyingTransient(player, CC_CAELUS_FLIGHT_ID, 1.0D);
             } else {
                 CaelusCompat.removeFallFlyingModifier(player, CC_CAELUS_FLIGHT_ID);
-
                 if (player.isFallFlying()) {
                     player.stopFallFlying();
                 }
             }
         }
-    } // <-- closes CaelusServerSync ONLY
+    }
+
+    private static boolean cc$hasRealChestElytra(Player player) {
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (chest.isEmpty()) return false;
+
+        if (!(chest.getItem() instanceof ElytraItem)) return false;
+
+        return ElytraItem.isFlyEnabled(chest);
+    }
+
+    private static boolean cc$hasEnabledDeployable(Player player) {
+        if (player == null) return false;
+        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return false;
+
+        for (int i = 0; i < CyberwareSlot.BONE.size; i++) {
+            if (!data.isInstalled(ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE, i)) continue;
+            if (!data.isEnabled(CyberwareSlot.BONE, i)) continue;
+            return true;
+        }
+
+        return false;
+    }
 
     private static boolean shouldAllowCyberFallFlyingAndPayEnergy(Player player) {
-        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+        if (!cc$hasEnabledDeployable(player)) {
+            return false;
+        }
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return false;
@@ -203,6 +234,18 @@ public class DeployableElytraItem extends Item implements ICyberwareItem {
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = mc.player;
             if (player == null) return;
+
+            if (!CaelusCompat.isLoaded()) return;
+
+            if (cc$hasRealChestElytra(player)) {
+                cc$sentStartThisFall = false;
+                return;
+            }
+
+            if (!cc$hasEnabledDeployable(player)) {
+                cc$sentStartThisFall = false;
+                return;
+            }
 
             if (player.onGround() || player.isFallFlying() || player.isInWaterOrBubble() || player.isInLava()) {
                 cc$sentStartThisFall = false;

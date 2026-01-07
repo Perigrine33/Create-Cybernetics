@@ -6,13 +6,14 @@ import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.entity.ModEntities;
 import com.perigrine3.createcybernetics.item.cyberware.*;
 import com.perigrine3.createcybernetics.item.cyberware.upgrade_items.*;
-import com.perigrine3.createcybernetics.item.generic.EmpGrenadeItem;
-import com.perigrine3.createcybernetics.item.generic.NeuropozyneAutoinjector;
-import com.perigrine3.createcybernetics.item.generic.XPCapsuleItem;
+import com.perigrine3.createcybernetics.item.generic.*;
 import com.perigrine3.createcybernetics.item.organs.*;
 import com.perigrine3.createcybernetics.sound.ModSounds;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
@@ -61,6 +62,17 @@ public class ModItems {
     public static final DeferredItem<Item> DATURA_SEED_POD = ITEMS.register("datura_seed_pod",
             () -> new ItemNameBlockItem(ModBlocks.DATURA_BUSH.get(), new Item.Properties()));
 
+    public static final DeferredItem<Item> FRONTAL_LOBE = ITEMS.register("frontal_lobe",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> PARIETAL_LOBE = ITEMS.register("parietal_lobe",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TEMPORAL_LOBE = ITEMS.register("temporal_lobe",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> OCCIPITAL_LOBE = ITEMS.register("occipital_lobe",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> CEREBELLUM = ITEMS.register("cerebellum",
+            () -> new Item(new Item.Properties()));
+
     public static final DeferredItem<Item> QUICKHACK_BURNING = ITEMS.register("quickhack_burning",
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> QUICKHACK_REBOOT = ITEMS.register("quickhack_reboot",
@@ -93,6 +105,107 @@ public class ModItems {
     public static final DeferredItem<Item> CYBERSKELETON_SPAWN_EGG = ITEMS.register("cyberskeleton_spawn_egg",
         () -> new DeferredSpawnEggItem(ModEntities.CYBERSKELETON, 0xC1C1C1, 0xFFFF003C,
                 new Item.Properties()));
+
+
+//DATA SHARDS
+    public static final DeferredItem<Item> DATA_SHARD_RED = ITEMS.register("data_shard_red",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Combat").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD90804))));
+                    tooltipComponents.add(Component.literal("Improves combat ability"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_ORANGE = ITEMS.register("data_shard_orange",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Mining").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD96704))));
+                    tooltipComponents.add(Component.literal("Occasionally doubles ore drops"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_YELLOW = ITEMS.register("data_shard_yellow",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Haggling").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xE8C602))));
+                    tooltipComponents.add(Component.literal("Improves villager trades"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_GREEN = ITEMS.register("data_shard_green",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Learning").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x08B302))));
+                    tooltipComponents.add(Component.literal("Doubles XP intake"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_CYAN = ITEMS.register("data_shard_cyan",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Archery").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x02C97A))));
+                    tooltipComponents.add(Component.literal("Improves accuracy with a bow"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_BLUE = ITEMS.register("data_shard_blue",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Swimming").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x023DE0))));
+                    tooltipComponents.add(Component.literal("Improves underwater actions"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_PURPLE = ITEMS.register("data_shard_purple",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Crafting").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x9A02D6))));
+                    tooltipComponents.add(Component.literal("Doubles 3x3 crafting output"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_PINK = ITEMS.register("data_shard_pink",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Husbandry").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xE002AD))));
+                    tooltipComponents.add(Component.literal("Doubles bred creatures"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_BROWN = ITEMS.register("data_shard_brown",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Farming").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x783F19))));
+                    tooltipComponents.add(Component.literal("Doubles crop drops"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_GRAY = ITEMS.register("data_shard_gray",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Flight").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5E5E5E))));
+                    tooltipComponents.add(Component.literal("Improves Elytra flight handling"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_BLACK = ITEMS.register("data_shard_black",
+            () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Stealth Ops").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x292929))));
+                    tooltipComponents.add(Component.literal("Improves stealth abilities"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> DATA_SHARD_BIOCHIP = ITEMS.register("data_shard_biochip",
+            () -> new BiochipDataShardItem(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.literal("Stores consciousness if installed for 28 days"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+
+
+
 
 
 //BASIC COMPONENTS
@@ -166,6 +279,21 @@ public class ModItems {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basiccomponent_tooltip"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
+    public static final DeferredItem<Item> COMPONENT_LED = registerIfNotLoaded("create", "component_led",
+            () -> new Item(new Item.Properties()) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basiccomponent_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+    public static final DeferredItem<Item> COMPONENT_TITANIUMROD = registerIfNotLoaded("create", "component_titaniumrod",
+            () -> new Item(new Item.Properties()) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basiccomponent_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+
 
 
 
@@ -837,7 +965,22 @@ public class ModItems {
         });
 
 //BRAIN UPGRADES
-    public static final DeferredItem<Item> BRAINUPGRADES_EYEOFDEFENDER = ITEMS.register("brainupgrade_eyeofdefender",
+    public static final DeferredItem<Item> BRAINUPGRADES_CYBERBRAIN = ITEMS.register("brainupgrades_cyberbrain",
+        () -> new CerebralProcessingUnitItem(new Item.Properties().stacksTo(1), 12) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_cyberbrain.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_cyberbrain.tooltip2"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
+    public static final DeferredItem<Item> BRAINUPGRADES_EYEOFDEFENDER = ITEMS.register("brainupgrades_eyeofdefender",
         () -> new EyeOfDefenderItem(new Item.Properties().stacksTo(1), 8) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -952,6 +1095,21 @@ public class ModItems {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_idem.tooltip1"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_idem.tooltip2"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
+    public static final DeferredItem<Item> BRAINUPGRADES_CHIPWARESLOTS = ITEMS.register("brainupgrades_chipwareslots",
+        () -> new ChipwareSlotsItem(new Item.Properties().stacksTo(1), 6) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_chipwareslots.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_chipwareslots.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
@@ -1913,6 +2071,14 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
+    public static final DeferredItem<Item> SCAVENGED_CHIPWARESLOTS = ITEMS.register("scavenged_chipwareslots",
+            () -> new Item(new Item.Properties().stacksTo(1)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
     public static final DeferredItem<Item> SCAVENGED_CYBERHEART = ITEMS.register("scavenged_cyberheart",
             () -> new Item(new Item.Properties().stacksTo(1)) {
                 @Override
@@ -2151,6 +2317,13 @@ public class ModItems {
 
     public static <T extends Item> DeferredItem<T> registerIfLoaded(String modid, String name, Supplier<T> supplier) {
         if (ModList.get().isLoaded(modid)) {
+            return ModItems.ITEMS.register(name, supplier);
+        }
+        return null;
+    }
+
+    public static <T extends Item> DeferredItem<T> registerIfNotLoaded(String modid, String name, Supplier<T> supplier) {
+        if (!ModList.get().isLoaded(modid)) {
             return ModItems.ITEMS.register(name, supplier);
         }
         return null;

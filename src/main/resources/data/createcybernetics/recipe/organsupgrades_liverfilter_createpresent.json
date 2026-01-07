@@ -1,0 +1,42 @@
+{
+  "neoforge:conditions": [
+    {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "L": {
+      "item": "createcybernetics:bodypart_liver"
+    },
+    "M": {
+      "item": "createcybernetics:component_mesh"
+    },
+    "S": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "I": {
+      "item": "create:filter"
+    }
+  },
+
+  "pattern": [
+    "  P  ",
+    "SPMP ",
+    "LPIP ",
+    "SPMP ",
+    "  P  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:organsupgrades_liverfilter"
+  }
+}

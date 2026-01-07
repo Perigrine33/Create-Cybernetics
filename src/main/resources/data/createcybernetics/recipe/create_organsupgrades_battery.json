@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "S": {
+      "item": "createcybernetics:component_storage"
+    }
+  },
+
+  "pattern": [
+    "  PPG",
+    " PSRP",
+    "PSSSP",
+    "PRSP ",
+    "GPP  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:organsupgrades_battery"
+  },
+  "show_notification": false
+}

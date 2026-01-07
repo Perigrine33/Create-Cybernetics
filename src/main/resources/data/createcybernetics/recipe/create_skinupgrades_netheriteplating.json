@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "I": {
+      "item": "minecraft:blue_ice"
+    },
+    "G": {
+      "item": "minecraft:slime_block"
+    },
+    "V": {
+      "item": "minecraft:netherite_block"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "VVVVV",
+    "SPSPS",
+    "GIGIG",
+    "N N N"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:skinupgrades_netheriteplating"
+  },
+  "show_notification": false
+}

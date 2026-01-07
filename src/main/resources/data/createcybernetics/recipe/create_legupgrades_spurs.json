@@ -1,0 +1,27 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "N": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    }
+  },
+  "pattern": [
+    "     ",
+    "  NT ",
+    " PPN ",
+    " PP  ",
+    "     "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:legupgrades_spurs"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "B": {
+      "item": "createcybernetics:organsupgrades_battery"
+    }
+  },
+
+  "pattern": [
+    "   PG",
+    "  PRP",
+    " PBP ",
+    "PRP  ",
+    "GP   "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:boneupgrades_bonebattery"
+  },
+  "show_notification": false
+}

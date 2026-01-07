@@ -127,17 +127,13 @@ dependencies {
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
+    implementation ("curse.maven:create-enchantment-industry-688768:7216917")
+    implementation ("curse.maven:create-dragons-plus-1216624:7231493")
 
     localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:7.0.1+1.21.1"
     compileOnly  "com.illusivesoulworks.caelus:caelus-neoforge:7.0.1+1.21.1:api"
-
-
-//optional dependencies
     implementation ("curse.maven:jei-238222:6589027")
     implementation ("curse.maven:farmers-delight-398521:6917256")
-    implementation ("curse.maven:xaeros-minimap-263420:6778051")
-    implementation ("curse.maven:create-enchantment-industry-688768:7216917")
-    implementation ("curse.maven:create-dragons-plus-1216624:7231493")
     implementation ("curse.maven:cold-sweat-506194:7316464")
 }
 

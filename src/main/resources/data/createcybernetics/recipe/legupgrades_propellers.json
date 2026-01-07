@@ -1,5 +1,14 @@
 {
-  "type": "create:mechanical_crafting",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+      }
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
@@ -8,10 +17,10 @@
       "item": "createcybernetics:component_plating"
     },
     "V": {
-      "item": "create:propeller"
+      "item": "createcybernetics:titaniumsheet"
     },
     "S": {
-      "item": "create:shaft"
+      "item": "createcybernetics:component_titaniumrod"
     },
     "N": {
       "item": "createcybernetics:component_synthnerves"
@@ -29,6 +38,5 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:legupgrades_propellers"
-  },
-  "show_notification": false
+  }
 }

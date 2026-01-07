@@ -17,11 +17,13 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, CreateCybernetics.MODID);
 
-//GAME SOUNDS
+//CYBERWARE SOUNDS
     public static final Supplier<SoundEvent> METAL_DETECTOR_BEEPS = registerSoundEvent("metal_detector_beeps");
     public static final Supplier<SoundEvent> RETRACTABLE_CLAWS_SNIKT = registerSoundEvent("retractable_claws_snikt");
     public static final Supplier<SoundEvent> SANDY_STARTUP = registerSoundEvent("sandy_startup");
-
+//UI SOUNDS
+    public static final Supplier<SoundEvent> METAL_CRUSHING = registerSoundEvent("metal_crushing");
+//EFFECT SOUNDS
     public static final Supplier<SoundEvent> GLITCHY = registerSoundEvent("glitchy");
 
 

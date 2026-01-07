@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "upgraded": {
+      "trigger": "createcybernetics:upgraded"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Installed An Arm Cannon",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:armupgrades_armcannon"
+    },
+    "title": "You Upgraded. Now You're Stronger. Faster. Better Than Everyone Else"
+  },
+  "requirements": [
+    [
+      "upgraded"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

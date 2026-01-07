@@ -1,0 +1,45 @@
+{
+  "neoforge:conditions": [
+    {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+    }
+  ],
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "T": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "V": {
+      "item": "minecraft:light_blue_dye"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "NTNTN",
+    "PPPVT",
+    "PSEPN",
+    "VPPPT"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:muscleupgrades_wiredreflexes"
+  }
+}

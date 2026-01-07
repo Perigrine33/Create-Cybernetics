@@ -1,14 +1,18 @@
 {
-  "type": "create:pressing",
-  "ingredients": [
-    {
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
       "item": "createcybernetics:titaniumingot"
     }
+  },
+  "pattern": [
+    "   ",
+    "TTT",
+    "   "
   ],
-  "results": [
-    {
-      "id": "createcybernetics:titaniumsheet",
-      "count": 1
-    }
-  ]
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:titaniumsheet"
+  }
 }

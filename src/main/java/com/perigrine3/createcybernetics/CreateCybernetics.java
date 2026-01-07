@@ -16,11 +16,10 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.loot.ModLootModifiers;
 import com.perigrine3.createcybernetics.particle.ModParticles;
 import com.perigrine3.createcybernetics.potion.ModPotions;
+import com.perigrine3.createcybernetics.recipe.ModRecipeSerializers;
+import com.perigrine3.createcybernetics.recipe.ModRecipes;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
-import com.perigrine3.createcybernetics.screen.custom.ArmCannonScreen;
-import com.perigrine3.createcybernetics.screen.custom.ExpandedInventoryScreen;
-import com.perigrine3.createcybernetics.screen.custom.RobosurgeonScreen;
-import com.perigrine3.createcybernetics.screen.custom.SpinalInjectorScreen;
+import com.perigrine3.createcybernetics.screen.custom.*;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -81,6 +80,8 @@ public class CreateCybernetics {
         ModLootModifiers.register(eventBus);
         ModCriteria.register(eventBus);
         ModDataComponents.register(eventBus);
+        ModRecipes.register(eventBus);
+        ModRecipeSerializers.register(eventBus);
 
         ModAttachments.register(eventBus);
         ModAttributes.register(eventBus);
@@ -138,7 +139,9 @@ public class CreateCybernetics {
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(ModMenuTypes.ROBOSURGEON_MENU.get(), RobosurgeonScreen::new);
+            event.register(ModMenuTypes.ENGINEERING_TABLE_MENU.get(), EngineeringTableScreen::new);
             event.register(ModMenuTypes.EXPANDED_INVENTORY_MENU.get(), ExpandedInventoryScreen::new);
+            event.register(ModMenuTypes.CHIPWARE_MINI_MENU.get(), ChipwareMiniScreen::new);
             event.register(ModMenuTypes.SPINAL_INJECTOR_MENU.get(), SpinalInjectorScreen::new);
             event.register(ModMenuTypes.ARM_CANNON_MENU.get(), ArmCannonScreen::new);
         }

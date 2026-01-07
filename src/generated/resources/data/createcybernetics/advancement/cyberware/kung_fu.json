@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "kung_fu": {
+      "trigger": "createcybernetics:kung_fu"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Downloaded Martial Arts Skills From A Data Shard",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:data_shard_red"
+    },
+    "title": "I Know Kung Fu"
+  },
+  "requirements": [
+    [
+      "kung_fu"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

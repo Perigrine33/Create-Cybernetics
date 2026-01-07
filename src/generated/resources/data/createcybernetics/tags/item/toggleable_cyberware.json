@@ -6,6 +6,9 @@
     "createcybernetics:armupgrades_firestarter",
     "createcybernetics:skinupgrades_chromatophores",
     "createcybernetics:brainupgrades_idem",
+    "createcybernetics:brainupgrades_matrix",
+    "createcybernetics:boneupgrades_sandevistan",
+    "createcybernetics:boneupgrades_spinalinjector",
     "createcybernetics:boneupgrades_elytra"
   ]
 }

@@ -1,7 +1,7 @@
 {
   "criteria": {
     "missing_muscle": {
-      "trigger": "createcybernetics:boneless"
+      "trigger": "createcybernetics:missing_muscle"
     }
   },
   "display": {
@@ -11,7 +11,7 @@
       "count": 1,
       "id": "createcybernetics:bodypart_muscle"
     },
-    "title": "Well, Sh**..."
+    "title": "I Have No Muscle And I Must Scream"
   },
   "requirements": [
     [

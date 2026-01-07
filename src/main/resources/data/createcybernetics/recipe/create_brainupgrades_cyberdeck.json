@@ -1,0 +1,37 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "R": {
+      "item": "create:redstone_link"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "D": {
+      "item": "createcybernetics:component_diodes"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    }
+  },
+
+  "pattern": [
+    "R    ",
+    "PPPPP",
+    "PWDEP",
+    "PPPPP",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_cyberdeck"
+  },
+  "show_notification": false
+}

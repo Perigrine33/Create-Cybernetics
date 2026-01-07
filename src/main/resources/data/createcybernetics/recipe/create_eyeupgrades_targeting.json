@@ -1,0 +1,45 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "D": {
+      "item": "createcybernetics:component_diodes"
+    },
+    "P": {
+      "item": "minecraft:red_dye"
+    },
+    "B": {
+      "item": "createcybernetics:eyeupgradebase"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "I": {
+      "item": "minecraft:glow_ink_sac"
+    }
+  },
+
+  "pattern": [
+    " NRN ",
+    " DID ",
+    "PGBSP",
+    " DSD "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:eyeupgrades_targeting"
+  },
+  "show_notification": false
+}

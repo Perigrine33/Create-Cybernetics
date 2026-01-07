@@ -21,6 +21,11 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         basicItem(ModItems.EYEUPGRADEBASE.get());
         basicItem(ModItems.TITANIUM_HAND.get());
+        basicItem(ModItems.FRONTAL_LOBE.get());
+        basicItem(ModItems.PARIETAL_LOBE.get());
+        basicItem(ModItems.TEMPORAL_LOBE.get());
+        basicItem(ModItems.OCCIPITAL_LOBE.get());
+        basicItem(ModItems.CEREBELLUM.get());
         basicItem(ModItems.NEUROPOZYNE_AUTOINJECTOR.get());
         basicItem(ModItems.EMPTY_AUTOINJECTOR.get());
         basicItem(ModItems.XP_CAPSULE.get());
@@ -55,6 +60,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COMPONENT_STORAGE.get());
         basicItem(ModItems.COMPONENT_SYNTHNERVES.get());
         basicItem(ModItems.COMPONENT_MESH.get());
+
+        if (ModItems.COMPONENT_LED != null && ModItems.COMPONENT_TITANIUMROD != null) {
+            basicItem(ModItems.COMPONENT_LED.get());
+            basicItem(ModItems.COMPONENT_TITANIUMROD.get());
+        }
     }
 
 //BODY PART
@@ -83,11 +93,6 @@ public class ModItemModelProvider extends ItemModelProvider {
 
 //BASE
         {
-        basicItem(ModItems.BASECYBERWARE_RIGHTLEG.get());
-        basicItem(ModItems.BASECYBERWARE_LEFTLEG.get());
-        basicItem(ModItems.BASECYBERWARE_RIGHTARM.get());
-        basicItem(ModItems.BASECYBERWARE_LEFTARM.get());
-        basicItem(ModItems.BASECYBERWARE_CYBEREYES.get());
         basicItem(ModItems.BASECYBERWARE_LINEARFRAME.get());
     }
 
@@ -146,6 +151,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
 //BRAIN
         {
+        basicItem(ModItems.BRAINUPGRADES_CYBERBRAIN.get());
         basicItem(ModItems.BRAINUPGRADES_EYEOFDEFENDER.get());
 
             if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
@@ -158,6 +164,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER.get());
         basicItem(ModItems.BRAINUPGRADES_CYBERDECK.get());
         basicItem(ModItems.BRAINUPGRADES_IDEM.get());
+        basicItem(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get());
     }
 
 //HEART
@@ -290,6 +297,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.SCAVENGED_NEURALCONTEXTUALIZER.get());
             basicItem(ModItems.SCAVENGED_CYBERDECK.get());
             basicItem(ModItems.SCAVENGED_IDEM.get());
+            basicItem(ModItems.SCAVENGED_CHIPWARESLOTS.get());
             basicItem(ModItems.SCAVENGED_CYBERHEART.get());
             basicItem(ModItems.SCAVENGED_COUPLER.get());
             basicItem(ModItems.SCAVENGED_CREEPERHEART.get());
@@ -323,6 +331,22 @@ public class ModItemModelProvider extends ItemModelProvider {
 
             basicItem(ModItems.SCAVENGED_SYNTHMUSCLE.get());
             basicItem(ModItems.SCAVENGED_WIREDREFLEXES.get());
+        }
+
+// DATA SHARDS
+        {
+            basicItem(ModItems.DATA_SHARD_RED.get());
+            basicItem(ModItems.DATA_SHARD_ORANGE.get());
+            basicItem(ModItems.DATA_SHARD_YELLOW.get());
+            basicItem(ModItems.DATA_SHARD_GREEN.get());
+            basicItem(ModItems.DATA_SHARD_CYAN.get());
+            basicItem(ModItems.DATA_SHARD_BLUE.get());
+            basicItem(ModItems.DATA_SHARD_PURPLE.get());
+            basicItem(ModItems.DATA_SHARD_PINK.get());
+            basicItem(ModItems.DATA_SHARD_BROWN.get());
+            basicItem(ModItems.DATA_SHARD_GRAY.get());
+            basicItem(ModItems.DATA_SHARD_BLACK.get());
+            basicItem(ModItems.DATA_SHARD_BIOCHIP.get());
         }
     }
 }

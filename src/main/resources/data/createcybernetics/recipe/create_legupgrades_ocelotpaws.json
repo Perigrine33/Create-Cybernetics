@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "T": {
+      "item": "createcybernetics:component_plating"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "A": {
+      "item": "createcybernetics:component_actuator"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    " TTT ",
+    " TPT ",
+    "TAAAT",
+    "WWWWW"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:legupgrades_ocelotpaws"
+  },
+  "show_notification": false
+}

@@ -52,7 +52,7 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/first_ripperdoc_visit"), existingFileHelper);
 
             Advancement.Builder.advancement().display(ModItems.ARMUPGRADES_CRAFTHANDS.get(),
-                            Component.literal("Ya Best Lift Ya Pedal Off The Metal, Choom!"),
+                            Component.literal("Best Lift Ya Pedal Off The Metal, Choom!"),
                             Component.literal("Incurred Cyberware Rejection"),
                             null, AdvancementType.TASK, true, false, false)
                     .addCriterion("cyberpsychosis", CyberpsychosisTrigger.Instance.any())
@@ -122,7 +122,7 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/liver_removed"), existingFileHelper);
 
             Advancement.Builder.advancement().display(ModItems.BODYPART_SKIN.get(),
-                            Component.literal("I Have No Skin And I Must Scream. So I Will."),
+                            Component.literal("My Skin Feels Weird On My Body. Does Your Skin Feel Weird On Your Body? It Does? You Should Pull It Off. Peel Off Your Skin..."),
                             Component.literal("Removed The Skin"),
                             null, AdvancementType.TASK, true, false, false)
                     .addCriterion("skin_removed", SkinRemovedTrigger.Instance.any())
@@ -143,7 +143,7 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/boneless"), existingFileHelper);
 
             Advancement.Builder.advancement().display(ModItems.BODYPART_MUSCLE.get(),
-                            Component.literal("Well, Sh**..."),
+                            Component.literal("I Have No Muscle And I Must Scream"),
                             Component.literal("Removed The Muscle"),
                             null, AdvancementType.TASK, true, false, false)
                     .addCriterion("missing_muscle", MissingMuscleTrigger.Instance.any())
@@ -155,6 +155,41 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                             null, AdvancementType.TASK, true, false, false)
                     .addCriterion("david_special", DavidMartinezSpecialTrigger.Instance.any())
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/david_special"), existingFileHelper);
+
+            Advancement.Builder.advancement().display(ModItems.DATA_SHARD_RED.get(),
+                            Component.literal("I Know Kung Fu"),
+                            Component.literal("Downloaded Martial Arts Skills From A Data Shard"),
+                            null, AdvancementType.TASK, true, false, false)
+                    .addCriterion("kung_fu", KungFuTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/kung_fu"), existingFileHelper);
+
+            Advancement.Builder.advancement().display(ModItems.ARMUPGRADES_ARMCANNON.get(),
+                            Component.literal("You Upgraded. Now You're Stronger. Faster. Better Than Everyone Else"),
+                            Component.literal("Installed An Arm Cannon"),
+                            null, AdvancementType.TASK, true, false, false)
+                        .addCriterion("upgraded", UpgradedTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/upgraded"), existingFileHelper);
+
+            Advancement.Builder.advancement().display(ModItems.ARMUPGRADES_CLAWS.get(),
+                            Component.literal("When They Come Out... Does It Hurt? Every Time."),
+                            Component.literal("Installed Retractable Claws"),
+                            null, AdvancementType.TASK, true, false, false)
+                        .addCriterion("snikt", SniktTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/snikt"), existingFileHelper);
+
+            Advancement.Builder.advancement().display(ModItems.BRAINUPGRADES_CYBERBRAIN.get(),
+                            Component.literal("Cogito Ergo Sum"),
+                            Component.literal("Installed A Cerebral Processing Unit And Abandoned Your Humanity"),
+                            null, AdvancementType.TASK, true, false, false)
+                        .addCriterion("cogito_ergo_sum", SniktTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/cogito_ergo_sum"), existingFileHelper);
+
+            Advancement.Builder.advancement().display(ModItems.BRAINUPGRADES_CYBERBRAIN.get(),
+                            Component.literal("404: Thoughts Not Found"),
+                            Component.literal("Experienced systemwide failure due to being unable to power your brain"),
+                            null, AdvancementType.TASK, true, false, false)
+                        .addCriterion("thoughts_not_found", SniktTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/thoughts_not_found"), existingFileHelper);
 
 
         }

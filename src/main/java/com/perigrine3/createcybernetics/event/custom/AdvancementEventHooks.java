@@ -16,6 +16,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+
+import java.util.UUID;
 
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
 public final class AdvancementEventHooks {
@@ -128,6 +131,31 @@ public final class AdvancementEventHooks {
         }
         if (!data.hasAnyTagged(ModTags.Items.MUSCLE_ITEMS, CyberwareSlot.MUSCLE)) {
             ModCriteria.MISSING_MUSCLE.get().trigger(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(ServerTickEvent.Post event) {
+        for (ServerPlayer player : event.getServer().getPlayerList().getPlayers()) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) continue;
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) continue;
+
+            if (data.hasChipwareShardExact(ModItems.DATA_SHARD_RED.get())) {
+                ModCriteria.KUNG_FU.get().trigger(player);
+            }
+
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_ARMCANNON.get())) {
+                ModCriteria.UPGRADED.get().trigger(player);
+            }
+
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_CLAWS.get())) {
+                ModCriteria.SNIKT.get().trigger(player);
+            }
+
+            if (data.hasSpecificItem(ModItems.BRAINUPGRADES_CYBERBRAIN.get())) {
+                ModCriteria.COGITO_ERGO_SUM.get().trigger(player);
+            }
         }
     }
 }

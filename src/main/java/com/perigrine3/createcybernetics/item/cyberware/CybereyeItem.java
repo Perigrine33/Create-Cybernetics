@@ -44,6 +44,16 @@ public class CybereyeItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean isDyeable(ItemStack stack, CyberwareSlot slot) {
+        return slot == CyberwareSlot.EYES;
+    }
+
+    @Override
+    public boolean isDyeable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
         return 5;
     }
@@ -60,13 +70,11 @@ public class CybereyeItem extends Item implements ICyberwareItem {
 
     @Override
     public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "cybereye_perception");
+
     }
 
     @Override
     public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "cybereye_perception");
-
         // Your mappings: MobEffects.* are Holder<MobEffect>
         player.removeEffect(MobEffects.BLINDNESS);
         player.removeEffect(MobEffects.DARKNESS);

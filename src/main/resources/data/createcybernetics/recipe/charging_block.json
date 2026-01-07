@@ -1,0 +1,33 @@
+{
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "T": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+
+  "pattern": [
+    "GTGTG",
+    "TWWWT",
+    "TWRWT",
+    "TWWWT",
+    "GTGTG"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:charging_block"
+  }
+}

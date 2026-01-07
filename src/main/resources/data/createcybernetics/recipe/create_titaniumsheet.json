@@ -1,0 +1,14 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "createcybernetics:titaniumingot"
+    }
+  ],
+  "results": [
+    {
+      "id": "createcybernetics:titaniumsheet",
+      "count": 1
+    }
+  ]
+}

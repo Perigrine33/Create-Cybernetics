@@ -1,0 +1,36 @@
+{
+"type": "create:crushing",
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "ingredients": [
+        {
+          "item": "createcybernetics:skinupgrades_metalplating"
+        }
+      ]
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "chance": 0.70,
+      "id": "createcybernetics:component_plating"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:component_synthnerves"
+    },
+    {
+      "chance": 0.20,
+      "id": "createcybernetics:skinupgrades_synthskin"
+    },
+    {
+      "chance": 0.25,
+      "id": "createcybernetics:skinupgrades_subdermalarmor"
+    },
+    {
+      "chance": 0.25,
+      "id": "create:experience_nugget"
+    }
+  ]
+}

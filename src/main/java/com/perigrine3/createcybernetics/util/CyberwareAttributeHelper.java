@@ -111,6 +111,40 @@ public class CyberwareAttributeHelper {
                 .orElseThrow(() -> new IllegalStateException("Safe fall distance attribute not found in registry"));
         Holder<Attribute> burningTimeAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.BURNING_TIME.getKey())
                 .orElseThrow(() -> new IllegalStateException("Burning time attribute not found in registry"));
+        Holder<Attribute> underwaterMiningAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.SUBMERGED_MINING_SPEED.getKey())
+                .orElseThrow(() -> new IllegalStateException("Underwater mining attribute not found in registry"));
+        Holder<Attribute> underwaterMovementAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.WATER_MOVEMENT_EFFICIENCY.getKey())
+                .orElseThrow(() -> new IllegalStateException("Underwater movement attribute not found in registry"));
+        Holder<Attribute> miningSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.MINING_EFFICIENCY.getKey())
+                .orElseThrow(() -> new IllegalStateException("Mining speed attribute not found in registry"));
+        Holder<Attribute> crouchSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.SNEAKING_SPEED.getKey())
+                .orElseThrow(() -> new IllegalStateException("Crouch speed attribute not found in registry"));
+
+        Holder<Attribute> xpMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.XP_GAIN_MULTIPLIER.getKey())
+                .orElseThrow(() -> new IllegalStateException("XP multiplier attribute not found in registry"));
+        Holder<Attribute> oreMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ORE_DROP_MULTIPLIER.getKey())
+                .orElseThrow(() -> new IllegalStateException("Ore drop multiplier attribute not found in registry"));
+        Holder<Attribute> hagglingAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.HAGGLING.getKey())
+                .orElseThrow(() -> new IllegalStateException("Haggling attribute not found in registry"));
+        Holder<Attribute> craftingOutputAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.CRAFTING_OUTPUT.getKey())
+                .orElseThrow(() -> new IllegalStateException("Crafting output attribute not found in registry"));
+        Holder<Attribute> arrowInaccuracyAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ARROW_INACCURACY.getKey())
+                .orElseThrow(() -> new IllegalStateException("Arrow inaccuracy attribute not found in registry"));
+        Holder<Attribute> breedingMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.BREEDING_MULTIPLIER.getKey())
+                .orElseThrow(() -> new IllegalStateException("Breeding multiplier attribute not found in registry"));
+        Holder<Attribute> cropMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.CROP_MULTIPLIER.getKey())
+                .orElseThrow(() -> new IllegalStateException("Crop multiplier attribute not found in registry"));
+        Holder<Attribute> elytraSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ELYTRA_SPEED.getKey())
+                .orElseThrow(() -> new IllegalStateException("Elytra speed attribute not found in registry"));
+        Holder<Attribute> elytraHandlingAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ELYTRA_HANDLING.getKey())
+                .orElseThrow(() -> new IllegalStateException("Elytra speed attribute not found in registry"));
+        Holder<Attribute> insomniaAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.INSOMNIA.getKey())
+                .orElseThrow(() -> new IllegalStateException("Insomnia attribute not found in registry"));
+
+
+
+
+
 
 
 
@@ -265,6 +299,87 @@ public class CyberwareAttributeHelper {
         registerModifier("sandevistan_jump", new AttributeModifierData(stepHeightAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "sandevistan_jump_boost"),
                 2, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("cyberbrain_learn", new AttributeModifierData(xpMultiplierAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberbrain_learn_boost"),
+                2, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("cyberbrain_insomnia", new AttributeModifierData(xpMultiplierAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberbrain_insomnia"),
+                3, AttributeModifier.Operation.ADD_VALUE));
+
+
+
+
+//CHIPWARE
+        registerModifier("redshard_strength", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_strength_boost"),
+                5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("redshard_speed", new AttributeModifierData(attackSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_speed_boost"),
+                3, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("redshard_knockback", new AttributeModifierData(attackSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_knockback_boost"),
+                3, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("orangeshard_ore", new AttributeModifierData(oreMultiplierAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "orangeshard_ore_multiplier"),
+                1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        registerModifier("orangeshard_mining", new AttributeModifierData(miningSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "orangeshard_mining_speed"),
+                0.5, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("yellowshard_haggling", new AttributeModifierData(hagglingAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "yellowshard_haggling_boost"),
+                2, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("greenshard_xp", new AttributeModifierData(xpMultiplierAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "greenshard_xp_multiplier"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("cyanshard_aim", new AttributeModifierData(arrowInaccuracyAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyanshard_aim_bot"),
+                -1, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("blueshard_swim", new AttributeModifierData(swimSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_swim_speed"),
+                3, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("blueshard_mining", new AttributeModifierData(underwaterMiningAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_mining_speed"),
+                1.5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("blueshard_movement", new AttributeModifierData(underwaterMovementAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_movement_speed"),
+                4, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("blueshard_oxygen", new AttributeModifierData(oxygenBonusAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_oxygen_boost"),
+                7, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("purpleshard_crafting", new AttributeModifierData(craftingOutputAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "purpleshard_crafting_output"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("pinkshard_breeding", new AttributeModifierData(breedingMultiplierAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pinkshard_breeding_multiplier"),
+                1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+
+        registerModifier("brownshard_crops", new AttributeModifierData(cropMultiplierAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "brownshard_crops_multiplier"),
+                1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+
+        registerModifier("grayshard_speed", new AttributeModifierData(cropMultiplierAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "grayshard_speed_boost"),
+                5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        registerModifier("grayshard_handling", new AttributeModifierData(cropMultiplierAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "grayshard_handling_boost"),
+                5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+
+        registerModifier("blackshard_crouch", new AttributeModifierData(crouchSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blackshard_crouch_speed"),
+                2.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        registerModifier("blackshard_sprint", new AttributeModifierData(crouchSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blackshard_crouch_sprint"),
+                3.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+
+
 
     }
 

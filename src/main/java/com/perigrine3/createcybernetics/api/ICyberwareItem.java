@@ -2,10 +2,12 @@ package com.perigrine3.createcybernetics.api;
 
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 
 import java.util.Set;
 
@@ -167,4 +169,31 @@ public interface ICyberwareItem {
     default int getChargerEnergyReceivePerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
         return 0;
     }
+
+    /* -------------------- DYE (PHASE 1: PRIMARY ONLY) -------------------- */
+
+    default boolean isDyeable(ItemStack stack, CyberwareSlot slot) {
+        return false;
+    }
+
+    default boolean isDyeable(ItemStack stack) {
+        return false;
+    }
+
+    default boolean isDyed(ItemStack installedStack, CyberwareSlot slot) {
+        if (installedStack == null || installedStack.isEmpty()) return false;
+        if (!isDyeable(installedStack, slot)) return false;
+        return installedStack.has(DataComponents.DYED_COLOR);
+    }
+    
+    default int dyeColor(ItemStack installedStack, CyberwareSlot slot) {
+        if (!isDyed(installedStack, slot)) return 0xFFFFFFFF;
+
+        DyedItemColor dyed = installedStack.get(DataComponents.DYED_COLOR);
+        if (dyed == null) return 0xFFFFFFFF;
+
+        // dyed.rgb() is 0xRRGGBB; convert to opaque ARGB.
+        return 0xFF000000 | dyed.rgb();
+    }
+
 }

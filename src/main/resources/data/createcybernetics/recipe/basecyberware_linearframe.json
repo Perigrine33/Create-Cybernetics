@@ -1,5 +1,5 @@
 {
-  "type": "create:mechanical_crafting",
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
@@ -17,7 +17,7 @@
       "item": "createcybernetics:titaniumsheet"
     },
     "E": {
-      "item": "create:electron_tube"
+      "item": "createcybernetics:component_led"
     }
   },
 
@@ -32,6 +32,5 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:basecyberware_linearframe"
-  },
-  "show_notification": false
+  }
 }

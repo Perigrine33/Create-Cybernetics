@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "H": {
+      "item": "createcybernetics:titanium_hand"
+    },
+    "T": {
+      "item": "createcybernetics:titaniumsheet"
+    },
+    "N": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "S": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
+    }
+  },
+
+  "pattern": [
+    " TTT ",
+    " NNN ",
+    " PMNT",
+    " PSP ",
+    "  H  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:armupgrades_crafthands"
+  },
+  "show_notification": false
+}

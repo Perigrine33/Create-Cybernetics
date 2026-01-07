@@ -37,6 +37,16 @@ public class ExpandedInventoryScreen extends AbstractContainerScreen<ExpandedInv
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(TEX, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
 
+        // Custom slot backgrounds for shard slots (only when present)
+        if (this.menu != null && this.menu.hasDataShardSlots()) {
+            int sx = leftPos + ExpandedInventoryMenu.DATA_SHARD_X;
+            int sy0 = topPos + ExpandedInventoryMenu.DATA_SHARD_Y;
+            int sy1 = sy0 + ExpandedInventoryMenu.DATA_SHARD_SPACING;
+
+            drawSlotBackground(graphics, sx, sy0);
+            drawSlotBackground(graphics, sx, sy1);
+        }
+
         if (this.minecraft == null || this.minecraft.player == null) return;
 
         int x1 = leftPos + 26;
@@ -53,6 +63,20 @@ public class ExpandedInventoryScreen extends AbstractContainerScreen<ExpandedInv
                 (float) mouseX, (float) mouseY,
                 this.minecraft.player
         );
+    }
+
+    private static void drawSlotBackground(GuiGraphics gg, int x, int y) {
+        int left = x - 1;
+        int top = y - 1;
+        int right = x + 17;
+        int bottom = y + 17;
+
+        gg.fill(left, top, right, bottom, 0xE005070A);
+
+        gg.fill(left, top, right, top + 1, 0xFF4AB3FF);
+        gg.fill(left, bottom - 1, right, bottom, 0xFF4AB3FF);
+        gg.fill(left, top, left + 1, bottom, 0xFF4AB3FF);
+        gg.fill(right - 1, top, right, bottom, 0xFF4AB3FF);
     }
 
     @Override

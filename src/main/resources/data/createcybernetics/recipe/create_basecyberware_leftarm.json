@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+
+  "key": {
+    "H": {
+      "item": "createcybernetics:titanium_hand"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "A": {
+      "item": "createcybernetics:component_actuator"
+    }
+  },
+
+  "pattern": [
+    "  P  ",
+    " PNP ",
+    " PAP ",
+    "  PNP",
+    "   PH"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:basecyberware_leftarm"
+  },
+  "show_notification": false
+}

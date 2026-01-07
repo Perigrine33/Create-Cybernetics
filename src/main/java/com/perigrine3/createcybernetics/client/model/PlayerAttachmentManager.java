@@ -14,6 +14,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -78,6 +79,106 @@ public final class PlayerAttachmentManager {
     }
 
     // =========================
+    // OCELOT PAWS
+    // =========================
+    private static final ResourceLocation OCELOT_PAWS_ITEM_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "legupgrades_ocelotpaws");
+
+    public static final ResourceLocation OCELOT_PAWS_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/ocelot_paws.png");
+
+    private static OcelotPawsAttachmentModel PAWS_MODEL;
+
+    public static OcelotPawsAttachmentModel pawsModel() {
+        if (PAWS_MODEL == null) {
+            var baked = Minecraft.getInstance().getEntityModels().bakeLayer(OcelotPawsAttachmentModel.LAYER);
+            PAWS_MODEL = new OcelotPawsAttachmentModel(baked);
+        }
+        return PAWS_MODEL;
+    }
+
+    private static Item ocelotPawsItemOrNull() {
+        if (!BuiltInRegistries.ITEM.containsKey(OCELOT_PAWS_ITEM_ID)) return null;
+        Item item = BuiltInRegistries.ITEM.get(OCELOT_PAWS_ITEM_ID);
+        return item == null ? null : item;
+    }
+
+    // =========================
+    // CALF PROPELLER
+    // =========================
+    private static final ResourceLocation CALF_PROPELLER_ITEM_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "legupgrades_propellers");
+
+    public static final ResourceLocation CALF_PROPELLER_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/calf_propeller.png");
+
+    private static CalfPropellerAttachmentModel CALF_PROPELLER_MODEL;
+
+    public static CalfPropellerAttachmentModel calfPropellerModel() {
+        if (CALF_PROPELLER_MODEL == null) {
+            var baked = Minecraft.getInstance().getEntityModels().bakeLayer(CalfPropellerAttachmentModel.LAYER);
+            CALF_PROPELLER_MODEL = new CalfPropellerAttachmentModel(baked);
+        }
+        return CALF_PROPELLER_MODEL;
+    }
+
+    private static Item calfPropellerItemOrNull() {
+        if (!BuiltInRegistries.ITEM.containsKey(CALF_PROPELLER_ITEM_ID)) return null;
+        Item item = BuiltInRegistries.ITEM.get(CALF_PROPELLER_ITEM_ID);
+        return item == null ? null : item;
+    }
+
+    // =========================
+    // SPURS
+    // =========================
+    private static final ResourceLocation SPUR_ITEM_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "legupgrades_spurs");
+
+    public static final ResourceLocation SPUR_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/spurs.png");
+
+    private static SpursAttachmentModel SPUR_MODEL;
+
+    public static SpursAttachmentModel spurModel() {
+        if (SPUR_MODEL == null) {
+            var baked = Minecraft.getInstance().getEntityModels().bakeLayer(SpursAttachmentModel.LAYER);
+            SPUR_MODEL = new SpursAttachmentModel(baked);
+        }
+        return SPUR_MODEL;
+    }
+
+    private static Item spurItemOrNull() {
+        if (!BuiltInRegistries.ITEM.containsKey(SPUR_ITEM_ID)) return null;
+        Item item = BuiltInRegistries.ITEM.get(SPUR_ITEM_ID);
+        return item == null ? null : item;
+    }
+
+    // =========================
+    // GUARDIAN EYE
+    // =========================
+    private static final ResourceLocation GUARDIAN_EYE_ITEM_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "wetware_guardianeye");
+
+    public static final ResourceLocation GUARDIAN_EYE_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/guardian_eye.png");
+
+    private static GuardianEyeAttachmentModel GUARDIAN_EYE_MODEL;
+
+    public static GuardianEyeAttachmentModel guardianEyeModel() {
+        if (GUARDIAN_EYE_MODEL == null) {
+            var baked = Minecraft.getInstance().getEntityModels().bakeLayer(GuardianEyeAttachmentModel.LAYER);
+            GUARDIAN_EYE_MODEL = new GuardianEyeAttachmentModel(baked);
+        }
+        return GUARDIAN_EYE_MODEL;
+    }
+
+    private static Item guardianEyeItemOrNull() {
+        if (!BuiltInRegistries.ITEM.containsKey(GUARDIAN_EYE_ITEM_ID)) return null;
+        Item item = BuiltInRegistries.ITEM.get(GUARDIAN_EYE_ITEM_ID);
+        return item == null ? null : item;
+    }
+
+    // =========================
     // STATE BUILD
     // =========================
     public static PlayerAttachmentState getState(AbstractClientPlayer player) {
@@ -91,25 +192,26 @@ public final class PlayerAttachmentManager {
 
         Item clawsItem = clawsItemOrNull();
         Item drillItem = drillFistItemOrNull();
+        Item pawsItem = ocelotPawsItemOrNull();
+        Item calfPropellerItem = calfPropellerItemOrNull();
+        Item spurItem = spurItemOrNull();
+        Item guardianEyeItem = guardianEyeItemOrNull();
 
-        if (clawsItem == null && drillItem == null) return state;
+        if (clawsItem == null && drillItem == null && pawsItem == null && calfPropellerItem == null && spurItem == null && guardianEyeItem == null) return state;
 
         for (var entry : data.getAll().entrySet()) {
             CyberwareSlot slot = entry.getKey();
             InstalledCyberware[] arr = entry.getValue();
             if (arr == null) continue;
-
             AttachmentAnchor anchor = mapSlotToAnchor(slot);
             if (anchor == null) continue;
-
             for (int idx = 0; idx < arr.length; idx++) {
                 InstalledCyberware cw = arr[idx];
                 if (cw == null) continue;
-
                 ItemStack stack = cw.getItem();
                 if (stack == null || stack.isEmpty()) continue;
-
                 if (!data.isEnabled(slot, idx)) continue;
+
 
                 if (clawsItem != null && stack.is(clawsItem)) {
                     state.add(new ClawAttachment(anchor));
@@ -118,6 +220,24 @@ public final class PlayerAttachmentManager {
 
                 if (drillItem != null && stack.is(drillItem)) {
                     state.add(new DrillFistAttachment(anchor));
+                }
+
+                if (pawsItem != null && stack.is(pawsItem)) {
+                    state.add(new OcelotPawsAttachment(anchor));
+                }
+
+                if (calfPropellerItem != null && stack.is(calfPropellerItem)) {
+                    state.add(new CalfPropellerAttachment(anchor));
+                }
+
+                if (spurItem != null && stack.is(spurItem)) {
+                    state.add(new SpursAttachment(anchor));
+                }
+
+                if (guardianEyeItem != null && stack.is(guardianEyeItem)) {
+                    if (player.isCrouching()) {
+                        state.add(new GuardianEyeAttachment(anchor));
+                    }
                 }
             }
         }
@@ -128,6 +248,9 @@ public final class PlayerAttachmentManager {
     private static AttachmentAnchor mapSlotToAnchor(CyberwareSlot slot) {
         if (slot == CyberwareSlot.LARM) return AttachmentAnchor.LEFT_ARM;
         if (slot == CyberwareSlot.RARM) return AttachmentAnchor.RIGHT_ARM;
+        if (slot == CyberwareSlot.LLEG) return AttachmentAnchor.LEFT_LEG;
+        if (slot == CyberwareSlot.RLEG) return AttachmentAnchor.RIGHT_LEG;
+        if (slot == CyberwareSlot.EYES) return AttachmentAnchor.HEAD;
         return null;
     }
 
@@ -152,13 +275,7 @@ public final class PlayerAttachmentManager {
     }
 
     public static void applyDrillFistTransform(PoseStack pose, AttachmentAnchor armAnchor) {
-        // Move down toward hand
-        pose.translate(0.0F, 0.0F, 0.0F);
-
-        // Push forward from wrist/knuckles
         pose.translate(0.05F, -0.15F, 0.39F);
-
-        // Orientation (depends on how the model was authored)
         pose.mulPose(Axis.YP.rotationDegrees(90.0F));
 
         if (armAnchor == AttachmentAnchor.LEFT_ARM) {
@@ -171,6 +288,73 @@ public final class PlayerAttachmentManager {
         }
 
         pose.scale(1.1F, 1.1F, 1.1F);
+    }
+
+    public static void applyOcelotPawsTransform(PoseStack pose, AttachmentAnchor legAnchor) {
+        pose.translate(0.0F, 0.77F, 0.0F);
+        pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+
+        if (legAnchor == AttachmentAnchor.LEFT_LEG) {
+            pose.translate(0.0F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+            pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+        } else if (legAnchor == AttachmentAnchor.RIGHT_LEG) {
+            pose.translate(0.0F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+        }
+
+        pose.scale(1, 1, 1);
+    }
+
+    public static void applyCalfPropellerTransform(PoseStack pose, AttachmentAnchor legAnchor) {
+        pose.translate(0.0F, -0.7F, -0.45F);
+        pose.mulPose(Axis.XN.rotationDegrees(-25.0F));
+        pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+
+        if (legAnchor == AttachmentAnchor.LEFT_LEG) {
+            pose.translate(0.0F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+            pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+        } else if (legAnchor == AttachmentAnchor.RIGHT_LEG) {
+            pose.translate(0.0F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+        }
+
+        pose.scale(1, 1, 1);
+    }
+
+    public static void applySpursTransform(PoseStack pose, AttachmentAnchor legAnchor) {
+        pose.translate(0.0F, 0.0F, 0.0F);
+        pose.mulPose(Axis.XN.rotationDegrees(0.0F));
+        pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+
+        if (legAnchor == AttachmentAnchor.LEFT_LEG) {
+            pose.translate(0.0F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+            pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+        } else if (legAnchor == AttachmentAnchor.RIGHT_LEG) {
+            pose.translate(0.0F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+        }
+
+        pose.scale(1, 1, 1);
+    }
+
+    public static void applyGuardianEyeTransform(PoseStack pose, AttachmentAnchor legAnchor) {
+        pose.translate(0.0F, -0.25F, -0.205F);
+        pose.mulPose(Axis.XN.rotationDegrees(0.0F));
+        pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+
+        if (legAnchor == AttachmentAnchor.LEFT_LEG) {
+            pose.translate(0.0F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+            pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+        } else if (legAnchor == AttachmentAnchor.RIGHT_LEG) {
+            pose.translate(0.0F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+        }
+
+        pose.scale(1, 1, 1);
     }
 
     // =========================
@@ -249,6 +433,158 @@ public final class PlayerAttachmentManager {
         @Override
         public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
             applyDrillFistTransform(poseStack, anchor);
+        }
+    }
+
+    private static final class OcelotPawsAttachment implements PlayerAttachment {
+        private final AttachmentAnchor anchor;
+
+        private OcelotPawsAttachment(AttachmentAnchor anchor) {
+            this.anchor = anchor;
+        }
+
+        @Override
+        public AttachmentAnchor anchor() {
+            return anchor;
+        }
+
+        @Override
+        public ResourceLocation texture(PlayerSkin.Model modelType) {
+            return OCELOT_PAWS_TEXTURE;
+        }
+
+        @Override
+        public Model model(PlayerSkin.Model modelType) {
+            return pawsModel();
+        }
+
+        @Override
+        public int color() {
+            return 0xFFFFFFFF;
+        }
+
+        @Override
+        public boolean thirdPersonOnly() {
+            return true;
+        }
+
+        @Override
+        public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
+            applyOcelotPawsTransform(poseStack, anchor);
+        }
+    }
+
+    private static final class CalfPropellerAttachment implements PlayerAttachment {
+        private final AttachmentAnchor anchor;
+
+        private CalfPropellerAttachment(AttachmentAnchor anchor) {
+            this.anchor = anchor;
+        }
+
+        @Override
+        public AttachmentAnchor anchor() {
+            return anchor;
+        }
+
+        @Override
+        public ResourceLocation texture(PlayerSkin.Model modelType) {
+            return CALF_PROPELLER_TEXTURE;
+        }
+
+        @Override
+        public Model model(PlayerSkin.Model modelType) {
+            return calfPropellerModel();
+        }
+
+        @Override
+        public int color() {
+            return 0xFFFFFFFF;
+        }
+
+        @Override
+        public boolean thirdPersonOnly() {
+            return true;
+        }
+
+        @Override
+        public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
+            applyCalfPropellerTransform(poseStack, anchor);
+        }
+    }
+
+    private static final class SpursAttachment implements PlayerAttachment {
+        private final AttachmentAnchor anchor;
+
+        private SpursAttachment(AttachmentAnchor anchor) {
+            this.anchor = anchor;
+        }
+
+        @Override
+        public AttachmentAnchor anchor() {
+            return anchor;
+        }
+
+        @Override
+        public ResourceLocation texture(PlayerSkin.Model modelType) {
+            return SPUR_TEXTURE;
+        }
+
+        @Override
+        public Model model(PlayerSkin.Model modelType) {
+            return spurModel();
+        }
+
+        @Override
+        public int color() {
+            return 0xFFFFFFFF;
+        }
+
+        @Override
+        public boolean thirdPersonOnly() {
+            return true;
+        }
+
+        @Override
+        public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
+            applySpursTransform(poseStack, anchor);
+        }
+    }
+
+    private static final class GuardianEyeAttachment implements PlayerAttachment {
+        private final AttachmentAnchor anchor;
+
+        private GuardianEyeAttachment(AttachmentAnchor anchor) {
+            this.anchor = anchor;
+        }
+
+        @Override
+        public AttachmentAnchor anchor() {
+            return anchor;
+        }
+
+        @Override
+        public ResourceLocation texture(PlayerSkin.Model modelType) {
+            return GUARDIAN_EYE_TEXTURE;
+        }
+
+        @Override
+        public Model model(PlayerSkin.Model modelType) {
+            return guardianEyeModel();
+        }
+
+        @Override
+        public int color() {
+            return 0xFFFFFFFF;
+        }
+
+        @Override
+        public boolean thirdPersonOnly() {
+            return true;
+        }
+
+        @Override
+        public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
+            applyGuardianEyeTransform(poseStack, anchor);
         }
     }
 }

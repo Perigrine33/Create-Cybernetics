@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,6 +44,22 @@ public final class SurgeryController {
             List<CyberwareSurgeryEvent.Change> installedChanges = new ArrayList<>();
             List<CyberwareSurgeryEvent.Change> removedChanges = new ArrayList<>();
 
+            // Track what was installed BEFORE surgery, so we don't accidentally change behavior by
+            // removing newly-installed items due to requirements that were already missing.
+            boolean[] wasInstalledBefore = new boolean[surgeon.inventory.getSlots()];
+            for (CyberwareSlot slot : CyberwareSlot.values()) {
+                for (int i = 0; i < slot.size; i++) {
+                    int invIndex = RobosurgeonSlotMap.toInventoryIndex(slot, i);
+                    if (invIndex < 0 || invIndex >= surgeon.inventory.getSlots()) continue;
+
+                    InstalledCyberware inst = data.get(slot, i);
+                    wasInstalledBefore[invIndex] = inst != null && inst.getItem() != null && !inst.getItem().isEmpty();
+                }
+            }
+
+            // Track items actually removed during this surgery (including later cascades).
+            Set<Item> removedItemsThisSurgery = new HashSet<>();
+
             for (CyberwareSlot slot : CyberwareSlot.values()) {
                 for (int i = 0; i < slot.size; i++) {
 
@@ -67,6 +84,7 @@ public final class SurgeryController {
                             didWork = true;
                             removals++;
                             removedChanges.add(new CyberwareSurgeryEvent.Change(slot, i, removed.getItem().copy()));
+                            removedItemsThisSurgery.add(removed.getItem().getItem());
 
                             if (removed.getItem().getItem() instanceof ICyberwareItem cw) {
                                 cw.onRemoved(player);
@@ -172,6 +190,24 @@ public final class SurgeryController {
                 }
             }
 
+            // --- FORCE-REMOVE DEPENDENTS OF REMOVED REQUIREMENTS ---
+            // Only remove items that were installed BEFORE surgery, and only if they require something
+            // that was removed in THIS surgery (directly or via cascade).
+            if (!removedItemsThisSurgery.isEmpty()) {
+                int forced = forceRemoveDependents(
+                        player,
+                        surgeon,
+                        data,
+                        wasInstalledBefore,
+                        removedItemsThisSurgery,
+                        removedChanges
+                );
+                if (forced > 0) {
+                    didWork = true;
+                    removals += forced;
+                }
+            }
+
             data.recomputeHumanityBaseFromInstalled();
 
             // --- POST SURGERY EVENTS + DAMAGE ---
@@ -197,6 +233,120 @@ public final class SurgeryController {
         } finally {
             surgeon.endSurgery();
         }
+    }
+
+    /**
+     * Cascades removals: if a cyberware item requires an item that was removed this surgery, and it no longer
+     * has any of its required items present, it gets force-removed (with refund/drop + onRemoved + change record).
+     *
+     * This function is intentionally conservative:
+     * - It only considers items that were installed BEFORE this surgery began.
+     * - It only triggers on requirements that intersect removedItemsThisSurgery.
+     */
+    private static int forceRemoveDependents(
+            Player player,
+            RobosurgeonBlockEntity surgeon,
+            PlayerCyberwareData data,
+            boolean[] wasInstalledBefore,
+            Set<Item> removedItemsThisSurgery,
+            List<CyberwareSurgeryEvent.Change> removedChanges
+    ) {
+        int forcedRemovals = 0;
+
+        boolean changed;
+        do {
+            changed = false;
+
+            for (CyberwareSlot slot : CyberwareSlot.values()) {
+                for (int i = 0; i < slot.size; i++) {
+
+                    int invIndex = RobosurgeonSlotMap.toInventoryIndex(slot, i);
+                    if (invIndex < 0 || invIndex >= surgeon.inventory.getSlots()) continue;
+                    if (invIndex >= wasInstalledBefore.length) continue;
+
+                    // Only consider items that existed pre-surgery (avoid changing behavior for new installs).
+                    if (!wasInstalledBefore[invIndex]) continue;
+
+                    InstalledCyberware inst = data.get(slot, i);
+                    if (inst == null || inst.getItem() == null || inst.getItem().isEmpty()) continue;
+
+                    ItemStack installedStack = inst.getItem();
+                    if (!(installedStack.getItem() instanceof ICyberwareItem cw)) continue;
+
+                    Set<Item> requiredItems = cw.requiresCyberware(installedStack, slot);
+                    if (requiredItems == null || requiredItems.isEmpty()) continue;
+
+                    // Only cascade if this item depended on something actually removed this surgery.
+                    boolean intersectsRemoved = false;
+                    for (Item req : requiredItems) {
+                        if (req != null && removedItemsThisSurgery.contains(req)) {
+                            intersectsRemoved = true;
+                            break;
+                        }
+                    }
+                    if (!intersectsRemoved) continue;
+
+                    // If none of the required items are currently installed anywhere, remove this item.
+                    if (hasAnyInstalledItem(data, requiredItems)) continue;
+
+                    // FORCE REMOVE
+                    InstalledCyberware removed = data.remove(slot, i);
+                    if (removed == null || removed.getItem() == null || removed.getItem().isEmpty()) {
+                        // Still clear the BE view for consistency
+                        surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
+                        surgeon.installed[invIndex] = false;
+                        continue;
+                    }
+
+                    forcedRemovals++;
+                    changed = true;
+
+                    Item removedItem = removed.getItem().getItem();
+                    if (removedItem != null) {
+                        removedItemsThisSurgery.add(removedItem); // enable multi-level cascades
+                    }
+
+                    removedChanges.add(new CyberwareSurgeryEvent.Change(slot, i, removed.getItem().copy()));
+
+                    if (removedItem instanceof ICyberwareItem cwRemoved) {
+                        cwRemoved.onRemoved(player);
+                    }
+
+                    ItemStack giveBack = removed.getItem().copy();
+                    if (!player.getInventory().add(giveBack)) {
+                        player.drop(giveBack, false);
+                    }
+
+                    // Keep the Robosurgeon inventory/state consistent.
+                    surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
+                    surgeon.installed[invIndex] = false;
+                    surgeon.staged[invIndex] = false;
+                    surgeon.markedForRemoval[invIndex] = false;
+                }
+            }
+
+        } while (changed);
+
+        return forcedRemovals;
+    }
+
+    private static boolean hasAnyInstalledItem(PlayerCyberwareData data, Set<Item> items) {
+        if (items == null || items.isEmpty()) return true;
+
+        for (var entry : data.getAll().entrySet()) {
+            InstalledCyberware[] arr = entry.getValue();
+            if (arr == null) continue;
+
+            for (InstalledCyberware inst : arr) {
+                if (inst == null || inst.getItem() == null) continue;
+                ItemStack st = inst.getItem();
+                if (st.isEmpty()) continue;
+
+                if (items.contains(st.getItem())) return true;
+            }
+        }
+
+        return false;
     }
 
     // --- Existing utility methods below remain untouched ---

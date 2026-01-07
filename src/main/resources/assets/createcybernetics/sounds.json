@@ -55,6 +55,14 @@
       }
     ]
   },
+  "metal_crushing": {
+    "subtitle": "sounds.createcybernetics.metal_crushing",
+    "sounds": [
+      {
+        "name": "createcybernetics:metal_crushing"
+      }
+    ]
+  },
   "glitchy": {
     "subtitle": "sounds.createcybernetics.glitchy",
     "sounds": [

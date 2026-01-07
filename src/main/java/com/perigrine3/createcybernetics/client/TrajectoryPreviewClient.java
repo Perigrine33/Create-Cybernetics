@@ -64,7 +64,6 @@ public final class TrajectoryPreviewClient {
         float partial = event.getPartialTick().getGameTimeDeltaPartialTick(true);
 
         List<Vec3> pts = new ArrayList<>(MAX_STEPS + 2);
-
         HitTarget firstHit = new HitTarget();
 
         boolean built =
@@ -76,10 +75,16 @@ public final class TrajectoryPreviewClient {
         if (!built || pts.size() < 2) return;
 
         renderLine(event, mc, level, pts);
-
         renderFirstHitOverlay(event, mc, level, firstHit, partial);
     }
 
+    /**
+     * Bow trajectory:
+     * - Simulation is computed from the real "centerline" origin and direction (no inaccuracy),
+     *   so the endpoint equals where a perfectly-accurate arrow would land.
+     * - Rendering is allowed to start from the bow side for depth, but that offset decays to 0
+     *   over distance so the endpoint remains exact.
+     */
     private static boolean tryBuildBow(
             Minecraft mc, LocalPlayer player, ClientLevel level, float partial,
             List<Vec3> pts, HitTarget firstHit
@@ -93,28 +98,28 @@ public final class TrajectoryPreviewClient {
         float power = BowItem.getPowerForTime(usedTicks);
         if (power <= 0.05F) return false;
 
+        // Camera basis
         Vec3 eye = player.getEyePosition(partial);
         Vec3 look = player.getViewVector(partial).normalize();
 
+        // Vanilla-ish speed (you already used power * 3)
         double speed = power * 3.0D;
 
-        Vec3 up = new Vec3(0.0D, 1.0D, 0.0D);
-        Vec3 right = look.cross(up).normalize(); // camera-right (correct handedness)
-
-        int armSign = (player.getMainArm() == HumanoidArm.RIGHT) ? 1 : -1;
-
-        Vec3 pos = eye
-                .add(look.scale(0.45D))            // keep original forward
-                .add(right.scale(0.16D * armSign)) // shift to bow side
-                .add(0.0D, -0.08D, 0.0D);      // slight downward to match hand height
-
-        Vec3 vel = look.scale(speed);
-
+        // ---------
+        // 1) SIMULATION ORIGIN / VELOCITY (ACCURATE)
+        // ---------
+        // Vanilla arrows are spawned near the player's centerline (x/z), around eyeY - 0.1.
+        // Using eye position is good enough client-side; the important part is: DO NOT offset
+        // sideways for the simulation.
+        Vec3 simPos = eye.add(0.0D, -0.10D, 0.0D);
+        Vec3 simVel = look.scale(speed);
 
         pts.clear();
-        pts.add(pos);
-
+        pts.add(simPos);
         firstHit.clear();
+
+        Vec3 pos = simPos;
+        Vec3 vel = simVel;
 
         for (int i = 0; i < MAX_STEPS; i++) {
             Vec3 next = pos.add(vel);
@@ -133,7 +138,63 @@ public final class TrajectoryPreviewClient {
             pos = next;
         }
 
-        return pts.size() >= 2;
+        if (pts.size() < 2) return false;
+
+        // ---------
+        // 2) RENDER-ONLY START OFFSET (DEPTH), DECAYING TO ZERO
+        // ---------
+        // This preserves your "starts in front of the bow" look, but guarantees the last point
+        // stays the true impact point.
+        applyBowRenderOffset(player, look, pts);
+
+        return true;
+    }
+
+    /**
+     * Applies a bow-side "depth" offset to the rendered polyline only.
+     * The offset smoothly decays to zero so the final endpoint remains exact.
+     */
+    private static void applyBowRenderOffset(LocalPlayer player, Vec3 lookUnit, List<Vec3> pts) {
+        if (pts.isEmpty()) return;
+
+        // Build camera-right basis. If look is nearly vertical, fall back to X axis to avoid NaNs.
+        Vec3 up = new Vec3(0.0D, 1.0D, 0.0D);
+        Vec3 right = lookUnit.cross(up);
+        if (right.lengthSqr() < 1.0E-6D) {
+            right = new Vec3(1.0D, 0.0D, 0.0D);
+        } else {
+            right = right.normalize();
+        }
+
+        int armSign = (player.getMainArm() == HumanoidArm.RIGHT) ? 1 : -1;
+
+        // This is the same *visual* offset you previously baked into the simulation start,
+        // converted into a delta relative to the simulation origin (eye - 0.10Y).
+        //
+        // Old render-start (from eye): +look*0.45 + right*0.16*sign + (0,-0.08,0)
+        // Sim origin (from eye): (0,-0.10,0)
+        // Delta = +look*0.45 + right*0.16*sign + (0,+0.02,0)
+        Vec3 delta0 = lookUnit.scale(0.45D)
+                .add(right.scale(0.16D * armSign))
+                .add(0.0D, 0.02D, 0.0D);
+
+        int n = pts.size();
+        if (n == 1) {
+            pts.set(0, pts.get(0).add(delta0));
+            return;
+        }
+
+        // Decay curve: weight = (1 - t)^2
+        // - First point gets ~full offset (depth)
+        // - Last point gets 0 offset (exact impact)
+        for (int i = 0; i < n; i++) {
+            double t = (double) i / (double) (n - 1);
+            double w = 1.0D - t;
+            w = w * w; // square for a smoother decay
+
+            if (w <= 0.0D) continue;
+            pts.set(i, pts.get(i).add(delta0.scale(w)));
+        }
     }
 
     private static HitResult clipFirst(ClientLevel level, LocalPlayer player, Vec3 from, Vec3 to) {

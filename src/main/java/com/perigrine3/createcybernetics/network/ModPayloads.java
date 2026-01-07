@@ -8,6 +8,7 @@ import com.perigrine3.createcybernetics.effect.*;
 import com.perigrine3.createcybernetics.network.handler.*;
 import com.perigrine3.createcybernetics.network.payload.*;
 import com.perigrine3.createcybernetics.util.ModTags;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -118,6 +119,37 @@ public final class ModPayloads {
                 ArmCannonFirePayload.STREAM_CODEC,
                 ArmCannonFireHandler::handle
         );
+
+        r.playToServer(
+                SetChipwareShardPayload.TYPE,
+                SetChipwareShardPayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> {
+                    if (!(ctx.player() instanceof ServerPlayer sp)) return;
+
+                    PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
+                    if (data == null) return;
+                    int slot = payload.slot();
+                    ItemStack stack = payload.stack();
+                    if (slot < 0 || slot >= PlayerCyberwareData.CHIPWARE_SLOT_COUNT) return;
+                    data.setChipwareStack(slot, stack);
+
+                    data.setDirty();
+                    sp.syncData(ModAttachments.CYBERWARE);
+                })
+        );
+
+        r.playToServer(
+                OpenChipwareMiniPayload.TYPE,
+                OpenChipwareMiniPayload.STREAM_CODEC,
+                OpenChipwareMiniHandler::handle
+        );
+
+        r.playToClient(
+                CerebralShutdownStatePayload.TYPE,
+                CerebralShutdownStatePayload.STREAM_CODEC,
+                CerebralShutdownStatePayload::handle
+        );
+
 
 
         /* ---------------- TOGGLE WHEEL PAYLOADS ---------------- */

@@ -56,8 +56,7 @@ public final class CyberElytraRenderLayer extends RenderLayer<AbstractClientPlay
 
         VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(tex));
         this.cyberElytraModel.renderToBuffer(
-                poseStack, vc, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF
-        );
+                poseStack, vc, packedLight, OverlayTexture.NO_OVERLAY, 0x999999);
 
         poseStack.popPose();
     }

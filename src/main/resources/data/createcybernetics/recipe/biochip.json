@@ -1,0 +1,38 @@
+{
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumsheet"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "I": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "C": {
+      "tag": "createcybernetics:data_shards"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    }
+  },
+
+  "pattern": [
+    "ISCSI",
+    " TST ",
+    "RTGTR",
+    " TST ",
+    "  TT "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:data_shard_biochip"
+  }
+}
