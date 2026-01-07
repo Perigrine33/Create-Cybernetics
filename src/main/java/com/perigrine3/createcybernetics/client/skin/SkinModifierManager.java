@@ -108,6 +108,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/synthskin_wide.png");
     private static final ResourceLocation NETHERPLATED_SKIN_TEXTURE_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/isothermal_skin_wide.png");
+    private static final ResourceLocation METALPLATED_SKIN_TEXTURE_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/metal_plating_wide.png");
 
 //SLIM VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_SLIM =
@@ -120,6 +122,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/synthskin_slim.png");
     private static final ResourceLocation NETHERPLATED_SKIN_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/isothermal_skin_slim.png");
+    private static final ResourceLocation METALPLATED_SKIN_TEXTURE_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/metal_plating_slim.png");
 
 
     public static SkinModifierState getPlayerSkinState(AbstractClientPlayer player) {
@@ -162,6 +166,20 @@ public class SkinModifierManager {
             }
                 state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM,
                         tint, false, EnumSet.noneOf(SkinModifier.HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), true));
+            return state;
+        }
+// METAL PLATING
+        if (data.hasSpecificItem(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
+            state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(FULLBODYCONVERSION_TEXTURE_WIDE, FULLBODYCONVERSION_TEXTURE_SLIM));
+            if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
+                state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE));
+            }
+                state.addModifier(new SkinModifier(METALPLATED_SKIN_TEXTURE_WIDE, METALPLATED_SKIN_TEXTURE_SLIM,
+                        0xFFFFFFFF, true));
             return state;
         }
 // POLAR BEAR FUR
@@ -223,9 +241,6 @@ public class SkinModifierManager {
                     0xFFFFFFFF, true);
         }
 
-
-
-        
         return state;
     }
 }
