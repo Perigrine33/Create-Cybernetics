@@ -26,7 +26,7 @@ public class ModEffects {
                         .addAttributeModifier(Attributes.MOVEMENT_SPEED,
                                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "neuropozyne_speed"), 0.001D,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        public static final Holder<MobEffect> EMP = MOB_EFFECTS.register("emp",
+        public static final Holder<MobEffect> EMP = MOB_EFFECTS.register("emp_effect",
                 () -> new EmpEffect()
                         .addAttributeModifier(Attributes.MOVEMENT_SPEED,
                                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "emp_speed"), 0.0D,

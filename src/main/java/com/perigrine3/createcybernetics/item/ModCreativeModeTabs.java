@@ -37,6 +37,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.EYEUPGRADEBASE);
                         output.accept(ModItems.TITANIUM_HAND);
                         output.accept(ModItems.FACEPLATE);
+                        output.accept(ModItems.EMP_GRENADE);
 
                         output.accept(ModItems.MUSIC_DISC_CYBERPSYCHO);
                         output.accept(ModItems.MUSIC_DISC_NEON_OVERLORDS);

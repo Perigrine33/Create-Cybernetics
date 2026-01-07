@@ -54,6 +54,48 @@ public final class EnergyController {
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
+        // ================================================================
+
+        if (hasEmpEffect(player)) {
+            data.setEnergyStored(player, 0);
+
+            for (var entry : data.getAll().entrySet()) {
+                CyberwareSlot slot = entry.getKey();
+                InstalledCyberware[] arr = entry.getValue();
+                if (arr == null) continue;
+                for (int idx = 0; idx < arr.length; idx++) {
+                    InstalledCyberware cw = arr[idx];
+                    if (cw == null) continue;
+                    ItemStack stack = cw.getItem();
+                    if (stack == null || stack.isEmpty()) {
+                        cw.setPowered(false);
+                        continue;
+                    }
+                    if (stack.getItem() instanceof ICyberwareItem item) {
+                        String paidKey = item.getActivationPaidNbtKey(player, stack, slot);
+                        if (paidKey != null && !paidKey.isBlank()) {
+                            String persistentKey = buildActivationPersistentKey(paidKey, slot, idx);
+                            player.getPersistentData().remove(persistentKey);
+                        }
+                    }
+
+                    cw.setPowered(false);
+                }
+            }
+
+            final boolean debug = player.getTags().contains(DEBUG_TAG);
+            if (debug) {
+                TickStats stats = new TickStats();
+                stats.capacityTotal = data.getTotalEnergyCapacity(player);
+                stats.storedEnd = readStoredEnergySafe(data);
+                maybeSendDebug(player, stats);
+            }
+
+            return;
+        }
+
+        // ================================================================
+
         data.clampEnergyToCapacity(player);
 
         final boolean debug = player.getTags().contains(DEBUG_TAG);

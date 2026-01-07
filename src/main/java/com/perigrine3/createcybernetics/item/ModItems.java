@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.entity.ModEntities;
 import com.perigrine3.createcybernetics.item.cyberware.*;
 import com.perigrine3.createcybernetics.item.cyberware.upgrade_items.*;
+import com.perigrine3.createcybernetics.item.generic.EmpGrenadeItem;
 import com.perigrine3.createcybernetics.item.generic.NeuropozyneAutoinjector;
 import com.perigrine3.createcybernetics.item.generic.XPCapsuleItem;
 import com.perigrine3.createcybernetics.item.organs.*;
@@ -53,6 +54,8 @@ public class ModItems {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legendarycomponent_tooltip"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
+    public static final DeferredItem<Item> EMP_GRENADE = ITEMS.register("emp_grenade",
+            () -> new EmpGrenadeItem(new Item.Properties()));
     public static final DeferredItem<Item> DATURA_FLOWER = ITEMS.register("datura_flower",
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> DATURA_SEED_POD = ITEMS.register("datura_seed_pod",

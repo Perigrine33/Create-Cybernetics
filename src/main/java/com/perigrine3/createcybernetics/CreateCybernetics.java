@@ -14,6 +14,7 @@ import com.perigrine3.createcybernetics.entity.client.*;
 import com.perigrine3.createcybernetics.item.ModCreativeModeTabs;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.loot.ModLootModifiers;
+import com.perigrine3.createcybernetics.particle.ModParticles;
 import com.perigrine3.createcybernetics.potion.ModPotions;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
 import com.perigrine3.createcybernetics.screen.custom.ArmCannonScreen;
@@ -22,7 +23,7 @@ import com.perigrine3.createcybernetics.screen.custom.RobosurgeonScreen;
 import com.perigrine3.createcybernetics.screen.custom.SpinalInjectorScreen;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -75,6 +76,7 @@ public class CreateCybernetics {
         ModMenuTypes.register(eventBus);
         ModEnchantmentEffects.register(eventBus);
         ModPotions.register(eventBus);
+        ModParticles.register(eventBus);
 
         ModLootModifiers.register(eventBus);
         ModCriteria.register(eventBus);
@@ -125,6 +127,7 @@ public class CreateCybernetics {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             EntityRenderers.register(ModEntities.NUGGET_PROJECTILE.get(), NuggetProjectileRenderer::new);
+            EntityRenderers.register(ModEntities.EMP_GRENADE_PROJECTILE.get(), ThrownItemRenderer::new);
 
             EntityRenderers.register(ModEntities.SMASHER.get(), SmasherRenderer::new);
             EntityRenderers.register(ModEntities.CYBERZOMBIE.get(), CyberzombieRenderer::new);

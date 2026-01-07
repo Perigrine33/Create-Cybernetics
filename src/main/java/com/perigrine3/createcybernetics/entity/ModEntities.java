@@ -2,12 +2,12 @@ package com.perigrine3.createcybernetics.entity;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.entity.custom.*;
+import com.perigrine3.createcybernetics.entity.projectile.EmpGrenadeProjectile;
 import com.perigrine3.createcybernetics.entity.projectile.NuggetProjectile;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -24,6 +24,9 @@ public class ModEntities {
     public static final Supplier<EntityType<NuggetProjectile>> NUGGET_PROJECTILE =
             ENTITY_TYPES.register("nugget_projectile", () -> EntityType.Builder.<NuggetProjectile>of(NuggetProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(10).build("nugget_projectile"));
+    public static final Supplier<EntityType<EmpGrenadeProjectile>> EMP_GRENADE_PROJECTILE =
+            ENTITY_TYPES.register("emp_grenade_projectile", () -> EntityType.Builder.<EmpGrenadeProjectile>of(EmpGrenadeProjectile::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f).clientTrackingRange(8).updateInterval(10).build("emp_grenade_projectile"));
 
 
 

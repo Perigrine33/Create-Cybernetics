@@ -11,6 +11,7 @@
   "item.createcybernetics.empty_autoinjector": "Empty Autoinjector",
   "item.createcybernetics.expcapsule": "Cortical Stack Capsule",
   "item.createcybernetics.faceplate": "Faceplate",
+  "item.createcybernetics.emp_grenade": "EMP Grenade",
   "item.createcybernetics.netherite_qpu": "Netherite Quantum Processor",
   "item.createcybernetics.datura_flower": "Datura Flower",
   "item.createcybernetics.datura_seed_pod": "Datura Seed Pod",
@@ -292,6 +293,7 @@
   "item.minecraft.lingering_potion.effect.neuropozyne_potion": "Lingering Potion of Neuropozyne",
 
   "effect.createcybernetics.neuropozyne": "Neuropozyne",
+  "effect.createcybernetics.emp_effect": "EMP",
   "effect.createcybernetics.cyberware_rejection": "Cyberware Rejection",
   "effect.createcybernetics.synthetic_setules_effect": "Synthetic Setules",
   "effect.createcybernetics.aerostasis_gyrobladder_effect": "Aerostasis Gyrobladder",
