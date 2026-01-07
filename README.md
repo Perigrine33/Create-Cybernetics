@@ -6,5 +6,3 @@ This mod adds Cybernetic technology to Minecraft! Based on the 1.10.2 mod, Cyber
 
 Additional Resources: 
 ==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
