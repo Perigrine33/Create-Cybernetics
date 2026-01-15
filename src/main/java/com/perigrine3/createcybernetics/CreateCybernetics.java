@@ -14,7 +14,6 @@ import com.perigrine3.createcybernetics.entity.client.*;
 import com.perigrine3.createcybernetics.item.ModCreativeModeTabs;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.loot.ModLootModifiers;
-import com.perigrine3.createcybernetics.particle.ModParticles;
 import com.perigrine3.createcybernetics.potion.ModPotions;
 import com.perigrine3.createcybernetics.recipe.ModRecipeSerializers;
 import com.perigrine3.createcybernetics.recipe.ModRecipes;
@@ -75,7 +74,6 @@ public class CreateCybernetics {
         ModMenuTypes.register(eventBus);
         ModEnchantmentEffects.register(eventBus);
         ModPotions.register(eventBus);
-        ModParticles.register(eventBus);
 
         ModLootModifiers.register(eventBus);
         ModCriteria.register(eventBus);
