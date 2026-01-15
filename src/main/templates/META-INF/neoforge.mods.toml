@@ -87,18 +87,10 @@ config="createcybernetics.mixins.json"
     ordering="NONE"
     side="CLIENT"
 
-
 [[dependencies.${mod_id}]]
     modId="farmersdelight"
     type="optional"
     versionRange="[1.2.9,]"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.${mod_id}]]
-    modId="xaerominimap"
-    type="optional"
-    versionRange="[0,)"
     ordering="NONE"
     side="BOTH"
 

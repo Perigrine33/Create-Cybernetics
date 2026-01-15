@@ -971,8 +971,8 @@ public class ModItems {
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_cyberbrain.tooltip1"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_cyberbrain.tooltip2"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_cyberbrain.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_cyberbrain.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
@@ -986,8 +986,8 @@ public class ModItems {
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip1"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_eyeofdefender.tooltip2"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_eyeofdefender.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_eyeofdefender.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));

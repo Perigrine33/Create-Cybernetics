@@ -8,7 +8,6 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.neoforged.neoforge.common.world.BiomeModifier;
@@ -35,11 +34,11 @@ public class ModBiomeModifiers {
 
         context.register(SPAWN_CYBERZOMBIE, new BiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.CYBERZOMBIE.get(), 5, 1, 3))));
+                List.of(new MobSpawnSettings.SpawnerData(ModEntities.CYBERZOMBIE.get(), 10, 1, 3))));
 
         context.register(SPAWN_CYBERSKELETON, new BiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.CYBERSKELETON.get(), 5, 1, 3))));
+                List.of(new MobSpawnSettings.SpawnerData(ModEntities.CYBERSKELETON.get(), 10, 1, 3))));
     }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {

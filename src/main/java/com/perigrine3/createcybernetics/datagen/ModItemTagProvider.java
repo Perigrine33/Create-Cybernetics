@@ -145,18 +145,15 @@ public class ModItemTagProvider extends ItemTagsProvider {
             tag(ModTags.Items.CYBERWARE_ITEM)
                     .add(ModItems.SKINUPGRADES_SWEAT.get());
         }
-
         if (ModItems.EYEUPGRADES_NAVIGATIONCHIP != null) {
             tag(ModTags.Items.CYBERWARE_ITEM)
                     .add(ModItems.EYEUPGRADES_NAVIGATIONCHIP.get());
         }
-
         if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
             tag(ModTags.Items.CYBERWARE_ITEM)
                     .add(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get())
                     .add(ModItems.BRAINUPGRADES_CORTICALSTACK.get());
         }
-
         if (ModItems.BONEUPGRADES_ELYTRA != null) {
             tag(ModTags.Items.CYBERWARE_ITEM)
                     .add(ModItems.BONEUPGRADES_ELYTRA.get());
@@ -470,7 +467,6 @@ public class ModItemTagProvider extends ItemTagsProvider {
         if (ModItems.SCAVENGED_ELYTRA != null) {
             tag(ModTags.Items.SCAVENGED_CYBERWARE)
                     .add(ModItems.SCAVENGED_ELYTRA.get());
-
         }
 
 
@@ -493,6 +489,10 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
                 .add(ModItems.BODYPART_SKIN.get());
+        if (ModItems.SKINUPGRADES_SWEAT != null) {
+            tag(ModTags.Items.SKIN_ITEMS)
+                    .add(ModItems.SKINUPGRADES_SWEAT.get());
+        }
 
         tag(ModTags.Items.MUSCLE_ITEMS)
                 .add(ModItems.WETWARE_RAVAGERTENDONS.get())

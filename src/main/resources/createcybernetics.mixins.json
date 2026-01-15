@@ -2,23 +2,23 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.perigrine3.createcybernetics.mixin",
-  "refmap": "createcybernetics.refmap.json",
   "mixins": [
     "AbstractContainerMenuAccessor",
     "AbstractContainerMenuInvoker",
     "InventoryMenuChipwareSlotsMixin",
-    "VillagerHostilesSensorMixin",
+    "PlayerSprintWhileCrouchingMixin",
     "ProjectileInaccuracyMixin",
-    "PlayerSprintWhileCrouchingMixin"
+    "RaidMixin",
+    "VillagerHostilesSensorMixin"
   ],
   "client": [
     "PlayerEyeHeightMixin",
     "client.AbstractContainerScreenAccessor",
-    "client.InventoryScreenChipwareSlotsMixin",
+    "client.CraftingResultCountMixin",
     "client.CreativeModeInventoryChipwareButtonMixin",
     "client.CreativeSlotWrapperHideChipwareMixin",
-    "client.ScreenInvoker",
-    "client.CraftingResultCountMixin"
+    "client.InventoryScreenChipwareSlotsMixin",
+    "client.ScreenInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

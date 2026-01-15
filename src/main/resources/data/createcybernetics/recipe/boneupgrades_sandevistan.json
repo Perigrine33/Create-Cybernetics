@@ -1,7 +1,7 @@
 {
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
-
   "key": {
     "P": {
       "item": "createcybernetics:component_plating"
@@ -18,7 +18,6 @@
       "item": "minecraft:gold_nugget"
     }
   },
-
   "pattern": [
     " NTP ",
     "NGTE ",
@@ -26,8 +25,8 @@
     "NGTE ",
     " NTP "
   ],
-
   "result": {
     "count": 1,
     "id": "createcybernetics:boneupgrades_sandevistan"
+  }
 }

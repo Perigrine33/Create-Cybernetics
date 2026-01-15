@@ -1,4 +1,5 @@
 {
+  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
   "key": {
