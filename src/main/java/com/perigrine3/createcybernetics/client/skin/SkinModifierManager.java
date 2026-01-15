@@ -80,10 +80,22 @@ public class SkinModifierManager {
 //INTERCHANGEABLES
     private static final ResourceLocation MISSING_SKIN_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/playermuscles_wide.png");
+    private static final ResourceLocation CYBEREYES_PRIMARY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/cybereyes_dye_primary.png");
+    private static final ResourceLocation CYBEREYES_SECONDARYY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/cybereyes_dye_secondary.png");
     private static final ResourceLocation RIGHT_CYBERLEG_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberleg.png");
+    private static final ResourceLocation RIGHT_CYBERLEG_PRIMARY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberleg_dye_primary.png");
+    private static final ResourceLocation RIGHT_CYBERLEG_SECONDARY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberleg_dye_secondary.png");
     private static final ResourceLocation LEFT_CYBERLEG_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberleg.png");
+    private static final ResourceLocation LEFT_CYBERLEG_PRIMARY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberleg_dye_primary.png");
+    private static final ResourceLocation LEFT_CYBERLEG_SECONDARY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberleg_dye_secondary.png");
     private static final ResourceLocation FULL_BODY_HIGHLIGHT_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/full_body_highlight.png");
     private static final ResourceLocation POLAR_BEAR_FUR_TEXTURE =
@@ -100,8 +112,16 @@ public class SkinModifierManager {
 //WIDE VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_wide.png");
+    private static final ResourceLocation LEFT_CYBERARM_PRIMARY_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_dye_primary_wide.png");
+    private static final ResourceLocation LEFT_CYBERARM_SECONDARY_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_dye_secondary_wide.png");
     private static final ResourceLocation RIGHT_CYBERARM_TEXTURE_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_wide.png");
+    private static final ResourceLocation RIGHT_CYBERARM_PRIMARY_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_dye_primary_wide.png");
+    private static final ResourceLocation RIGHT_CYBERARM_SECONDARY_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_dye_secondary_wide.png");
     private static final ResourceLocation FULLBODYCONVERSION_TEXTURE_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/full_body_conversion_wide.png");
     private static final ResourceLocation SYNTHSKIN_TEXTURE_WIDE =
@@ -112,8 +132,16 @@ public class SkinModifierManager {
 //SLIM VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_slim.png");
+    private static final ResourceLocation LEFT_CYBERARM_PRIMARY_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_dye_primary_slim.png");
+    private static final ResourceLocation LEFT_CYBERARM_SECONDARY_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_dye_secondary_slim.png");
     private static final ResourceLocation RIGHT_CYBERARM_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_slim.png");
+    private static final ResourceLocation RIGHT_CYBERARM_PRIMARY_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_dye_primary_slim.png");
+    private static final ResourceLocation RIGHT_CYBERARM_SECONDARY_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_dye_secondary_slim.png");
     private static final ResourceLocation FULLBODYCONVERSION_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/full_body_conversion_slim.png");
     private static final ResourceLocation SYNTHSKIN_TEXTURE_SLIM =
@@ -133,7 +161,16 @@ public class SkinModifierManager {
         state.clearModifiers();
 
 
-
+// CYBEREYES
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
+            if (data.isDyed(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
+                int tint = data.dyeColor(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES);
+                state.addModifier(new SkinModifier(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
+                        tint, true));
+                state.addHighlight(new SkinHighlight(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
+                        tint, false));
+            }
+        }
 // NETHERITE PLATING
         if (data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN)) {
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
@@ -178,21 +215,45 @@ public class SkinModifierManager {
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
             state.addModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE,
                     0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+
+            if (data.isDyed(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
+                int tint = data.dyeColor(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
+                state.addModifier(new SkinModifier(LEFT_CYBERLEG_PRIMARY, LEFT_CYBERLEG_PRIMARY,
+                        tint, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+            }
         }
 // RIGHT CYBERLEG
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
             state.addModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE,
                     0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+
+            if (data.isDyed(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
+                int tint = data.dyeColor(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
+                state.addModifier(new SkinModifier(RIGHT_CYBERLEG_PRIMARY, RIGHT_CYBERLEG_PRIMARY,
+                        tint, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+            }
         }
 // LEFT CYBERARM
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM)) {
             state.addModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM,
                     0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE), EnumSet.of(HumanoidArm.LEFT)));
+
+            if (data.isDyed(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM)) {
+                int tint = data.dyeColor(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM);
+                state.addModifier(new SkinModifier(LEFT_CYBERARM_PRIMARY_WIDE, LEFT_CYBERARM_PRIMARY_SLIM,
+                        tint, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+            }
         }
 // RIGHT CYBERARM
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM)) {
             state.addModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM,
                     0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE), EnumSet.of(HumanoidArm.RIGHT)));
+
+            if (data.isDyed(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM)) {
+                int tint = data.dyeColor(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM);
+                state.addModifier(new SkinModifier(RIGHT_CYBERARM_PRIMARY_WIDE, RIGHT_CYBERARM_PRIMARY_SLIM,
+                        tint, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+            }
         }
 // SPINAL INJECTOR
         if (data.hasSpecificItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get(), CyberwareSlot.BONE)) {
