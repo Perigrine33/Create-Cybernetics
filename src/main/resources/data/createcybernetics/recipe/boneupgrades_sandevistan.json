@@ -1,14 +1,4 @@
 {
-  "neoforge:conditions": [
-    {
-      "type": "neoforge:not",
-      "value": {
-        "type": "neoforge:mod_loaded",
-        "modid": "create"
-      }
-    }
-  ],
-  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
@@ -20,7 +10,6 @@
       "item": "createcybernetics:titaniumsheet"
     },
     "E": {
-      "item": "createcybernetics:component_led"
     },
     "N": {
       "item": "createcybernetics:component_synthnerves"
@@ -41,5 +30,4 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:boneupgrades_sandevistan"
-  }
 }

@@ -1,10 +1,8 @@
 {
-  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
 
   "key": {
-    "T": {
       "item": "createcybernetics:titaniumnugget"
     },
     "N": {
@@ -26,5 +24,4 @@
   "result": {
     "count": 1,
     "id": "createcybernetics:skinupgrades_syntheticsetules"
-  }
 }

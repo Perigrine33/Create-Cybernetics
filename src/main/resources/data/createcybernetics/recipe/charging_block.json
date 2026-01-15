@@ -1,8 +1,6 @@
 {
-  "type": "createcybernetics:engineering_table",
   "accept_mirrored": true,
   "category": "misc",
-
   "key": {
     "W": {
       "item": "createcybernetics:component_wiring"
@@ -17,7 +15,6 @@
       "item": "minecraft:redstone_block"
     }
   },
-
   "pattern": [
     "GTGTG",
     "TWWWT",
@@ -25,7 +22,6 @@
     "TWWWT",
     "GTGTG"
   ],
-
   "result": {
     "count": 1,
     "id": "createcybernetics:charging_block"
