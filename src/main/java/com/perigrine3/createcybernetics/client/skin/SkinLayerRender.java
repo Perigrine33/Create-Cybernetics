@@ -3,6 +3,7 @@ package com.perigrine3.createcybernetics.client.skin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.compat.bettercombat.BetterCombatCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -115,6 +116,7 @@ public final class SkinLayerRender {
 
         @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
         public static void onRenderArmCancel(RenderArmEvent event) {
+            if (BetterCombatCompat.LOADED) return;
             AbstractClientPlayer player = event.getPlayer();
 
             SkinModifierState state = SkinModifierManager.getPlayerSkinState(player);

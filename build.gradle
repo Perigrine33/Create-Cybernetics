@@ -132,9 +132,16 @@ dependencies {
 
     localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:7.0.1+1.21.1"
     compileOnly  "com.illusivesoulworks.caelus:caelus-neoforge:7.0.1+1.21.1:api"
+
     implementation ("curse.maven:jei-238222:6589027")
+
     implementation ("curse.maven:farmers-delight-398521:6917256")
+
     implementation ("curse.maven:cold-sweat-506194:7316464")
+
+    implementation "curse.maven:better-combat-by-daedelus-639842:7348161"
+    implementation "curse.maven:playeranimator-658587:7389814"
+    implementation "curse.maven:cloth-config-348521:5729127"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

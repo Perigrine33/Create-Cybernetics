@@ -1,0 +1,7 @@
+{
+  "layer_type": "epicfight:model_original",
+  "target_layer": "com.perigrine3.createcybernetics.client.skin.epicfight.CcOverlaysRightArmLayer",
+  "joint": "RightArm",
+  "translation": [0.0, 0.0, 0.0],
+  "rotation": [0.0, 0.0, 0.0]
+}
