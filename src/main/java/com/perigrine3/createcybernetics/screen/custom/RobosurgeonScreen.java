@@ -280,9 +280,10 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         if (data == null) return;
 
         int humanity = calculatePreviewHumanity();
-        int maxHumanity = Math.max(100, humanity);
-
+        int maxHumanity = getConfiguredBaseHumanity();
+        maxHumanity = Math.max(1, maxHumanity);
         float percent = Math.max(0f, Math.min(1f, humanity / (float) maxHumanity));
+
 
         int x = leftPos + 10;
         int y = topPos + 30;
@@ -301,6 +302,10 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         gui.pose().scale(0.5f, 0.5f, 1f);
         gui.drawString(minecraft.font, "" + humanity, (int)(x * 2), (int)((y - 7) * 2), 0xFF34D5EB, false);
         gui.pose().popPose();
+    }
+
+    private int getConfiguredBaseHumanity() {
+        return com.perigrine3.createcybernetics.Config.HUMANITY.get();
     }
 
     private static final int NEUROPOZYNE_HUMANITY_PER_LEVEL = 25;

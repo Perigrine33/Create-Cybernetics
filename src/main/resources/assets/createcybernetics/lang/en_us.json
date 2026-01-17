@@ -1,4 +1,7 @@
 {
+  "createcybernetics.configuration.humanity": "Base Humanity Value",
+
+
   "item.createcybernetics.titaniumingot": "Titanium Ingot",
   "item.createcybernetics.rawtitanium": "Raw Titanium",
   "item.createcybernetics.crushedtitanium": "Crushed Titanium",

@@ -166,7 +166,7 @@ public class SkinModifierManager {
             if (data.isDyed(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
                 int tint = data.dyeColor(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES);
                 state.addModifier(new SkinModifier(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
-                        tint, true));
+                        tint, false));
                 state.addHighlight(new SkinHighlight(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
                         tint, false));
             }

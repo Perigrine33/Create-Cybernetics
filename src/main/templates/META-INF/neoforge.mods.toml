@@ -108,6 +108,12 @@ config="createcybernetics.mixins.json"
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.${mod_id}]]
+    modId="epicfight"
+    type="optional"
+    versionRange="*"
+    ordering="NONE"
+    side="CLIENT"
 
 # Here's another dependency
 [[dependencies.${mod_id}]]

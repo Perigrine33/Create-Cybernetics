@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.common.capabilities;
 
+import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
@@ -50,7 +51,7 @@ public class PlayerCyberwareData implements ICyberwareData {
             new EnumMap<>(CyberwareSlot.class);
 
     private boolean dirty = false;
-    private int humanity = 100;
+    private int humanity = ConfigValues.BASE_HUMANITY;
     private int humanityBonus = 0;
 
     private int energyStored = 0;
@@ -88,7 +89,19 @@ public class PlayerCyberwareData implements ICyberwareData {
 
         boolean[] en = enabled.get(slot);
         if (en != null && index >= 0 && index < en.length) {
-            en[index] = true;
+            boolean enabledByDefault = true;
+
+            if (cyberware != null) {
+                ItemStack st = cyberware.getItem();
+                if (st != null && !st.isEmpty() && st.getItem() instanceof ICyberwareItem cwItem) {
+                    // Wheel-toggleables should start DISABLED by default.
+                    if (cwItem.isToggleableByWheel(st, slot)) {
+                        enabledByDefault = false;
+                    }
+                }
+            }
+
+            en[index] = enabledByDefault;
         }
 
         dirty = true;
@@ -145,7 +158,7 @@ public class PlayerCyberwareData implements ICyberwareData {
     }
 
     public void recomputeHumanityBaseFromInstalled() {
-        int base = 100;
+        int base = ConfigValues.BASE_HUMANITY;
 
         for (var entry : slots.entrySet()) {
             InstalledCyberware[] arr = entry.getValue();
@@ -775,7 +788,7 @@ public class PlayerCyberwareData implements ICyberwareData {
         if (tag.contains(NBT_HUMANITY, Tag.TAG_INT)) {
             humanity = tag.getInt(NBT_HUMANITY);
         } else {
-            humanity = 100;
+            humanity = ConfigValues.BASE_HUMANITY;
             recomputeHumanityBaseFromInstalled();
         }
 
