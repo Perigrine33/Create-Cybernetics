@@ -84,6 +84,7 @@ public final class CyberwareDeathReset {
                 ItemStack effective = !installedStack.isEmpty() ? installedStack : def;
                 if (effective.isEmpty()) continue;
 
+                assert ModItems.BRAINUPGRADES_CORTICALSTACK != null;
                 if (effective.is(ModItems.BRAINUPGRADES_CORTICALSTACK.get())) {
                     if (hadCorticalStack && !capsuleDropped) {
                         String ownerName = player.getGameProfile().getName();
@@ -124,6 +125,7 @@ public final class CyberwareDeathReset {
                 ItemStack st = inst.getItem();
                 if (st == null || st.isEmpty()) continue;
 
+                assert ModItems.BRAINUPGRADES_CORTICALSTACK != null;
                 if (st.is(ModItems.BRAINUPGRADES_CORTICALSTACK.get())) {
                     return true;
                 }

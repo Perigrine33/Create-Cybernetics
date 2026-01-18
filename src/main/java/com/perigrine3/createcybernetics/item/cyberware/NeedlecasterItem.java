@@ -73,6 +73,7 @@ public class NeedlecasterItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        assert ModItems.BRAINUPGRADES_CORTICALSTACK != null;
         return Set.of(ModItems.BRAINUPGRADES_CORTICALSTACK.get());
     }
 
@@ -141,6 +142,7 @@ public class NeedlecasterItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return false;
 
+            assert ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null;
             return data.hasSpecificItem(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get(), CyberwareSlot.BRAIN);
         }
     }
