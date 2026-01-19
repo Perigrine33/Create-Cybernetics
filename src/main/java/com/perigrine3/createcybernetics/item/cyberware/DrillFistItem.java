@@ -51,10 +51,10 @@ public class DrillFistItem extends Item implements ICyberwareItem {
     @Override public int getHumanityCost() { return humanityCost; }
 
     @Override
-    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+    public Set<Item> requiresCyberware(ItemStack installedStack, CyberwareSlot slot) {
         return switch (slot) {
-            case RARM -> Set.of(ModTags.Items.RIGHTARM_ITEMS);
-            case LARM -> Set.of(ModTags.Items.LEFTARM_ITEMS);
+            case RARM -> Set.of(ModItems.BASECYBERWARE_RIGHTARM.get());
+            case LARM -> Set.of(ModItems.BASECYBERWARE_LEFTARM.get());
             default -> Set.of();
         };
     }

@@ -1,0 +1,14 @@
+{
+  "type": "create:haunting",
+  "ingredients": [
+    {
+      "item": "createcybernetics:bodypart_lungs"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:rotten_flesh"
+    }
+  ],
+  "processingTime": 100
+}

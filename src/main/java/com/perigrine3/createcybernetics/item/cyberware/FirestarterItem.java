@@ -6,11 +6,13 @@ import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -56,6 +58,15 @@ public class FirestarterItem extends Item implements ICyberwareItem {
     @Override
     public int getHumanityCost() {
         return humanityCost;
+    }
+
+    @Override
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+        return switch (slot) {
+            case RLEG -> Set.of(ModTags.Items.RIGHTARM_ITEMS);
+            case LLEG -> Set.of(ModTags.Items.LEFTARM_ITEMS);
+            default -> Set.of();
+        };
     }
 
     @Override

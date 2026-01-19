@@ -31,6 +31,7 @@ public class ModTags {
         public static final TagKey<Item> HUMANOID_BODYPART_DROPS = createTag("humanoid_bodypart_drops");
         public static final TagKey<Item> GRASSFED_BODYPART_DROPS = createTag("grassfed_bodypart_drops");
         public static final TagKey<Item> FISH_BODYPART_DROPS = createTag("fish_bodypart_drops");
+        public static final TagKey<Item> OFFAL = createTag("offal");
 
         public static final TagKey<Item> BODY_PARTS = createTag("body_parts");
         public static final TagKey<Item> BASE_CYBERWARE = createTag("base_cyberware");

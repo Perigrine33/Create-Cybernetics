@@ -7,8 +7,12 @@
     "createcybernetics:skinupgrades_chromatophores",
     "createcybernetics:brainupgrades_idem",
     "createcybernetics:brainupgrades_matrix",
-    "createcybernetics:boneupgrades_sandevistan",
     "createcybernetics:boneupgrades_spinalinjector",
-    "createcybernetics:boneupgrades_elytra"
+    "createcybernetics:boneupgrades_sandevistan",
+    "createcybernetics:armupgrades_armcannon",
+    {
+      "id": "createcybernetics:boneupgrades_elytra",
+      "required": false
+    }
   ]
 }

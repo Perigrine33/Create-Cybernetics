@@ -1,0 +1,14 @@
+{
+  "type": "create:haunting",
+  "ingredients": [
+    {
+      "item": "createcybernetics:bodypart_liver"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:rotten_flesh"
+    }
+  ],
+  "processingTime": 100
+}

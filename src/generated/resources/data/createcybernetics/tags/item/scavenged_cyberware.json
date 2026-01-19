@@ -68,7 +68,25 @@
     "createcybernetics:scavenged_metalplating",
     "createcybernetics:scavenged_synthmuscle",
     "createcybernetics:scavenged_wiredreflexes",
-    "createcybernetics:scavenged_sweat",
-    "createcybernetics:scavenged_elytra"
+    {
+      "id": "createcybernetics:scavenged_elytra",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:scavenged_navigationchip",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:scavenged_consciousnesstransmitter",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:scavenged_corticalstack",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:scavenged_sweat",
+      "required": false
+    }
   ]
 }

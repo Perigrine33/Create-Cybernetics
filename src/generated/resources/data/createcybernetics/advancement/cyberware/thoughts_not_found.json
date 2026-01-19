@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "thoughts_not_found": {
+      "trigger": "createcybernetics:snikt"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Experienced systemwide failure due to being unable to power your brain",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:brainupgrades_cyberbrain"
+    },
+    "title": "404: Thoughts Not Found"
+  },
+  "requirements": [
+    [
+      "thoughts_not_found"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

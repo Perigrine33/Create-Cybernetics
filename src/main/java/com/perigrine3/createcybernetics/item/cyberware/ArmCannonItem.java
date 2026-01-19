@@ -18,6 +18,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
@@ -69,6 +70,16 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
     }
 
     @Override public int getHumanityCost() { return humanityCost; }
+
+    @Override
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+        return switch (slot) {
+            case RLEG -> Set.of(ModTags.Items.RIGHTARM_ITEMS);
+            case LLEG -> Set.of(ModTags.Items.LEFTARM_ITEMS);
+            default -> Set.of();
+        };
+    }
+
     @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.LARM); }
     @Override public boolean replacesOrgan() { return false; }
     @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }

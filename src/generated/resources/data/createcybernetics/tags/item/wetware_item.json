@@ -26,6 +26,9 @@
     "createcybernetics:wetware_ravagertendons",
     "createcybernetics:wetware_grassfedstomach",
     "createcybernetics:wetware_spinnerette",
-    "createcybernetics:wetware_blubber"
+    {
+      "id": "createcybernetics:wetware_blubber",
+      "required": false
+    }
   ]
 }

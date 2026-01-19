@@ -9,8 +9,10 @@ import com.perigrine3.createcybernetics.client.model.AttachmentAnchor;
 import com.perigrine3.createcybernetics.client.model.PlayerAttachmentManager;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -64,6 +66,15 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
     @Override
     public Set<CyberwareSlot> getSupportedSlots() {
         return Set.of(CyberwareSlot.LARM, CyberwareSlot.RARM);
+    }
+
+    @Override
+    public Set<Item> requiresCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return switch (slot) {
+            case RARM -> Set.of(ModItems.BASECYBERWARE_RIGHTARM.get());
+            case LARM -> Set.of(ModItems.BASECYBERWARE_LEFTARM.get());
+            default -> Set.of();
+        };
     }
 
     @Override

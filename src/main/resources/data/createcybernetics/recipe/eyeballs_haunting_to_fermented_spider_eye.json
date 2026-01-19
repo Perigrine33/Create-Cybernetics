@@ -1,0 +1,14 @@
+{
+  "type": "create:haunting",
+  "ingredients": [
+    {
+      "item": "createcybernetics:bodypart_eyeballs"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:fermented_spider_eye"
+    }
+  ],
+  "processingTime": 100
+}

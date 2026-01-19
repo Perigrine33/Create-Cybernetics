@@ -8,11 +8,13 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.network.payload.OpenExpandedInventoryPayload;
 import com.perigrine3.createcybernetics.screen.custom.ExpandedInventoryScreen;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -57,6 +59,15 @@ public class CraftingHandsItem extends Item implements ICyberwareItem {
     @Override
     public int getHumanityCost() {
         return humanityCost;
+    }
+
+    @Override
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+        return switch (slot) {
+            case RLEG -> Set.of(ModTags.Items.RIGHTARM_ITEMS);
+            case LLEG -> Set.of(ModTags.Items.LEFTARM_ITEMS);
+            default -> Set.of();
+        };
     }
 
     @Override

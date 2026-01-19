@@ -68,9 +68,25 @@
     "createcybernetics:skinupgrades_metalplating",
     "createcybernetics:muscleupgrades_synthmuscle",
     "createcybernetics:muscleupgrades_wiredreflexes",
-    "createcybernetics:skinupgrades_sweat",
-    "createcybernetics:brainupgrades_consciousnesstransmitter",
-    "createcybernetics:brainupgrades_corticalstack",
-    "createcybernetics:boneupgrades_elytra"
+    {
+      "id": "createcybernetics:boneupgrades_elytra",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:skinupgrades_sweat",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:eyeupgrades_navigationchip",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:brainupgrades_consciousnesstransmitter",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:brainupgrades_corticalstack",
+      "required": false
+    }
   ]
 }

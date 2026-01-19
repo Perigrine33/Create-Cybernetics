@@ -14,6 +14,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
@@ -207,6 +208,23 @@ public class ModItems {
 
 
 
+    public static final DeferredItem<Item> COOKED_BRAIN = ITEMS.register("cooked_brain",
+            () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.COOKED_BRAIN)));
+    public static final DeferredItem<Item> COOKED_LIVER = ITEMS.register("cooked_liver",
+            () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.COOKED_LIVER)));
+    public static final DeferredItem<Item> BONE_MARROW = ITEMS.register("bone_marrow",
+            () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.BONE_MARROW)));
+    public static final DeferredItem<Item> COOKED_HEART = ITEMS.register("cooked_heart",
+            () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.COOKED_HEART)));
+    public static final DeferredItem<Item> ANDOUILLE_SAUSAGE = registerIfLoaded("farmersdelight", "andouille_sausage",
+            () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.ANDOUILLE_SAUSAGE)));
+    public static final DeferredItem<Item> ROASTED_ANDOUILLE = registerIfLoaded("farmersdelight", "roasted_andouille",
+            () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.ROASTED_ANDOUILLE)));
+    public static final DeferredItem<Item> GROUND_OFFAL = registerIfLoaded("farmersdelight", "ground_offal",
+            () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.GROUND_OFFAL)));
+
+
+
 
 //BASIC COMPONENTS
     public static final DeferredItem<Item> COMPONENT_ACTUATOR = ITEMS.register("component_actuator",
@@ -341,7 +359,7 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> BODYPART_BRAIN = ITEMS.register("bodypart_brain",
-            () -> new BrainItem(new Item.Properties().stacksTo(16), 0) {
+            () -> new BrainItem(new Item.Properties().stacksTo(16).food(ModFoods.RAW_BRAIN), 0) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_tooltip"));
@@ -357,7 +375,7 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> BODYPART_HEART = ITEMS.register("bodypart_heart",
-            () -> new HeartItem(new Item.Properties().stacksTo(16), 0) {
+            () -> new HeartItem(new Item.Properties().stacksTo(16).food(ModFoods.RAW_HEART), 0) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_tooltip"));
@@ -373,7 +391,7 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> BODYPART_LIVER = ITEMS.register("bodypart_liver",
-            () -> new LiverItem(new Item.Properties().stacksTo(16), 0) {
+            () -> new LiverItem(new Item.Properties().stacksTo(16).food(ModFoods.RAW_LIVER), 0) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.wetware_tooltip"));
@@ -652,7 +670,6 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_armcannon.tooltip1"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_armcannon.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
@@ -667,7 +684,6 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_flywheel.tooltip1"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_flywheel.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
@@ -697,7 +713,6 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_crafthands.tooltip1"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_crafthands.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
@@ -727,7 +742,6 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_firestarter.tooltip1"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_firestarter.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
@@ -757,7 +771,6 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_reinforcedknuckles.tooltip1"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_reinforcedknuckles.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
@@ -834,7 +847,6 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legupgrades_spurs.tooltip1"));
-                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legupgrades_spurs.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.legupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));

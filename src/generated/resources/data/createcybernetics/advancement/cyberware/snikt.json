@@ -1,6 +1,6 @@
 {
   "criteria": {
-    "kung_fu": {
+    "snikt": {
       "trigger": "createcybernetics:snikt"
     }
   },
@@ -15,7 +15,7 @@
   },
   "requirements": [
     [
-      "kung_fu"
+      "snikt"
     ]
   ],
   "sends_telemetry_event": true

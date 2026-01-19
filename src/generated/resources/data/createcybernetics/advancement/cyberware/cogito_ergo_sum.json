@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "cogito_ergo_sum": {
+      "trigger": "createcybernetics:snikt"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Installed A Cerebral Processing Unit And Abandoned Your Humanity",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:brainupgrades_cyberbrain"
+    },
+    "title": "Cogito Ergo Sum"
+  },
+  "requirements": [
+    [
+      "cogito_ergo_sum"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

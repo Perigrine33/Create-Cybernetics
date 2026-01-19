@@ -11,6 +11,9 @@
     "createcybernetics:skinupgrades_subdermalspikes",
     "createcybernetics:skinupgrades_syntheticsetules",
     "createcybernetics:skinupgrades_metalplating",
-    "createcybernetics:skinupgrades_sweat"
+    {
+      "id": "createcybernetics:skinupgrades_sweat",
+      "required": false
+    }
   ]
 }

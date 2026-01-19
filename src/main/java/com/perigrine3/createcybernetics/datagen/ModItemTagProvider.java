@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -18,6 +19,10 @@ import java.util.concurrent.CompletableFuture;
 public class ModItemTagProvider extends ItemTagsProvider {
     public ModItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, blockTags, CreateCybernetics.MODID, existingFileHelper);
+    }
+
+    private static ResourceLocation resourceLocation(String id) {
+        return ResourceLocation.parse(id);
     }
 
     @Override
@@ -33,12 +38,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_MATRIX.get())
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
                 .add(ModItems.BONEUPGRADES_SANDEVISTAN.get())
-                .add(ModItems.ARMUPGRADES_ARMCANNON.get());
-
-        if (ModItems.BONEUPGRADES_ELYTRA != null) {
-            tag(ModTags.Items.TOGGLEABLE_CYBERWARE)
-                    .add(ModItems.BONEUPGRADES_ELYTRA.get());
-        }
+                .add(ModItems.ARMUPGRADES_ARMCANNON.get())
+                .addOptional(resourceLocation("createcybernetics:boneupgrades_elytra"));
 
 //ARM CANNON AMMO
         tag(ModTags.Items.ARM_CANNON_AMMO)
@@ -139,26 +140,12 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SYNTHETICSETULES.get())
                 .add(ModItems.SKINUPGRADES_METALPLATING.get())
                 .add(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get())
-                .add(ModItems.MUSCLEUPGRADES_WIREDREFLEXES.get());
-
-        if (ModItems.SKINUPGRADES_SWEAT != null) {
-            tag(ModTags.Items.CYBERWARE_ITEM)
-                    .add(ModItems.SKINUPGRADES_SWEAT.get());
-        }
-        if (ModItems.EYEUPGRADES_NAVIGATIONCHIP != null) {
-            tag(ModTags.Items.CYBERWARE_ITEM)
-                    .add(ModItems.EYEUPGRADES_NAVIGATIONCHIP.get());
-        }
-        if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
-            tag(ModTags.Items.CYBERWARE_ITEM)
-                    .add(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get())
-                    .add(ModItems.BRAINUPGRADES_CORTICALSTACK.get());
-        }
-        if (ModItems.BONEUPGRADES_ELYTRA != null) {
-            tag(ModTags.Items.CYBERWARE_ITEM)
-                    .add(ModItems.BONEUPGRADES_ELYTRA.get());
-        }
-
+                .add(ModItems.MUSCLEUPGRADES_WIREDREFLEXES.get())
+                .addOptional(resourceLocation("createcybernetics:boneupgrades_elytra"))
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"))
+                .addOptional(resourceLocation("createcybernetics:eyeupgrades_navigationchip"))
+                .addOptional(resourceLocation("createcybernetics:brainupgrades_consciousnesstransmitter"))
+                .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"));
 
 //BODYPART DROPS
         tag(ModTags.Items.BODYPART_DROPS)
@@ -234,12 +221,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
                 .add(ModItems.WETWARE_RAVAGERTENDONS.get())
                 .add(ModItems.WETWARE_GRASSFEDSTOMACH.get())
-                .add(ModItems.WETWARE_SPINNERETTE.get());
-
-            if (ModItems.WETWARE_BLUBBER != null) {
-                tag(ModTags.Items.WETWARE_ITEM)
-                        .add(ModItems.WETWARE_BLUBBER.get());
-            }
+                .add(ModItems.WETWARE_SPINNERETTE.get())
+                .addOptional(resourceLocation("createcybernetics:wetware_blubber"));
 //BODY PARTS
         tag(ModTags.Items.BODY_PARTS)
                 .add(ModItems.BODYPART_RIGHTLEG.get())
@@ -288,13 +271,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_BONELACING.get())
                 .add(ModItems.BONEUPGRADES_PIEZO.get())
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
-                .add(ModItems.BONEUPGRADES_SANDEVISTAN.get());
-
-        if (ModItems.BONEUPGRADES_ELYTRA != null) {
-            tag(ModTags.Items.BONE_UPGRADES)
-                    .add(ModItems.BONEUPGRADES_ELYTRA.get());
-        }
-
+                .add(ModItems.BONEUPGRADES_SANDEVISTAN.get())
+                .addOptional(resourceLocation("createcybernetics:boneupgrades_elytra"));
 //SKIN UPGRADES
         tag(ModTags.Items.SKIN_UPGRADES)
                 .add(ModItems.SKINUPGRADES_ARTERIALTURBINE.get())
@@ -307,12 +285,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SUBDERMALARMOR.get())
                 .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get())
                 .add(ModItems.SKINUPGRADES_SYNTHETICSETULES.get())
-                .add(ModItems.SKINUPGRADES_METALPLATING.get());
-
-        if (ModItems.SKINUPGRADES_SWEAT != null) {
-            tag(ModTags.Items.SKIN_UPGRADES)
-                    .add(ModItems.SKINUPGRADES_SWEAT.get());
-        }
+                .add(ModItems.SKINUPGRADES_METALPLATING.get())
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"));
 //ORGAN UPGRADES
         tag(ModTags.Items.ORGAN_UPGRADES)
                 .add(ModItems.ORGANSUPGRADES_ADRENALINE.get())
@@ -343,12 +317,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.EYEUPGRADES_TARGETING.get())
                 .add(ModItems.EYEUPGRADES_UNDERWATERVISION.get())
                 .add(ModItems.EYEUPGRADES_ZOOM.get())
-                .add(ModItems.EYEUPGRADES_TRAJECTORYCALCULATOR.get());
-
-        if (ModItems.EYEUPGRADES_NAVIGATIONCHIP != null) {
-            tag(ModTags.Items.EYE_UPGRADES)
-                    .add(ModItems.EYEUPGRADES_NAVIGATIONCHIP.get());
-        }
+                .add(ModItems.EYEUPGRADES_TRAJECTORYCALCULATOR.get())
+                .addOptional(resourceLocation("createcybernetics:eyeupgrades_navigationchip"));
 //BRAIN UPGRADES
         tag(ModTags.Items.BRAIN_UPGRADES)
                 .add(ModItems.BRAINUPGRADES_CYBERBRAIN.get())
@@ -358,13 +328,10 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_NEURALCONTEXTUALIZER.get())
                 .add(ModItems.BRAINUPGRADES_CYBERDECK.get())
                 .add(ModItems.BRAINUPGRADES_IDEM.get())
-                .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get());
+                .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
+                .addOptional(resourceLocation("createcybernetics:brainupgrades_consciousnesstransmitter"))
+                .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"));
 
-        if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
-            tag(ModTags.Items.BRAIN_UPGRADES)
-                .add(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get())
-                .add(ModItems.BRAINUPGRADES_CORTICALSTACK.get());
-        }
 //MUSCLE UPGRADES
         tag(ModTags.Items.MUSCLE_UPGRADES)
                 .add(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get())
@@ -448,26 +415,12 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_SYNTHETICSETULES.get())
                 .add(ModItems.SCAVENGED_METALPLATING.get())
                 .add(ModItems.SCAVENGED_SYNTHMUSCLE.get())
-                .add(ModItems.SCAVENGED_WIREDREFLEXES.get());
-
-        if (ModItems.SCAVENGED_NAVIGATIONCHIP != null) {
-            tag(ModTags.Items.SCAVENGED_CYBERWARE)
-                    .add(ModItems.SCAVENGED_NAVIGATIONCHIP.get());
-        }
-        if (ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER != null && ModItems.SCAVENGED_CORTICALSTACK != null) {
-            tag(ModTags.Items.SCAVENGED_CYBERWARE)
-                    .add(ModItems.SCAVENGED_CONSCIOUSNESSTRANSMITTER.get())
-                    .add(ModItems.SCAVENGED_CORTICALSTACK.get());
-        }
-        if (ModItems.SCAVENGED_SWEAT != null) {
-            tag(ModTags.Items.SCAVENGED_CYBERWARE)
-                    .add(ModItems.SCAVENGED_SWEAT.get());
-        }
-
-        if (ModItems.SCAVENGED_ELYTRA != null) {
-            tag(ModTags.Items.SCAVENGED_CYBERWARE)
-                    .add(ModItems.SCAVENGED_ELYTRA.get());
-        }
+                .add(ModItems.SCAVENGED_WIREDREFLEXES.get())
+                .addOptional(resourceLocation("createcybernetics:scavenged_elytra"))
+                .addOptional(resourceLocation("createcybernetics:scavenged_navigationchip"))
+                .addOptional(resourceLocation("createcybernetics:scavenged_consciousnesstransmitter"))
+                .addOptional(resourceLocation("createcybernetics:scavenged_corticalstack"))
+                .addOptional(resourceLocation("createcybernetics:scavenged_sweat"));
 
 
         tag(ModTags.Items.BRAIN_ITEMS)
@@ -488,11 +441,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SYNTHSKIN.get())
                 .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
-                .add(ModItems.BODYPART_SKIN.get());
-        if (ModItems.SKINUPGRADES_SWEAT != null) {
-            tag(ModTags.Items.SKIN_ITEMS)
-                    .add(ModItems.SKINUPGRADES_SWEAT.get());
-        }
+                .add(ModItems.BODYPART_SKIN.get())
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"));
 
         tag(ModTags.Items.MUSCLE_ITEMS)
                 .add(ModItems.WETWARE_RAVAGERTENDONS.get())
@@ -576,6 +526,20 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.DEFAULTS_FAIL_AS_MISSING_WHEN_UNPOWERED)
                 .add(ModItems.BASECYBERWARE_CYBEREYES.get())
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get());
+
+
+
+
+
+// OFFAL
+        tag(ModTags.Items.OFFAL)
+                .add(ModItems.BODYPART_BRAIN.get())
+                .add(ModItems.BODYPART_LUNGS.get())
+                .add(ModItems.BODYPART_LIVER.get())
+                .add(ModItems.BODYPART_INTESTINES.get())
+                .add(ModItems.BODYPART_EYEBALLS.get())
+                .add(ModItems.BODYPART_SKIN.get())
+                .add(ModItems.BODYPART_MUSCLE.get());
 
 
 

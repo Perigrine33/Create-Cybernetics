@@ -34,6 +34,16 @@
   "item.createcybernetics.music_disc_the_grid": "§bMusic Disc",
   "item.createcybernetics.music_disc_the_grid.desc": "The Grid - Perigrine3",
 
+
+  "item.createcybernetics.cooked_brain": "Cooked Brain",
+  "item.createcybernetics.cooked_heart": "Cooked Heart",
+  "item.createcybernetics.cooked_liver": "Cooked Liver",
+  "item.createcybernetics.bone_marrow": "Bone Marrow",
+  "item.createcybernetics.andouille_sausage": "Andouille Sausage",
+  "item.createcybernetics.roasted_andouille": "Roasted Andouille",
+  "item.createcybernetics.ground_offal": "Ground Offal",
+
+
   "item.createcybernetics.data_shard_red": "Data Shard",
   "item.createcybernetics.data_shard_orange": "Data Shard",
   "item.createcybernetics.data_shard_yellow": "Data Shard",

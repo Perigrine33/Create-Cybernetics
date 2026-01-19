@@ -5,9 +5,11 @@ import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -34,14 +36,13 @@ public class SpursItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public Set<Item> requiresCyberware(ItemStack installedStack, CyberwareSlot slot) {
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         return switch (slot) {
-            case RLEG -> Set.of(ModItems.BASECYBERWARE_RIGHTLEG.get());
-            case LLEG -> Set.of(ModItems.BASECYBERWARE_LEFTLEG.get());
+            case RLEG -> Set.of(ModTags.Items.RIGHTLEG_ITEMS);
+            case LLEG -> Set.of(ModTags.Items.LEFTLEG_ITEMS);
             default -> Set.of();
         };
     }
-
     @Override
     public int getHumanityCost() {
         return humanityCost;

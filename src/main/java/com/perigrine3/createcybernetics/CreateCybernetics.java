@@ -22,6 +22,9 @@ import com.perigrine3.createcybernetics.screen.custom.*;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -94,15 +97,20 @@ public class CreateCybernetics {
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
-            event.accept(ModItems.DATURA_SEED_POD);
+            event.insertAfter(Items.PITCHER_POD.getDefaultInstance(),
+                    ModItems.DATURA_SEED_POD.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
 
-            event.accept(ModBlocks.TITANIUMORE_BLOCK);
-            event.accept(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK);
-            event.accept(ModBlocks.RAW_TITANIUM_BLOCK);
+            event.insertAfter(Blocks.DEEPSLATE_IRON_ORE.asItem().getDefaultInstance(),
+                    ModBlocks.TITANIUMORE_BLOCK.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.TITANIUMORE_BLOCK.asItem().getDefaultInstance(),
+                    ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(Blocks.RAW_IRON_BLOCK.asItem().getDefaultInstance(),
+                    ModBlocks.RAW_TITANIUM_BLOCK.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(ModBlocks.TITANIUM_BLOCK);
+            event.insertAfter(Items.CHAIN.getDefaultInstance(),
+                    ModBlocks.TITANIUM_BLOCK.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
@@ -112,7 +120,34 @@ public class CreateCybernetics {
         }
 
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.DATURA_FLOWER);
+            event.insertAfter(Items.PHANTOM_MEMBRANE.getDefaultInstance(),
+                    ModItems.DATURA_FLOWER.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+        }
+
+        if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
+            event.insertAfter(Items.COOKED_RABBIT.getDefaultInstance(),
+                    ModItems.BODYPART_BRAIN.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.BODYPART_BRAIN.get().getDefaultInstance(),
+                    ModItems.COOKED_BRAIN.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.COOKED_BRAIN.get().getDefaultInstance(),
+                    ModItems.BODYPART_HEART.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.BODYPART_HEART.get().getDefaultInstance(),
+                    ModItems.COOKED_HEART.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.COOKED_HEART.get().getDefaultInstance(),
+                    ModItems.BODYPART_LIVER.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.BODYPART_LIVER.get().getDefaultInstance(),
+                    ModItems.COOKED_LIVER.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModItems.COOKED_LIVER.get().getDefaultInstance(),
+                    ModItems.BONE_MARROW.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+
+            if (ModItems.ANDOUILLE_SAUSAGE != null && ModItems.ROASTED_ANDOUILLE != null && ModItems.GROUND_OFFAL != null ) {
+                event.insertAfter(ModItems.BONE_MARROW.get().getDefaultInstance(),
+                        ModItems.ANDOUILLE_SAUSAGE.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                event.insertAfter(ModItems.ANDOUILLE_SAUSAGE.get().getDefaultInstance(),
+                        ModItems.ROASTED_ANDOUILLE.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                event.insertAfter(ModItems.ROASTED_ANDOUILLE.get().getDefaultInstance(),
+                        ModItems.GROUND_OFFAL.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            }
         }
     }
 

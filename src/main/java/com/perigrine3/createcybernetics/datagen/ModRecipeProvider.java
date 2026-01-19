@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.datagen;
 
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -64,7 +65,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(ModItems.TITANIUMINGOT.get())
                 .unlockedBy("has_titaniumingot", has(ModItems.TITANIUMINGOT))
                 .save(recipeOutput, "createcybernetics:titaniumnugget_from_titaniumingot");
-
+//ANDOUILLE SAUSAGE
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.ANDOUILLE_SAUSAGE.get(), 4)
+                .requires(ModItems.GROUND_OFFAL.get()).requires(ModItems.BODYPART_INTESTINES.get())
+                .unlockedBy("has_ground_offal", has(ModItems.GROUND_OFFAL)).unlockedBy("has_intestines", has(ModItems.BODYPART_INTESTINES));
+//GROUND OFFAL
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.GROUND_OFFAL.get(), 4)
+                .requires(ModTags.Items.OFFAL).requires(ModTags.Items.OFFAL).requires(ModTags.Items.OFFAL)
+                .requires(ModTags.Items.OFFAL).requires(ModTags.Items.OFFAL).requires(ModTags.Items.OFFAL)
+                .unlockedBy("has_offal", has(ModTags.Items.OFFAL));
 
 //TITANIUM SMELTING
         oreSmelting(recipeOutput, TITANIUM_SMELTABLES, RecipeCategory.MISC,
@@ -83,6 +92,29 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         ModItems.BRAINUPGRADES_CORTICALSTACK.get())
                 .unlocks("has_xp_capsule", has(ModItems.XP_CAPSULE.get()))
                 .save(recipeOutput, "createcybernetics:cortical_stack_from_xp_capsule");
+
+
+//FOOD COOKING
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.BODYPART_BRAIN.get()),
+                        RecipeCategory.FOOD, ModItems.COOKED_BRAIN.get(), 0.35f, 200)
+                .unlockedBy("has_brain", has(ModItems.BODYPART_BRAIN.get()))
+                .save(recipeOutput, "createcybernetics:cooked_brain_from_smelting");
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.BODYPART_LIVER.get()),
+                        RecipeCategory.FOOD, ModItems.COOKED_LIVER.get(), 0.35f, 200)
+                .unlockedBy("has_liver", has(ModItems.BODYPART_LIVER.get()))
+                .save(recipeOutput, "createcybernetics:cooked_liver_from_smelting");
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.BODYPART_HEART.get()),
+                        RecipeCategory.FOOD, ModItems.COOKED_HEART.get(), 0.35f, 200)
+                .unlockedBy("has_heart", has(ModItems.BODYPART_HEART.get()))
+                .save(recipeOutput, "createcybernetics:cooked_heart_from_smelting");
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(Items.BONE),
+                        RecipeCategory.FOOD, ModItems.BONE_MARROW.get(), 0.35f, 200)
+                .unlockedBy("has_bone", has(Items.BONE))
+                .save(recipeOutput, "createcybernetics:bone_marrow_from_smelting");
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.ANDOUILLE_SAUSAGE),
+                        RecipeCategory.FOOD, ModItems.ROASTED_ANDOUILLE.get(), 0.35f, 200)
+                .unlockedBy("has_bone", has(ModItems.ANDOUILLE_SAUSAGE.get()))
+                .save(recipeOutput, "createcybernetics:roasted_andouille_from_smelting");
 
     }
 }

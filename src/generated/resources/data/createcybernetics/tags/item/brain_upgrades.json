@@ -8,7 +8,13 @@
     "createcybernetics:brainupgrades_cyberdeck",
     "createcybernetics:brainupgrades_idem",
     "createcybernetics:brainupgrades_chipwareslots",
-    "createcybernetics:brainupgrades_consciousnesstransmitter",
-    "createcybernetics:brainupgrades_corticalstack"
+    {
+      "id": "createcybernetics:brainupgrades_consciousnesstransmitter",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:brainupgrades_corticalstack",
+      "required": false
+    }
   ]
 }

@@ -55,7 +55,8 @@ public final class EnergyController {
         if (data == null) return;
 
         // ================================================================
-
+        // EMP: wipe stored energy, clear activation-paid flags, and mark all unpowered.
+        // ================================================================
         if (hasEmpEffect(player)) {
             data.setEnergyStored(player, 0);
 
@@ -63,14 +64,17 @@ public final class EnergyController {
                 CyberwareSlot slot = entry.getKey();
                 InstalledCyberware[] arr = entry.getValue();
                 if (arr == null) continue;
+
                 for (int idx = 0; idx < arr.length; idx++) {
                     InstalledCyberware cw = arr[idx];
                     if (cw == null) continue;
+
                     ItemStack stack = cw.getItem();
                     if (stack == null || stack.isEmpty()) {
                         cw.setPowered(false);
                         continue;
                     }
+
                     if (stack.getItem() instanceof ICyberwareItem item) {
                         String paidKey = item.getActivationPaidNbtKey(player, stack, slot);
                         if (paidKey != null && !paidKey.isBlank()) {
@@ -83,8 +87,7 @@ public final class EnergyController {
                 }
             }
 
-            final boolean debug = player.getTags().contains(DEBUG_TAG);
-            if (debug) {
+            if (player.getTags().contains(DEBUG_TAG)) {
                 TickStats stats = new TickStats();
                 stats.capacityTotal = data.getTotalEnergyCapacity(player);
                 stats.storedEnd = readStoredEnergySafe(data);
@@ -95,19 +98,22 @@ public final class EnergyController {
         }
 
         // ================================================================
-
+        // Normal flow
+        // ================================================================
         data.clampEnergyToCapacity(player);
 
         final boolean debug = player.getTags().contains(DEBUG_TAG);
         final TickStats stats = debug ? new TickStats() : null;
+        if (stats != null) stats.storedStart = readStoredEnergySafe(data);
 
-        if (stats != null) {
-            stats.storedStart = readStoredEnergySafe(data);
-        }
+        final boolean onCharger = isOnChargerBlock(player);
 
-        if (isOnChargerBlock(player)) {
-            int chargerIn = 0;
-
+        // ================================================================
+        // Compute charger "charge rate" (how much can be stored this tick).
+        // This is independent from powering implants while on the charger.
+        // ================================================================
+        int chargerCharge = 0;
+        if (onCharger) {
             for (var entry : data.getAll().entrySet()) {
                 CyberwareSlot slot = entry.getKey();
                 InstalledCyberware[] arr = entry.getValue();
@@ -121,21 +127,17 @@ public final class EnergyController {
                     if (stack == null || stack.isEmpty()) continue;
 
                     if (!(stack.getItem() instanceof ICyberwareItem item)) continue;
-
                     if (!item.acceptsChargerEnergy(player, stack, slot)) continue;
 
                     int req = item.getChargerEnergyReceivePerTick(player, stack, slot);
-                    if (req > 0) chargerIn += req;
+                    if (req > 0) chargerCharge += req;
                 }
             }
-
-            if (chargerIn > 0) {
-                data.receiveEnergy(player, chargerIn);
-            }
-
-            data.clampEnergyToCapacity(player);
         }
 
+        // ================================================================
+        // Capacity (debug only)
+        // ================================================================
         int totalCapacity = 0;
         for (var entry : data.getAll().entrySet()) {
             CyberwareSlot slot = entry.getKey();
@@ -157,8 +159,10 @@ public final class EnergyController {
         }
         if (stats != null) stats.capacityTotal = totalCapacity;
 
+        // ================================================================
+        // Generator pool (existing behavior)
+        // ================================================================
         int tickGenerated = 0;
-
         for (var entry : data.getAll().entrySet()) {
             CyberwareSlot slot = entry.getKey();
             InstalledCyberware[] arr = entry.getValue();
@@ -182,9 +186,25 @@ public final class EnergyController {
             }
         }
 
-        MutableInt tickPool = new MutableInt(tickGenerated);
+        MutableInt genPool = new MutableInt(tickGenerated);
         if (stats != null) stats.generated = tickGenerated;
 
+        // ================================================================
+        // “Mains” power while on the charger:
+        // If on the charging block, implants can draw unlimited external power.
+        // This prevents stored energy from being drained and allows batteries to charge.
+        //
+        // IMPORTANT: This is the behavior that fixes your reported issue.
+        // ================================================================
+        MutableInt mainsPool = new MutableInt(onCharger ? Integer.MAX_VALUE : 0);
+
+        // ================================================================
+        // Pay per-tick energy + activation costs:
+        // Priority:
+        //   1) mainsPool (only when on charger)
+        //   2) genPool
+        //   3) stored energy
+        // ================================================================
         for (var entry : data.getAll().entrySet()) {
             CyberwareSlot slot = entry.getKey();
             InstalledCyberware[] arr = entry.getValue();
@@ -204,7 +224,7 @@ public final class EnergyController {
                 int use = item.getEnergyUsedPerTick(player, stack, slot);
                 if (use > 0) {
                     if (stats != null) stats.requestedUse += use;
-                    powered = tryPayEnergy(data, tickPool, use, stats);
+                    powered = tryPayEnergy(data, mainsPool, genPool, use, stats);
                 }
 
                 if (powered && item.shouldConsumeActivationEnergyThisTick(player, stack, slot)) {
@@ -214,7 +234,7 @@ public final class EnergyController {
 
                         if (paidKey == null || paidKey.isBlank()) {
                             if (stats != null) stats.requestedActivation += actCost;
-                            powered = tryPayEnergy(data, tickPool, actCost, stats);
+                            powered = tryPayEnergy(data, mainsPool, genPool, actCost, stats);
                         } else {
                             String persistentKey = buildActivationPersistentKey(paidKey, slot, idx);
                             CompoundTag ptag = player.getPersistentData();
@@ -222,7 +242,7 @@ public final class EnergyController {
 
                             if (!alreadyPaid) {
                                 if (stats != null) stats.requestedActivation += actCost;
-                                if (tryPayEnergy(data, tickPool, actCost, stats)) {
+                                if (tryPayEnergy(data, mainsPool, genPool, actCost, stats)) {
                                     ptag.putBoolean(persistentKey, true);
                                 } else {
                                     powered = false;
@@ -243,14 +263,28 @@ public final class EnergyController {
             }
         }
 
-        int leftover = tickPool.value;
-        if (leftover > 0) {
+        // ================================================================
+        // Deposit generator surplus (existing rule)
+        // ================================================================
+        int genLeftover = genPool.value;
+        if (genLeftover > 0) {
             if (canAcceptGeneratedSurplus(player, data)) {
-                if (stats != null) stats.surplusDeposited = leftover;
-                data.receiveEnergy(player, leftover);
+                if (stats != null) stats.surplusDeposited = genLeftover;
+                data.receiveEnergy(player, genLeftover);
             } else {
                 if (stats != null) stats.surplusDeposited = 0;
             }
+        } else {
+            if (stats != null) stats.surplusDeposited = 0;
+        }
+
+        // ================================================================
+        // Deposit charger charge into stored energy.
+        // This is the ONLY place charger affects stored energy now.
+        // Since mainsPool covered running costs on the charger, this actually accumulates.
+        // ================================================================
+        if (onCharger && chargerCharge > 0) {
+            data.receiveEnergy(player, chargerCharge);
         }
 
         data.clampEnergyToCapacity(player);
@@ -261,14 +295,26 @@ public final class EnergyController {
         }
     }
 
-    private static boolean tryPayEnergy(PlayerCyberwareData data, MutableInt tickPool, int amount, TickStats stats) {
+    /**
+     * Spend energy in priority order:
+     *   1) mainsPool (only available while on charging block)
+     *   2) genPool
+     *   3) stored energy
+     */
+    private static boolean tryPayEnergy(PlayerCyberwareData data, MutableInt mainsPool, MutableInt genPool, int amount, TickStats stats) {
         if (amount <= 0) return true;
 
-        int fromPool = Math.min(tickPool.value, amount);
-        tickPool.value -= fromPool;
-        amount -= fromPool;
+        int fromMains = Math.min(mainsPool.value, amount);
+        mainsPool.value -= fromMains;
+        amount -= fromMains;
+        if (stats != null) stats.usedFromPool += fromMains;
 
-        if (stats != null) stats.usedFromPool += fromPool;
+        if (amount <= 0) return true;
+
+        int fromGen = Math.min(genPool.value, amount);
+        genPool.value -= fromGen;
+        amount -= fromGen;
+        if (stats != null) stats.usedFromPool += fromGen;
 
         if (amount <= 0) return true;
 
@@ -339,6 +385,7 @@ public final class EnergyController {
         int usedTotal = s.usedFromPool + s.usedFromStored;
         int requestedTotal = s.requestedUse + s.requestedActivation;
         int net = s.generated - usedTotal;
+
         String text =
                 "Energy " + s.storedEnd + "/" + s.capacityTotal +
                         " | +" + s.generated +

@@ -43,6 +43,22 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.MUSIC_DISC_NEUROHACK.get());
         basicItem(ModItems.MUSIC_DISC_THE_GRID.get());
 
+
+
+        basicItem(ModItems.COOKED_BRAIN.get());
+        basicItem(ModItems.COOKED_HEART.get());
+        basicItem(ModItems.COOKED_LIVER.get());
+        basicItem(ModItems.BONE_MARROW.get());
+
+        if (ModItems.ANDOUILLE_SAUSAGE != null && ModItems.ROASTED_ANDOUILLE != null && ModItems.GROUND_OFFAL != null ) {
+            basicItem(ModItems.ANDOUILLE_SAUSAGE.get());
+            basicItem(ModItems.ROASTED_ANDOUILLE.get());
+            basicItem(ModItems.GROUND_OFFAL.get());
+        }
+
+
+
+
         withExistingParent(ModItems.SMASHER_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.CYBERZOMBIE_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.CYBERSKELETON_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
