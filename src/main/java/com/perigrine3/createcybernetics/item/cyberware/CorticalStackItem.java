@@ -68,8 +68,10 @@ public class CorticalStackItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
-        assert ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null;
-        return Set.of(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get());
+        if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null) {
+            return Set.of(ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER.get());
+        }
+        return Set.of();
     }
 
     @Override

@@ -84,17 +84,18 @@ public final class CyberwareDeathReset {
                 ItemStack effective = !installedStack.isEmpty() ? installedStack : def;
                 if (effective.isEmpty()) continue;
 
-                assert ModItems.BRAINUPGRADES_CORTICALSTACK != null;
-                if (effective.is(ModItems.BRAINUPGRADES_CORTICALSTACK.get())) {
-                    if (hadCorticalStack && !capsuleDropped) {
-                        String ownerName = player.getGameProfile().getName();
-                        ItemStack capsule = XPCapsuleItem.makeCapsule(ownerName, xpPoints);
-                        player.spawnAtLocation(capsule);
-                        capsuleDropped = true;
+                if (ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
+                    if (effective.is(ModItems.BRAINUPGRADES_CORTICALSTACK.get())) {
+                        if (hadCorticalStack && !capsuleDropped) {
+                            String ownerName = player.getGameProfile().getName();
+                            ItemStack capsule = XPCapsuleItem.makeCapsule(ownerName, xpPoints);
+                            player.spawnAtLocation(capsule);
+                            capsuleDropped = true;
+                        }
+                        if (!shouldDropInstalledOnDeath(effective, slot)) continue;
+                        player.spawnAtLocation(effective.copy());
+                        continue;
                     }
-                    if (!shouldDropInstalledOnDeath(effective, slot)) continue;
-                    player.spawnAtLocation(effective.copy());
-                    continue;
                 }
 
                 if (shouldDropInstalledOnDeath(effective, slot)) {
@@ -125,9 +126,10 @@ public final class CyberwareDeathReset {
                 ItemStack st = inst.getItem();
                 if (st == null || st.isEmpty()) continue;
 
-                assert ModItems.BRAINUPGRADES_CORTICALSTACK != null;
-                if (st.is(ModItems.BRAINUPGRADES_CORTICALSTACK.get())) {
-                    return true;
+                if (ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
+                    if (st.is(ModItems.BRAINUPGRADES_CORTICALSTACK.get())) {
+                        return true;
+                    }
                 }
             }
         }
