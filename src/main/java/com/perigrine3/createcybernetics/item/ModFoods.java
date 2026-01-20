@@ -26,4 +26,6 @@ public class ModFoods  {
             .nutrition(5).saturationModifier(0.75f).build();
     public static final FoodProperties ROASTED_ANDOUILLE = new FoodProperties.Builder()
             .nutrition(7).saturationModifier(0.65f).build();
+    public static final FoodProperties BRAIN_STEW = new FoodProperties.Builder()
+            .nutrition(7).saturationModifier(0.65f).build();
 }

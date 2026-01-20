@@ -76,6 +76,27 @@ public final class SurgeryController {
                     boolean willRemove = isMarked;
                     boolean willInstall = isStaged && !stackInGui.isEmpty();
 
+                    /*
+                     * CRITICAL GUARD:
+                     * If a slot is marked for removal and the GUI still contains the SAME stack as currently installed,
+                     * do NOT "remove then reinstall" in the same pass. This preserves all swap functionality:
+                     * - If a DIFFERENT replacement is staged, install still proceeds normally.
+                     */
+                    if (willRemove && willInstall) {
+                        InstalledCyberware current = data.get(slot, i);
+                        ItemStack installedStack = (current != null && current.getItem() != null) ? current.getItem() : ItemStack.EMPTY;
+
+                        if (!installedStack.isEmpty() && ItemStack.isSameItemSameComponents(stackInGui, installedStack)) {
+                            willInstall = false;
+
+                            // Keep BE/UI consistent with removal-only.
+                            surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
+                            surgeon.installed[invIndex] = false;
+                            surgeon.staged[invIndex] = false;
+                            stackInGui = ItemStack.EMPTY;
+                        }
+                    }
+
                     // --- REMOVAL PHASE ---
                     if (willRemove) {
                         InstalledCyberware removed = data.remove(slot, i);
@@ -286,13 +307,12 @@ public final class SurgeryController {
                     }
                     if (!intersectsRemoved) continue;
 
-                    // If none of the required items are currently installed anywhere, remove this item.
+                    // If any required item still exists anywhere, keep it.
                     if (hasAnyInstalledItem(data, requiredItems)) continue;
 
                     // FORCE REMOVE
                     InstalledCyberware removed = data.remove(slot, i);
                     if (removed == null || removed.getItem() == null || removed.getItem().isEmpty()) {
-                        // Still clear the BE view for consistency
                         surgeon.inventory.setStackInSlot(invIndex, ItemStack.EMPTY);
                         surgeon.installed[invIndex] = false;
                         continue;
@@ -348,8 +368,6 @@ public final class SurgeryController {
 
         return false;
     }
-
-    // --- Existing utility methods below remain untouched ---
 
     private static boolean hasAnyRequiredCyberware(PlayerCyberwareData data, RobosurgeonBlockEntity surgeon, boolean[] staged, Set<Item> required, CyberwareSlot installSlotType) {
         if (required == null || required.isEmpty()) return true;
@@ -415,7 +433,7 @@ public final class SurgeryController {
                     continue;
                 }
 
-                ItemStack otherStack = ItemStack.EMPTY;
+                ItemStack otherStack;
 
                 boolean otherIsStaged = staged != null
                         && otherInvIndex < staged.length
@@ -425,10 +443,10 @@ public final class SurgeryController {
                     otherStack = surgeon.inventory.getStackInSlot(otherInvIndex);
                 } else {
                     InstalledCyberware inst = data.get(otherSlot, otherIndex);
-                    if (inst != null && inst.getItem() != null) otherStack = inst.getItem();
+                    otherStack = (inst != null && inst.getItem() != null) ? inst.getItem() : ItemStack.EMPTY;
                 }
 
-                if (otherStack == null || otherStack.isEmpty()) continue;
+                if (otherStack.isEmpty()) continue;
 
                 if (badItems.contains(otherStack.getItem())) return true;
 
@@ -473,8 +491,10 @@ public final class SurgeryController {
             if (invIndex < 0 || invIndex >= surgeon.inventory.getSlots()) continue;
             if (invIndex >= markedForRemoval.length) continue;
             if (!markedForRemoval[invIndex]) continue;
+
             InstalledCyberware inst = data.get(slotType, i);
             if (inst == null || inst.getItem() == null || inst.getItem().isEmpty()) continue;
+
             if (ItemStack.isSameItemSameComponents(inst.getItem(), needle)) {
                 count++;
             }

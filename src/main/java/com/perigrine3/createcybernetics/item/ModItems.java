@@ -16,6 +16,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Tool;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
@@ -73,6 +74,9 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CEREBELLUM = ITEMS.register("cerebellum",
             () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> BONE_SAW = ITEMS.register("bone_saw",
+            () -> new SwordItem(Tiers.IRON, new Item.Properties().stacksTo(1).durability(128)));
 
     public static final DeferredItem<Item> QUICKHACK_BURNING = ITEMS.register("quickhack_burning",
             () -> new Item(new Item.Properties()));
@@ -222,6 +226,8 @@ public class ModItems {
             () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.ROASTED_ANDOUILLE)));
     public static final DeferredItem<Item> GROUND_OFFAL = registerIfLoaded("farmersdelight", "ground_offal",
             () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.GROUND_OFFAL)));
+    public static final DeferredItem<Item> BRAIN_STEW = registerIfLoaded("farmersdelight", "brain_stew",
+            () -> new Item(new Item.Properties().stacksTo(64).food(ModFoods.BRAIN_STEW)));
 
 
 

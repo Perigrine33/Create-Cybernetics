@@ -140,13 +140,15 @@ public class CreateCybernetics {
             event.insertAfter(ModItems.COOKED_LIVER.get().getDefaultInstance(),
                     ModItems.BONE_MARROW.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
 
-            if (ModItems.ANDOUILLE_SAUSAGE != null && ModItems.ROASTED_ANDOUILLE != null && ModItems.GROUND_OFFAL != null ) {
+            if (ModItems.ANDOUILLE_SAUSAGE != null && ModItems.ROASTED_ANDOUILLE != null && ModItems.GROUND_OFFAL != null && ModItems.BRAIN_STEW != null ) {
                 event.insertAfter(ModItems.BONE_MARROW.get().getDefaultInstance(),
                         ModItems.ANDOUILLE_SAUSAGE.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                 event.insertAfter(ModItems.ANDOUILLE_SAUSAGE.get().getDefaultInstance(),
                         ModItems.ROASTED_ANDOUILLE.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
                 event.insertAfter(ModItems.ROASTED_ANDOUILLE.get().getDefaultInstance(),
                         ModItems.GROUND_OFFAL.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                event.insertAfter(ModItems.GROUND_OFFAL.get().getDefaultInstance(),
+                        ModItems.BRAIN_STEW.get().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             }
         }
     }

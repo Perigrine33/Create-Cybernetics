@@ -50,10 +50,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COOKED_LIVER.get());
         basicItem(ModItems.BONE_MARROW.get());
 
-        if (ModItems.ANDOUILLE_SAUSAGE != null && ModItems.ROASTED_ANDOUILLE != null && ModItems.GROUND_OFFAL != null ) {
+        if (ModItems.ANDOUILLE_SAUSAGE != null && ModItems.ROASTED_ANDOUILLE != null && ModItems.GROUND_OFFAL != null && ModItems.BRAIN_STEW != null ) {
             basicItem(ModItems.ANDOUILLE_SAUSAGE.get());
             basicItem(ModItems.ROASTED_ANDOUILLE.get());
             basicItem(ModItems.GROUND_OFFAL.get());
+            basicItem(ModItems.BRAIN_STEW.get());
         }
 
 

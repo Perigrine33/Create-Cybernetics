@@ -181,15 +181,22 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                             Component.literal("Cogito Ergo Sum"),
                             Component.literal("Installed A Cerebral Processing Unit And Abandoned Your Humanity"),
                             null, AdvancementType.TASK, true, false, false)
-                        .addCriterion("cogito_ergo_sum", SniktTrigger.Instance.any())
+                        .addCriterion("cogito_ergo_sum", CogitoErgoSumTrigger.Instance.any())
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/cogito_ergo_sum"), existingFileHelper);
 
             Advancement.Builder.advancement().display(ModItems.BRAINUPGRADES_CYBERBRAIN.get(),
                             Component.literal("404: Thoughts Not Found"),
                             Component.literal("Experienced systemwide failure due to being unable to power your brain"),
                             null, AdvancementType.TASK, true, false, false)
-                        .addCriterion("thoughts_not_found", SniktTrigger.Instance.any())
+                        .addCriterion("thoughts_not_found", ThoughtsNotFoundTrigger.Instance.any())
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/thoughts_not_found"), existingFileHelper);
+
+            Advancement.Builder.advancement().display(ModItems.BONE_MARROW.get(),
+                            Component.literal("Bones And All"),
+                            Component.literal("Consumed Bones"),
+                            null, AdvancementType.TASK, true, false, false)
+                        .addCriterion("bones_and_all", BonesAndAllTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/bones_and_all"), existingFileHelper);
 
 
         }

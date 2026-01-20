@@ -1,7 +1,7 @@
 {
   "criteria": {
     "cogito_ergo_sum": {
-      "trigger": "createcybernetics:snikt"
+      "trigger": "createcybernetics:cogito_ergo_sum"
     }
   },
   "display": {

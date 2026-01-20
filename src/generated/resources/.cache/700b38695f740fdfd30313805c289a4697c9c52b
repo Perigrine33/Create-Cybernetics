@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-19T12:22:07.2028376	Item Models: createcybernetics
+// 1.21.1	2026-01-19T17:20:00.0762064	Item Models: createcybernetics
 8570733f6ab9231502efdbe6dd1695f08dc806b1 assets/createcybernetics/models/item/andouille_sausage.json
 ae78f051d9328e5a204530b7fc2e3d88362b4e68 assets/createcybernetics/models/item/armupgrades_armcannon.json
 37f82cc0ca47be7b60c54ef6d3b7059b9b671846 assets/createcybernetics/models/item/armupgrades_claws.json
@@ -43,6 +43,7 @@ c1d7a12527d23af8a1cc7d1a8c997d78a6e0723c assets/createcybernetics/models/item/br
 c7bd954e40b322be4d77044b6ce57dccdd8e896d assets/createcybernetics/models/item/brainupgrades_idem.json
 444fd7510a13094e6fff9f0c8c86b3bf620d62ca assets/createcybernetics/models/item/brainupgrades_matrix.json
 35b809912e768811502bd3b860f477b87586f9ac assets/createcybernetics/models/item/brainupgrades_neuralcontextualizer.json
+b676f1a042b51c8e36fe0c15bf04455f0de09dbf assets/createcybernetics/models/item/brain_stew.json
 f1529bab8dcbbb01a4a724c326942a4c1ca7fd6d assets/createcybernetics/models/item/cerebellum.json
 416d8ac74607dae9ba4384fe8d17809eabe11ff2 assets/createcybernetics/models/item/component_actuator.json
 cf17f7ed90150de9aa427364287db476311bc487 assets/createcybernetics/models/item/component_diodes.json

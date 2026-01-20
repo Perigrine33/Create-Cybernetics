@@ -1,7 +1,7 @@
 {
   "criteria": {
     "thoughts_not_found": {
-      "trigger": "createcybernetics:snikt"
+      "trigger": "createcybernetics:thoughts_not_found"
     }
   },
   "display": {

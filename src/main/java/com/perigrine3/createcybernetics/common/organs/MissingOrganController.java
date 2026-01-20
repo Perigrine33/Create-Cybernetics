@@ -105,6 +105,7 @@ public final class MissingOrganController {
         if (!hasEyes) {
             refreshEffect(player, MobEffects.BLINDNESS, 220, 1);
             refreshEffect(player, MobEffects.DARKNESS, 220, 0);
+
         } else {
             player.removeEffect(MobEffects.BLINDNESS);
             player.removeEffect(MobEffects.DARKNESS);
@@ -121,7 +122,12 @@ public final class MissingOrganController {
         boolean underwater = player.isUnderWater();
 
         if (!hasLungs) {
-            if (hasGills && !underwater) {
+            boolean canBreatheHere = hasGills && underwater;
+
+            if (canBreatheHere) {
+                player.getPersistentData().remove(NO_LUNGS_AIR);
+                player.setAirSupply(player.getMaxAirSupply());
+            } else {
                 CompoundTag pd = player.getPersistentData();
 
                 int air = pd.contains(NO_LUNGS_AIR, Tag.TAG_INT)
@@ -137,13 +143,9 @@ public final class MissingOrganController {
 
                 pd.putInt(NO_LUNGS_AIR, air);
                 player.setAirSupply(air);
-            } else {
-                player.getPersistentData().remove(NO_LUNGS_AIR);
-                player.setAirSupply(player.getMaxAirSupply());
             }
-        } else if (data.isInstalled(ModItems.LUNGSUPGRADES_HYPEROXYGENATION.get(), CyberwareSlot.LUNGS)) {
-            player.getPersistentData().remove(NO_LUNGS_AIR);
         } else {
+            // Lungs present: clear custom tracking.
             player.getPersistentData().remove(NO_LUNGS_AIR);
         }
 

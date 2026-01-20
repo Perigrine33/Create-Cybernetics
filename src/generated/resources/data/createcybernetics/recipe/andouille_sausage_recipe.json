@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "createcybernetics:ground_offal"
+    },
+    {
+      "item": "createcybernetics:bodypart_intestines"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "createcybernetics:andouille_sausage"
+  }
+}

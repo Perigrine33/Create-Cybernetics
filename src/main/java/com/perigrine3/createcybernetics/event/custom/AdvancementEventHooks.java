@@ -9,11 +9,13 @@ import com.perigrine3.createcybernetics.common.damage.ModDamageTypes;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -156,6 +158,17 @@ public final class AdvancementEventHooks {
             if (data.hasSpecificItem(ModItems.BRAINUPGRADES_CYBERBRAIN.get())) {
                 ModCriteria.COGITO_ERGO_SUM.get().trigger(player);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onFinish(LivingEntityUseItemEvent.Finish event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        ItemStack eaten = event.getItem();
+        if (eaten.isEmpty()) return;
+
+        if (eaten.is(ModItems.BONE_MARROW.get())) {
+            ModCriteria.BONES_AND_ALL.get().trigger(player);
         }
     }
 }

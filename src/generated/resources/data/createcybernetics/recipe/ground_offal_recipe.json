@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": {
+      "tag": "createcybernetics:offal"
+    }
+  },
+  "pattern": [
+    "OOO",
+    "OOO"
+  ],
+  "result": {
+    "count": 4,
+    "id": "createcybernetics:ground_offal"
+  }
+}

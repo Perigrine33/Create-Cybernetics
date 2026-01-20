@@ -34,6 +34,8 @@ public final class ModCriteria {
             TRIGGER_TYPES.register("cortical_stack", CorticalStackTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, CogitoErgoSumTrigger> COGITO_ERGO_SUM =
             TRIGGER_TYPES.register("cogito_ergo_sum", CogitoErgoSumTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, BonesAndAllTrigger> BONES_AND_ALL =
+            TRIGGER_TYPES.register("bones_and_all", BonesAndAllTrigger::new);
 
     public static final DeferredHolder<CriterionTrigger<?>, TooMuchTooFastTrigger> TOO_MUCH_TOO_FAST =
             TRIGGER_TYPES.register("too_much_too_fast", TooMuchTooFastTrigger::new);

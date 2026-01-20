@@ -3,15 +3,11 @@ package com.perigrine3.createcybernetics.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
-import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.item.cyberware.CerebralProcessingUnitItem;
-import com.perigrine3.createcybernetics.item.cyberware.CybereyeItem;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,20 +21,16 @@ public final class MissingEyesOverlayClient {
     private static final int ALPHA = 0xFF;
 
     @SubscribeEvent
-    public static void onRenderGuiPre(RenderGuiEvent.Pre event) {
+    public static void onRenderGuiPost(RenderGuiEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
         if (mc.screen != null) return;
+        if (!mc.player.hasData(ModAttachments.CYBERWARE)) return;
 
         PlayerCyberwareData data = mc.player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
 
-        boolean eyesEnabled = hasCybereyesInstalledAndEnabled(data);
-        if (!eyesEnabled) return;
-
-        boolean blinded = mc.player.hasEffect(MobEffects.BLINDNESS);
-        boolean darkened = mc.player.hasEffect(MobEffects.DARKNESS);
-        if (!blinded && !darkened) return;
+        boolean missingEyes = !data.hasAnyTagged(ModTags.Items.EYE_ITEMS, CyberwareSlot.EYES);
+        if (!missingEyes) return;
 
         GuiGraphics gg = event.getGuiGraphics();
         int w = mc.getWindow().getGuiScaledWidth();
@@ -51,24 +43,5 @@ public final class MissingEyesOverlayClient {
         gg.fill(0, 0, w, h, argb);
 
         RenderSystem.disableBlend();
-    }
-
-    private static boolean hasCybereyesInstalledAndEnabled(PlayerCyberwareData data) {
-        InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.EYES);
-        if (arr == null) return false;
-
-        for (int idx = 0; idx < arr.length; idx++) {
-            InstalledCyberware cw = arr[idx];
-            if (cw == null) continue;
-
-            ItemStack st = cw.getItem();
-            if (st == null || st.isEmpty()) continue;
-
-            if (!(st.getItem() instanceof CybereyeItem)) continue;
-            if (!data.isEnabled(CyberwareSlot.EYES, idx)) continue;
-
-            return true;
-        }
-        return false;
     }
 }

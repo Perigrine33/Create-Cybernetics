@@ -68,12 +68,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 //ANDOUILLE SAUSAGE
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.ANDOUILLE_SAUSAGE.get(), 4)
                 .requires(ModItems.GROUND_OFFAL.get()).requires(ModItems.BODYPART_INTESTINES.get())
-                .unlockedBy("has_ground_offal", has(ModItems.GROUND_OFFAL)).unlockedBy("has_intestines", has(ModItems.BODYPART_INTESTINES));
+                .unlockedBy("has_ground_offal", has(ModItems.GROUND_OFFAL)).unlockedBy("has_intestines", has(ModItems.BODYPART_INTESTINES))
+                        .save(recipeOutput, "createcybernetics:andouille_sausage_recipe");
 //GROUND OFFAL
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.GROUND_OFFAL.get(), 4)
-                .requires(ModTags.Items.OFFAL).requires(ModTags.Items.OFFAL).requires(ModTags.Items.OFFAL)
-                .requires(ModTags.Items.OFFAL).requires(ModTags.Items.OFFAL).requires(ModTags.Items.OFFAL)
-                .unlockedBy("has_offal", has(ModTags.Items.OFFAL));
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.GROUND_OFFAL.get(), 4)
+                .pattern("OOO")
+                .pattern("OOO")
+                .define('O', ModTags.Items.OFFAL)
+                .unlockedBy("has_offal", has(ModTags.Items.OFFAL))
+                .save(recipeOutput, "createcybernetics:ground_offal_recipe");
 
 //TITANIUM SMELTING
         oreSmelting(recipeOutput, TITANIUM_SMELTABLES, RecipeCategory.MISC,

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ground_offal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:ground_offal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_intestines": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:bodypart_intestines"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createcybernetics:andouille_sausage_recipe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ground_offal",
+      "has_intestines"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createcybernetics:andouille_sausage_recipe"
+    ]
+  }
+}

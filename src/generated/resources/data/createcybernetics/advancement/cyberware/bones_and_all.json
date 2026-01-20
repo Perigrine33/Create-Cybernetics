@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "bones_and_all": {
+      "trigger": "createcybernetics:bones_and_all"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "Consumed Bones",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bone_marrow"
+    },
+    "title": "Bones And All"
+  },
+  "requirements": [
+    [
+      "bones_and_all"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
