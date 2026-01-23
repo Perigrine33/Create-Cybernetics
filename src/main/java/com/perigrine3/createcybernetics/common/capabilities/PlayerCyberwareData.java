@@ -346,6 +346,56 @@ public class PlayerCyberwareData implements ICyberwareData {
         return false;
     }
 
+    public boolean hasMultipleSpecificItem(Item item, CyberwareSlot slotToCheck, int requiredCount) {
+        if (item == null) return false;
+        if (requiredCount <= 0) return true;
+
+        InstalledCyberware[] arr = slots.get(slotToCheck);
+        if (arr == null) return false;
+
+        int found = 0;
+        for (InstalledCyberware cw : arr) {
+            if (cw == null) continue;
+
+            ItemStack stack = cw.getItem();
+            if (stack == null || stack.isEmpty()) continue;
+
+            if (stack.is(item)) {
+                found++;
+                if (found >= requiredCount) return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasMultipleSpecificItem(Item item, int requiredCount, CyberwareSlot... slotsToCheck) {
+        if (item == null) return false;
+        if (requiredCount <= 0) return true;
+        if (slotsToCheck == null || slotsToCheck.length == 0) return false;
+
+        int found = 0;
+
+        for (CyberwareSlot slot : slotsToCheck) {
+            InstalledCyberware[] arr = slots.get(slot);
+            if (arr == null) continue;
+
+            for (InstalledCyberware cw : arr) {
+                if (cw == null) continue;
+
+                ItemStack stack = cw.getItem();
+                if (stack == null || stack.isEmpty()) continue;
+
+                if (stack.is(item)) {
+                    found++;
+                    if (found >= requiredCount) return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public boolean isInstalled(Item item, CyberwareSlot slot, int index) {
         InstalledCyberware[] arr = slots.get(slot);
         if (arr == null) return false;

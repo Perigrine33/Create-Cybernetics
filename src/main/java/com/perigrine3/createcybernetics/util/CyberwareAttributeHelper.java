@@ -176,9 +176,15 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "linear_frame_speed_stifle"),
                 -0.02, AttributeModifier.Operation.ADD_VALUE));
 
-        registerModifier("subdermalarmor_armor", new AttributeModifierData(armorAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "subdermal_armor_boost"),
-                6.0, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("subdermalarmor_armor_1", new AttributeModifierData(armorAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "subdermal_armor_boost_1"),
+                4.0, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("subdermalarmor_armor_2", new AttributeModifierData(armorAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "subdermal_armor_boost_2"),
+                4.0, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("subdermalarmor_armor_3", new AttributeModifierData(armorAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "subdermal_armor_boost_3"),
+                4.0, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("bonelacing_health_1", new AttributeModifierData(maxHealthAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "bonelacing_health_boost_1"),
@@ -380,6 +386,96 @@ public class CyberwareAttributeHelper {
                 3.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
 
+
+
+        registerModifier("gemini_attackstrength", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gemini_attackstrength_add"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("gemini_attackspeed", new AttributeModifierData(miningSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gemini_attackspeed_add"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("gemini_miningstrength", new AttributeModifierData(miningSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gemini_miningstrength_add"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("gemini_speed", new AttributeModifierData(speedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gemini_speed_add"),
+                0.2, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("samson_attackstrength", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "samson_attackstrength_add"),
+                2, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("samson_miningstrength", new AttributeModifierData(miningSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "samson_miningstrength_add"),
+                2, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("samson_durability", new AttributeModifierData(armorAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "samson_durability_add"),
+                8, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("samson_watermove", new AttributeModifierData(underwaterMovementAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "samson_watermove_subtract"),
+                -0.75, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("samson_weight", new AttributeModifierData(gravityAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "samson_weight_add"),
+                0.1, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("eclipse_speed", new AttributeModifierData(speedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "eclipse_speed_add"),
+                0.1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("eclipse_sprintspeed", new AttributeModifierData(speedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "eclipse_sprintspeed_add"),
+                0.2, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("eclipse_crouchspeed", new AttributeModifierData(crouchSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "eclipse_crouchspeed_add"),
+                0.5, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("spyder_crouchspeed", new AttributeModifierData(crouchSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "spyder_crouchspeed_add"),
+                0.5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("spyder_jumpheight", new AttributeModifierData(jumpStrengthAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "spyder_jumpheight_add"),
+                0.1, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("wingman_elytraspeed", new AttributeModifierData(elytraSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "wingman_elytraspeed_add"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("wingman_elytrahandling", new AttributeModifierData(elytraHandlingAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "wingman_elytrahandling_add"),
+                4, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("aquarius_movement", new AttributeModifierData(underwaterMovementAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "aquarius_movement_add"),
+                5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("aquarius_mining", new AttributeModifierData(underwaterMiningAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "aquarius_mining_add"),
+                2, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("aquarius_swim", new AttributeModifierData(swimSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "aquarius_swim_add"),
+                5, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("dymond_miningspeed", new AttributeModifierData(miningSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dymond_miningspeed_add"),
+                3, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("dymond_weight", new AttributeModifierData(gravityAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dymond_weight_add"),
+                0.01, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("dragoon_weight", new AttributeModifierData(gravityAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragoon_weight_add"),
+                0.1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("dragoon_size", new AttributeModifierData(scaleAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragoon_size_add"),
+                0.3, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("dragoon_attack", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragoon_attack_add"),
+                7, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("dragoon_resist", new AttributeModifierData(knockbackResistAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragoon_resist_add"),
+                5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("dragoon_knockback", new AttributeModifierData(attackKnockbackAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragoon_knockback_add"),
+                5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("dragoon_jump", new AttributeModifierData(jumpStrengthAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragoon_jump_add"),
+                5, AttributeModifier.Operation.ADD_VALUE));
 
     }
 

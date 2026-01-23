@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-19T17:20:00.0762064	Item Models: createcybernetics
+// 1.21.1	2026-01-23T00:04:18.4626185	Item Models: createcybernetics
 8570733f6ab9231502efdbe6dd1695f08dc806b1 assets/createcybernetics/models/item/andouille_sausage.json
 ae78f051d9328e5a204530b7fc2e3d88362b4e68 assets/createcybernetics/models/item/armupgrades_armcannon.json
 37f82cc0ca47be7b60c54ef6d3b7059b9b671846 assets/createcybernetics/models/item/armupgrades_claws.json
@@ -28,6 +28,7 @@ b465ff6ac0fc51780551515d20c6c48637b33bce assets/createcybernetics/models/item/bo
 4b2bf31a9270ebb84e7882e608d127c12c1f5ded assets/createcybernetics/models/item/boneupgrades_bonebattery.json
 3ba2284108582d59cf8c851b0c5ff21029d386e4 assets/createcybernetics/models/item/boneupgrades_boneflex.json
 4b4c33f9b1bdbbbcfc43cb0466d970d26739d6c3 assets/createcybernetics/models/item/boneupgrades_bonelacing.json
+d0b4a8654ee753076a9d5b10b232e0d781b2e454 assets/createcybernetics/models/item/boneupgrades_cyberskull.json
 6b1d030cf07cb6ade1499227e0f2ea8cbaa85247 assets/createcybernetics/models/item/boneupgrades_elytra.json
 491ace7ed3caea0fb36fcd733fe1a02a154f7c1d assets/createcybernetics/models/item/boneupgrades_piezo.json
 ae3dff816baa8d55079746d4e7384c03e48a7c57 assets/createcybernetics/models/item/boneupgrades_sandevistan.json

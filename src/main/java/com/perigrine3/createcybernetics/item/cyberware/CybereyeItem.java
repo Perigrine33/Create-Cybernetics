@@ -69,6 +69,11 @@ public class CybereyeItem extends Item implements ICyberwareItem {
     @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(CyberwareSlot.EYES); }
 
     @Override
+    public int maxStacksPerSlotType(ItemStack stack, CyberwareSlot slotType) {
+        return 3;
+    }
+
+    @Override
     public void onInstalled(Player player) {
 
     }

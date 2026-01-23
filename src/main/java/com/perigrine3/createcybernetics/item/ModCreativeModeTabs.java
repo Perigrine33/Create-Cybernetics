@@ -247,6 +247,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BONEUPGRADES_PIEZO);
                         output.accept(ModItems.BONEUPGRADES_SPINALINJECTOR);
                         output.accept(ModItems.BONEUPGRADES_SANDEVISTAN);
+                        output.accept(ModItems.BONEUPGRADES_CYBERSKULL);
                     //BRAIN UPGRADES
                         output.accept(ModItems.BRAINUPGRADES_CYBERBRAIN);
                         output.accept(ModItems.BRAINUPGRADES_EYEOFDEFENDER);

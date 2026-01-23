@@ -138,6 +138,7 @@
   "item.createcybernetics.boneupgrades_piezo": "Piezoelectric Energy Generator",
   "item.createcybernetics.boneupgrades_spinalinjector": "Spinal Injector",
   "item.createcybernetics.boneupgrades_sandevistan": "Sandevistan",
+  "item.createcybernetics.boneupgrades_cyberskull": "Titanium Skull",
 
   "item.createcybernetics.brainupgrades_cyberbrain": "Cerebral Processing Unit",
   "item.createcybernetics.brainupgrades_eyeofdefender": "Eye of Defender",
@@ -182,7 +183,7 @@
   "item.createcybernetics.skinupgrades_sweat": "Enhanced Sweat Glands",
   "item.createcybernetics.skinupgrades_metalplating": "Metal Plating",
 
-  "item.createcybernetics.muscleupgrades_synthmuscle": "Synthetic Muscle",
+  "item.createcybernetics.muscleupgrades_synthmuscle": "Myomer Muscle",
   "item.createcybernetics.muscleupgrades_wiredreflexes": "Wired Reflexes",
 
   "item.createcybernetics.wetware_blubber": "Polar Bear Fat",
@@ -451,6 +452,8 @@
       "tooltip.createcybernetics.boneupgrades_spinalinjector.tooltip1": "§1Allows the user to store and use up to 4 potions with extra duration",
           "tooltip.createcybernetics.boneupgrades_spinalinjector.tooltip2": "§7Requires §9Linear Frame",
       "tooltip.createcybernetics.boneupgrades_sandevistan.tooltip1": "§1Grants the user immense speed for a short time",
+      "tooltip.createcybernetics.boneupgrades_cyberskull.tooltip1": "§1Negates elytra momentum damage",
+      "tooltip.createcybernetics.boneupgrades_cyberskull.tooltip2": "§7Requires §9Linear Frame",
 
 
   "tooltip.createcybernetics.brainupgrades_cyberbrain.tooltip1": "§1Grants the user 3x experience, and prevents insomnia for 6 days",

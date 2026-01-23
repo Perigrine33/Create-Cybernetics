@@ -1,0 +1,28 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "S": {
+      "item": "minecraft:skeleton_skull"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "  T  ",
+    " TST ",
+    "  T  ",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:boneupgrades_cyberskull"
+  },
+  "show_notification": false
+}

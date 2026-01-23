@@ -105,6 +105,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_PIEZO.get())
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
                 .add(ModItems.BONEUPGRADES_SANDEVISTAN.get())
+                .add(ModItems.BONEUPGRADES_CYBERSKULL.get())
                 .add(ModItems.BRAINUPGRADES_EYEOFDEFENDER.get())
                 .add(ModItems.BRAINUPGRADES_ENDERJAMMER.get())
                 .add(ModItems.BRAINUPGRADES_MATRIX.get())
@@ -272,6 +273,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_PIEZO.get())
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
                 .add(ModItems.BONEUPGRADES_SANDEVISTAN.get())
+                .add(ModItems.BONEUPGRADES_CYBERSKULL.get())
                 .addOptional(resourceLocation("createcybernetics:boneupgrades_elytra"));
 //SKIN UPGRADES
         tag(ModTags.Items.SKIN_UPGRADES)

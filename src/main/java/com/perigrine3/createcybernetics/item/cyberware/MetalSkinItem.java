@@ -71,6 +71,7 @@ public class MetalSkinItem extends Item implements ICyberwareItem {
     public void onTick(Player player) {
         ICyberwareItem.super.onTick(player);
         if (player.level().isClientSide) return;
+        if (player.isInvisible()) return;
         if (player.getRandom().nextInt(60) != 0) return;
 
         double px = player.getX();

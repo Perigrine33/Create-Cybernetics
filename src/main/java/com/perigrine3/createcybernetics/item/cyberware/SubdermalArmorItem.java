@@ -2,6 +2,9 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -62,14 +65,25 @@ public class SubdermalArmorItem extends Item implements ICyberwareItem {
 
     @Override
     public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "subdermalarmor_armor");
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data.hasMultipleSpecificItem(ModItems.SKINUPGRADES_SUBDERMALARMOR.get(), 3, CyberwareSlot.SKIN)) {
+            CyberwareAttributeHelper.applyModifier(player, "subdermalarmor_armor_1");
+            CyberwareAttributeHelper.applyModifier(player, "subdermalarmor_armor_2");
+            CyberwareAttributeHelper.applyModifier(player, "subdermalarmor_armor_3");
+        } else if (data.hasMultipleSpecificItem(ModItems.SKINUPGRADES_SUBDERMALARMOR.get(), 3, CyberwareSlot.SKIN)) {
+            CyberwareAttributeHelper.applyModifier(player, "subdermalarmor_armor_1");
+            CyberwareAttributeHelper.applyModifier(player, "subdermalarmor_armor_2");
+        } else if (data.hasSpecificItem(ModItems.SKINUPGRADES_SUBDERMALARMOR.get(), CyberwareSlot.SKIN)) {
+            CyberwareAttributeHelper.applyModifier(player, "subdermalarmor_armor_1");
+        }
 
     }
 
     @Override
     public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "subdermalarmor_armor");
-
+        CyberwareAttributeHelper.removeModifier(player, "subdermalarmor_armor_1");
+        CyberwareAttributeHelper.removeModifier(player, "subdermalarmor_armor_2");
+        CyberwareAttributeHelper.removeModifier(player, "subdermalarmor_armor_3");
     }
 
     @Override

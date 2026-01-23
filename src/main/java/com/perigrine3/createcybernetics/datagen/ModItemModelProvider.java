@@ -164,6 +164,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BONEUPGRADES_PIEZO.get());
         basicItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get());
         basicItem(ModItems.BONEUPGRADES_SANDEVISTAN.get());
+        basicItem(ModItems.BONEUPGRADES_CYBERSKULL.get());
     }
 
 //BRAIN

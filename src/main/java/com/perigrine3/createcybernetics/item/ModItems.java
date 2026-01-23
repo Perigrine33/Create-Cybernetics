@@ -974,6 +974,21 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.boneupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.boneupgrades_sandevistan.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.boneupgrades_sandevistan.tooltip2"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.boneupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
+    public static final DeferredItem<Item> BONEUPGRADES_CYBERSKULL = ITEMS.register("boneupgrades_cyberskull",
+        () -> new TitaniumSkullItem(new Item.Properties().stacksTo(1), 10) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.boneupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.boneupgrades_cyberskull.tooltip1"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.boneupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));

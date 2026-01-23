@@ -19,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -41,6 +42,7 @@ public final class SandevistanMirageTrail {
 
     private static final int RENDER_SNAPSHOTS = 241;
     private static final int TRAIL_LIFETIME_TICKS = 12 * 20;
+
     private static final float MIRAGE_MODEL_SCALE = 0.9375F;
 
     private static final double RENDER_DELAY_TICKS = 0.6725;
@@ -253,6 +255,10 @@ public final class SandevistanMirageTrail {
             int renderCount = endExclusive - start;
             if (renderCount <= 0) return;
 
+            float scaleAttr = (float) player.getAttributeValue(Attributes.SCALE);
+            scaleAttr = Mth.clamp(scaleAttr, 0.0625F, 16.0F);
+            float mirageScale = MIRAGE_MODEL_SCALE * scaleAttr;
+
             for (int i = start; i < endExclusive; i++) {
                 Snapshot s = arr[i];
 
@@ -298,9 +304,8 @@ public final class SandevistanMirageTrail {
                     poseStack.translate(dx, dy, dz);
                     poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - s.bodyYaw));
                     poseStack.scale(-1.0F, -1.0F, 1.0F);
-                    poseStack.scale(MIRAGE_MODEL_SCALE, MIRAGE_MODEL_SCALE, MIRAGE_MODEL_SCALE);
-                    poseStack.translate(0.0F, -1.501F / MIRAGE_MODEL_SCALE, 0.0F);
-
+                    poseStack.scale(mirageScale, mirageScale, mirageScale);
+                    poseStack.translate(0.0F, -1.501F / mirageScale, 0.0F);
 
                     int packedLight = LevelRenderer.getLightColor(
                             player.level(),

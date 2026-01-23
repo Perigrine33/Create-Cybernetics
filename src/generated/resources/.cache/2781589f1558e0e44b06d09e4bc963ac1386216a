@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-19T18:02:51.2820584	Tags for minecraft:item mod id createcybernetics
+// 1.21.1	2026-01-23T00:04:18.466619	Tags for minecraft:item mod id createcybernetics
 facebceb0f7eaac59aec077332daccfdb5c937c8 data/createcybernetics/tags/item/arm_cannon_ammo.json
 0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
 c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
@@ -6,11 +6,11 @@ c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_c
 22dd43158827f4d7cda7a49ec4b5120807881949 data/createcybernetics/tags/item/body_parts.json
 2d7af27172af4d41b4cc22a5243b9b321bfe02fe data/createcybernetics/tags/item/bone_items.json
 81f44616354ae3360e79d0d5995c7860fd6e8897 data/createcybernetics/tags/item/bone_replacements.json
-52c868b243165421399d4a559330e0c502011544 data/createcybernetics/tags/item/bone_upgrades.json
+f04aebd3a507204edbea582c1beea66ffb2c39d8 data/createcybernetics/tags/item/bone_upgrades.json
 c1c6008b29c475ecc00649282b6c8ca2fce1fa36 data/createcybernetics/tags/item/brain_items.json
 f6c8399848801cefe03e09702a8354e1c24d9f1c data/createcybernetics/tags/item/brain_replacements.json
 4efa1c65a5ed3c168731a4472d968e2294fdc052 data/createcybernetics/tags/item/brain_upgrades.json
-1d145be7726c371e0ac0978a79732f69c49a9875 data/createcybernetics/tags/item/cyberware_item.json
+727b334c979242f18fc3f089f9617aaf2292938b data/createcybernetics/tags/item/cyberware_item.json
 570b1fe5d500b7914189745556e9c8d776a0b102 data/createcybernetics/tags/item/data_shards.json
 334b677712c730f32620517e83e87c9ee661ffda data/createcybernetics/tags/item/defaults_fail_as_missing_when_unpowered.json
 0e6ae54a88da0f758eb244fa267684c1a47a734b data/createcybernetics/tags/item/eye_items.json

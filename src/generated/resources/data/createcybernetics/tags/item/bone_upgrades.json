@@ -6,6 +6,7 @@
     "createcybernetics:boneupgrades_piezo",
     "createcybernetics:boneupgrades_spinalinjector",
     "createcybernetics:boneupgrades_sandevistan",
+    "createcybernetics:boneupgrades_cyberskull",
     {
       "id": "createcybernetics:boneupgrades_elytra",
       "required": false
