@@ -31,6 +31,16 @@ public class MetalSkinItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean isDyeable(ItemStack stack, CyberwareSlot slot) {
+        return slot == CyberwareSlot.SKIN;
+    }
+
+    @Override
+    public boolean isDyeable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public int getHumanityCost() {
         return humanityCost;
     }

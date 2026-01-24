@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/liver_removed",
   "criteria": {
     "skin_removed": {
       "trigger": "createcybernetics:skin_removed"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Removed The Skin",
     "icon": {
       "count": 1,

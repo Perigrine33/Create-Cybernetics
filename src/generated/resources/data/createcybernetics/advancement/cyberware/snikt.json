@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/first_ripperdoc_visit",
   "criteria": {
     "snikt": {
       "trigger": "createcybernetics:snikt"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Installed Retractable Claws",
     "icon": {
       "count": 1,

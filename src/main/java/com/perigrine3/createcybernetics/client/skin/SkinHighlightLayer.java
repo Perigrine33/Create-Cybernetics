@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.client.skin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -45,22 +46,43 @@ public final class SkinHighlightLayer extends RenderLayer<AbstractClientPlayer, 
 
         PlayerSkin.Model modelType = player.getSkin().model();
 
-        for (SkinHighlight highlight : state.getHighlights()) {
-            if (highlight == null) continue;
+        RenderSystem.enableBlend();
+        try {
+            for (SkinHighlight highlight : state.getHighlights()) {
+                if (highlight == null) continue;
 
-            ResourceLocation tex = highlight.getTexture(modelType);
+                ResourceLocation tex = highlight.getTexture(modelType);
 
-            // Emissive = fullbright, but still use entityTranslucent so texture RGB is preserved
-            int light = highlight.isEmissive() ? 0x00F000F0 : packedLight;
-            RenderType rt = RenderType.entityTranslucent(tex);
+                final boolean emissive = highlight.isEmissive();
+                final boolean tintOnEmissive = highlight.tintOnEmissive();
 
-            // IMPORTANT:
-            // For emissive highlights, use WHITE so the texture's OWN color shows.
-            // For non-emissive highlights, respect highlight.getColor().
-            int color = highlight.isEmissive() ? 0xFFFFFFFF : highlight.getColor();
+                RenderType rt;
+                int light;
+                int color;
 
-            var vc = buffer.getBuffer(rt);
-            this.getParentModel().renderToBuffer(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                if (emissive) {
+                    light = 0x00F000F0;
+
+                    if (tintOnEmissive) {
+                        rt = SkinRenderTypes.emissiveTinted(tex);
+                        color = highlight.getColor();
+                    } else {
+                        rt = RenderType.entityTranslucent(tex);
+                        color = 0xFFFFFFFF;
+                    }
+                } else {
+                    light = packedLight;
+                    rt = RenderType.entityTranslucent(tex);
+                    color = highlight.getColor();
+                }
+
+                var vc = buffer.getBuffer(rt);
+                this.getParentModel().renderToBuffer(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+            }
+
+        } finally {
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableBlend();
         }
     }
 }

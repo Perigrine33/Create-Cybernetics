@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/first_ripperdoc_visit",
   "criteria": {
     "cogito_ergo_sum": {
       "trigger": "createcybernetics:cogito_ergo_sum"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Installed A Cerebral Processing Unit And Abandoned Your Humanity",
     "icon": {
       "count": 1,

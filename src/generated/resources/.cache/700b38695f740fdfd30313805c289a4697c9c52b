@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-23T00:04:18.4626185	Item Models: createcybernetics
+// 1.21.1	2026-01-23T19:25:13.3466173	Item Models: createcybernetics
 8570733f6ab9231502efdbe6dd1695f08dc806b1 assets/createcybernetics/models/item/andouille_sausage.json
 ae78f051d9328e5a204530b7fc2e3d88362b4e68 assets/createcybernetics/models/item/armupgrades_armcannon.json
 37f82cc0ca47be7b60c54ef6d3b7059b9b671846 assets/createcybernetics/models/item/armupgrades_claws.json
@@ -197,7 +197,6 @@ aa5fe1e7c4a12baa5d76ac06478915b2872fe163 assets/createcybernetics/models/item/sc
 13dca263b8886ec299d8a211c5587bce8e6846bd assets/createcybernetics/models/item/skinupgrades_chromatophores.json
 00f67acccd438ff34e80fcc37720f87e0e46c7ee assets/createcybernetics/models/item/skinupgrades_faceplate.json
 5586b29ccfd0471dec25f3ce70ee2ff8a4b82d8e assets/createcybernetics/models/item/skinupgrades_immuno.json
-1e745118ca8a74f3a3b4f8973118a648a7b1c95c assets/createcybernetics/models/item/skinupgrades_metalplating.json
 1935e66ba7f315765f9e94ef7df1501200fa427d assets/createcybernetics/models/item/skinupgrades_netheriteplating.json
 b18a4914f9cb971c7a25a60028a147c51e63041a assets/createcybernetics/models/item/skinupgrades_solarskin.json
 3d6cc6dc65f86e15ff8c849bdbef8a708e61326f assets/createcybernetics/models/item/skinupgrades_subdermalarmor.json

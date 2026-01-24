@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "createcybernetics:item/skinupgrades_metalplating",
+    "layer1": "createcybernetics:item/skinupgrades_metalplating_mask"
+  }
+}

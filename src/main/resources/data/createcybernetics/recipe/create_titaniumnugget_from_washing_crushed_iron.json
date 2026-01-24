@@ -12,6 +12,19 @@
       "chance": 0.5
     },
     {
+      "item": "minecraft:iron_nugget",
+      "count": 9
+    },
+    {
+      "item": "minecraft:iron_nugget",
+      "count": 4,
+      "chance": 0.25
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
       "id": "createcybernetics:titaniumnugget",
       "count": 1,
       "chance": 0.1

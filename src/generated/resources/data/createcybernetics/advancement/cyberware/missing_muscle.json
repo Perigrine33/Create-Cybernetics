@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/boneless",
   "criteria": {
     "missing_muscle": {
       "trigger": "createcybernetics:missing_muscle"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Removed The Muscle",
     "icon": {
       "count": 1,

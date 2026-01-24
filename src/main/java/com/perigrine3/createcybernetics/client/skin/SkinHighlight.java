@@ -10,16 +10,22 @@ public final class SkinHighlight {
     private final ResourceLocation slimTexture;
     private final int color;
     private final boolean emissive;
+    private final boolean tintOnEmissive;
 
     public SkinHighlight(ResourceLocation wideTexture, ResourceLocation slimTexture) {
-        this(wideTexture, slimTexture, FastColor.ARGB32.color(255, 255, 255, 255), false);
+        this(wideTexture, slimTexture, FastColor.ARGB32.color(255, 255, 255, 255), false, false);
     }
 
     public SkinHighlight(ResourceLocation wideTexture, ResourceLocation slimTexture, int color, boolean emissive) {
+        this(wideTexture, slimTexture, color, emissive, false);
+    }
+
+    public SkinHighlight(ResourceLocation wideTexture, ResourceLocation slimTexture, int color, boolean emissive, boolean tintOnEmissive) {
         this.wideTexture = wideTexture;
         this.slimTexture = slimTexture;
         this.color = color;
         this.emissive = emissive;
+        this.tintOnEmissive = tintOnEmissive;
     }
 
     public ResourceLocation getTexture(PlayerSkin.Model modelType) {
@@ -32,5 +38,9 @@ public final class SkinHighlight {
 
     public boolean isEmissive() {
         return emissive;
+    }
+
+    public boolean tintOnEmissive() {
+        return tintOnEmissive;
     }
 }

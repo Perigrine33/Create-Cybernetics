@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/cogito_ergo_sum",
   "criteria": {
     "thoughts_not_found": {
       "trigger": "createcybernetics:thoughts_not_found"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Experienced systemwide failure due to being unable to power your brain",
     "icon": {
       "count": 1,

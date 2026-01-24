@@ -6,6 +6,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/raw_titanium_block.png",
     "description": "Consumed Bones",
     "icon": {
       "count": 1,

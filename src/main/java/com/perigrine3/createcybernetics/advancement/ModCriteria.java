@@ -55,6 +55,10 @@ public final class ModCriteria {
             TRIGGER_TYPES.register("boneless", BonelessTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, MissingMuscleTrigger> MISSING_MUSCLE =
             TRIGGER_TYPES.register("missing_muscle", MissingMuscleTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, FleshWoundTrigger> FLESH_WOUND =
+            TRIGGER_TYPES.register("missing_limbs", FleshWoundTrigger::new);
+
+
     public static final DeferredHolder<CriterionTrigger<?>, DavidMartinezSpecialTrigger> DAVID_SPECIAL =
             TRIGGER_TYPES.register("david_special", DavidMartinezSpecialTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, KungFuTrigger> KUNG_FU =

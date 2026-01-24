@@ -27,14 +27,15 @@ public final class SkinHighlightRender {
 
     private SkinHighlightRender() {}
 
-    /**
-     * MULTI-HIGHLIGHT:
-     * - enabled=true  => add a highlight entry (does not overwrite others)
-     * - enabled=false => clears all highlights (keeps old semantics simple)
-     */
     public static void apply(SkinModifierState state, boolean enabled,
                              ResourceLocation wide, ResourceLocation slim,
                              int color, boolean emissive) {
+        apply(state, enabled, wide, slim, color, emissive, false);
+    }
+
+    public static void apply(SkinModifierState state, boolean enabled,
+                             ResourceLocation wide, ResourceLocation slim,
+                             int color, boolean emissive, boolean tintOnEmissive) {
         if (state == null) return;
 
         if (!enabled) {
@@ -42,7 +43,7 @@ public final class SkinHighlightRender {
             return;
         }
 
-        state.addHighlight(new SkinHighlight(wide, slim, color, emissive));
+        state.addHighlight(new SkinHighlight(wide, slim, color, emissive, tintOnEmissive));
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
@@ -57,10 +58,6 @@ public final class SkinHighlightRender {
             PlayerRenderer slim = event.getSkin(PlayerSkin.Model.SLIM);
             if (slim != null) slim.addLayer(new SkinHighlightLayer(slim));
         }
-    }
-
-    private static boolean cc$allowTintOnEmissive(ResourceLocation tex) {
-        return tex != null && tex.getPath().contains("cybereyes_dye_primary");
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
@@ -124,13 +121,28 @@ public final class SkinHighlightRender {
 
                 ResourceLocation tex = highlight.getTexture(modelType);
 
-                // Emissive = fullbright, but keep entityTranslucent so texture RGB is preserved
-                int light = highlight.isEmissive() ? 0x00F000F0 : event.getPackedLight();
-                RenderType rt = RenderType.entityTranslucent(tex);
+                final boolean emissive = highlight.isEmissive();
+                final boolean tintOnEmissive = highlight.tintOnEmissive();
 
-                // For emissive highlights, use WHITE so the texture's OWN color shows.
-                // For non-emissive highlights, respect highlight.getColor().
-                int color = highlight.isEmissive() ? 0xFFFFFFFF : highlight.getColor();
+                RenderType rt;
+                int light;
+                int color;
+
+                if (emissive) {
+                    light = 0x00F000F0;
+
+                    if (tintOnEmissive) {
+                        rt = SkinRenderTypes.emissiveTinted(tex);
+                        color = highlight.getColor();
+                    } else {
+                        rt = RenderType.entityTranslucent(tex);
+                        color = 0xFFFFFFFF;
+                    }
+                } else {
+                    light = event.getPackedLight();
+                    rt = RenderType.entityTranslucent(tex);
+                    color = highlight.getColor();
+                }
 
                 var vc = buffer.getBuffer(rt);
                 armPart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);

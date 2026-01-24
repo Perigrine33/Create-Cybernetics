@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "background": "createcybernetics:textures/block/blankmachine.png",
+    "description": "Become a cyberpunk",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:basecyberware_cybereyes"
+    },
+    "title": "Cybernetics"
+  },
+  "requirements": [
+    [
+      "tick"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

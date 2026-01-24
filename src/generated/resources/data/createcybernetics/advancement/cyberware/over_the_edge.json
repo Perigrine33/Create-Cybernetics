@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/cyberpsychosis",
   "criteria": {
     "over_the_edge": {
       "trigger": "createcybernetics:over_the_edge"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/blankmachine.png",
     "description": "Died From Cyberpsychosis",
     "icon": {
       "count": 1,

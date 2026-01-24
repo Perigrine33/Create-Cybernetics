@@ -14,10 +14,12 @@ public class SyntheticSetulesEffect extends MobEffect {
     @Override
     public boolean applyEffectTick(LivingEntity livingEntity, int amplifier) {
         if (livingEntity.horizontalCollision) {
-            Vec3 initialVec = livingEntity.getDeltaMovement();
-            Vec3 climbVector = new Vec3(initialVec.x, 0.2, initialVec.z);
-            livingEntity.setDeltaMovement(climbVector.scale(0.96));
-            return true;
+            if (!livingEntity.isShiftKeyDown()) {
+                Vec3 initialVec = livingEntity.getDeltaMovement();
+                Vec3 climbVector = new Vec3(initialVec.x, 0.2, initialVec.z);
+                livingEntity.setDeltaMovement(climbVector.scale(0.96));
+                return true;
+            }
         }
 
         return super.applyEffectTick(livingEntity, amplifier);

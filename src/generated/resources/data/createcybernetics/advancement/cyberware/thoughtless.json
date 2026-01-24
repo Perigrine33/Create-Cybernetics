@@ -6,6 +6,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Removed The Brain",
     "icon": {
       "count": 1,

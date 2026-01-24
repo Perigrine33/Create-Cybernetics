@@ -1,10 +1,12 @@
 {
+  "parent": "createcybernetics:cyberware/first_ripperdoc_visit",
   "criteria": {
     "weak_flesh": {
       "trigger": "createcybernetics:weak_flesh"
     }
   },
   "display": {
+    "background": "createcybernetics:textures/block/blankmachine.png",
     "description": "Went Full Borg",
     "icon": {
       "count": 1,

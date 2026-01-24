@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/root",
   "criteria": {
     "first_scavenged_cyberware": {
       "trigger": "createcybernetics:first_scavenged_cyberware"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/blankmachine.png",
     "description": "Obtained Scavenged Cyberware",
     "icon": {
       "count": 1,

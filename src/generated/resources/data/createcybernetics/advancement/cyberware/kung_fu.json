@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/first_ripperdoc_visit",
   "criteria": {
     "kung_fu": {
       "trigger": "createcybernetics:kung_fu"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Downloaded Martial Arts Skills From A Data Shard",
     "icon": {
       "count": 1,

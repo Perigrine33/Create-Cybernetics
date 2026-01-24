@@ -134,6 +134,10 @@ public final class AdvancementEventHooks {
         if (!data.hasAnyTagged(ModTags.Items.MUSCLE_ITEMS, CyberwareSlot.MUSCLE)) {
             ModCriteria.MISSING_MUSCLE.get().trigger(player);
         }
+        if (!data.hasAnyTagged(ModTags.Items.LEFTARM_ITEMS, CyberwareSlot.LARM) && !data.hasAnyTagged(ModTags.Items.RIGHTARM_ITEMS, CyberwareSlot.RARM) &&
+                !data.hasAnyTagged(ModTags.Items.LEFTLEG_ITEMS, CyberwareSlot.LLEG) && !data.hasAnyTagged(ModTags.Items.RIGHTLEG_ITEMS, CyberwareSlot.RLEG)) {
+            ModCriteria.FLESH_WOUND.get().trigger(player);
+        }
     }
 
     @SubscribeEvent

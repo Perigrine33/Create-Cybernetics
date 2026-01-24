@@ -1,14 +1,16 @@
 {
+  "parent": "createcybernetics:cyberware/first_scavenged_cyberware",
   "criteria": {
     "first_cyberware": {
       "trigger": "createcybernetics:first_cyberware"
     }
   },
   "display": {
+    "background": "createcybernetics:textures/block/blankmachine.png",
     "description": "Obtained Cyberware",
     "icon": {
       "count": 1,
-      "id": "createcybernetics:basecyberware_cybereyes"
+      "id": "createcybernetics:basecyberware_leftarm"
     },
     "title": "Time To Chrome"
   },

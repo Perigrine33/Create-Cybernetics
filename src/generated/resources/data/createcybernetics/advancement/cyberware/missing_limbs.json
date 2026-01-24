@@ -1,0 +1,24 @@
+{
+  "parent": "createcybernetics:cyberware/missing_muscle",
+  "criteria": {
+    "missing_limbs": {
+      "trigger": "createcybernetics:missing_limbs"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
+    "description": "Removed All Limbs",
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:bodypart_leftarm"
+    },
+    "title": "'Tis But A Flesh Wound"
+  },
+  "requirements": [
+    [
+      "missing_limbs"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

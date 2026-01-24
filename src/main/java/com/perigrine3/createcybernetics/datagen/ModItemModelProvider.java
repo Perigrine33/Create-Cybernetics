@@ -225,7 +225,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SKINUPGRADES_SUBDERMALARMOR.get());
         basicItem(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get());
         basicItem(ModItems.SKINUPGRADES_SYNTHETICSETULES.get());
-        basicItem(ModItems.SKINUPGRADES_METALPLATING.get());
 
             if (ModItems.SKINUPGRADES_SWEAT != null) {
                 basicItem(ModItems.SKINUPGRADES_SWEAT.get());

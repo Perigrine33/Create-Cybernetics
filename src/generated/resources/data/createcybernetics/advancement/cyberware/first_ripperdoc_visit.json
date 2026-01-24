@@ -1,10 +1,12 @@
 {
+  "parent": "createcybernetics:cyberware/first_cyberware",
   "criteria": {
     "first_ripperdoc_visit": {
       "trigger": "createcybernetics:first_ripperdoc_visit"
     }
   },
   "display": {
+    "background": "createcybernetics:textures/block/blankmachine.png",
     "description": "Installed Cyberware",
     "icon": {
       "count": 1,

@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/thoughtless",
   "criteria": {
     "chest_pains": {
       "trigger": "createcybernetics:chest_pains"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Removed The Heart",
     "icon": {
       "count": 1,

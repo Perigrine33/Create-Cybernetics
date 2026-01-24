@@ -1,4 +1,5 @@
 {
+  "parent": "createcybernetics:cyberware/first_ripperdoc_visit",
   "criteria": {
     "david_special": {
       "trigger": "createcybernetics:david_special"
@@ -6,6 +7,7 @@
   },
   "display": {
     "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
     "description": "Did not adhere to the limitations of the flesh",
     "icon": {
       "count": 1,
