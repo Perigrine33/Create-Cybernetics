@@ -158,10 +158,6 @@ public record EngineeringTableRecipe(
                 Codec.BOOL.optionalFieldOf("accept_mirrored", true).forGetter(EngineeringTableRecipe::accept_mirrored)
         ).apply(inst, (pattern, key, result, accept_mirrored) -> fromJson(pattern, key, result, accept_mirrored)));
 
-        // NOTE: The CODEC above is “decode-focused” (common for custom recipes).
-        // NeoForge requires a MapCodec; it’s acceptable to throw on encode if you never encode recipes back to JSON.
-        // Recipe loading uses decode. :contentReference[oaicite:1]{index=1}
-
         public static final StreamCodec<RegistryFriendlyByteBuf, EngineeringTableRecipe> STREAM_CODEC =
                 new StreamCodec<>() {
                     @Override

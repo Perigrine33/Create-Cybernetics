@@ -399,7 +399,7 @@ public class CyberwareAttributeHelper {
                 1, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("gemini_speed", new AttributeModifierData(speedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gemini_speed_add"),
-                0.2, AttributeModifier.Operation.ADD_VALUE));
+                0.02, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("samson_attackstrength", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "samson_attackstrength_add"),

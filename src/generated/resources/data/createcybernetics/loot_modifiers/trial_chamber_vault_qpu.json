@@ -1,0 +1,14 @@
+{
+  "type": "createcybernetics:add_item",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:vault/ominous_trial_chamber"
+    },
+    {
+      "chance": 0.05,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "item": "createcybernetics:netherite_qpu"
+}

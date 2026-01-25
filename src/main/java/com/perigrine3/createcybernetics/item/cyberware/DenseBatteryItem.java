@@ -18,7 +18,7 @@ public class DenseBatteryItem extends Item implements ICyberwareItem {
 
     private final int humanityCost;
 
-    private static final int CAPACITY = 500;
+    private static final int CAPACITY = 5000;
     private static final int CHARGE_CYCLE_TICKS = 6;
 
     public DenseBatteryItem(Properties props, int humanityCost) {
@@ -32,7 +32,7 @@ public class DenseBatteryItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Stores 500 Energy From Charging Block").withStyle(ChatFormatting.DARK_PURPLE));
+            tooltip.add(Component.literal("Stores 5000 Energy From Charging Block").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }
 

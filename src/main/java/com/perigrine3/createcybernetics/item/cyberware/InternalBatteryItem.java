@@ -18,7 +18,7 @@ public class InternalBatteryItem extends Item implements ICyberwareItem {
 
     private final int humanityCost;
 
-    private static final int CAPACITY = 100;
+    private static final int CAPACITY = 500;
 
     public InternalBatteryItem(Properties props, int humanityCost) {
         super(props);
@@ -31,7 +31,7 @@ public class InternalBatteryItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Stores 100 Energy").withStyle(ChatFormatting.DARK_PURPLE));
+            tooltip.add(Component.literal("Stores 500 Energy").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }
 
