@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "createcybernetics:block/etched_titanium_copper",
+    "side": "createcybernetics:block/etched_titanium_copper",
+    "top": "createcybernetics:block/etched_titanium_copper"
+  }
+}

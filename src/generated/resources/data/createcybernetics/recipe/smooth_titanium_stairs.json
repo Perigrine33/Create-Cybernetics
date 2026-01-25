@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "titanium",
+  "key": {
+    "#": {
+      "item": "createcybernetics:smooth_titanium"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "createcybernetics:smooth_titanium_stairs"
+  }
+}

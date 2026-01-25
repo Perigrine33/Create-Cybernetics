@@ -28,6 +28,8 @@ public class PlayerCyberwareData implements ICyberwareData {
     private static final String NBT_HUMANITY = "Humanity";
     private static final String NBT_ENERGY = "Energy";
 
+    private boolean forcedChamberCrouch = false;
+
     private static final String NBT_NEUROPOZYNE_APPLY_COUNT = "NeuropozyneApplyCount";
     private int neuropozyneApplyCount = 0;
 

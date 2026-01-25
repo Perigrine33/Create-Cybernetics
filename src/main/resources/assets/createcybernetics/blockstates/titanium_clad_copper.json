@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "createcybernetics:block/titanium_clad_copper", "y": 180 },
+    "facing=south": { "model": "createcybernetics:block/titanium_clad_copper", "y": 0 },
+    "facing=west":  { "model": "createcybernetics:block/titanium_clad_copper", "y": 90 },
+    "facing=east":  { "model": "createcybernetics:block/titanium_clad_copper", "y": 270 }
+  }
+}

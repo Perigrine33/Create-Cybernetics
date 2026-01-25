@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "createcybernetics:block/smooth_titanium",
+    "up": "createcybernetics:block/smooth_titanium",
+    "north": "createcybernetics:block/titanium_clad_copper",
+    "east": "createcybernetics:block/smooth_titanium",
+    "south": "createcybernetics:block/titanium_clad_copper",
+    "west": "createcybernetics:block/smooth_titanium",
+    "particle": "createcybernetics:block/smooth_titanium"
+  },
+  "render_type": "solid"
+}

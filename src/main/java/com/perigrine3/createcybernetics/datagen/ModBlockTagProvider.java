@@ -24,6 +24,10 @@ public class ModBlockTagProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.TITANIUM_BLOCK.get())
+                .add(ModBlocks.SMOOTH_TITANIUM.get())
+                .add(ModBlocks.TITANIUM_GRATE.get())
+                .add(ModBlocks.TITANIUM_CLAD_COPPER.get())
+                .add(ModBlocks.ETCHED_TITANIUM_COPPER.get())
                 .add(ModBlocks.RAW_TITANIUM_BLOCK.get())
                 .add(ModBlocks.TITANIUMORE_BLOCK.get())
                 .add(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK.get())
@@ -31,12 +35,20 @@ public class ModBlockTagProvider extends BlockTagsProvider {
 
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.TITANIUM_BLOCK.get())
+                .add(ModBlocks.SMOOTH_TITANIUM.get())
+                .add(ModBlocks.TITANIUM_GRATE.get())
+                .add(ModBlocks.TITANIUM_CLAD_COPPER.get())
+                .add(ModBlocks.ETCHED_TITANIUM_COPPER.get())
                 .add(ModBlocks.RAW_TITANIUM_BLOCK.get())
                 .add(ModBlocks.TITANIUMORE_BLOCK.get())
                 .add(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK.get());
 
         tag(ModTags.Blocks.METAL_DETECTABLE)
                 .add(ModBlocks.TITANIUM_BLOCK.get())
+                .add(ModBlocks.SMOOTH_TITANIUM.get())
+                .add(ModBlocks.TITANIUM_GRATE.get())
+                .add(ModBlocks.TITANIUM_CLAD_COPPER.get())
+                .add(ModBlocks.ETCHED_TITANIUM_COPPER.get())
                 .add(ModBlocks.RAW_TITANIUM_BLOCK.get())
                 .add(ModBlocks.TITANIUMORE_BLOCK.get())
                 .add(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK.get())

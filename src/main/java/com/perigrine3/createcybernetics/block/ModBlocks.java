@@ -1,15 +1,10 @@
 package com.perigrine3.createcybernetics.block;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.common.block.RobosurgeonBlock;
 import com.perigrine3.createcybernetics.item.ModItems;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -39,10 +34,42 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(3f).requiresCorrectToolForDrops().sound(SoundType.STONE)), true);
 
+    public static final DeferredBlock<Block> SMOOTH_TITANIUM = registerBlock("smooth_titanium",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(6f).requiresCorrectToolForDrops().sound(SoundType.METAL)), true);
+    public static final DeferredBlock<Block> TITANIUM_GRATE = registerBlock("titanium_grate",
+            () -> new Block(BlockBehaviour.Properties.of().noOcclusion()
+                    .strength(6f).requiresCorrectToolForDrops().sound(SoundType.METAL)), true);
+    public static final DeferredBlock<Block> TITANIUM_CLAD_COPPER = registerBlock("titanium_clad_copper",
+            () -> new TitaniumCladCopperBlock(BlockBehaviour.Properties.of()
+                    .strength(5f).requiresCorrectToolForDrops().sound(SoundType.METAL)), true);
+    public static final DeferredBlock<Block> ETCHED_TITANIUM_COPPER = registerBlock("etched_titanium_copper",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(5f).requiresCorrectToolForDrops().sound(SoundType.METAL)), true);
+
+//NON-BLOCK BLOCKS
+    public static final DeferredBlock<StairBlock> SMOOTH_TITANIUM_STAIRS = registerBlock("smooth_titanium_stairs",
+            () -> new StairBlock(ModBlocks.SMOOTH_TITANIUM.get().defaultBlockState(),
+                    BlockBehaviour.Properties.of().strength(6f).requiresCorrectToolForDrops()), true);
+    public static final DeferredBlock<SlabBlock> SMOOTH_TITANIUM_SLAB = registerBlock("smooth_titanium_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.of().strength(6f).requiresCorrectToolForDrops()), true);
+
+    public static final DeferredBlock<StairBlock> TITANIUM_CLAD_COPPER_STAIRS = registerBlock("titanium_clad_copper_stairs",
+            () -> new StairBlock(ModBlocks.SMOOTH_TITANIUM.get().defaultBlockState(),
+                    BlockBehaviour.Properties.of().strength(6f).requiresCorrectToolForDrops()), true);
+    public static final DeferredBlock<SlabBlock> TITANIUM_CLAD_COPPER_SLAB = registerBlock("titanium_clad_copper_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.of().strength(6f).requiresCorrectToolForDrops()), true);
+
+    public static final DeferredBlock<StairBlock> ETCHED_TITANIUM_COPPER_STAIRS = registerBlock("etched_titanium_copper_stairs",
+            () -> new StairBlock(ModBlocks.SMOOTH_TITANIUM.get().defaultBlockState(),
+                    BlockBehaviour.Properties.of().strength(6f).requiresCorrectToolForDrops()), true);
+    public static final DeferredBlock<SlabBlock> ETCHED_TITANIUM_COPPER_SLAB = registerBlock("etched_titanium_copper_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.of().strength(6f).requiresCorrectToolForDrops()), true);
+
 //FUNCTIONAL BLOCKS
     public static final DeferredBlock<Block> SURGERY_CHAMBER_BOTTOM = registerBlock("surgery_chamber",
-        () -> new SurgeryChamberBlockBottom(BlockBehaviour.Properties.of()
-                .noOcclusion().sound(SoundType.METAL)), true);
+            () -> new SurgeryChamberBlockBottom(BlockBehaviour.Properties.of()
+                    .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> SURGERY_CHAMBER_TOP = registerBlock("surgery_chamber_top",
             () -> new SurgeryChamberBlockTop(BlockBehaviour.Properties.of()
                     .noOcclusion().sound(SoundType.METAL)), false);

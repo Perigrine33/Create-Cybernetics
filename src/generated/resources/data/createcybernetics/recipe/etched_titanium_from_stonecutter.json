@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "createcybernetics:titanium_clad_copper"
+  },
+  "result": {
+    "count": 4,
+    "id": "createcybernetics:etched_titanium_copper"
+  }
+}

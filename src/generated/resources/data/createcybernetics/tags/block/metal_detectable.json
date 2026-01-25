@@ -1,6 +1,10 @@
 {
   "values": [
     "createcybernetics:titanium_block",
+    "createcybernetics:smooth_titanium",
+    "createcybernetics:titanium_grate",
+    "createcybernetics:titanium_clad_copper",
+    "createcybernetics:etched_titanium_copper",
     "createcybernetics:raw_titanium_block",
     "createcybernetics:titaniumore_block",
     "createcybernetics:deepslate_titaniumore_block",
@@ -18,10 +22,25 @@
     "minecraft:raw_gold_block",
     "minecraft:raw_copper_block",
     "minecraft:netherite_block",
-    "create:zinc_ore",
-    "create:zinc_block",
-    "create:raw_zinc_block",
-    "create:brass_block",
-    "create:industrial_iron_block"
+    {
+      "id": "create:zinc_ore",
+      "required": false
+    },
+    {
+      "id": "create:zinc_block",
+      "required": false
+    },
+    {
+      "id": "create:raw_zinc_block",
+      "required": false
+    },
+    {
+      "id": "create:brass_block",
+      "required": false
+    },
+    {
+      "id": "create:industrial_iron_block",
+      "required": false
+    }
   ]
 }

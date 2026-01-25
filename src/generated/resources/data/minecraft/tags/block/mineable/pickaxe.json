@@ -1,6 +1,10 @@
 {
   "values": [
     "createcybernetics:titanium_block",
+    "createcybernetics:smooth_titanium",
+    "createcybernetics:titanium_grate",
+    "createcybernetics:titanium_clad_copper",
+    "createcybernetics:etched_titanium_copper",
     "createcybernetics:raw_titanium_block",
     "createcybernetics:titaniumore_block",
     "createcybernetics:deepslate_titaniumore_block",

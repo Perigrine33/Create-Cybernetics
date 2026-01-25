@@ -9,6 +9,8 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
 import java.util.List;
@@ -31,6 +33,16 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("TTT")
                 .define('T', ModItems.TITANIUMINGOT.get())
                 .unlockedBy("has_titaniumingot", has(ModItems.TITANIUMINGOT))
+                .save(recipeOutput);
+//TITANIUM CLAD COPPER
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.TITANIUM_CLAD_COPPER.get())
+                .pattern("TTT")
+                .pattern("TCT")
+                .pattern("TTT")
+                .define('T', ModItems.TITANIUMINGOT.get())
+                .define('C', Blocks.COPPER_BLOCK)
+                .unlockedBy("has_titaniumingot", has(ModItems.TITANIUMINGOT))
+                .unlockedBy("has_copper_block", has(Blocks.COPPER_BLOCK))
                 .save(recipeOutput);
 //RAW TITANIUM BLOCK FROM RAW TITANIUM
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.RAW_TITANIUM_BLOCK.get())
@@ -85,6 +97,57 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         oreBlasting(recipeOutput, TITANIUM_SMELTABLES, RecipeCategory.MISC,
                 ModItems.TITANIUMINGOT.get(), 0.25f, 100, "titanium");
 
+//SMOOTH TITANIUM
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.TITANIUM_BLOCK.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.SMOOTH_TITANIUM.get(), 4)
+                .unlockedBy("has_titanium_block", has(ModBlocks.TITANIUM_BLOCK.get()))
+                .save(recipeOutput, "createcybernetics:smooth_titanium_from_stonecutter");
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.SMOOTH_TITANIUM.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.SMOOTH_TITANIUM_STAIRS.get(), 2)
+                .unlockedBy("has_smooth_titanium", has(ModBlocks.SMOOTH_TITANIUM.get()))
+                .save(recipeOutput, "createcybernetics:smooth_titanium_stairs_from_stonecutter");
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.SMOOTH_TITANIUM.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.SMOOTH_TITANIUM_SLAB.get(), 2)
+                .unlockedBy("has_smooth_titanium", has(ModBlocks.SMOOTH_TITANIUM.get()))
+                .save(recipeOutput, "createcybernetics:smooth_titanium_slab_from_stonecutter");
+//TITANIUM GRATE
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.SMOOTH_TITANIUM.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.TITANIUM_GRATE.get(), 4)
+                .unlockedBy("has_smooth_titanium", has(ModBlocks.SMOOTH_TITANIUM.get()))
+                .save(recipeOutput, "createcybernetics:titanium_grate_from_stonecutter");
+//ETCHED TITANIUM COPPER
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.TITANIUM_CLAD_COPPER.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.ETCHED_TITANIUM_COPPER.get(), 4)
+                .unlockedBy("has_titanium_clad_copper", has(ModBlocks.TITANIUM_CLAD_COPPER.get()))
+                .save(recipeOutput, "createcybernetics:etched_titanium_from_stonecutter");
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.ETCHED_TITANIUM_COPPER.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.ETCHED_TITANIUM_COPPER_STAIRS.get(), 2)
+                .unlockedBy("has_etched_titanium_copper", has(ModBlocks.ETCHED_TITANIUM_COPPER.get()))
+                .save(recipeOutput, "createcybernetics:etched_titanium_stairs_from_stonecutter");
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.ETCHED_TITANIUM_COPPER.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.ETCHED_TITANIUM_COPPER_SLAB.get(), 2)
+                .unlockedBy("has_etched_titanium_copper", has(ModBlocks.ETCHED_TITANIUM_COPPER.get()))
+                .save(recipeOutput, "createcybernetics:etched_titanium_slab_from_stonecutter");
+
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.TITANIUM_CLAD_COPPER.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.TITANIUM_CLAD_COPPER_STAIRS.get(), 2)
+                .unlockedBy("has_titanium_clad_copper", has(ModBlocks.TITANIUM_CLAD_COPPER.get()))
+                .save(recipeOutput, "createcybernetics:titanium_clad_copper_stairs_from_stonecutter");
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.TITANIUM_CLAD_COPPER.get()),
+                        RecipeCategory.MISC,
+                        ModBlocks.TITANIUM_CLAD_COPPER_SLAB.get(), 2)
+                .unlockedBy("has_titanium_clad_copper", has(ModBlocks.TITANIUM_CLAD_COPPER.get()))
+                .save(recipeOutput, "createcybernetics:titanium_clad_copper_slab_from_stonecutter");
+
+
 
 //CORTICAL STACK SMITHING
         SmithingTransformRecipeBuilder.smithing(
@@ -118,6 +181,21 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         RecipeCategory.FOOD, ModItems.ROASTED_ANDOUILLE.get(), 0.35f, 200)
                 .unlockedBy("has_bone", has(ModItems.ANDOUILLE_SAUSAGE.get()))
                 .save(recipeOutput, "createcybernetics:roasted_andouille_from_smelting");
+
+
+
+//NON-BLOCK BLOCK RECIPES
+        stairBuilder(ModBlocks.SMOOTH_TITANIUM_STAIRS.get(), Ingredient.of(ModBlocks.SMOOTH_TITANIUM)).group("titanium")
+                .unlockedBy("has_titaniumingot", has(ModBlocks.SMOOTH_TITANIUM)).save(recipeOutput);
+        slab(recipeOutput, RecipeCategory.BUILDING_BLOCKS, ModBlocks.SMOOTH_TITANIUM_SLAB.get(), ModBlocks.SMOOTH_TITANIUM.get());
+
+        stairBuilder(ModBlocks.TITANIUM_CLAD_COPPER_STAIRS.get(), Ingredient.of(ModBlocks.TITANIUM_CLAD_COPPER)).group("titanium")
+                .unlockedBy("has_titanium_clad_copper", has(ModBlocks.TITANIUM_CLAD_COPPER)).save(recipeOutput);
+        slab(recipeOutput, RecipeCategory.BUILDING_BLOCKS, ModBlocks.TITANIUM_CLAD_COPPER_SLAB.get(), ModBlocks.TITANIUM_CLAD_COPPER.get());
+
+        stairBuilder(ModBlocks.ETCHED_TITANIUM_COPPER_STAIRS.get(), Ingredient.of(ModBlocks.ETCHED_TITANIUM_COPPER)).group("titanium")
+                .unlockedBy("has_titaniumingot", has(ModBlocks.ETCHED_TITANIUM_COPPER)).save(recipeOutput);
+        slab(recipeOutput, RecipeCategory.BUILDING_BLOCKS, ModBlocks.ETCHED_TITANIUM_COPPER_SLAB.get(), ModBlocks.ETCHED_TITANIUM_COPPER.get());
 
     }
 }

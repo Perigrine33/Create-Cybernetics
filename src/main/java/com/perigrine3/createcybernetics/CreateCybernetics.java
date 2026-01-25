@@ -111,6 +111,28 @@ public class CreateCybernetics {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.insertAfter(Items.CHAIN.getDefaultInstance(),
                     ModBlocks.TITANIUM_BLOCK.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.TITANIUM_BLOCK.asItem().getDefaultInstance(),
+                    ModBlocks.SMOOTH_TITANIUM.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.SMOOTH_TITANIUM.asItem().getDefaultInstance(),
+                    ModBlocks.TITANIUM_GRATE.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.TITANIUM_GRATE.asItem().getDefaultInstance(),
+                    ModBlocks.TITANIUM_CLAD_COPPER.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.TITANIUM_CLAD_COPPER.asItem().getDefaultInstance(),
+                    ModBlocks.ETCHED_TITANIUM_COPPER.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+
+
+            event.insertAfter(ModBlocks.SMOOTH_TITANIUM.asItem().getDefaultInstance(),
+                    ModBlocks.SMOOTH_TITANIUM_STAIRS.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.SMOOTH_TITANIUM_STAIRS.asItem().getDefaultInstance(),
+                    ModBlocks.SMOOTH_TITANIUM_SLAB.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.TITANIUM_CLAD_COPPER.asItem().getDefaultInstance(),
+                    ModBlocks.TITANIUM_CLAD_COPPER_STAIRS.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.TITANIUM_CLAD_COPPER_STAIRS.asItem().getDefaultInstance(),
+                    ModBlocks.TITANIUM_CLAD_COPPER_SLAB.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.ETCHED_TITANIUM_COPPER.asItem().getDefaultInstance(),
+                    ModBlocks.ETCHED_TITANIUM_COPPER_STAIRS.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+            event.insertAfter(ModBlocks.ETCHED_TITANIUM_COPPER_STAIRS.asItem().getDefaultInstance(),
+                    ModBlocks.ETCHED_TITANIUM_COPPER_SLAB.get().asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {

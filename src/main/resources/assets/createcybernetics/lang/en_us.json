@@ -277,7 +277,18 @@
   "block.createcybernetics.titaniumore_block": "Titanium Ore",
   "block.createcybernetics.deepslate_titaniumore_block": "Deepslate Titanium Ore",
   "block.createcybernetics.titanium_block": "Block of Titanium",
+  "block.createcybernetics.smooth_titanium": "Smooth Titanium",
+  "block.createcybernetics.titanium_grate": "Titanium Grate",
+  "block.createcybernetics.titanium_clad_copper": "Titanium Clad Copper",
+  "block.createcybernetics.etched_titanium_copper": "Etched Titanium Clad Copper",
   "block.createcybernetics.raw_titanium_block": "Block of Raw Titanium",
+
+  "block.createcybernetics.smooth_titanium_stairs": "Smooth Titanium Stairs",
+  "block.createcybernetics.smooth_titanium_slab": "Smooth Titanium Slab",
+  "block.createcybernetics.titanium_clad_copper_stairs": "Titanium Clad Copper Stairs",
+  "block.createcybernetics.titanium_clad_copper_slab": "Titanium Clad Copper Slab",
+  "block.createcybernetics.etched_titanium_copper_stairs": "Etched Titanium Clad Copper Stairs",
+  "block.createcybernetics.etched_titanium_copper_slab": "Etched Titanium Clad Copper Slab",
 
 
   "block.createcybernetics.robosurgeon": "Robosurgeon",

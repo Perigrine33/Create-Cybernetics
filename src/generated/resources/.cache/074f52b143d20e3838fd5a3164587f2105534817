@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-27T23:23:18.2889802	Tags for minecraft:block mod id createcybernetics
-73565ceb86cb6f53c7d8966893fb681997820533 data/createcybernetics/tags/block/metal_detectable.json
-e7a47e8cf913bfda8f8657fe5b1308bbe9725aac data/minecraft/tags/block/mineable/pickaxe.json
-09217a7da45d0805a0e4087e74b276240a6fb8bf data/minecraft/tags/block/needs_iron_tool.json
+// 1.21.1	2026-01-24T12:40:15.579681	Tags for minecraft:block mod id createcybernetics
+46a7e1fd1a107d00c2d178d5b04018c7185c6045 data/createcybernetics/tags/block/metal_detectable.json
+89e1052815c9d6841d29d5b1d4fffb0204b5f9e3 data/minecraft/tags/block/mineable/pickaxe.json
+c2af1f467aefe6058717662fd87b7d40443e94c0 data/minecraft/tags/block/needs_iron_tool.json

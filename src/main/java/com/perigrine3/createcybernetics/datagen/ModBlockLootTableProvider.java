@@ -36,13 +36,28 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.SURGERY_CHAMBER_BOTTOM.get());
         dropSelf(ModBlocks.SURGERY_CHAMBER_TOP.get());
         dropSelf(ModBlocks.ROBOSURGEON.get());
-
-        if (ModBlocks.ENGINEERING_TABLE != null) {
-            dropSelf(ModBlocks.ENGINEERING_TABLE.get());
-        }
+        dropSelf(ModBlocks.ENGINEERING_TABLE.get());
         dropSelf(ModBlocks.CHARGING_BLOCK.get());
 
         dropSelf(ModBlocks.TITANIUM_BLOCK.get());
+
+        dropSelf(ModBlocks.SMOOTH_TITANIUM.get());
+        dropSelf(ModBlocks.SMOOTH_TITANIUM_STAIRS.get());
+        add(ModBlocks.SMOOTH_TITANIUM_SLAB.get(),
+                block -> createSlabItemTable(ModBlocks.SMOOTH_TITANIUM_SLAB.get()));
+
+        dropSelf(ModBlocks.TITANIUM_GRATE.get());
+
+        dropSelf(ModBlocks.TITANIUM_CLAD_COPPER.get());
+        dropSelf(ModBlocks.TITANIUM_CLAD_COPPER_STAIRS.get());
+        add(ModBlocks.TITANIUM_CLAD_COPPER_SLAB.get(),
+                block -> createSlabItemTable(ModBlocks.TITANIUM_CLAD_COPPER_SLAB.get()));
+
+        dropSelf(ModBlocks.ETCHED_TITANIUM_COPPER.get());
+        dropSelf(ModBlocks.ETCHED_TITANIUM_COPPER_STAIRS.get());
+        add(ModBlocks.ETCHED_TITANIUM_COPPER_SLAB.get(),
+                block -> createSlabItemTable(ModBlocks.ETCHED_TITANIUM_COPPER_SLAB.get()));
+
         dropSelf(ModBlocks.RAW_TITANIUM_BLOCK.get());
 
         add(ModBlocks.TITANIUMORE_BLOCK.get(),

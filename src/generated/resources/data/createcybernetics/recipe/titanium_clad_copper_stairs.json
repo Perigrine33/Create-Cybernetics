@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "titanium",
+  "key": {
+    "#": {
+      "item": "createcybernetics:titanium_clad_copper"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "createcybernetics:titanium_clad_copper_stairs"
+  }
+}

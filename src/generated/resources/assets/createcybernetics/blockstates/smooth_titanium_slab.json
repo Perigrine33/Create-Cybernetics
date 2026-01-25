@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "createcybernetics:block/smooth_titanium_slab"
+    },
+    "type=double": {
+      "model": "createcybernetics:block/smooth_titanium"
+    },
+    "type=top": {
+      "model": "createcybernetics:block/smooth_titanium_slab_top"
+    }
+  }
+}

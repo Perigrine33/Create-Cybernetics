@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "titanium",
+  "key": {
+    "#": {
+      "item": "createcybernetics:etched_titanium_copper"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "createcybernetics:etched_titanium_copper_stairs"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createcybernetics:etched_titanium_from_stonecutter"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_titanium_clad_copper": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:titanium_clad_copper"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_titanium_clad_copper"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createcybernetics:etched_titanium_from_stonecutter"
+    ]
+  }
+}

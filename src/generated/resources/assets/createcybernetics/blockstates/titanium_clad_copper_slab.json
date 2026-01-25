@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "createcybernetics:block/titanium_clad_copper_slab"
+    },
+    "type=double": {
+      "model": "createcybernetics:block/titanium_clad_copper"
+    },
+    "type=top": {
+      "model": "createcybernetics:block/titanium_clad_copper_slab_top"
+    }
+  }
+}
