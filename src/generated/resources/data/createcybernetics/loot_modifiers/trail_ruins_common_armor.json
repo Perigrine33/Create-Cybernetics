@@ -6,7 +6,7 @@
       "loot_table_id": "minecraft:archaeology/trail_ruins_common"
     },
     {
-      "chance": 0.1,
+      "chance": 0.2,
       "condition": "minecraft:random_chance"
     }
   ],

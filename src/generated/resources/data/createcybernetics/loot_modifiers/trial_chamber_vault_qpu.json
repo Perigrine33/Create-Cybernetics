@@ -6,7 +6,7 @@
       "loot_table_id": "minecraft:vault/ominous_trial_chamber"
     },
     {
-      "chance": 0.05,
+      "chance": 0.33,
       "condition": "minecraft:random_chance"
     }
   ],

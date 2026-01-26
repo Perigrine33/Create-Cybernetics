@@ -1,5 +1,19 @@
 {
   "entries": [
+    "createcybernetics:trial_chamber_vault_qpu",
+    "createcybernetics:trial_chamber_vault_armcannon",
+    "createcybernetics:trial_chamber_vault_claws",
+    "createcybernetics:trial_chamber_vault_rarm",
+    "createcybernetics:trial_chamber_vault_larm",
+    "createcybernetics:trial_chamber_vault_redshard",
+    "createcybernetics:trial_chamber_vault_flywheel",
+    "createcybernetics:trial_chamber_vault_wrist",
+    "createcybernetics:trial_chamber_vault_jumpboost",
+    "createcybernetics:trial_chamber_vault_bonelacing",
+    "createcybernetics:trial_chamber_vault_boneflex",
+    "createcybernetics:trial_chamber_vault_matrix",
+    "createcybernetics:trial_chamber_vault_subdermalarmor",
+    "createcybernetics:trial_chamber_vault_neuro",
     "createcybernetics:trail_ruins_common_armor",
     "createcybernetics:trail_ruins_common_larm",
     "createcybernetics:trail_ruins_common_rleg",
@@ -506,21 +520,7 @@
     "createcybernetics:bodypart_spinnerette_to_spider",
     "createcybernetics:wetware_firebreathinggland_to_ender_dragon",
     "createcybernetics:bodypart_wardenesophagus_to_warden",
-    "createcybernetics:bodypart_gyroscopicbladder_to_ghast",
-    "createcybernetics:trial_chamber_vault_qpu",
-    "createcybernetics:trial_chamber_vault_armcannon",
-    "createcybernetics:trial_chamber_vault_claws",
-    "createcybernetics:trial_chamber_vault_rarm",
-    "createcybernetics:trial_chamber_vault_larm",
-    "createcybernetics:trial_chamber_vault_redshard",
-    "createcybernetics:trial_chamber_vault_flywheel",
-    "createcybernetics:trial_chamber_vault_wrist",
-    "createcybernetics:trial_chamber_vault_jumpboost",
-    "createcybernetics:trial_chamber_vault_bonelacing",
-    "createcybernetics:trial_chamber_vault_boneflex",
-    "createcybernetics:trial_chamber_vault_matrix",
-    "createcybernetics:trial_chamber_vault_subdermalarmor",
-    "createcybernetics:trial_chamber_vault_neuro"
+    "createcybernetics:bodypart_gyroscopicbladder_to_ghast"
   ],
   "replace": false
 }
