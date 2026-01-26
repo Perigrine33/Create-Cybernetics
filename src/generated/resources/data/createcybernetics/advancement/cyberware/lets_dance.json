@@ -1,0 +1,27 @@
+{
+  "parent": "createcybernetics:cyberware/root",
+  "criteria": {
+    "lets_dance": {
+      "trigger": "createcybernetics:lets_dance"
+    }
+  },
+  "display": {
+    "background": "createcybernetics:textures/block/titanium_block.png",
+    "description": {
+      "translate": "advancement.lets_dance.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:brainupgrades_cyberbrain"
+    },
+    "title": {
+      "translate": "advancement.lets_dance"
+    }
+  },
+  "requirements": [
+    [
+      "lets_dance"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -36,13 +36,8 @@ public class XPCapsuleItem extends Item {
             tag.putString(NBT_OWNER, ownerName);
         });
 
-        stack.set(
-                DataComponents.CUSTOM_NAME,
-                Component.translatable(
-                        "item.createcybernetics.expcapsule.playername", ownerName
-                ).withStyle(ChatFormatting.GREEN)
-        );
-
+        stack.set(DataComponents.CUSTOM_NAME,
+                Component.translatable("item.createcybernetics.expcapsule.playername", ownerName).withStyle(ChatFormatting.GREEN));
 
         return stack;
     }
@@ -88,12 +83,14 @@ public class XPCapsuleItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         int xp = getStoredXp(stack);
         if (xp > 0) {
-            tooltip.add(Component.translatable("item.createcybernetics.expcapsule.stored" + xp).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("item.createcybernetics.expcapsule.stored", xp)
+                    .withStyle(ChatFormatting.GRAY));
         }
 
         String owner = getOwner(stack);
         if (!owner.isEmpty()) {
-            tooltip.add(Component.translatable("item.createcybernetics.expcapsule.owner" + owner).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("item.createcybernetics.expcapsule.owner", owner)
+                    .withStyle(ChatFormatting.GRAY));
         }
     }
 }

@@ -44,8 +44,8 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private static final int TYPE_DELAY = 4;
     private final Skeleton skeletonPreview = new Skeleton(EntityType.SKELETON, Minecraft.getInstance().level);
     private float modelFade = 0f;
-    private final int backX = 156;
-    private final int backY = 120;
+    private final int backX = 4;
+    private final int backY = 117;
     private final int backW = 20;
     private final int backH = 10;
     private static final int HUMANITY_BAR_WIDTH = 10;
@@ -395,106 +395,106 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
     private void registerSlotBackgrounds() {
         slotBackgrounds.clear();
-    //BRAIN SLOTS   = 5
+        //BRAIN SLOTS   = 5
         {
-        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.BRAIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.BRAIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.BRAIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.BRAIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.BRAIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.BRAIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.BRAIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.BRAIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.BRAIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.BRAIN, SLOT_ICON));
         }
-    //EYE SLOTS     = 5
+        //EYE SLOTS     = 5
         {
-        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.EYES, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.EYES, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.EYES, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.EYES, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.EYES, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.EYES, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.EYES, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.EYES, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.EYES, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.EYES, SLOT_ICON));
         }
-    //HEART SLOTS   = 6
+        //HEART SLOTS   = 6
         {
-        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.HEART, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.HEART, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.HEART, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.HEART, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.HEART, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.HEART, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.HEART, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.HEART, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.HEART, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.HEART, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.HEART, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.HEART, SLOT_ICON));
         }
-    //LUNGS SLOTS   = 6
+        //LUNGS SLOTS   = 6
         {
-        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.LUNGS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.LUNGS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.LUNGS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.LUNGS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.LUNGS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.LUNGS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.LUNGS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.LUNGS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.LUNGS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.LUNGS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.LUNGS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.LUNGS, SLOT_ICON));
         }
-    //ORGANS SLOTS  = 6
+        //ORGANS SLOTS  = 6
         {
-        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.ORGANS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.ORGANS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.ORGANS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.ORGANS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.ORGANS, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.ORGANS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.ORGANS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.ORGANS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.ORGANS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.ORGANS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.ORGANS, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.ORGANS, SLOT_ICON));
         }
-    //R ARM SLOTS   = 6
+        //R ARM SLOTS   = 6
         {
-        slotBackgrounds.add(new SlotBackground(43, 110, ViewMode.RARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 92, ViewMode.RARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 74, ViewMode.RARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 56, ViewMode.RARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 38, ViewMode.RARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 20, ViewMode.RARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 110, ViewMode.RARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 92, ViewMode.RARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 74, ViewMode.RARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 56, ViewMode.RARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 38, ViewMode.RARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 20, ViewMode.RARM, SLOT_ICON));
         }
-    //L ARM SLOTS   = 6
+        //L ARM SLOTS   = 6
         {
-        slotBackgrounds.add(new SlotBackground(115, 110, ViewMode.LARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 92, ViewMode.LARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 74, ViewMode.LARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 56, ViewMode.LARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 38, ViewMode.LARM, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 20, ViewMode.LARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 110, ViewMode.LARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 92, ViewMode.LARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 74, ViewMode.LARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 56, ViewMode.LARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 38, ViewMode.LARM, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 20, ViewMode.LARM, SLOT_ICON));
         }
-    //R LEG SLOTS   = 5
+        //R LEG SLOTS   = 5
         {
-        slotBackgrounds.add(new SlotBackground(43, 110, ViewMode.RLEG, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 92, ViewMode.RLEG, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 74, ViewMode.RLEG, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 56, ViewMode.RLEG, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(43, 38, ViewMode.RLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 110, ViewMode.RLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 92, ViewMode.RLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 74, ViewMode.RLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 56, ViewMode.RLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(43, 38, ViewMode.RLEG, SLOT_ICON));
         }
-    //L LEG SLOTS   = 5
+        //L LEG SLOTS   = 5
         {
-        slotBackgrounds.add(new SlotBackground(115, 110, ViewMode.LLEG, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 92, ViewMode.LLEG, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 74, ViewMode.LLEG, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 56, ViewMode.LLEG, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(115, 38, ViewMode.LLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 110, ViewMode.LLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 92, ViewMode.LLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 74, ViewMode.LLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 56, ViewMode.LLEG, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(115, 38, ViewMode.LLEG, SLOT_ICON));
         }
-    //MUSCLE SLOTS  = 5
+        //MUSCLE SLOTS  = 5
         {
-        slotBackgrounds.add(new SlotBackground(79, 110, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(79, 92, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(79, 74, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(79, 56, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(79, 38, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(79, 110, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(79, 92, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(79, 74, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(79, 56, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(79, 38, ViewMode.SKIN, SLOT_ICON));
         }
-    //BONE SLOTS    = 5
+        //BONE SLOTS    = 5
         {
-        slotBackgrounds.add(new SlotBackground(106, 110, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(106, 92, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(106, 74, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(106, 56, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(106, 38, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(106, 110, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(106, 92, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(106, 74, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(106, 56, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(106, 38, ViewMode.SKIN, SLOT_ICON));
         }
-    //SKIN SLOTS    = 5
+        //SKIN SLOTS    = 5
         {
-        slotBackgrounds.add(new SlotBackground(52, 110, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(52, 92, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(52, 74, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(52, 56, ViewMode.SKIN, SLOT_ICON));
-        slotBackgrounds.add(new SlotBackground(52, 38, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(52, 110, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(52, 92, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(52, 74, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(52, 56, ViewMode.SKIN, SLOT_ICON));
+            slotBackgrounds.add(new SlotBackground(52, 38, ViewMode.SKIN, SLOT_ICON));
         }
     }
 
@@ -766,14 +766,17 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
+            int bx = leftPos + backX;
+            int by = topPos + backY;
+
             boolean hoveringBack =
-                    mouseX >= backX && mouseX <= backX + backW &&
-                            mouseY >= backY && mouseY <= backY + backH;
+                    mouseX >= bx && mouseX <= bx + backW &&
+                            mouseY >= by && mouseY <= by + backH;
 
             float alpha = hoveringBack ? 1f : 0.35f;
             gui.setColor(1f, 1f, 1f, alpha);
 
-            gui.blit(BACK_ICON, backX, backY, 0, 0, backW, backH, backW, backH);
+            gui.blit(BACK_ICON, bx, by, 0, 0, backW, backH, backW, backH);
 
             gui.setColor(1f, 1f, 1f, 1f);
             RenderSystem.disableBlend();
@@ -1010,14 +1013,17 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
         if (button == 0 && viewMode != ViewMode.FULL_BODY) {
-            if (mouseX >= backX && mouseX <= backX + backW &&
-                    mouseY >= backY && mouseY <= backY + backH) {
+            int bx = leftPos + backX;
+            int by = topPos + backY;
+
+            if (mouseX >= bx && mouseX <= bx + backW &&
+                    mouseY >= by && mouseY <= by + backH) {
 
                 if (minecraft.player != null) {
                     minecraft.player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, 1f, 1f);
                 }
 
-                viewMode = viewMode.parent != null ? viewMode.parent : ViewMode.FULL_BODY;
+                viewMode = (viewMode.parent != null) ? viewMode.parent : ViewMode.FULL_BODY;
                 modelViewer.triggerZoomReset();
                 return true;
             }
