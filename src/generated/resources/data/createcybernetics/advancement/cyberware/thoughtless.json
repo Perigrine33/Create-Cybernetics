@@ -7,12 +7,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/titanium_block.png",
-    "description": "Removed The Brain",
+    "description": {
+      "translate": "advancement.thoughtless.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:bodypart_brain"
     },
-    "title": "That Was Pretty Thoughtless..."
+    "title": {
+      "translate": "advancement.thoughtless"
+    }
   },
   "requirements": [
     [

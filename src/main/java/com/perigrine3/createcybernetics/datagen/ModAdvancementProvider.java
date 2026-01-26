@@ -225,8 +225,15 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                             Component.translatable("advancement.pretty_in_pink"),
                             Component.translatable("advancement.pretty_in_pink.desc"),
                             TITANIUM_BG, AdvancementType.TASK, true, false, false)
-                        .addCriterion("pretty_in_pink", ThoughtsNotFoundTrigger.Instance.any())
+                        .addCriterion("pretty_in_pink", PrettyInPinkTrigger.Instance.any())
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/pretty_in_pink"), existingFileHelper);
+
+            AdvancementHolder letsDance = Advancement.Builder.advancement().parent(root).display(ModItems.BRAINUPGRADES_CYBERBRAIN.get(),
+                            Component.translatable("advancement.lets_dance"),
+                            Component.translatable("advancement.lets_dance.desc"),
+                            TITANIUM_BG, AdvancementType.TASK, true, true, false)
+                        .addCriterion("lets_dance", LetsDanceTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/lets_dance"), existingFileHelper);
 
 
 

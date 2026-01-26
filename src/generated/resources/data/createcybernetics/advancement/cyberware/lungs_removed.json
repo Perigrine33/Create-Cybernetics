@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/titanium_block.png",
-    "description": "Removed The Lungs",
+    "description": {
+      "translate": "advancement.lungs_removed.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:bodypart_lungs"
     },
-    "title": "Respiratoryn’t"
+    "title": {
+      "translate": "advancement.lungs_removed"
+    }
   },
   "requirements": [
     [

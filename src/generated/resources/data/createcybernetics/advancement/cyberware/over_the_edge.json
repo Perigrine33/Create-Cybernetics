@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/blankmachine.png",
-    "description": "Died From Cyberpsychosis",
+    "description": {
+      "translate": "advancement.over_the_edge.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:surgery_chamber"
     },
-    "title": "You Fell Over The Edge, Punk"
+    "title": {
+      "translate": "advancement.over_the_edge"
+    }
   },
   "requirements": [
     [

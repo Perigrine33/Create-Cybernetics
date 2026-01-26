@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/blankmachine.png",
-    "description": "Obtained Scavenged Cyberware",
+    "description": {
+      "translate": "advancement.first_scavenged_cyberware.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:scavenged_leftarm"
     },
-    "title": "I Don't Think I Want To Put That In My Body..."
+    "title": {
+      "translate": "advancement.first_scavenged_cyberware"
+    }
   },
   "requirements": [
     [

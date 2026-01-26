@@ -32,7 +32,8 @@ public final class ClientItemColors {
                 ModItems.BASECYBERWARE_LEFTLEG.get(),
                 ModItems.BASECYBERWARE_RIGHTLEG.get(),
                 ModItems.BASECYBERWARE_CYBEREYES.get(),
-                ModItems.SKINUPGRADES_METALPLATING.get()
+                ModItems.SKINUPGRADES_METALPLATING.get(),
+                ModItems.LEGUPGRADES_OCELOTPAWS.get()
         );
     }
 }

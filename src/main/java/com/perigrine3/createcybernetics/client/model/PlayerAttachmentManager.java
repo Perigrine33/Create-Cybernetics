@@ -7,6 +7,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.PlayerModel;
@@ -14,10 +15,13 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nullable;
+import java.awt.datatransfer.Clipboard;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -86,6 +90,8 @@ public final class PlayerAttachmentManager {
 
     public static final ResourceLocation OCELOT_PAWS_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/ocelot_paws.png");
+    public static final ResourceLocation OCELOT_PAWS_DYED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/ocelot_paws_dyed.png");
 
     private static OcelotPawsAttachmentModel PAWS_MODEL;
 
@@ -439,6 +445,9 @@ public final class PlayerAttachmentManager {
     private static final class OcelotPawsAttachment implements PlayerAttachment {
         private final AttachmentAnchor anchor;
 
+        // cached each frame from setupPose; avoids relying on Minecraft.getInstance().player
+        private @Nullable AbstractClientPlayer renderPlayer;
+
         private OcelotPawsAttachment(AttachmentAnchor anchor) {
             this.anchor = anchor;
         }
@@ -448,9 +457,25 @@ public final class PlayerAttachmentManager {
             return anchor;
         }
 
+        private CyberwareSlot slotForThisSide() {
+            return (anchor == AttachmentAnchor.LEFT_LEG) ? CyberwareSlot.LLEG : CyberwareSlot.RLEG;
+        }
+
+        private @Nullable PlayerCyberwareData dataOrNull() {
+            Player p = (renderPlayer != null) ? renderPlayer : Minecraft.getInstance().player;
+            if (p == null || !p.hasData(ModAttachments.CYBERWARE)) return null;
+            return p.getData(ModAttachments.CYBERWARE);
+        }
+
         @Override
         public ResourceLocation texture(PlayerSkin.Model modelType) {
-            return OCELOT_PAWS_TEXTURE;
+            PlayerCyberwareData data = dataOrNull();
+            if (data == null) return OCELOT_PAWS_TEXTURE;
+
+            Item item = ModItems.LEGUPGRADES_OCELOTPAWS.get();
+            CyberwareSlot slot = slotForThisSide();
+
+            return data.isDyed(item, slot) ? OCELOT_PAWS_DYED : OCELOT_PAWS_TEXTURE;
         }
 
         @Override
@@ -460,7 +485,15 @@ public final class PlayerAttachmentManager {
 
         @Override
         public int color() {
-            return 0xFFFFFFFF;
+            PlayerCyberwareData data = dataOrNull();
+            if (data == null) return 0xFFFFFFFF;
+
+            Item item = ModItems.LEGUPGRADES_OCELOTPAWS.get();
+            CyberwareSlot slot = slotForThisSide();
+
+            if (!data.isDyed(item, slot)) return 0xFFFFFFFF;
+
+            return data.dyeColor(item, slot);
         }
 
         @Override
@@ -469,10 +502,18 @@ public final class PlayerAttachmentManager {
         }
 
         @Override
-        public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
+        public void setupPose(
+                PoseStack poseStack,
+                AbstractClientPlayer player,
+                PlayerModel<AbstractClientPlayer> parentModel,
+                PlayerSkin.Model modelType,
+                float partialTick
+        ) {
+            this.renderPlayer = player;
             applyOcelotPawsTransform(poseStack, anchor);
         }
     }
+
 
     private static final class CalfPropellerAttachment implements PlayerAttachment {
         private final AttachmentAnchor anchor;

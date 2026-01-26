@@ -148,7 +148,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.LEGUPGRADES_JUMPBOOST.get());
         basicItem(ModItems.LEGUPGRADES_PROPELLERS.get());
         basicItem(ModItems.LEGUPGRADES_SPURS.get());
-        basicItem(ModItems.LEGUPGRADES_OCELOTPAWS.get());
     }
 
 //BONE

@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/titanium_block.png",
-    "description": "Experienced systemwide failure due to being unable to power your brain",
+    "description": {
+      "translate": "advancement.thoughts_not_found.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:brainupgrades_cyberbrain"
     },
-    "title": "404: Thoughts Not Found"
+    "title": {
+      "translate": "advancement.thoughts_not_found"
+    }
   },
   "requirements": [
     [

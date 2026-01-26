@@ -138,11 +138,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
     /* ============================================================
        Shutdown conditions
        ============================================================ */
-
-    /**
-     * SERVER-side: authoritative "CPU installed+enabled and unpowered".
-     * This must be computed after EnergyController has set InstalledCyberware#setPowered(...) for the tick.
-     */
     private static boolean cpuInstalledEnabledAndUnpowered(PlayerCyberwareData data) {
         InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.BRAIN);
         if (arr == null) return false;
@@ -162,19 +157,10 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         return false;
     }
 
-    /**
-     * Client helper: you requested the overlay should be active if
-     * (hasCybereyesInstalledAndEnabled) OR (shutdown).
-     *
-     * IMPORTANT: this controls ONLY the overlay, not the full-body lock.
-     */
     private static boolean clientOverlayActive(Player player) {
         if (player == null) return false;
-
-        // Always show overlay during shutdown.
         if (CLIENT_SHUTDOWN_ACTIVE) return true;
 
-        // Otherwise, only show overlay for cybereyes if the player is actually blinded/darkened.
         PlayerCyberwareData data = player.hasData(ModAttachments.CYBERWARE) ? player.getData(ModAttachments.CYBERWARE) : null;
         if (data == null) return false;
 
@@ -212,10 +198,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
     public static final class ShutdownServerDecision {
         private ShutdownServerDecision() {}
 
-        /**
-         * LOWEST is intentional: EnergyController also runs on PlayerTickEvent.Post and decides cw.setPowered(...).
-         * We run after it, read InstalledCyberware#isPowered(), then sync to client if changed.
-         */
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public static void onTickPost(PlayerTickEvent.Post event) {
             Player p = event.getEntity();
@@ -432,6 +414,42 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
             gg.fill(0, 0, w, h, 0xFF000000);
 
             RenderSystem.disableBlend();
+        }
+    }
+
+    @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
+    public static final class ShutdownResetHooks {
+        private ShutdownResetHooks() {}
+
+        @SubscribeEvent
+        public static void onClone(net.neoforged.neoforge.event.entity.player.PlayerEvent.Clone event) {
+            if (!event.isWasDeath()) return;
+            if (!(event.getEntity() instanceof ServerPlayer sp)) return;
+
+            clearShutdownState(sp);
+            PacketDistributor.sendToPlayer(sp, new CerebralShutdownStatePayload(false));
+        }
+
+        @SubscribeEvent
+        public static void onRespawn(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerRespawnEvent event) {
+            if (!(event.getEntity() instanceof ServerPlayer sp)) return;
+
+            // Defensive: some setups can still carry data in odd ways; clearing twice is harmless.
+            clearShutdownState(sp);
+            PacketDistributor.sendToPlayer(sp, new CerebralShutdownStatePayload(false));
+        }
+
+        private static void clearShutdownState(ServerPlayer sp) {
+            CompoundTag pt = sp.getPersistentData();
+            pt.putBoolean(NBT_SHUTDOWN_ACTIVE, false);
+
+            // Remove anchor so the next shutdown starts clean
+            pt.remove(NBT_ANCHOR_SET);
+            pt.remove(NBT_AX);
+            pt.remove(NBT_AY);
+            pt.remove(NBT_AZ);
+            pt.remove(NBT_AYAW);
+            pt.remove(NBT_APITCH);
         }
     }
 }

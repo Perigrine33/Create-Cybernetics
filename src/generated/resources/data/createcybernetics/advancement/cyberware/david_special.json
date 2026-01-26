@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/titanium_block.png",
-    "description": "Did not adhere to the limitations of the flesh",
+    "description": {
+      "translate": "advancement.david_special.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:boneupgrades_sandevistan"
     },
-    "title": "The David Martinez Special"
+    "title": {
+      "translate": "advancement.david_special"
+    }
   },
   "requirements": [
     [

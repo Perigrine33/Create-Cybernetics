@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/blankmachine.png",
-    "description": "Persisted Through Death In A Cortical Stack",
+    "description": {
+      "translate": "advancement.cortical_stack.desc"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:cobweb"
     },
-    "title": "We Aren't Meant To Live Forever. It Corrupts Even The Best Of Us"
+    "title": {
+      "translate": "advancement.cortical_stack"
+    }
   },
   "requirements": [
     [

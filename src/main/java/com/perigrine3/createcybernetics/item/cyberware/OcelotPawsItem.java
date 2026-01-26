@@ -45,6 +45,16 @@ public class OcelotPawsItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean isDyeable(ItemStack stack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
+    public boolean isDyeable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public int getHumanityCost() {
         return humanityCost;
     }

@@ -7,12 +7,16 @@
   },
   "display": {
     "background": "createcybernetics:textures/block/blankmachine.png",
-    "description": "Installed Cyberware",
+    "description": {
+      "translate": "advancement.first_ripperdoc_visit.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:robosurgeon"
     },
-    "title": "I Want This Fused Here"
+    "title": {
+      "translate": "advancement.first_ripperdoc_visit"
+    }
   },
   "requirements": [
     [

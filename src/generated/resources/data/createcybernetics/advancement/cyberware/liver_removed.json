@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/titanium_block.png",
-    "description": "Removed The Liver",
+    "description": {
+      "translate": "advancement.liver_removed.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:bodypart_liver"
     },
-    "title": "Liver? Hardly Know Her..."
+    "title": {
+      "translate": "advancement.liver_removed"
+    }
   },
   "requirements": [
     [

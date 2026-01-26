@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/blankmachine.png",
-    "description": "Used Neuropozyne 100 Times",
+    "description": {
+      "translate": "advancement.chrome_junkie.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:neuropozyne_autoinjector"
     },
-    "title": "Chrome Junkie"
+    "title": {
+      "translate": "advancement.chrome_junkie"
+    }
   },
   "requirements": [
     [

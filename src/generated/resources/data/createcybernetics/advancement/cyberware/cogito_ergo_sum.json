@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/titanium_block.png",
-    "description": "Installed A Cerebral Processing Unit And Abandoned Your Humanity",
+    "description": {
+      "translate": "advancement.cogito_ergo_sum.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:brainupgrades_cyberbrain"
     },
-    "title": "Cogito Ergo Sum"
+    "title": {
+      "translate": "advancement.cogito_ergo_sum"
+    }
   },
   "requirements": [
     [

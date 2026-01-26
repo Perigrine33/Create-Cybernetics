@@ -7,12 +7,16 @@
   },
   "display": {
     "background": "createcybernetics:textures/block/blankmachine.png",
-    "description": "Went Full Borg",
+    "description": {
+      "translate": "advancement.weak_flesh.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:skinupgrades_metalplating"
     },
-    "title": "From The Moment I Understood The Weakness Of My Flesh..."
+    "title": {
+      "translate": "advancement.weak_flesh"
+    }
   },
   "requirements": [
     [

@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/blankmachine.png",
-    "description": "Used Cyberware To Escape Death",
+    "description": {
+      "translate": "advancement.deus_ex_machina.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:heartupgrades_defibrillator"
     },
-    "title": "Deus Ex Machina"
+    "title": {
+      "translate": "advancement.deus_ex_machina"
+    }
   },
   "requirements": [
     [

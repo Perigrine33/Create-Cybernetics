@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/titanium_block.png",
-    "description": "Installed An Arm Cannon",
+    "description": {
+      "translate": "advancement.upgraded.desc"
+    },
     "icon": {
       "count": 1,
       "id": "createcybernetics:armupgrades_armcannon"
     },
-    "title": "You Upgraded. Now You're Stronger. Faster. Better Than Everyone Else"
+    "title": {
+      "translate": "advancement.upgraded"
+    }
   },
   "requirements": [
     [

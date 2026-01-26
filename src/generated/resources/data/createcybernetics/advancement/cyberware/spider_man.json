@@ -8,12 +8,16 @@
   "display": {
     "announce_to_chat": false,
     "background": "createcybernetics:textures/block/blankmachine.png",
-    "description": "Became A Cyborg Spider-Man",
+    "description": {
+      "translate": "advancement.spider_man.desc"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:cobweb"
     },
-    "title": "Spider-Man: 2099"
+    "title": {
+      "translate": "advancement.spider_man"
+    }
   },
   "requirements": [
     [

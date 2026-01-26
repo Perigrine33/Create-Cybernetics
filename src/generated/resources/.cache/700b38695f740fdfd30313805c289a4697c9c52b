@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-23T19:25:13.3466173	Item Models: createcybernetics
+// 1.21.1	2026-01-26T14:30:03.3321839	Item Models: createcybernetics
 8570733f6ab9231502efdbe6dd1695f08dc806b1 assets/createcybernetics/models/item/andouille_sausage.json
 ae78f051d9328e5a204530b7fc2e3d88362b4e68 assets/createcybernetics/models/item/armupgrades_armcannon.json
 37f82cc0ca47be7b60c54ef6d3b7059b9b671846 assets/createcybernetics/models/item/armupgrades_claws.json
@@ -98,7 +98,6 @@ bffb81f64f2036852a361cad7b228315127f89e8 assets/createcybernetics/models/item/fr
 4c3412be5db1787ca2d4a577ffc440186e527870 assets/createcybernetics/models/item/legupgrades_anklebracers.json
 8fbb1befb738168dd168f50316bedbb90b886b37 assets/createcybernetics/models/item/legupgrades_jumpboost.json
 72d112c2b7b0ff302eb2ae4d6a72c44114854267 assets/createcybernetics/models/item/legupgrades_metaldetector.json
-10c15238190b826dd648a83c06269f954a78f454 assets/createcybernetics/models/item/legupgrades_ocelotpaws.json
 209b8ecc7dc1e39a519f760f6ff648f44fbdfc7a assets/createcybernetics/models/item/legupgrades_propellers.json
 98db40cf71c5cedc0c6c2956fe335f3e400ba3de assets/createcybernetics/models/item/legupgrades_spurs.json
 987ea85861a2603ba52a14f9a11c68313987355b assets/createcybernetics/models/item/lungsupgrades_hyperoxygenation.json
