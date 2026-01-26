@@ -431,6 +431,8 @@
   "advancement.bones_and_all.desc": "Consumed Bones",
   "advancement.pretty_in_pink": "Pretty In Pink",
   "advancement.pretty_in_pink.desc": "Dyed A Full Body Conversion Pink",
+  "advancement.lets_dance": "Let's Dance",
+  "advancement.lets_dance.desc": "Killed A Full Borg As A Full 'Ganic",
 
 
   "death.attack.createcybernetics.cyberware_surgery": "%1$s didn’t survive the procedure...",
