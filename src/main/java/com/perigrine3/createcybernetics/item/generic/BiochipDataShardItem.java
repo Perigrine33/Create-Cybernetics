@@ -42,7 +42,7 @@ public class BiochipDataShardItem extends DataShardItem {
         long ticks = (tag == null) ? 0L : Math.max(0L, tag.getLong(TAG_PROGRESS));
 
         double pct = (TOTAL_TICKS <= 0) ? 0.0 : (100.0 * (double) ticks / (double) TOTAL_TICKS);
-        tooltip.add(Component.translatable(String.format("item.createcybernetics.data_shard_biochip.downloading", Math.max(0.0, Math.min(100.0, pct)))).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        tooltip.add(Component.translatable(String.format("item.createcybernetics.data_shard_biochip.downloading" + "%.1f%%", Math.max(0.0, Math.min(100.0, pct)))).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 
     public static CompoundTag getOrCreateTag(ItemStack stack) {
