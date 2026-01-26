@@ -46,7 +46,7 @@
   "item.createcybernetics.neuropozyne_autoinjector.desc": "Injection Extends Duration to a Full Day",
   "item.createcybernetics.empty_autoinjector": "Empty Autoinjector",
   "item.createcybernetics.expcapsule": "Cortical Stack Capsule",
-  "item.createcybernetics.expcapsule.playername": "'s Cortical Stack",
+  "item.createcybernetics.expcapsule.playername": "%s's Cortical Stack",
   "item.createcybernetics.expcapsule.owner": "Owner: ",
   "item.createcybernetics.expcapsule.stored": "Stored XP: ",
   "item.createcybernetics.faceplate": "Faceplate",
