@@ -2,6 +2,14 @@
   "createcybernetics.configuration.humanity": "Base Humanity Value",
 
 
+  "commands.createcybernetics.implants.wrong_item": "Only Create Cybernetics cyberware items are allowed.",
+  "commands.createcybernetics.implants.no_cyberware": "Target has no cyberware data.",
+  "commands.createcybernetics.implants.install_fail": "Failed to install %s (no slot / no space / not a valid implant).",
+  "commands.createcybernetics.implants.install_success": "Installed %s into %s.",
+  "commands.createcybernetics.implants.remove_fail": "%s does not have that implant installed.",
+  "commands.createcybernetics.implants.remove_success": "Removed %s from %s.",
+  "commands.createcybernetics.implants.clear_success": "Cleared all cyberware and restored default organs for %s.",
+
   "gui.robosurgeon.title": "Robosurgeon Interface",
   "gui.engineeringtable.title": "Engineering Table",
   "gui.armcannon.title": "Arm Cannon",

@@ -13,6 +13,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -913,5 +915,208 @@ public class PlayerCyberwareData implements ICyberwareData {
                 : 0;
 
         dirty = false;
+    }
+
+    /* ---------------- COMMANDS ---------------- */
+
+    public boolean commandInstall(Player player, ItemStack stack) {
+        if (player == null) return false;
+        if (stack == null || stack.isEmpty()) return false;
+
+        Item item = stack.getItem();
+        if (!(item instanceof ICyberwareItem cw)) return false;
+
+        // Normalize: commands install exactly one instance.
+        ItemStack installStack = stack.copy();
+        installStack.setCount(1);
+
+        // Find a target slot/index that is valid and has space.
+        InstallTarget target = findInstallTargetForCommand(installStack, cw);
+        if (target == null) return false;
+
+        // If the incoming item replaces an organ, remove any existing organ(s) it replaces first.
+        // This prevents "replaced organ" stacks coexisting incorrectly.
+        if (cw.replacesOrgan()) {
+            for (CyberwareSlot replaced : cw.getReplacedOrgans()) {
+                InstalledCyberware removedAny = removeFirstNonEmptyInSlotGroup(player, replaced);
+                // If you want "hard replace" (remove ALL in that group), loop indices instead.
+                // For now, remove just the first non-empty because many of your groups are multi-slot.
+                // If your semantics are "the organ group is fully replaced", change this to remove all.
+            }
+        }
+
+        // Install it.
+        int humanityCost = cw.getHumanityCost();
+        InstalledCyberware installed = new InstalledCyberware(installStack, target.slot, target.index, humanityCost);
+        // Power state should be computed by your EnergyController; default to powered=true.
+        installed.setPowered(true);
+
+        set(target.slot, target.index, installed);
+
+        // Call hooks.
+        cw.onInstalled(player);
+
+        // Keep derived stats consistent.
+        recomputeHumanityBaseFromInstalled();
+        clampEnergyToCapacity(player);
+
+        return true;
+    }
+
+    public boolean commandRemove(Player player, Item item) {
+        if (player == null) return false;
+        if (item == null) return false;
+
+        for (CyberwareSlot slot : CyberwareSlot.values()) {
+            InstalledCyberware[] arr = slots.get(slot);
+            if (arr == null) continue;
+
+            for (int i = 0; i < arr.length; i++) {
+                InstalledCyberware installed = arr[i];
+                if (installed == null) continue;
+
+                ItemStack st = installed.getItem();
+                if (st == null || st.isEmpty()) continue;
+
+                if (!st.is(item)) continue;
+
+                // Remove it.
+                remove(slot, i);
+
+                // Call hooks.
+                if (item instanceof ICyberwareItem cw) {
+                    cw.onRemoved(player);
+                }
+
+                // Optional: if you want removed "organ replacement" to restore defaults, do it here.
+                // I am NOT auto-restoring defaults, because your surgery system likely owns that.
+                // If you want it, you can restore DefaultOrgans.get(slot, i) when appropriate.
+
+                recomputeHumanityBaseFromInstalled();
+                clampEnergyToCapacity(player);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Component commandListComponent() {
+        MutableComponent root = Component.literal("Installed Implants:");
+
+        boolean any = false;
+
+        for (CyberwareSlot slot : CyberwareSlot.values()) {
+            InstalledCyberware[] arr = slots.get(slot);
+            if (arr == null) continue;
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < arr.length; i++) {
+                InstalledCyberware installed = arr[i];
+                if (installed == null) continue;
+
+                ItemStack st = installed.getItem();
+                if (st == null || st.isEmpty()) continue;
+
+                // Skip default organs (optional)
+                ItemStack def = DefaultOrgans.get(slot, i);
+                if (def != null && !def.isEmpty() && ItemStack.isSameItemSameComponents(st, def)) {
+                    continue;
+                }
+
+                if (sb.length() > 0) sb.append(", ");
+                sb.append(st.getHoverName().getString());
+            }
+
+            if (sb.isEmpty()) continue;
+
+            any = true;
+            root.append(Component.literal("\n" + slot.name() + ": " + sb));
+        }
+
+        if (!any) {
+            root.append(Component.literal("\n(X)"));
+        }
+
+        return root;
+    }
+
+    /* ---------------- internal helpers for commands ---------------- */
+
+    private record InstallTarget(CyberwareSlot slot, int index) {}
+
+    private InstallTarget findInstallTargetForCommand(ItemStack stack, ICyberwareItem cw) {
+        // Prefer supported slots in a deterministic order:
+        // - if it replaces organs, prioritize its replaced organ group(s) first
+        // - otherwise, use cw.getSupportedSlots() order (Set has no order) so iterate CyberwareSlot.values()
+
+        // 1) If it replaces organs, try those slot groups first.
+        if (cw.replacesOrgan()) {
+            for (CyberwareSlot replaced : cw.getReplacedOrgans()) {
+                InstallTarget t = findFirstValidSpaceInSlotGroup(stack, cw, replaced);
+                if (t != null) return t;
+            }
+        }
+
+        // 2) Otherwise, try any supported slot group in enum order.
+        for (CyberwareSlot slot : CyberwareSlot.values()) {
+            if (!cw.supportsSlot(slot)) continue;
+
+            InstallTarget t = findFirstValidSpaceInSlotGroup(stack, cw, slot);
+            if (t != null) return t;
+        }
+
+        return null;
+    }
+
+    private InstallTarget findFirstValidSpaceInSlotGroup(ItemStack incoming, ICyberwareItem cw, CyberwareSlot slot) {
+        InstalledCyberware[] arr = slots.get(slot);
+        if (arr == null) return null;
+
+        // Respect max stacks per slot type (per group).
+        int max = Math.max(1, cw.maxStacksPerSlotType(incoming, slot));
+        int already = 0;
+
+        for (InstalledCyberware installed : arr) {
+            if (installed == null) continue;
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+            if (ItemStack.isSameItemSameComponents(st, incoming)) already++;
+        }
+        if (already >= max) return null;
+
+        // Find the first empty index.
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null || installed.getItem() == null || installed.getItem().isEmpty()) {
+                return new InstallTarget(slot, i);
+            }
+        }
+
+        return null;
+    }
+
+    private InstalledCyberware removeFirstNonEmptyInSlotGroup(Player player, CyberwareSlot slot) {
+        InstalledCyberware[] arr = slots.get(slot);
+        if (arr == null) return null;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+
+            InstalledCyberware removed = remove(slot, i);
+
+            Item removedItem = (st != null) ? st.getItem() : null;
+            if (removedItem instanceof ICyberwareItem cw) {
+                cw.onRemoved(player);
+            }
+
+            return removed;
+        }
+
+        return null;
     }
 }
