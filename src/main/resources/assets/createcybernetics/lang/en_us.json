@@ -118,7 +118,7 @@
   "item.createcybernetics.data_shard_biochip": "§bBiochip Data Shard",
   "item.createcybernetics.data_shard_biochip.desc": "Stores consciousness if installed for 28 days",
   "item.createcybernetics.data_shard_biochip.downloaded": "Consciousness: downloaded",
-  "item.createcybernetics.data_shard_biochip.downloading": "Consciousness Download: %.1f%%",
+  "item.createcybernetics.data_shard_biochip.downloading": "Consciousness Download: %s%%",
 
   "item.createcybernetics.cyberzombie_spawn_egg": "Cyberzombie Spawn Egg",
   "item.createcybernetics.cyberskeleton_spawn_egg": "Cyberskeleton Spawn Egg",

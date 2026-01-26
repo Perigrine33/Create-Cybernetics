@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
@@ -42,7 +43,9 @@ public class BiochipDataShardItem extends DataShardItem {
         long ticks = (tag == null) ? 0L : Math.max(0L, tag.getLong(TAG_PROGRESS));
 
         double pct = (TOTAL_TICKS <= 0) ? 0.0 : (100.0 * (double) ticks / (double) TOTAL_TICKS);
-        tooltip.add(Component.translatable(String.format("item.createcybernetics.data_shard_biochip.downloading", Math.max(0.0, Math.min(100.0, pct)))).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+
+        double clamped = Mth.clamp(pct, 0.0, 100.0);
+        tooltip.add(Component.translatable("item.createcybernetics.data_shard_biochip.downloading", String.format("%.1f", clamped)).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 
     public static CompoundTag getOrCreateTag(ItemStack stack) {
