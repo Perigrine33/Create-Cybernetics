@@ -38,8 +38,11 @@ public class XPCapsuleItem extends Item {
 
         stack.set(
                 DataComponents.CUSTOM_NAME,
-                Component.translatable(ownerName + "item.createcybernetics.expcapsule.playername").withStyle(ChatFormatting.GREEN)
+                Component.translatable(
+                        "item.createcybernetics.expcapsule.playername", ownerName
+                ).withStyle(ChatFormatting.GREEN)
         );
+
 
         return stack;
     }
