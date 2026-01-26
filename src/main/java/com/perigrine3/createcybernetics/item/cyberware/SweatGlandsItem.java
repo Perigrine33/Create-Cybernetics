@@ -32,7 +32,7 @@ public class SweatGlandsItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-            tooltip.add(Component.literal("Costs 5 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.skinupgrades_sweat.energy").withStyle(ChatFormatting.RED));
         }
     }
 

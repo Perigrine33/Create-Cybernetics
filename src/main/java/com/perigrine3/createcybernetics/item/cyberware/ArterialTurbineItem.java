@@ -37,7 +37,7 @@ public class ArterialTurbineItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Adds 3/10/25/50 Energy From Blood Pressure").withStyle(ChatFormatting.DARK_GREEN));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.skinupgrades_arterialturbine.energy").withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 

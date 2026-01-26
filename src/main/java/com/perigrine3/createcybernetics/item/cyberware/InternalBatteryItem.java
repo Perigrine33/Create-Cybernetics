@@ -31,7 +31,7 @@ public class InternalBatteryItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Stores 500 Energy").withStyle(ChatFormatting.DARK_PURPLE));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrades_battery.energy").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }
 

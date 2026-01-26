@@ -230,7 +230,7 @@ public class RobosurgeonBlockEntity extends BlockEntity implements MenuProvider 
 
     @Override
     public Component getDisplayName() {
-        return Component.literal("Robosurgeon Interface");
+        return Component.translatable("gui.robosurgeon.title");
     }
 
     @Override

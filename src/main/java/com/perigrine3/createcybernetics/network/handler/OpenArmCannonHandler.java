@@ -31,7 +31,7 @@ public final class OpenArmCannonHandler {
             sp.openMenu(new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
-                    return Component.literal("Arm Cannon");
+                    return Component.translatable("gui.armcannon.title");
                 }
 
                 @Override

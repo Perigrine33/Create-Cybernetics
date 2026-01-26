@@ -138,6 +138,14 @@ public final class AdvancementEventHooks {
                 !data.hasAnyTagged(ModTags.Items.LEFTLEG_ITEMS, CyberwareSlot.LLEG) && !data.hasAnyTagged(ModTags.Items.RIGHTLEG_ITEMS, CyberwareSlot.RLEG)) {
             ModCriteria.FLESH_WOUND.get().trigger(player);
         }
+        if (data.hasSpecificItem(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN) &&
+                data.isDyed(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
+                int tint = data.dyeColor(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN);
+
+                if (tint == 0xFFF38BAA) {
+                    ModCriteria.PRETTY_IN_PINK.get().trigger(player);
+                }
+        }
     }
 
     @SubscribeEvent

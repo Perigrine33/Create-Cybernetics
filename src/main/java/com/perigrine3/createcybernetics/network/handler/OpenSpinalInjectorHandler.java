@@ -34,7 +34,7 @@ public final class OpenSpinalInjectorHandler {
             sp.openMenu(new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
-                    return Component.literal("Spinal Injector");
+                    return Component.translatable("gui.spinalinjector.title");
                 }
 
                 @Override

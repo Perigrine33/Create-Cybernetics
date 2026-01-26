@@ -48,7 +48,7 @@ public class EngineeringTableRecipeCategory implements IRecipeCategory<RecipeHol
 
     @Override
     public Component getTitle() {
-        return Component.literal("Engineering Table");
+        return Component.translatable("gui.engineeringtable.title");
     }
 
     @Override

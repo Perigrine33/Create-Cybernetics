@@ -37,7 +37,7 @@ public class HyperoxygenationBoostItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 3/6/9 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.lungsupgrades_hyperoxygenation.energy").withStyle(ChatFormatting.RED));
         }
     }
 

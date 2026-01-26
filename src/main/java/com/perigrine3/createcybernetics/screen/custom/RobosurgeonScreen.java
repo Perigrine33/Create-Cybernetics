@@ -119,21 +119,21 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private void registerMarkers() {
         markerManager.clear();
 // Full body selection
-        markerManager.add(new MarkerManager.Marker(-8, -78, ViewMode.FULL_BODY, ViewMode.HEAD, Component.literal("Head"), false));
-        markerManager.add(new MarkerManager.Marker(-8, -52, ViewMode.FULL_BODY, ViewMode.TORSO, Component.literal("Torso"), false));
-        markerManager.add(new MarkerManager.Marker(50, -52, ViewMode.FULL_BODY, ViewMode.SKIN, Component.literal("Flesh"), false));
-        markerManager.add(new MarkerManager.Marker(9, -55, ViewMode.FULL_BODY, ViewMode.LARM, Component.literal("Left Arm"), true));
-        markerManager.add(new MarkerManager.Marker(-25, -55, ViewMode.FULL_BODY, ViewMode.RARM, Component.literal("Right Arm"), true));
-        markerManager.add(new MarkerManager.Marker(-2, -28, ViewMode.FULL_BODY, ViewMode.LLEG, Component.literal("Left Leg"), true));
-        markerManager.add(new MarkerManager.Marker(-14, -28, ViewMode.FULL_BODY, ViewMode.RLEG, Component.literal("Right Leg"), true));
+        markerManager.add(new MarkerManager.Marker(-8, -78, ViewMode.FULL_BODY, ViewMode.HEAD, Component.translatable("gui.marker.head"), false));
+        markerManager.add(new MarkerManager.Marker(-8, -52, ViewMode.FULL_BODY, ViewMode.TORSO, Component.translatable("gui.marker.torso"), false));
+        markerManager.add(new MarkerManager.Marker(50, -52, ViewMode.FULL_BODY, ViewMode.SKIN, Component.translatable("gui.marker.skin"), false));
+        markerManager.add(new MarkerManager.Marker(9, -55, ViewMode.FULL_BODY, ViewMode.LARM, Component.translatable("gui.marker.larm"), true));
+        markerManager.add(new MarkerManager.Marker(-25, -55, ViewMode.FULL_BODY, ViewMode.RARM, Component.translatable("gui.marker.rarm"), true));
+        markerManager.add(new MarkerManager.Marker(-2, -28, ViewMode.FULL_BODY, ViewMode.LLEG, Component.translatable("gui.marker.lleg"), true));
+        markerManager.add(new MarkerManager.Marker(-14, -28, ViewMode.FULL_BODY, ViewMode.RLEG, Component.translatable("gui.marker.rleg"), true));
 // Expanded head details
-        markerManager.add(new MarkerManager.Marker(-35, -210, ViewMode.HEAD, ViewMode.BRAIN, Component.literal("Brain"), false));
-        markerManager.add(new MarkerManager.Marker(-10, -197, ViewMode.HEAD, ViewMode.EYES, Component.literal("Eyes"), false));
-        markerManager.add(new MarkerManager.Marker(15, -197, ViewMode.HEAD, ViewMode.EYES, Component.literal("Eyes"), false));
+        markerManager.add(new MarkerManager.Marker(-35, -210, ViewMode.HEAD, ViewMode.BRAIN, Component.translatable("gui.marker.brain"), false));
+        markerManager.add(new MarkerManager.Marker(-10, -197, ViewMode.HEAD, ViewMode.EYES, Component.translatable("gui.marker.eyes"), false));
+        markerManager.add(new MarkerManager.Marker(15, -197, ViewMode.HEAD, ViewMode.EYES, Component.translatable("gui.marker.eyes"), false));
 // Expanded torso details
-        markerManager.add(new MarkerManager.Marker(0, -185, ViewMode.TORSO, ViewMode.HEART, Component.literal("Heart"), false));
-        markerManager.add(new MarkerManager.Marker(-15, -170, ViewMode.TORSO, ViewMode.LUNGS, Component.literal("Lungs"), false));
-        markerManager.add(new MarkerManager.Marker(-5, -135, ViewMode.TORSO, ViewMode.ORGANS, Component.literal("Lower Organs"), false));
+        markerManager.add(new MarkerManager.Marker(0, -185, ViewMode.TORSO, ViewMode.HEART, Component.translatable("gui.marker.heart"), false));
+        markerManager.add(new MarkerManager.Marker(-15, -170, ViewMode.TORSO, ViewMode.LUNGS, Component.translatable("gui.marker.lungs"), false));
+        markerManager.add(new MarkerManager.Marker(-5, -135, ViewMode.TORSO, ViewMode.ORGANS, Component.translatable("gui.marker.organs"), false));
     }
 
 
@@ -989,9 +989,9 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         if (hovering) {
 
             List<Component> tip = List.of(
-                    Component.literal("Warning!").withStyle(ChatFormatting.RED),
-                    Component.literal("One or more vital organs are marked for removal!").withStyle(ChatFormatting.RED),
-                    Component.literal("Removal could have negative repercussions...").withStyle(ChatFormatting.RED));
+                    Component.translatable("gui.warning.title").withStyle(ChatFormatting.RED),
+                    Component.translatable("gui.warning.desc1").withStyle(ChatFormatting.RED),
+                    Component.translatable("gui.warning.desc2").withStyle(ChatFormatting.RED));
 
             gui.renderComponentTooltip(this.font, tip, mouseX, mouseY);
         }

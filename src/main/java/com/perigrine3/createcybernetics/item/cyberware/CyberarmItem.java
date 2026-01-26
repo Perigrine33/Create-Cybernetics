@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CyberarmItem extends Item implements ICyberwareItem {
 
     private final int humanityCost;
-    final CyberwareSlot side; // package-visible so hooks can read without reflection
+    final CyberwareSlot side;
 
     public CyberarmItem(Properties props, int humanityCost, CyberwareSlot side) {
         super(props);
@@ -48,7 +48,7 @@ public class CyberarmItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
-            tooltip.add(Component.literal("Costs 10 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.basecyberware_cyberarm.energy").withStyle(ChatFormatting.RED));
         }
     }
 

@@ -34,7 +34,7 @@ public class BiochipDataShardItem extends DataShardItem {
             if (name != null && !name.isBlank()) {
                 tooltip.add(Component.literal(name + ".dhf" ).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
             } else {
-                tooltip.add(Component.literal("Consciousness: downloaded").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
+                tooltip.add(Component.translatable("item.createcybernetics.data_shard_biochip.downloaded").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
             }
             return;
         }
@@ -42,7 +42,7 @@ public class BiochipDataShardItem extends DataShardItem {
         long ticks = (tag == null) ? 0L : Math.max(0L, tag.getLong(TAG_PROGRESS));
 
         double pct = (TOTAL_TICKS <= 0) ? 0.0 : (100.0 * (double) ticks / (double) TOTAL_TICKS);
-        tooltip.add(Component.literal(String.format("Consciousness Download: %.1f%%", Math.max(0.0, Math.min(100.0, pct)))).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        tooltip.add(Component.translatable(String.format("item.createcybernetics.data_shard_biochip.downloading", Math.max(0.0, Math.min(100.0, pct)))).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 
     public static CompoundTag getOrCreateTag(ItemStack stack) {

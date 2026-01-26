@@ -18,7 +18,7 @@ public final class OpenChipwareMiniHandler {
             if (!ChipwareMiniMenu.canOpen(sp)) return;
 
             MenuProvider provider = new SimpleMenuProvider((id, inv, player) -> new ChipwareMiniMenu(id, inv, new ChipwareContainer(player)),
-                    Component.literal("Creative Chiware Slots"));
+                    Component.translatable("gui.chipwarecreative.title"));
 
             sp.openMenu(provider, buf -> {});
         });

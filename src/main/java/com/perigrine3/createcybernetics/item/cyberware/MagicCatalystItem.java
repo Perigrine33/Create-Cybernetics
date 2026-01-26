@@ -30,7 +30,7 @@ public class MagicCatalystItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Adds 100 Energy From Magic").withStyle(ChatFormatting.DARK_GREEN));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrades_magiccatalyst.energy").withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 

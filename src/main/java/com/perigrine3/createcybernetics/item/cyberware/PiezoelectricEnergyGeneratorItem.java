@@ -53,7 +53,7 @@ public class PiezoelectricEnergyGeneratorItem extends Item implements ICyberware
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Adds 2 Energy While Moving").withStyle(ChatFormatting.DARK_GREEN));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.boneupgrades_piezo.energy").withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 

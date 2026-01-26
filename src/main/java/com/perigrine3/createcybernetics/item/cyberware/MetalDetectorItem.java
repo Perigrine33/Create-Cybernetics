@@ -41,7 +41,7 @@ public class MetalDetectorItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 3 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.legupgrades_metaldetector.energy").withStyle(ChatFormatting.RED));
         }
     }
 

@@ -31,7 +31,7 @@ public class DiamondWaferstackItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Adds 5 Energy Really Slowly").withStyle(ChatFormatting.DARK_GREEN));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrades_diamondwaferstack.energy").withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 

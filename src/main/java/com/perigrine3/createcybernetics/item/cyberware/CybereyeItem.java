@@ -39,7 +39,7 @@ public class CybereyeItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
-            tooltip.add(Component.literal("Consumes 5 Energy/tick").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.basecyberware_cybereye.energy").withStyle(ChatFormatting.RED));
         }
     }
 

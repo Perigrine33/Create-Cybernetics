@@ -32,7 +32,7 @@ public class DenseBatteryItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Stores 5000 Energy From Charging Block").withStyle(ChatFormatting.DARK_PURPLE));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrade_densebattery.energy").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }
 

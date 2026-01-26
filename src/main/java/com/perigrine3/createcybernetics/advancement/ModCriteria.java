@@ -69,6 +69,8 @@ public final class ModCriteria {
             TRIGGER_TYPES.register("snikt", SniktTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, ThoughtsNotFoundTrigger> THOUGHTS_NOT_FOUND =
             TRIGGER_TYPES.register("thoughts_not_found", ThoughtsNotFoundTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, PrettyInPinkTrigger> PRETTY_IN_PINK =
+            TRIGGER_TYPES.register("pretty_in_pink", PrettyInPinkTrigger::new);
 
     public static void register(IEventBus modEventBus) {
         TRIGGER_TYPES.register(modEventBus);

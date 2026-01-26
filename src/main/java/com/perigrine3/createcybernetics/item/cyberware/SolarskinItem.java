@@ -35,7 +35,7 @@ public class SolarskinItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Adds 15 Energy In Sunlight").withStyle(ChatFormatting.DARK_GREEN));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.skinupgrades_solarskin.energy").withStyle(ChatFormatting.DARK_GREEN));
 
         }
     }

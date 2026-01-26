@@ -3,6 +3,10 @@ package com.perigrine3.createcybernetics.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.client.skin.SkinHighlight;
+import com.perigrine3.createcybernetics.client.skin.SkinModifier;
+import com.perigrine3.createcybernetics.client.skin.SkinModifierManager;
+import com.perigrine3.createcybernetics.client.skin.SkinModifierState;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -15,6 +19,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
@@ -27,11 +32,13 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -54,13 +61,57 @@ public final class SandevistanMirageTrail {
 
     private static final int MAX_SNAPSHOTS = Math.max(
             (int) Math.ceil(TRAIL_LIFETIME_TICKS / SAMPLE_PERIOD_TICKS) + 2,
-            RENDER_SNAPSHOTS + (int) Math.ceil(RENDER_DELAY_TICKS / SAMPLE_PERIOD_TICKS) + 2
-    );
+            RENDER_SNAPSHOTS + (int) Math.ceil(RENDER_DELAY_TICKS / SAMPLE_PERIOD_TICKS) + 2);
 
     private static final Map<UUID, Deque<Snapshot>> TRAILS = new HashMap<>();
 
     private static double lastFrameTimeTicks = Double.NaN;
     private static double accumulatorTicks = 0.0;
+
+    private static final int FULL_BRIGHT = 0xF000F0;
+
+    private static final class OverlayPass {
+        final ResourceLocation texture;
+        final int argb;
+        final boolean fullBright;
+
+        OverlayPass(ResourceLocation texture, int argb, boolean fullBright) {
+            this.texture = texture;
+            this.argb = argb;
+            this.fullBright = fullBright;
+        }
+    }
+
+    private static final class SkinSnapshot {
+        final OverlayPass[] passes;
+
+        final boolean hideHat;
+        final boolean hideJacket;
+        final boolean hideLeftSleeve;
+        final boolean hideRightSleeve;
+        final boolean hideLeftPants;
+        final boolean hideRightPants;
+
+        SkinSnapshot(OverlayPass[] passes,
+                     boolean hideHat,
+                     boolean hideJacket,
+                     boolean hideLeftSleeve,
+                     boolean hideRightSleeve,
+                     boolean hideLeftPants,
+                     boolean hideRightPants) {
+            this.passes = (passes == null) ? new OverlayPass[0] : passes;
+            this.hideHat = hideHat;
+            this.hideJacket = hideJacket;
+            this.hideLeftSleeve = hideLeftSleeve;
+            this.hideRightSleeve = hideRightSleeve;
+            this.hideLeftPants = hideLeftPants;
+            this.hideRightPants = hideRightPants;
+        }
+
+        static SkinSnapshot empty() {
+            return new SkinSnapshot(new OverlayPass[0], false, false, false, false, false, false);
+        }
+    }
 
     private static final class Snapshot {
         final Vec3 pos;
@@ -73,10 +124,12 @@ public final class SandevistanMirageTrail {
         final float limbSwingAmount;
         final float ageInTicks;
 
+        final SkinSnapshot skin;
+
         int ageTicks;
 
         Snapshot(Vec3 pos, float bodyYaw, float headYaw, float pitch, boolean crouching,
-                 float limbSwing, float limbSwingAmount, float ageInTicks) {
+                 float limbSwing, float limbSwingAmount, float ageInTicks, SkinSnapshot skin) {
             this.pos = pos;
             this.bodyYaw = bodyYaw;
             this.headYaw = headYaw;
@@ -85,6 +138,7 @@ public final class SandevistanMirageTrail {
             this.limbSwing = limbSwing;
             this.limbSwingAmount = limbSwingAmount;
             this.ageInTicks = ageInTicks;
+            this.skin = (skin == null) ? SkinSnapshot.empty() : skin;
             this.ageTicks = 0;
         }
     }
@@ -188,6 +242,8 @@ public final class SandevistanMirageTrail {
                 float limbSwing = safeWalkPosition(player, samplePartial);
                 float limbSwingAmount = safeWalkSpeed(player, samplePartial);
 
+                SkinSnapshot skin = captureSkinSnapshot(player);
+
                 Snapshot snap = new Snapshot(
                         new Vec3(x, y, z),
                         bodyYaw,
@@ -196,7 +252,8 @@ public final class SandevistanMirageTrail {
                         player.isCrouching(),
                         limbSwing,
                         limbSwingAmount,
-                        (float) sampleTimeTicks
+                        (float) sampleTimeTicks,
+                        skin
                 );
 
                 Deque<Snapshot> q = TRAILS.computeIfAbsent(id, k -> new ArrayDeque<>());
@@ -276,9 +333,9 @@ public final class SandevistanMirageTrail {
                 float hue = (baseHue + indexNorm) % 1.0F;
 
                 int rgb = Mth.hsvToRgb(hue, 0.90F, 1.0F);
-                int r = (rgb >> 16) & 0xFF;
-                int g = (rgb >> 8) & 0xFF;
-                int b = rgb & 0xFF;
+                int hueR = (rgb >> 16) & 0xFF;
+                int hueG = (rgb >> 8) & 0xFF;
+                int hueB = rgb & 0xFF;
 
                 Vec3 renderPos = s.pos;
                 if (isLocalFirstPerson) {
@@ -312,11 +369,33 @@ public final class SandevistanMirageTrail {
                             BlockPos.containing(renderPos.x, renderPos.y, renderPos.z)
                     );
 
-                    int bodyColor = FastColor.ARGB32.color(aBody, r, g, b);
+                    model.hat.visible = true;
+                    model.jacket.visible = true;
+                    model.leftSleeve.visible = true;
+                    model.rightSleeve.visible = true;
+                    model.leftPants.visible = true;
+                    model.rightPants.visible = true;
+
+                    applyHideVanilla(model, s.skin);
+
+                    int bodyColor = FastColor.ARGB32.color(aBody, hueR, hueG, hueB);
                     ResourceLocation skin = player.getSkin().texture();
 
                     var vcBody = buffer.getBuffer(RenderType.entityTranslucent(skin));
                     model.renderToBuffer(poseStack, vcBody, packedLight, OverlayTexture.NO_OVERLAY, bodyColor);
+
+                    if (s.skin.passes.length > 0) {
+                        for (OverlayPass pass : s.skin.passes) {
+                            if (pass == null || pass.texture == null) continue;
+
+                            int hueTinted = applyHueTint(pass.argb, hueR, hueG, hueB);
+                            int faded = multiplyAlpha(hueTinted, aBody);
+
+                            int light = pass.fullBright ? FULL_BRIGHT : packedLight;
+                            var vc = buffer.getBuffer(RenderType.entityTranslucent(pass.texture));
+                            model.renderToBuffer(poseStack, vc, light, OverlayTexture.NO_OVERLAY, faded);
+                        }
+                    }
                 } finally {
                     poseStack.popPose();
                 }
@@ -336,6 +415,230 @@ public final class SandevistanMirageTrail {
             model.rightPants.visible = prevRightPants;
             model.young = prevYoung;
         }
+    }
+
+    private static SkinSnapshot captureSkinSnapshot(AbstractClientPlayer player) {
+        SkinModifierState state = SkinModifierManager.getPlayerSkinState(player);
+        if (state == null) return SkinSnapshot.empty();
+
+        List<SkinModifier> mods = state.getModifiers();
+        List<SkinHighlight> highs = state.getHighlights();
+
+        int modCount = (mods == null) ? 0 : mods.size();
+        int hiCount = (highs == null) ? 0 : highs.size();
+
+        if (modCount == 0 && hiCount == 0) return SkinSnapshot.empty();
+
+        OverlayPass[] passes = new OverlayPass[modCount + hiCount];
+
+        boolean hideHat = false;
+        boolean hideJacket = false;
+        boolean hideLeftSleeve = false;
+        boolean hideRightSleeve = false;
+        boolean hideLeftPants = false;
+        boolean hideRightPants = false;
+
+        int idx = 0;
+
+        if (mods != null) {
+            for (SkinModifier m : mods) {
+                if (m == null) continue;
+
+                ResourceLocation tex = extractTextureForPlayer(m, player);
+                int tint = extractTint(m, 0xFFFFFFFF);
+
+                Object hideSet = extractHideVanillaSet(m);
+                if (hideSet instanceof Iterable<?> it) {
+                    for (Object o : it) {
+                        if (o == null) continue;
+                        String n = enumName(o);
+                        if (n == null) continue;
+
+                        if ("HAT".equals(n)) hideHat = true;
+                        if ("JACKET".equals(n)) hideJacket = true;
+                        if ("LEFT_SLEEVE".equals(n)) hideLeftSleeve = true;
+                        if ("RIGHT_SLEEVE".equals(n)) hideRightSleeve = true;
+                        if ("LEFT_PANTS".equals(n)) hideLeftPants = true;
+                        if ("RIGHT_PANTS".equals(n)) hideRightPants = true;
+                    }
+                }
+
+                if (extractBoolean(m, false, "hideAllVanillaLayers", "isHideAllVanillaLayers", "getHideAllVanillaLayers")) {
+                    hideHat = true;
+                    hideJacket = true;
+                    hideLeftSleeve = true;
+                    hideRightSleeve = true;
+                    hideLeftPants = true;
+                    hideRightPants = true;
+                }
+
+                passes[idx++] = new OverlayPass(tex, tint, false);
+            }
+        }
+
+        if (highs != null) {
+            for (SkinHighlight h : highs) {
+                if (h == null) continue;
+
+                ResourceLocation tex = extractTextureForPlayer(h, player);
+                int tint = extractTint(h, 0xFFFFFFFF);
+
+                passes[idx++] = new OverlayPass(tex, tint, true);
+            }
+        }
+
+        if (idx != passes.length) {
+            OverlayPass[] compact = new OverlayPass[idx];
+            System.arraycopy(passes, 0, compact, 0, idx);
+            passes = compact;
+        }
+
+        return new SkinSnapshot(
+                passes,
+                hideHat,
+                hideJacket,
+                hideLeftSleeve,
+                hideRightSleeve,
+                hideLeftPants,
+                hideRightPants
+        );
+    }
+
+    private static void applyHideVanilla(PlayerModel<?> model, SkinSnapshot skin) {
+        if (skin == null) return;
+
+        if (skin.hideHat) model.hat.visible = false;
+        if (skin.hideJacket) model.jacket.visible = false;
+        if (skin.hideLeftSleeve) model.leftSleeve.visible = false;
+        if (skin.hideRightSleeve) model.rightSleeve.visible = false;
+        if (skin.hideLeftPants) model.leftPants.visible = false;
+        if (skin.hideRightPants) model.rightPants.visible = false;
+    }
+
+    private static int multiplyAlpha(int argb, int alphaMul0to255) {
+        alphaMul0to255 = Mth.clamp(alphaMul0to255, 0, 255);
+        int a = FastColor.ARGB32.alpha(argb);
+        int newA = (a * alphaMul0to255) / 255;
+        return (argb & 0x00FFFFFF) | (newA << 24);
+    }
+
+    private static int applyHueTint(int argb, int hueR, int hueG, int hueB) {
+        int a = FastColor.ARGB32.alpha(argb);
+        int r = FastColor.ARGB32.red(argb);
+        int g = FastColor.ARGB32.green(argb);
+        int b = FastColor.ARGB32.blue(argb);
+
+        int outR = (r * hueR) / 255;
+        int outG = (g * hueG) / 255;
+        int outB = (b * hueB) / 255;
+
+        return FastColor.ARGB32.color(a, outR, outG, outB);
+    }
+
+    private static String enumName(Object enumValue) {
+        if (enumValue instanceof Enum<?> e) return e.name();
+        try {
+            Method m = enumValue.getClass().getMethod("name");
+            Object r = m.invoke(enumValue);
+            return (r instanceof String s) ? s : null;
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    private static Object extractHideVanillaSet(Object obj) {
+        Object r = extractByMethod(obj, "getHideVanilla", "hideVanilla", "getHideVanillaLayers", "hideVanillaLayers");
+        if (r != null) return r;
+        return extractByField(obj, "hideVanilla", "hideVanillaLayers", "hiddenVanilla", "hideLayers");
+    }
+
+    private static ResourceLocation extractTextureForPlayer(Object obj, AbstractClientPlayer player) {
+        boolean slim = player.getSkin().model() == PlayerSkin.Model.SLIM;
+
+        if (slim) {
+            ResourceLocation r = extractResourceLocation(obj,
+                    "getSlimTexture", "slimTexture", "slim", "getTextureSlim", "textureSlim");
+            if (r != null) return r;
+        } else {
+            ResourceLocation r = extractResourceLocation(obj,
+                    "getWideTexture", "wideTexture", "wide", "getTextureWide", "textureWide");
+            if (r != null) return r;
+        }
+
+        ResourceLocation generic = extractResourceLocation(obj, "getTexture", "texture");
+        if (generic != null) return generic;
+
+        if (slim) {
+            ResourceLocation r = extractResourceLocationField(obj, "slimTexture", "slim", "textureSlim");
+            if (r != null) return r;
+            return extractResourceLocationField(obj, "wideTexture", "wide", "textureWide");
+        } else {
+            ResourceLocation r = extractResourceLocationField(obj, "wideTexture", "wide", "textureWide");
+            if (r != null) return r;
+            return extractResourceLocationField(obj, "slimTexture", "slim", "textureSlim");
+        }
+    }
+
+    private static int extractTint(Object obj, int def) {
+        Object r = extractByMethod(obj, "getTint", "tint", "getColor", "color", "getArgb", "argb");
+        if (r instanceof Integer i) return i;
+        r = extractByField(obj, "tint", "color", "argb", "tintColor");
+        if (r instanceof Integer i) return i;
+        return def;
+    }
+
+    private static boolean extractBoolean(Object obj, boolean def, String... names) {
+        Object r = extractByMethod(obj, names);
+        if (r instanceof Boolean b) return b;
+        r = extractByField(obj, names);
+        if (r instanceof Boolean b) return b;
+        return def;
+    }
+
+    private static Object extractByMethod(Object obj, String... names) {
+        for (String n : names) {
+            try {
+                Method m = obj.getClass().getMethod(n);
+                m.setAccessible(true);
+                return m.invoke(obj);
+            } catch (Throwable ignored) {}
+        }
+        return null;
+    }
+
+    private static Object extractByField(Object obj, String... names) {
+        for (String n : names) {
+            try {
+                Field f = obj.getClass().getDeclaredField(n);
+                f.setAccessible(true);
+                return f.get(obj);
+            } catch (Throwable ignored) {}
+        }
+        return null;
+    }
+
+    private static ResourceLocation extractResourceLocation(Object obj, String... methodNames) {
+        for (String n : methodNames) {
+            try {
+                Method m = obj.getClass().getMethod(n);
+                m.setAccessible(true);
+                Object r = m.invoke(obj);
+                if (r instanceof ResourceLocation rl) return rl;
+            } catch (Throwable ignored) {}
+        }
+        return null;
+    }
+
+    private static ResourceLocation extractResourceLocationField(Object obj, String... fieldNames) {
+        for (String n : fieldNames) {
+            try {
+                Field f = obj.getClass().getDeclaredField(n);
+                f.setAccessible(true);
+                Object r = f.get(obj);
+                if (r instanceof ResourceLocation rl) return rl;
+            } catch (Throwable ignored) {}
+        }
+        return null;
     }
 
     private static float safeWalkPosition(AbstractClientPlayer player, float partial) {

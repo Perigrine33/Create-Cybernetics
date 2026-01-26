@@ -31,7 +31,7 @@ public class SynthMuscleItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 3 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.muscleupgrades_synthmuscle.energy").withStyle(ChatFormatting.RED));
         }
     }
 

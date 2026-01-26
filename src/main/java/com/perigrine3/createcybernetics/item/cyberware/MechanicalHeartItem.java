@@ -34,7 +34,7 @@ public class MechanicalHeartItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 6 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.heartupgrades_cyberheart.energy").withStyle(ChatFormatting.RED));
         }
     }
 

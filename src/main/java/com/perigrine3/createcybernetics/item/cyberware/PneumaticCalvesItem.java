@@ -43,7 +43,7 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 3-5 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.legupgrades_jumpboost.energy").withStyle(ChatFormatting.RED));
         }
     }
 

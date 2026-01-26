@@ -28,7 +28,7 @@ public class TrajectoryCalculatorModuleItem extends Item implements ICyberwareIt
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 2 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.eyeupgrades_trajectorycalculator.energy").withStyle(ChatFormatting.RED));
         }
     }
 

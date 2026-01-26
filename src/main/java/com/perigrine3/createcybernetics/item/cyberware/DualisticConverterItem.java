@@ -30,7 +30,7 @@ public class DualisticConverterItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Adds 50 Energy From Science/Magic").withStyle(ChatFormatting.DARK_GREEN));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrades_dualisticconverter.energy").withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 

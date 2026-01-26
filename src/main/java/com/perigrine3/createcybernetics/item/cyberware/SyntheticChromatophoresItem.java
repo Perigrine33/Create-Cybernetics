@@ -35,7 +35,7 @@ public class SyntheticChromatophoresItem extends Item implements ICyberwareItem 
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
-            tooltip.add(Component.literal("Costs 7 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.skinupgrades_chromatophores.energy").withStyle(ChatFormatting.RED));
         }
     }
 

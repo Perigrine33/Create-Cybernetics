@@ -117,95 +117,95 @@ public class ModItems {
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Combat").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD90804))));
-                    tooltipComponents.add(Component.literal("Improves combat ability"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_red.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD90804))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_red.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_ORANGE = ITEMS.register("data_shard_orange",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Mining").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD96704))));
-                    tooltipComponents.add(Component.literal("Occasionally doubles ore drops"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_orange.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD96704))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_orange.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_YELLOW = ITEMS.register("data_shard_yellow",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Haggling").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xE8C602))));
-                    tooltipComponents.add(Component.literal("Improves villager trades"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_yellow.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xE8C602))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_yellow.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_GREEN = ITEMS.register("data_shard_green",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Learning").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x08B302))));
-                    tooltipComponents.add(Component.literal("Doubles XP intake"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_green.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x08B302))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_green.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_CYAN = ITEMS.register("data_shard_cyan",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Archery").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x02C97A))));
-                    tooltipComponents.add(Component.literal("Improves accuracy with a bow"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_cyan.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x02C97A))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_cyan.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_BLUE = ITEMS.register("data_shard_blue",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Swimming").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x023DE0))));
-                    tooltipComponents.add(Component.literal("Improves underwater actions"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_blue.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x023DE0))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_blue.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_PURPLE = ITEMS.register("data_shard_purple",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Crafting").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x9A02D6))));
-                    tooltipComponents.add(Component.literal("Doubles 3x3 crafting output"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_purple.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x9A02D6))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_purple.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_PINK = ITEMS.register("data_shard_pink",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Husbandry").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xE002AD))));
-                    tooltipComponents.add(Component.literal("Doubles bred creatures"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_pink.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xE002AD))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_pink.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_BROWN = ITEMS.register("data_shard_brown",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Farming").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x783F19))));
-                    tooltipComponents.add(Component.literal("Doubles crop drops"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_brown.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x783F19))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_brown.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_GRAY = ITEMS.register("data_shard_gray",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Flight").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5E5E5E))));
-                    tooltipComponents.add(Component.literal("Improves Elytra flight handling"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_gray.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5E5E5E))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_gray.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_BLACK = ITEMS.register("data_shard_black",
             () -> new DataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Stealth Ops").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x292929))));
-                    tooltipComponents.add(Component.literal("Improves stealth abilities"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_black.title").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x292929))));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_black.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
     public static final DeferredItem<Item> DATA_SHARD_BIOCHIP = ITEMS.register("data_shard_biochip",
             () -> new BiochipDataShardItem(new Item.Properties().stacksTo(1)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-                    tooltipComponents.add(Component.literal("Stores consciousness if installed for 28 days"));
+                    tooltipComponents.add(Component.translatable("item.createcybernetics.data_shard_biochip.desc"));
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }});
 

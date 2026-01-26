@@ -61,10 +61,10 @@ public class IDEMItem extends Item implements ICyberwareItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
-            tooltip.add(Component.literal("15 Second Cooldown").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.brainupgrades_idem.tooltip3").withStyle(ChatFormatting.DARK_GRAY));
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 50 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.brainupgrades_idem.energy").withStyle(ChatFormatting.RED));
         }
     }
 

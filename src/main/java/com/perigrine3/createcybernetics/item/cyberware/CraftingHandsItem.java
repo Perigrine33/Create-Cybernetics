@@ -42,7 +42,7 @@ public class CraftingHandsItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 2 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.armupgrades_crafthands.energy").withStyle(ChatFormatting.RED));
         }
     }
 

@@ -48,7 +48,7 @@ public class OpticZoomModuleItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 2 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.eyeupgrades_zoom.energy").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -154,7 +154,7 @@ public class OpticZoomModuleItem extends Item implements ICyberwareItem {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == player) {
             player.displayClientMessage(
-                    Component.literal("Zoom: " + LEVELS[next] + "x").withStyle(ChatFormatting.AQUA),
+                    Component.translatable("zoom.mult.desc1" + LEVELS[next] + "zoom.mult.desc2").withStyle(ChatFormatting.AQUA),
                     true
             );
         }

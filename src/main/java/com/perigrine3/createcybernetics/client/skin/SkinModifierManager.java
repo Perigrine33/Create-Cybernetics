@@ -38,12 +38,12 @@ import java.util.UUID;
  *    if (data.hasAnyTagged(ModTags.Items.YOUR_ITEMS, CyberwareSlot.YOUR_SLOT)) {
  *        state.addModifier(YOUR_MODIFIER);
  *    }
- *    
+ *
  *    // For effect-based modifications:
  *    if (player.hasEffect(ModEffects.YOUR_EFFECT)) {
  *        state.addModifier(YOUR_MODIFIER);
  *    }
- *    
+ *
  *    // For conditional modifications:
  *    if (shouldApplyCondition(player)) {
  *        state.addModifier(YOUR_MODIFIER);
@@ -78,7 +78,7 @@ import java.util.UUID;
 public class SkinModifierManager {
     private static final Map<UUID, SkinModifierState> PLAYER_STATES = new HashMap<>();
 
-//INTERCHANGEABLES
+    //INTERCHANGEABLES
     private static final ResourceLocation MISSING_SKIN_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/playermuscles_wide.png");
     private static final ResourceLocation CYBEREYES_PRIMARY =
@@ -132,7 +132,7 @@ public class SkinModifierManager {
     private static final ResourceLocation DRAGOON_EYES_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/dragoon_eyes_dyed.png");
 
-//WIDE VARIANTS
+    //WIDE VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_wide.png");
     private static final ResourceLocation LEFT_CYBERARM_PRIMARY_WIDE =
@@ -191,7 +191,7 @@ public class SkinModifierManager {
     private static final ResourceLocation DRAGOON_WIDE_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/dragoon_wide_dyed.png");
 
-//SLIM VARIANTS
+    //SLIM VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_slim.png");
     private static final ResourceLocation LEFT_CYBERARM_PRIMARY_SLIM =
@@ -297,8 +297,8 @@ public class SkinModifierManager {
             if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
                 state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE));
             }
-                state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM,
-                        tint, false, EnumSet.noneOf(SkinModifier.HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), true));
+            state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM,
+                    tint, false, EnumSet.noneOf(SkinModifier.HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), true));
             return state;
         }
 // GILLS
@@ -677,7 +677,7 @@ public class SkinModifierManager {
 
 
 
-        
+
         return state;
     }
 }

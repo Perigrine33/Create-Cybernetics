@@ -56,7 +56,7 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 50 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.heartupgrades_defibrillator.energy").withStyle(ChatFormatting.RED));
         }
     }
 

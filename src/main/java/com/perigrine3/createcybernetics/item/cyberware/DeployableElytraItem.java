@@ -56,7 +56,7 @@ public class DeployableElytraItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 1-2 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.boneupgrades_elytra.energy").withStyle(ChatFormatting.RED));
         }
     }
 

@@ -29,7 +29,7 @@ public abstract class CreativeModeInventoryChipwareButtonMixin
         int y = this.topPos + 7;
 
         this.cc$chipwareBtn = Button.builder(
-                        Component.literal("Chipware"),
+                        Component.translatable("gui.chipware.button"),
                         b -> PacketDistributor.sendToServer(new OpenChipwareMiniPayload()))
                 .bounds(x, y, 48, 15).build();
 

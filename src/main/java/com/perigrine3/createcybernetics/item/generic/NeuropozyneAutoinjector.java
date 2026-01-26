@@ -31,8 +31,8 @@ public class NeuropozyneAutoinjector extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        tooltipComponents.add(Component.literal("Neuropozyne (20:00)").withStyle(ChatFormatting.BLUE));
-        tooltipComponents.add(Component.literal("Injection Extends Duration to a Full Day").withStyle(ChatFormatting.DARK_PURPLE));
+        tooltipComponents.add(Component.translatable("item.createcybernetics.neuropozyne_autoinjector.duration").withStyle(ChatFormatting.BLUE));
+        tooltipComponents.add(Component.translatable("item.createcybernetics.neuropozyne_autoinjector.desc").withStyle(ChatFormatting.DARK_PURPLE));
     }
 
     @Override

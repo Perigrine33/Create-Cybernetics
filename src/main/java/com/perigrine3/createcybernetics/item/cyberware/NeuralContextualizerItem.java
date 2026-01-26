@@ -36,7 +36,7 @@ public class NeuralContextualizerItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.literal("Costs 2 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.brainupgrades_neuralcontextualizer.energy").withStyle(ChatFormatting.RED));
         }
     }
 

@@ -79,7 +79,7 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
-            tooltip.add(Component.literal("Costs 5 Energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.brainupgrades_cyberbrain.energy").withStyle(ChatFormatting.RED));
         }
     }
 
