@@ -142,6 +142,14 @@ dependencies {
     implementation "curse.maven:better-combat-by-daedelus-639842:7348161"
     implementation "curse.maven:playeranimator-658587:7389814"
     implementation "curse.maven:cloth-config-348521:5729127"
+
+    //implementation "curse.maven:stellaris-1036270:7517669"
+    //implementation "curse.maven:sky-aesthetics-1096636:7473076"
+    //implementation "curse.maven:architectury-api-419699:5786327"
+    //implementation "curse.maven:potentials-1165185:6912628"
+
+    implementation "curse.maven:northstar-redux-1318310:7476517"
+    implementation "curse.maven:geckolib-388172:7415496"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

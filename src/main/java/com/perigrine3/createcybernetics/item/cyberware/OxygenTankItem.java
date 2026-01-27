@@ -62,6 +62,11 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public int maxStacksPerSlotType(ItemStack stack, CyberwareSlot slotType) {
+        return 3;
+    }
+
+    @Override
     public boolean replacesOrgan() {
         return false;
     }
