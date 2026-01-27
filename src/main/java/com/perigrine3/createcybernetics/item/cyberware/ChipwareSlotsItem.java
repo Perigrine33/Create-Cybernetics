@@ -127,9 +127,9 @@ public class ChipwareSlotsItem extends Item implements ICyberwareItem {
         }
 
         if (data.hasChipwareShardExact(ModItems.DATA_SHARD_PURPLE.get())) {
-            CyberwareAttributeHelper.applyModifier(player, "purpleshard_crafting");
+            CyberwareAttributeHelper.applyModifier(player, "purpleshard_pearl");
         } else {
-            CyberwareAttributeHelper.removeModifier(player, "purpleshard_crafting");
+            CyberwareAttributeHelper.removeModifier(player, "purpleshard_pearl");
         }
 
         if (data.hasChipwareShardExact(ModItems.DATA_SHARD_PINK.get())) {

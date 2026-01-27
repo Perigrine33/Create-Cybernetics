@@ -3,9 +3,15 @@ package com.perigrine3.createcybernetics.event.custom;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.common.attributes.ModAttributes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,7 +39,9 @@ public final class OreMultiplierHandler {
         BlockPos pos = event.getPos();
         BlockState state = event.getState();
         BlockEntity be = level.getBlockEntity(pos);
+
         ItemStack tool = player.getMainHandItem();
+        if (hasSilkTouch(level, tool)) return;
 
         List<ItemStack> drops = Block.getDrops(state, level, pos, be, player, tool);
 
@@ -52,5 +60,15 @@ public final class OreMultiplierHandler {
 
             Block.popResource(level, pos, extraStack);
         }
+    }
+
+    private static boolean hasSilkTouch(Level level, ItemStack tool) {
+        if (tool.isEmpty()) return false;
+
+        Holder<Enchantment> silk = level.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(Enchantments.SILK_TOUCH);
+
+        return EnchantmentHelper.getItemEnchantmentLevel(silk, tool) > 0;
     }
 }

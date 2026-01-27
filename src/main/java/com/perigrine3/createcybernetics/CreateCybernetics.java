@@ -5,6 +5,7 @@ import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.block.entity.ModBlockEntities;
 import com.perigrine3.createcybernetics.common.attributes.ModAttributes;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.compat.CompatBootstrap;
 import com.perigrine3.createcybernetics.component.ModDataComponents;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.effect.PneumaticCalvesEffect;
@@ -88,6 +89,8 @@ public class CreateCybernetics {
         ModAttributes.register(eventBus);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        CompatBootstrap.bootstrap();
 
     }
 

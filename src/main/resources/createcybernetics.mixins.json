@@ -14,11 +14,10 @@
   "client": [
     "PlayerEyeHeightMixin",
     "client.AbstractContainerScreenAccessor",
-    "client.CraftingResultCountMixin",
     "client.CreativeModeInventoryChipwareButtonMixin",
     "client.CreativeSlotWrapperHideChipwareMixin",
     "client.InventoryScreenChipwareSlotsMixin",
-    "client.ScreenInvoker",
+    "client.ScreenInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

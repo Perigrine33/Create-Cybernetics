@@ -23,8 +23,8 @@ public final class ModAttributes {
     public static final DeferredHolder<Attribute, Attribute> HAGGLING =
             ATTRIBUTES.register("haggling", () -> new RangedAttribute("attribute." + CreateCybernetics.MODID + ".haggling",
                     1.0D, 0.0D, 2.0D).setSyncable(true));
-    public static final DeferredHolder<Attribute, Attribute> CRAFTING_OUTPUT =
-            ATTRIBUTES.register("crafting_output", () -> new RangedAttribute("attribute." + CreateCybernetics.MODID + ".crafting_output",
+    public static final DeferredHolder<Attribute, Attribute> ENDER_PEARL_DAMAGE =
+            ATTRIBUTES.register("ender_pearl_damage", () -> new RangedAttribute("attribute." + CreateCybernetics.MODID + ".ender_pearl_damage",
                     1.0D, 0.0D, 16.0D).setSyncable(true));
     public static final DeferredHolder<Attribute, Attribute> ARROW_INACCURACY =
             ATTRIBUTES.register("arrow_inaccuracy", () -> new RangedAttribute("attribute." + CreateCybernetics.MODID + ".arrow_inaccuracy",

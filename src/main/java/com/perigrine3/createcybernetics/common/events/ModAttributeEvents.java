@@ -16,7 +16,7 @@ public final class ModAttributeEvents {
         event.add(EntityType.PLAYER, ModAttributes.XP_GAIN_MULTIPLIER);
         event.add(EntityType.PLAYER, ModAttributes.ORE_DROP_MULTIPLIER);
         event.add(EntityType.PLAYER, ModAttributes.HAGGLING);
-        event.add(EntityType.PLAYER, ModAttributes.CRAFTING_OUTPUT);
+        event.add(EntityType.PLAYER, ModAttributes.ENDER_PEARL_DAMAGE);
         event.add(EntityType.PLAYER, ModAttributes.ARROW_INACCURACY);
         event.add(EntityType.PLAYER, ModAttributes.BREEDING_MULTIPLIER);
         event.add(EntityType.PLAYER, ModAttributes.CROP_MULTIPLIER);
