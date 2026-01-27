@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.compat.northstar.CopernicusSuitPredicate;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.DeltaTracker;
@@ -21,15 +22,12 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class CyberwareHudLayer {
 
-    // Battery/normal HUD layer (unchanged intent)
     public static final ResourceLocation LAYER_ID =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_hud");
 
-    // Spinner/crosshair overlay layer (NEW)
     public static final ResourceLocation CROSSHAIR_LAYER_ID =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_hud_crosshair");
 
-    // ---- Battery textures ----
     private static final ResourceLocation FRAME =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/hud/hud_batteryframe.png");
     private static final ResourceLocation FRAME_EMPTY =
@@ -45,11 +43,9 @@ public final class CyberwareHudLayer {
     private static final ResourceLocation BARS2_EMPTY =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/hud/hud_batterybars2_empty.png");
 
-    // ---- Center Fram texture ----
     private static final ResourceLocation CENTER_OVERLAY =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/hud/hud_overlay.png");
 
-    // ---- Spinning crosshair overlay texture ----
     private static final ResourceLocation CENTER_SPINNER =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/hud/hud_overlay_circle.png");
 
@@ -57,11 +53,11 @@ public final class CyberwareHudLayer {
     private static final int OVERLAY_H = 1055;
     private static final int SPINNER_W = 2048;
     private static final int SPINNER_H = 1055;
-    // Overlay tuning
+
     private static final float OVERLAY_MAX_SCREEN_FRACTION = 0.95f;
     private static final float OVERLAY_ALPHA = 0.5f;
     private static final boolean OVERLAY_DRAW_BEHIND_BATTERY = true;
-    // Spinner tuning
+
     private static final float SPINNER_MAX_SCREEN_FRACTION = 1.25f;
     private static final float SPINNER_ALPHA = 0.1f;
     private static float SPINNER_OFFSET_X_PX = -0.5f;
@@ -84,6 +80,14 @@ public final class CyberwareHudLayer {
     private static final int VALUE_COLOR_LOW = 0xFF5555;
     private static final boolean VALUE_SHADOW = true;
     private static final float LOW_THRESHOLD = 0.25f;
+
+    public static final int COPERNICUS_OXYGEN_MAX_DISPLAY = 3000;
+
+    private static final float OXYGEN_TEXT_SCALE = 0.8f;
+    private static final int OXYGEN_TEXT_COLOR = 0xFFFFFF;
+    private static final int OXYGEN_TEXT_COLOR_LOW = 0xFF5555;
+    private static final boolean OXYGEN_TEXT_SHADOW = true;
+    private static final float OXYGEN_LOW_THRESHOLD = 0.25f;
 
     @SubscribeEvent
     public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
@@ -136,6 +140,7 @@ public final class CyberwareHudLayer {
 
         renderEnergyValueAboveBattery(gg, mc, current, capacity, x, y, scaledW, low);
         renderBatteryScaled(gg, x, y, current, capForPct, net);
+        renderCopernicusOxygenIndicator(gg, mc, player, screenW, screenH);
 
         if (!OVERLAY_DRAW_BEHIND_BATTERY) {
             renderCenteredImageAutoFit(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, screenW, screenH,
@@ -177,7 +182,7 @@ public final class CyberwareHudLayer {
     }
 
     private static void renderCenteredImageAutoFit(GuiGraphics gg, ResourceLocation tex, int texW, int texH,
-                                                int screenW, int screenH, float maxScreenFraction, float alpha) {
+                                                   int screenW, int screenH, float maxScreenFraction, float alpha) {
         float sx = (screenW * maxScreenFraction) / (float) texW;
         float sy = (screenH * maxScreenFraction) / (float) texH;
         float scale = Math.min(sx, sy);
@@ -206,7 +211,7 @@ public final class CyberwareHudLayer {
     }
 
     private static void renderSpinningCenteredImageAutoFit(GuiGraphics gg, ResourceLocation tex, int texW, int texH, int screenW, int screenH,
-                    float maxScreenFraction, float alpha, int tickCount, float partialTick, float degPerSecond, float offsetXPx, float offsetYPx) {
+                                                           float maxScreenFraction, float alpha, int tickCount, float partialTick, float degPerSecond, float offsetXPx, float offsetYPx) {
         float sx = (screenW * maxScreenFraction) / (float) texW;
         float sy = (screenH * maxScreenFraction) / (float) texH;
         float scale = Math.min(sx, sy);
@@ -232,7 +237,6 @@ public final class CyberwareHudLayer {
 
         gg.pose().popPose();
     }
-
 
     private static void renderEnergyValueAboveBattery(
             GuiGraphics gg, Minecraft mc,
@@ -262,6 +266,35 @@ public final class CyberwareHudLayer {
         gg.pose().translate(x, y, 0);
         gg.pose().scale(BATTERY_SCALE, BATTERY_SCALE, 1.0f);
         renderBattery(gg, 0, 0, currentPower, maxPower, netPowerPerTick);
+        gg.pose().popPose();
+    }
+
+    private static void renderCopernicusOxygenIndicator(GuiGraphics gg, Minecraft mc, LocalPlayer player, int screenW, int screenH) {
+        if (!CopernicusSuitPredicate.hasCopernicusSetInstalled(player)) return;
+
+        int oxygen = ClientCopernicusOxygenState.get();
+        int max = COPERNICUS_OXYGEN_MAX_DISPLAY;
+
+        String text = "OXYGEN: " + oxygen + "/" + max;
+
+        float pct = (max <= 0) ? 0f : (oxygen / (float) max);
+        boolean low = pct <= OXYGEN_LOW_THRESHOLD;
+
+        int color = low ? OXYGEN_TEXT_COLOR_LOW : OXYGEN_TEXT_COLOR;
+
+        int airRightX = (screenW / 2) + 91;
+        int airY = screenH - 52;
+
+        int scaledTextW = Math.round(mc.font.width(text) * OXYGEN_TEXT_SCALE);
+        int scaledTextH = Math.round(mc.font.lineHeight * OXYGEN_TEXT_SCALE);
+
+        int textX = airRightX - scaledTextW;
+        int textY = airY - scaledTextH - 1;
+
+        gg.pose().pushPose();
+        gg.pose().translate(textX, textY, 0);
+        gg.pose().scale(OXYGEN_TEXT_SCALE, OXYGEN_TEXT_SCALE, 1.0f);
+        gg.drawString(mc.font, text, 0, 0, color, OXYGEN_TEXT_SHADOW);
         gg.pose().popPose();
     }
 
@@ -329,6 +362,20 @@ public final class CyberwareHudLayer {
         }
 
         public static TickSnapshot getSnapshot() {
+            return LAST;
+        }
+    }
+
+    public static final class ClientCopernicusOxygenState {
+        private static volatile int LAST = 0;
+
+        private ClientCopernicusOxygenState() {}
+
+        public static void set(int oxygen) {
+            LAST = Math.max(0, oxygen);
+        }
+
+        public static int get() {
             return LAST;
         }
     }

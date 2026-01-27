@@ -126,8 +126,6 @@ public class CyberwareAttributeHelper {
                 .orElseThrow(() -> new IllegalStateException("Ore drop multiplier attribute not found in registry"));
         Holder<Attribute> hagglingAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.HAGGLING.getKey())
                 .orElseThrow(() -> new IllegalStateException("Haggling attribute not found in registry"));
-        Holder<Attribute> craftingOutputAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.CRAFTING_OUTPUT.getKey())
-                .orElseThrow(() -> new IllegalStateException("Crafting output attribute not found in registry"));
         Holder<Attribute> arrowInaccuracyAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ARROW_INACCURACY.getKey())
                 .orElseThrow(() -> new IllegalStateException("Arrow inaccuracy attribute not found in registry"));
         Holder<Attribute> breedingMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.BREEDING_MULTIPLIER.getKey())
@@ -140,6 +138,8 @@ public class CyberwareAttributeHelper {
                 .orElseThrow(() -> new IllegalStateException("Elytra speed attribute not found in registry"));
         Holder<Attribute> insomniaAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.INSOMNIA.getKey())
                 .orElseThrow(() -> new IllegalStateException("Insomnia attribute not found in registry"));
+        Holder<Attribute> enderDamageAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ENDER_PEARL_DAMAGE.getKey())
+                .orElseThrow(() -> new IllegalStateException("Ender pearl damage attribute not found in registry"));
 
 
 
@@ -309,7 +309,7 @@ public class CyberwareAttributeHelper {
         registerModifier("cyberbrain_learn", new AttributeModifierData(xpMultiplierAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberbrain_learn_boost"),
                 2, AttributeModifier.Operation.ADD_VALUE));
-        registerModifier("cyberbrain_insomnia", new AttributeModifierData(xpMultiplierAttribute,
+        registerModifier("cyberbrain_insomnia", new AttributeModifierData(insomniaAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberbrain_insomnia"),
                 3, AttributeModifier.Operation.ADD_VALUE));
 
@@ -359,9 +359,9 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_oxygen_boost"),
                 7, AttributeModifier.Operation.ADD_VALUE));
 
-        registerModifier("purpleshard_crafting", new AttributeModifierData(craftingOutputAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "purpleshard_crafting_output"),
-                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("purpleshard_pearl", new AttributeModifierData(enderDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "purpleshard_pearl_negate"),
+                -1, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("pinkshard_breeding", new AttributeModifierData(breedingMultiplierAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pinkshard_breeding_multiplier"),
@@ -476,6 +476,17 @@ public class CyberwareAttributeHelper {
         registerModifier("dragoon_jump", new AttributeModifierData(jumpStrengthAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragoon_jump_add"),
                 5, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("copernicus_oxygen", new AttributeModifierData(oxygenBonusAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "copernicus_oxygen_add"),
+                20, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("genos_speed", new AttributeModifierData(speedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "genos_sprintspeed"),
+                0.2, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("genos_strength", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "genos_strength_add"),
+                4, AttributeModifier.Operation.ADD_VALUE));
 
     }
 

@@ -44,6 +44,13 @@ public class PlayerCyberwareData implements ICyberwareData {
     private static final String NBT_ARM_CANNON_SELECTED = "ArmCannonSelected";
     private int armCannonSelected = 0;
 
+    // ---- Copernicus oxygen (display units 0..maxDisplayUnits) ----
+    private static final String NBT_COPERNICUS_OXYGEN = "CopernicusOxygen";
+    private int copernicusOxygen = 0;
+    private boolean copernicusOxygenatedEnvironment = false;
+    private int copernicusOxygenSecondTicker = 0;
+
+
     public static final int CHIPWARE_SLOT_COUNT = 2;
     private static final String NBT_CHIPWARE_INV = "ChipwareInv";
     private final ItemStack[] chipwareInv = new ItemStack[CHIPWARE_SLOT_COUNT];
@@ -574,9 +581,52 @@ public class PlayerCyberwareData implements ICyberwareData {
         }
 
         armCannonSelected = 0;
+        copernicusOxygen = 0;
+        copernicusOxygenSecondTicker = 0;
 
         dirty = true;
     }
+
+    /* ---------------- COPERNICUS BREATHING STUFF ---------------- */
+
+    public int getCopernicusOxygen() {
+        return Math.max(0, copernicusOxygen);
+    }
+
+    public void setCopernicusOxygen(int value, int maxDisplayUnits) {
+        int max = Math.max(0, maxDisplayUnits);
+        int clamped = Mth.clamp(value, 0, max);
+        if (clamped != copernicusOxygen) {
+            copernicusOxygen = clamped;
+            dirty = true;
+        }
+    }
+
+    public boolean getCopernicusOxygenatedEnvironment() {
+        return copernicusOxygenatedEnvironment;
+    }
+
+    public void setCopernicusOxygenatedEnvironment(boolean oxygenated) {
+        copernicusOxygenatedEnvironment = oxygenated;
+    }
+
+    public void tickCopernicusOxygen(boolean oxygenatedEnvironment, int depletionPerSecond, int rechargePerSecond, int maxDisplayUnits) {
+        copernicusOxygenSecondTicker++;
+        if (copernicusOxygenSecondTicker < 20) return;
+        copernicusOxygenSecondTicker = 0;
+
+        int oxy = getCopernicusOxygen();
+
+        if (oxygenatedEnvironment) {
+            oxy = Math.min(maxDisplayUnits, oxy + Math.max(0, rechargePerSecond));
+        } else {
+            oxy = Math.max(0, oxy - Math.max(0, depletionPerSecond));
+        }
+
+        setCopernicusOxygen(oxy, maxDisplayUnits);
+    }
+
+    /* ---------------- DATA AND RESET ---------------- */
 
     @Override
     public void setDirty() {
@@ -809,8 +859,9 @@ public class PlayerCyberwareData implements ICyberwareData {
         }
         tag.put(NBT_CHIPWARE_INV, chip);
 
-
         tag.putInt(NBT_NEUROPOZYNE_APPLY_COUNT, neuropozyneApplyCount);
+
+        tag.putInt(NBT_COPERNICUS_OXYGEN, copernicusOxygen);
 
         return tag;
     }
@@ -914,6 +965,10 @@ public class PlayerCyberwareData implements ICyberwareData {
                 ? Math.max(0, tag.getInt(NBT_NEUROPOZYNE_APPLY_COUNT))
                 : 0;
 
+        copernicusOxygen = tag.contains(NBT_COPERNICUS_OXYGEN, Tag.TAG_INT)
+                ? Math.max(0, tag.getInt(NBT_COPERNICUS_OXYGEN))
+                : 0;
+
         dirty = false;
     }
 
@@ -926,37 +981,26 @@ public class PlayerCyberwareData implements ICyberwareData {
         Item item = stack.getItem();
         if (!(item instanceof ICyberwareItem cw)) return false;
 
-        // Normalize: commands install exactly one instance.
         ItemStack installStack = stack.copy();
         installStack.setCount(1);
 
-        // Find a target slot/index that is valid and has space.
         InstallTarget target = findInstallTargetForCommand(installStack, cw);
         if (target == null) return false;
 
-        // If the incoming item replaces an organ, remove any existing organ(s) it replaces first.
-        // This prevents "replaced organ" stacks coexisting incorrectly.
         if (cw.replacesOrgan()) {
             for (CyberwareSlot replaced : cw.getReplacedOrgans()) {
                 InstalledCyberware removedAny = removeFirstNonEmptyInSlotGroup(player, replaced);
-                // If you want "hard replace" (remove ALL in that group), loop indices instead.
-                // For now, remove just the first non-empty because many of your groups are multi-slot.
-                // If your semantics are "the organ group is fully replaced", change this to remove all.
             }
         }
 
-        // Install it.
         int humanityCost = cw.getHumanityCost();
         InstalledCyberware installed = new InstalledCyberware(installStack, target.slot, target.index, humanityCost);
-        // Power state should be computed by your EnergyController; default to powered=true.
         installed.setPowered(true);
 
         set(target.slot, target.index, installed);
 
-        // Call hooks.
         cw.onInstalled(player);
 
-        // Keep derived stats consistent.
         recomputeHumanityBaseFromInstalled();
         clampEnergyToCapacity(player);
 
@@ -977,20 +1021,13 @@ public class PlayerCyberwareData implements ICyberwareData {
 
                 ItemStack st = installed.getItem();
                 if (st == null || st.isEmpty()) continue;
-
                 if (!st.is(item)) continue;
 
-                // Remove it.
                 remove(slot, i);
 
-                // Call hooks.
                 if (item instanceof ICyberwareItem cw) {
                     cw.onRemoved(player);
                 }
-
-                // Optional: if you want removed "organ replacement" to restore defaults, do it here.
-                // I am NOT auto-restoring defaults, because your surgery system likely owns that.
-                // If you want it, you can restore DefaultOrgans.get(slot, i) when appropriate.
 
                 recomputeHumanityBaseFromInstalled();
                 clampEnergyToCapacity(player);
@@ -1018,7 +1055,6 @@ public class PlayerCyberwareData implements ICyberwareData {
                 ItemStack st = installed.getItem();
                 if (st == null || st.isEmpty()) continue;
 
-                // Skip default organs (optional)
                 ItemStack def = DefaultOrgans.get(slot, i);
                 if (def != null && !def.isEmpty() && ItemStack.isSameItemSameComponents(st, def)) {
                     continue;
@@ -1046,11 +1082,6 @@ public class PlayerCyberwareData implements ICyberwareData {
     private record InstallTarget(CyberwareSlot slot, int index) {}
 
     private InstallTarget findInstallTargetForCommand(ItemStack stack, ICyberwareItem cw) {
-        // Prefer supported slots in a deterministic order:
-        // - if it replaces organs, prioritize its replaced organ group(s) first
-        // - otherwise, use cw.getSupportedSlots() order (Set has no order) so iterate CyberwareSlot.values()
-
-        // 1) If it replaces organs, try those slot groups first.
         if (cw.replacesOrgan()) {
             for (CyberwareSlot replaced : cw.getReplacedOrgans()) {
                 InstallTarget t = findFirstValidSpaceInSlotGroup(stack, cw, replaced);
@@ -1058,7 +1089,6 @@ public class PlayerCyberwareData implements ICyberwareData {
             }
         }
 
-        // 2) Otherwise, try any supported slot group in enum order.
         for (CyberwareSlot slot : CyberwareSlot.values()) {
             if (!cw.supportsSlot(slot)) continue;
 
@@ -1073,7 +1103,6 @@ public class PlayerCyberwareData implements ICyberwareData {
         InstalledCyberware[] arr = slots.get(slot);
         if (arr == null) return null;
 
-        // Respect max stacks per slot type (per group).
         int max = Math.max(1, cw.maxStacksPerSlotType(incoming, slot));
         int already = 0;
 
@@ -1085,7 +1114,6 @@ public class PlayerCyberwareData implements ICyberwareData {
         }
         if (already >= max) return null;
 
-        // Find the first empty index.
         for (int i = 0; i < arr.length; i++) {
             InstalledCyberware installed = arr[i];
             if (installed == null || installed.getItem() == null || installed.getItem().isEmpty()) {

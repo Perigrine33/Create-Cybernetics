@@ -7,6 +7,7 @@ import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.*;
 import com.perigrine3.createcybernetics.network.handler.*;
 import com.perigrine3.createcybernetics.network.payload.*;
+import com.perigrine3.createcybernetics.screen.custom.hud.CyberwareHudLayer;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +15,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public final class ModPayloads {
-    private ModPayloads() {}
+    private ModPayloads() {
+    }
 
     public static void register(PayloadRegistrar r) {
         r.playToServer(
@@ -64,8 +66,6 @@ public final class ModPayloads {
         );
 
 
-
-
         r.playToServer(
                 com.perigrine3.createcybernetics.network.payload.OpenExpandedInventoryPayload.TYPE,
                 com.perigrine3.createcybernetics.network.payload.OpenExpandedInventoryPayload.STREAM_CODEC,
@@ -91,7 +91,6 @@ public final class ModPayloads {
                 EnergyHudSnapshotPayload.STREAM_CODEC,
                 EnergyHudSnapshotPayload::handle
         );
-
 
 
         r.playToServer(
@@ -150,6 +149,12 @@ public final class ModPayloads {
                 CerebralShutdownStatePayload::handle
         );
 
+
+        r.playToClient(
+                CopernicusOxygenSyncPayload.TYPE,
+                CopernicusOxygenSyncPayload.STREAM_CODEC,
+                CopernicusOxygenSyncPayload::handle
+        );
 
 
         /* ---------------- TOGGLE WHEEL PAYLOADS ---------------- */

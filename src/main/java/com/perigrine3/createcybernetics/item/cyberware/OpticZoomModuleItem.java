@@ -154,8 +154,7 @@ public class OpticZoomModuleItem extends Item implements ICyberwareItem {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == player) {
             player.displayClientMessage(
-                    Component.translatable("zoom.mult.desc1" + LEVELS[next] + "zoom.mult.desc2").withStyle(ChatFormatting.AQUA),
-                    true
+                    Component.translatable("message.createcybernetics.zoom_level", LEVELS[next]).withStyle(ChatFormatting.AQUA), true
             );
         }
     }
