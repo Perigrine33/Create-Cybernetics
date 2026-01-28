@@ -32,15 +32,25 @@ public class ModItems {
 
 //BASIC ITEMS & COMPONENTS
     public static final DeferredItem<Item> RAWTITANIUM = ITEMS.register("rawtitanium",
-            () -> new Item(new Item.Properties()));
+            () -> new ConditionalNameItem(new Item.Properties(),
+                    "item.createcybernetics.rawtitanium",
+                    "item.createcybernetics.rawtitanium.northstar"));
     public static final DeferredItem<Item> TITANIUMINGOT = ITEMS.register("titaniumingot",
-            () -> new Item(new Item.Properties()));
+            () -> new ConditionalNameItem(new Item.Properties(),
+                    "item.createcybernetics.titaniumingot",
+                    "item.createcybernetics.titaniumingot.northstar"));
     public static final DeferredItem<Item> CRUSHEDTITANIUM = ITEMS.register("crushedtitanium",
-            () -> new Item(new Item.Properties()));
+            () -> new ConditionalNameItem(new Item.Properties(),
+                    "item.createcybernetics.crushedtitanium",
+                    "item.createcybernetics.crushedtitanium.northstar"));
     public static final DeferredItem<Item> TITANIUMNUGGET = ITEMS.register("titaniumnugget",
-            () -> new Item(new Item.Properties()));
+            () -> new ConditionalNameItem(new Item.Properties(),
+                    "item.createcybernetics.titaniumnugget",
+                    "item.createcybernetics.titaniumnugget.northstar"));
     public static final DeferredItem<Item> TITANIUMSHEET = ITEMS.register("titaniumsheet",
-            () -> new Item(new Item.Properties()));
+            () -> new ConditionalNameItem(new Item.Properties(),
+                    "item.createcybernetics.titaniumsheet",
+                    "item.createcybernetics.titaniumsheet.northstar"));
 
     public static final DeferredItem<Item> EYEUPGRADEBASE = ITEMS.register("eyeupgradebase",
             () -> new Item(new Item.Properties()));

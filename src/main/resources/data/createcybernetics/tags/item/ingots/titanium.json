@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "createcybernetics:titaniumingot",
+    { "id": "northstar:titanium_ingot", "required": false }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0,
+  "group": "titanium",
+  "ingredient": {
+    "item": "northstar:titanium_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:titanium_block"
+  }
+}

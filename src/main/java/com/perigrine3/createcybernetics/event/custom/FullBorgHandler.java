@@ -227,6 +227,8 @@ public final class FullBorgHandler {
             CyberwareAttributeHelper.applyModifier(player, "genos_strength");
             if (player.isSprinting()) {
                 CyberwareAttributeHelper.applyModifier(player, "genos_speed");
+            } else {
+                CyberwareAttributeHelper.removeModifier(player, "genos_speed");
             }
         } else {
             CyberwareAttributeHelper.removeModifier(player, "genos_strength");

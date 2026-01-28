@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.block;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.item.ConditionalNameBlockItem;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;

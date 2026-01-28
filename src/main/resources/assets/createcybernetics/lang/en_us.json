@@ -41,10 +41,15 @@
 
 
   "item.createcybernetics.titaniumingot": "Titanium Ingot",
+  "item.createcybernetics.titaniumingot.northstar": "Surgical Titanium Ingot",
   "item.createcybernetics.rawtitanium": "Raw Titanium",
+  "item.createcybernetics.rawtitanium.northstar": "Raw Surgical Titanium",
   "item.createcybernetics.crushedtitanium": "Crushed Titanium",
+  "item.createcybernetics.crushedtitanium.northstar": "Crushed Surgical Titanium",
   "item.createcybernetics.titaniumnugget": "Titanium Nugget",
+  "item.createcybernetics.titaniumnugget.northstar": "Surgical Titanium Nugget",
   "item.createcybernetics.titaniumsheet": "Titanium Sheet",
+  "item.createcybernetics.titaniumsheet.northstar": "Surgical Titanium Sheet",
 
   "item.createcybernetics.eyeupgradebase": "Cybereye Module Base",
   "item.createcybernetics.titanium_hand": "Titanium Hand",

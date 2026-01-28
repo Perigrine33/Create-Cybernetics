@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "createcybernetics:titaniumingot"
+    },
+    {
+      "item": "createcybernetics:titaniumingot"
+    },
+    {
+      "item": "create:sturdy_sheet"
+    },
+    {
+      "item": "create:sturdy_sheet"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "northstar:titanium_ingot"
+  }
+}

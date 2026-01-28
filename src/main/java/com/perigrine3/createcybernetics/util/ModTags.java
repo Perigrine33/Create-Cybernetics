@@ -26,6 +26,8 @@ public class ModTags {
                 TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "foods/raw_meats"));
         private static final TagKey<Item> FD_KNIVES =
                 ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/knives"));
+        private static final TagKey<Item> C_TITANIUM_INGOTS =
+                ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/titanium"));
 
 
         public static final TagKey<Item> TOGGLEABLE_CYBERWARE = createTag("toggleable_cyberware");

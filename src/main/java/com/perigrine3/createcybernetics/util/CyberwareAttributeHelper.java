@@ -483,7 +483,7 @@ public class CyberwareAttributeHelper {
 
         registerModifier("genos_speed", new AttributeModifierData(speedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "genos_sprintspeed"),
-                0.2, AttributeModifier.Operation.ADD_VALUE));
+                0.05, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("genos_strength", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "genos_strength_add"),
                 4, AttributeModifier.Operation.ADD_VALUE));

@@ -136,6 +136,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/copernicus_eyes_dyed.png");
     private static final ResourceLocation GENOS_EYES_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_eyes_dyed.png");
+    private static final ResourceLocation GENOS_HIGHLIGHT =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_highlight.png");
 
     //WIDE VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_WIDE =
@@ -718,6 +720,8 @@ public class SkinModifierManager {
             state.addModifier(new SkinModifier(GENOS_WIDE, GENOS_SLIM,
                     0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS, SkinModifier.HideVanilla.LEFT_PANTS,
                     SkinModifier.HideVanilla.RIGHT_SLEEVE, SkinModifier.HideVanilla.LEFT_SLEEVE, SkinModifier.HideVanilla.JACKET)));
+            state.addHighlight(new SkinHighlight(GENOS_HIGHLIGHT, GENOS_HIGHLIGHT,
+                    0xFFFFFF, true, false));
 
             if (data.isDyed(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
                 int tint = data.dyeColor(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN);
@@ -729,11 +733,16 @@ public class SkinModifierManager {
 
             if (data.isDyed(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
                 int tint = data.dyeColor(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES);
+                state.clearHighlights();
 
                 state.addModifier(new SkinModifier(GENOS_EYES_DYED, GENOS_EYES_DYED,
                         tint, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS, SkinModifier.HideVanilla.LEFT_PANTS,
                         SkinModifier.HideVanilla.RIGHT_SLEEVE, SkinModifier.HideVanilla.LEFT_SLEEVE, SkinModifier.HideVanilla.JACKET)));
-                state.addHighlight(new SkinHighlight(DRAGOON_EYES_DYED, DRAGOON_EYES_DYED,
+                state.addHighlight(new SkinHighlight(GENOS_EYES_DYED, GENOS_EYES_DYED,
+                        tint, true, true));
+                state.addModifier(new SkinModifier(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
+                        tint, false));
+                state.addHighlight(new SkinHighlight(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
                         tint, true, true));
             }
         }
