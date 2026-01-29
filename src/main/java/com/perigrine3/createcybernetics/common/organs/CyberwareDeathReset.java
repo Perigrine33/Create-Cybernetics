@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.common.organs;
 
+import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
@@ -10,6 +11,8 @@ import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
 import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.item.generic.XPCapsuleItem;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -36,10 +39,25 @@ public final class CyberwareDeathReset {
         PlayerCyberwareData newData = player.getData(ModAttachments.CYBERWARE);
         if (newData == null) return;
 
+        if (ConfigValues.KEEP_CYBERWARE) {
+            Player original = event.getOriginal();
+            PlayerCyberwareData oldData = original.getData(ModAttachments.CYBERWARE);
+            if (oldData == null) return;
+
+            HolderLookup.Provider provider = player.registryAccess();
+            CompoundTag copied = oldData.serializeNBT(provider);
+            newData.deserializeNBT(copied, provider);
+
+            newData.setDirty();
+            player.syncData(ModAttachments.CYBERWARE);
+            return;
+        }
+
         newData.resetToDefaultOrgans();
         newData.setDirty();
         player.syncData(ModAttachments.CYBERWARE);
     }
+
 
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {
@@ -63,6 +81,8 @@ public final class CyberwareDeathReset {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) return;
+
+        if (ConfigValues.KEEP_CYBERWARE) return;
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
@@ -156,6 +176,7 @@ public final class CyberwareDeathReset {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (player.level().isClientSide) return;
         if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) return;
+        if (ConfigValues.KEEP_CYBERWARE) return;
 
         if (hasCorticalStackInstalled(player)) {
             event.setDroppedExperience(0);

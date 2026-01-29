@@ -1,7 +1,9 @@
 package com.perigrine3.createcybernetics.command.custom;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
@@ -19,10 +21,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-public final class ImplantsCommand {
-    private ImplantsCommand() {}
+public final class CyberneticsCommand {
+    private CyberneticsCommand() {}
 
-    // ---- Translation keys (keep these stable) ----
+    // ---- Translation keys for KeepCyberware ----
+    private static final String KEY_KEEP_QUERY = "command.createcybernetics.keep_cyberware.query";
+    private static final String KEY_KEEP_SET   = "command.createcybernetics.keep_cyberware.set";
+
+    // ---- Translation keys for Implants ----
     private static final String KEY_WRONG_ITEM   = "commands.createcybernetics.implants.wrong_item";
     private static final String KEY_NO_CYBERWARE = "commands.createcybernetics.implants.no_cyberware";
     private static final String KEY_INSTALL_FAIL = "commands.createcybernetics.implants.install_fail";
@@ -46,41 +52,77 @@ public final class ImplantsCommand {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext ctx) {
-        dispatcher.register(
-                        Commands.literal("implants")
-                                .requires(src -> src.hasPermission(2))
+        dispatcher.register(Commands.literal("cybernetics").requires(src -> src.hasPermission(2))
 
-                                .then(Commands.literal("install")
-                                        .then(Commands.argument("player", EntityArgument.player())
-                                                .then(Commands.argument("item", ItemArgument.item(ctx))
-                                                        .suggests(CYBERWARE_ITEM_SUGGESTIONS)
+                                .then(Commands.literal("implants")
+
+                                        .then(Commands.literal("install")
+                                                .then(Commands.argument("player", EntityArgument.player())
+                                                        .then(Commands.argument("item", ItemArgument.item(ctx))
+                                                                .suggests(CYBERWARE_ITEM_SUGGESTIONS)
+                                                                .executes(c -> {
+                                                                    ServerPlayer target = EntityArgument.getPlayer(c, "player");
+                                                                    Item item = ItemArgument.getItem(c, "item").getItem();
+                                                                    return install(c.getSource(), target, item);
+                                                                })
+                                                        )
+                                                )
+                                        )
+
+                                        .then(Commands.literal("remove")
+                                                .then(Commands.argument("player", EntityArgument.player())
+                                                        .then(Commands.argument("item", ItemArgument.item(ctx))
+                                                                .suggests(CYBERWARE_ITEM_SUGGESTIONS)
+                                                                .executes(c -> {
+                                                                    ServerPlayer target = EntityArgument.getPlayer(c, "player");
+                                                                    Item item = ItemArgument.getItem(c, "item").getItem();
+                                                                    return remove(c.getSource(), target, item);
+                                                                })
+                                                        )
+                                                )
+                                        )
+
+                                        .then(Commands.literal("list")
+                                                .then(Commands.argument("player", EntityArgument.player())
                                                         .executes(c -> {
                                                             ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                                                            Item item = ItemArgument.getItem(c, "item").getItem();
-                                                            return install(c.getSource(), target, item);
-                                                        }))))
-                .then(Commands.literal("remove")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("item", ItemArgument.item(ctx))
-                                        .suggests(CYBERWARE_ITEM_SUGGESTIONS)
-                                        .executes(c -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                                            Item item = ItemArgument.getItem(c, "item").getItem();
-                                            return remove(c.getSource(), target, item);
-                                        }))))
-                        .then(Commands.literal("list")
-                .then(Commands.argument("player", EntityArgument.player())
-                        .executes(c -> {
-                            ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                            return list(c.getSource(), target);
-                        })))
-                .then(Commands.literal("clear")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .executes(c -> {
-                                    ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                                    return clear(c.getSource(), target);
-                                }))));
+                                                            return list(c.getSource(), target);
+                                                        })
+                                                )
+                                        )
+
+                                        .then(Commands.literal("clear")
+                                                .then(Commands.argument("player", EntityArgument.player())
+                                                        .executes(c -> {
+                                                            ServerPlayer target = EntityArgument.getPlayer(c, "player");
+                                                            return clear(c.getSource(), target);
+                                                        })
+                                                )
+                                        )
+                                )
+
+                                .then(Commands.literal("keepCyberware")
+                                        .then(Commands.argument("value", BoolArgumentType.bool())
+                                            .executes(c -> {
+                                                boolean value = BoolArgumentType.getBool(c, "value");
+                                                ConfigValues.KEEP_CYBERWARE = value;
+
+                                                Component state = Component.translatable(value ? "options.on" : "options.off");
+                                                c.getSource().sendSuccess(
+                                                        () -> Component.translatable(KEY_KEEP_SET, state),
+                                                        true);
+                                                return 1;
+                                            })
+                                        )
+                                )
+
+        );
     }
+
+
+
+
+
 
     private static int install(CommandSourceStack src, ServerPlayer target, Item item) {
         if (!isCreateCyberneticsCyberwareItem(item)) {
@@ -106,6 +148,8 @@ public final class ImplantsCommand {
         src.sendSuccess(() -> Component.translatable(KEY_INSTALL_OK, stack.getHoverName(), target.getDisplayName()), false);
         return 1;
     }
+
+
 
     private static int remove(CommandSourceStack src, ServerPlayer target, Item item) {
         if (!isCreateCyberneticsCyberwareItem(item)) {
@@ -133,6 +177,8 @@ public final class ImplantsCommand {
         return 1;
     }
 
+
+
     private static int list(CommandSourceStack src, ServerPlayer target) {
         PlayerCyberwareData data = target.getData(ModAttachments.CYBERWARE);
         if (data == null) {
@@ -145,6 +191,8 @@ public final class ImplantsCommand {
         return 1;
     }
 
+
+
     private static int clear(CommandSourceStack src, ServerPlayer target) {
         PlayerCyberwareData data = target.getData(ModAttachments.CYBERWARE);
         if (data == null) {
@@ -154,7 +202,6 @@ public final class ImplantsCommand {
 
         data.clear();
         data.resetToDefaultOrgans();
-
         target.syncData(ModAttachments.CYBERWARE);
 
         src.sendSuccess(() -> Component.translatable(KEY_CLEAR_OK, target.getDisplayName()), false);

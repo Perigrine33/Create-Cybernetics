@@ -1,5 +1,6 @@
 {
   "createcybernetics.configuration.humanity": "Base Humanity Value",
+  "createcybernetics.configuration.keepCyberware": "Keep Cyberware on Death",
 
 
   "commands.createcybernetics.implants.wrong_item": "Only Create Cybernetics cyberware items are allowed.",
@@ -9,6 +10,8 @@
   "commands.createcybernetics.implants.remove_fail": "%s does not have that implant installed.",
   "commands.createcybernetics.implants.remove_success": "Removed %s from %s.",
   "commands.createcybernetics.implants.clear_success": "Cleared all cyberware and restored default organs for %s.",
+  "command.createcybernetics.keep_cyberware.query": "Keep Cyberware set to %s (runtime only).",
+  "command.createcybernetics.keep_cyberware.set": "Keep Cyberware is currently %s (runtime only, to make permanent, change in config).",
 
   "gui.robosurgeon.title": "Robosurgeon Interface",
   "gui.engineeringtable.title": "Engineering Table",

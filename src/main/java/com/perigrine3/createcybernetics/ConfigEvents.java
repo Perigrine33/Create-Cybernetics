@@ -23,5 +23,6 @@ public final class ConfigEvents {
         if (config.getSpec() != Config.SPEC) return;
 
         ConfigValues.BASE_HUMANITY = Config.HUMANITY.get();
+        ConfigValues.KEEP_CYBERWARE = Config.KEEP_CYBERWARE.get();
     }
 }

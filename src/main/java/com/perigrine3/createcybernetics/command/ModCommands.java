@@ -1,7 +1,7 @@
 package com.perigrine3.createcybernetics.command;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.command.custom.ImplantsCommand;
+import com.perigrine3.createcybernetics.command.custom.CyberneticsCommand;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -12,6 +12,6 @@ public final class ModCommands {
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
-        ImplantsCommand.register(event.getDispatcher(), event.getBuildContext());
+        CyberneticsCommand.register(event.getDispatcher(), event.getBuildContext());
     }
 }

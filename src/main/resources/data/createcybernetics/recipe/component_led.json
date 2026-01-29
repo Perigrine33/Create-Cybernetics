@@ -6,7 +6,7 @@
       "item": "minecraft:iron_nugget"
     },
     "G": {
-      "tag": "minecraft:impermeable"
+      "tag": "c:glass_blocks"
     }
   },
   "pattern": [
