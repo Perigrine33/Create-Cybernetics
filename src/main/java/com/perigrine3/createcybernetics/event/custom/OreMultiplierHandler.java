@@ -30,7 +30,6 @@ public final class OreMultiplierHandler {
     public static void onBreak(BlockEvent.BreakEvent event) {
         Player player = event.getPlayer();
         if (player == null || player.isCreative()) return;
-
         if (!(event.getLevel() instanceof ServerLevel level)) return;
 
         double mult = player.getAttributeValue(ModAttributes.ORE_DROP_MULTIPLIER);
@@ -38,16 +37,16 @@ public final class OreMultiplierHandler {
 
         BlockPos pos = event.getPos();
         BlockState state = event.getState();
-        BlockEntity be = level.getBlockEntity(pos);
+        if (!state.is(Tags.Blocks.ORES)) return;
 
         ItemStack tool = player.getMainHandItem();
         if (hasSilkTouch(level, tool)) return;
 
+        BlockEntity be = level.getBlockEntity(pos);
         List<ItemStack> drops = Block.getDrops(state, level, pos, be, player, tool);
 
         for (ItemStack drop : drops) {
             if (drop.isEmpty()) continue;
-            if (!drop.is(Tags.Items.ORES)) continue;
 
             int base = drop.getCount();
             if (base <= 0) continue;
@@ -57,10 +56,10 @@ public final class OreMultiplierHandler {
 
             ItemStack extraStack = drop.copy();
             extraStack.setCount(extra);
-
             Block.popResource(level, pos, extraStack);
         }
     }
+
 
     private static boolean hasSilkTouch(Level level, ItemStack tool) {
         if (tool.isEmpty()) return false;

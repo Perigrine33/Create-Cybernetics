@@ -47,6 +47,7 @@ public final class CyberwareDeathReset {
             HolderLookup.Provider provider = player.registryAccess();
             CompoundTag copied = oldData.serializeNBT(provider);
             newData.deserializeNBT(copied, provider);
+            reapplyInstalledCyberwareHooks(player instanceof ServerPlayer sp ? sp : null, newData);
 
             newData.setDirty();
             player.syncData(ModAttachments.CYBERWARE);
@@ -182,4 +183,24 @@ public final class CyberwareDeathReset {
             event.setDroppedExperience(0);
         }
     }
+
+    private static void reapplyInstalledCyberwareHooks(ServerPlayer player, PlayerCyberwareData data) {
+        for (CyberwareSlot slot : CyberwareSlot.values()) {
+            InstalledCyberware[] arr = data.getAll().get(slot);
+            if (arr == null) continue;
+
+            for (int i = 0; i < arr.length; i++) {
+                InstalledCyberware inst = arr[i];
+                if (inst == null) continue;
+
+                ItemStack st = inst.getItem();
+                if (st == null || st.isEmpty()) continue;
+                if (!data.isEnabled(slot, i)) continue;
+                if (st.getItem() instanceof ICyberwareItem cw) {
+                    cw.onInstalled(player);
+                }
+            }
+        }
+    }
+
 }
