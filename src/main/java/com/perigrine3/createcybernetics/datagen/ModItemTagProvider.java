@@ -566,7 +566,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_RIGHTLEG.get())
                 .add(ModItems.BASECYBERWARE_LEFTLEG.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM.get())
-                .add(ModItems.BASECYBERWARE_LEFTARM.get());
+                .add(ModItems.BASECYBERWARE_LEFTARM.get())
+                .add(ModItems.SKINUPGRADES_METALPLATING.get());
 
         tag(ModTags.Items.C_FOODS_RAW_MEATS)
                 .add(ModItems.BODYPART_BRAIN.get())
@@ -580,5 +581,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         tag(vectorwing.farmersdelight.common.tag.ModTags.KNIVES)
                 .add(ModItems.BONE_SAW.get());
+
+        tag(ModTags.Items.C_TITANIUM)
+                .add(ModItems.TITANIUMINGOT.get());
     }
 }

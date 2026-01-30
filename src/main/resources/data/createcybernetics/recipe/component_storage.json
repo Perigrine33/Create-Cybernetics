@@ -6,7 +6,7 @@
       "item": "createcybernetics:titaniumsheet"
     },
     "V": {
-      "item": "create:item_vault"
+      "item": "minecraft:barrel"
     }
   },
   "pattern": [

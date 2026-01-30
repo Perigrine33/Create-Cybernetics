@@ -3,6 +3,7 @@ package com.perigrine3.createcybernetics.common.surgery;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.block.entity.RobosurgeonBlockEntity;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
@@ -231,13 +232,19 @@ public final class SurgeryController {
 
             data.recomputeHumanityBaseFromInstalled();
 
-            // --- POST SURGERY EVENTS + DAMAGE ---
+// --- POST SURGERY EVENTS + DAMAGE ---
             if (didWork) {
                 if (player instanceof ServerPlayer sp) {
                     NeoForge.EVENT_BUS.post(new CyberwareSurgeryEvent(sp, installs, removals, installedChanges, removedChanges));
                 }
 
-                float damage = installs * 4.0F + removals * 6.0F;
+                final float damage;
+                if (ConfigValues.SURGERY_DAMAGE_SCALING) {
+                    damage = installs * 4.0F + removals * 6.0F;
+                } else {
+                    damage = 10.0F;
+                }
+
                 if (damage > 0.0F) {
                     player.hurt(ModDamageSources.cyberwareSurgery(player.level(), player, null), damage);
                 }

@@ -6,10 +6,10 @@
       "item": "createcybernetics:titaniumsheet"
     },
     "S": {
-      "item": "create:shaft"
+      "item": "createcybernetics:titaniumrod"
     },
     "C": {
-      "item": "create:cogwheel"
+      "item": "createcybernetics:titaniumnugget"
     },
     "R": {
       "item": "minecraft:redstone"

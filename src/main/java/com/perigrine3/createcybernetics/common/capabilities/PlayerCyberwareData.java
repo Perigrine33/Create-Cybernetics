@@ -5,21 +5,25 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.client.TrimColorPresets;
 import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
 import com.perigrine3.createcybernetics.item.cyberware.ArmCannonItem;
 import com.perigrine3.createcybernetics.item.cyberware.SpinalInjectorItem;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.armortrim.ArmorTrim;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -490,6 +494,118 @@ public class PlayerCyberwareData implements ICyberwareData {
             return 0xFFFFFFFF;
         }
         return 0xFFFFFFFF;
+    }
+
+    public boolean isTrimmed(CyberwareSlot slot, int index) {
+        InstalledCyberware installed = get(slot, index);
+        if (installed == null) return false;
+
+        ItemStack st = installed.getItem();
+        if (st == null || st.isEmpty()) return false;
+
+        return st.get(DataComponents.TRIM) != null;
+    }
+
+    public boolean isTrimmed(Item item, CyberwareSlot slotToCheck) {
+        if (item == null) return false;
+
+        InstalledCyberware[] arr = slots.get(slotToCheck);
+        if (arr == null) return false;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+            if (!st.is(item)) continue;
+
+            return st.get(DataComponents.TRIM) != null;
+        }
+
+        return false;
+    }
+
+    public ResourceLocation trimMaterialId(Item item, CyberwareSlot slotToCheck) {
+        if (item == null) return null;
+
+        InstalledCyberware[] arr = slots.get(slotToCheck);
+        if (arr == null) return null;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+            if (!st.is(item)) continue;
+
+            ArmorTrim trim = st.get(DataComponents.TRIM);
+            if (trim == null) return null;
+
+            return trim.material().unwrapKey().map(k -> k.location()).orElse(null);
+        }
+
+        return null;
+    }
+
+    public ResourceLocation trimPatternId(Item item, CyberwareSlot slotToCheck) {
+        if (item == null) return null;
+
+        InstalledCyberware[] arr = slots.get(slotToCheck);
+        if (arr == null) return null;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+            if (!st.is(item)) continue;
+
+            ArmorTrim trim = st.get(DataComponents.TRIM);
+            if (trim == null) return null;
+
+            return trim.pattern().unwrapKey().map(k -> k.location()).orElse(null);
+        }
+
+        return null;
+    }
+
+    public int trimColor(Item item, CyberwareSlot slotToCheck) {
+        if (item == null) return 0xFFFFFFFF;
+
+        InstalledCyberware[] arr = slots.get(slotToCheck);
+        if (arr == null) return 0xFFFFFFFF;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+            if (!st.is(item)) continue;
+
+            ArmorTrim trim = st.get(DataComponents.TRIM);
+            if (trim == null) return 0xFFFFFFFF;
+
+            return TrimColorPresets.colorFor(trim.material());
+        }
+
+        return 0xFFFFFFFF;
+    }
+
+    public int trimColor(CyberwareSlot slot, int index) {
+        InstalledCyberware installed = get(slot, index);
+        if (installed == null) return 0xFFFFFFFF;
+
+        ItemStack st = installed.getItem();
+        if (st == null || st.isEmpty()) return 0xFFFFFFFF;
+
+        ArmorTrim trim = st.get(DataComponents.TRIM);
+        if (trim == null) return 0xFFFFFFFF;
+
+        return TrimColorPresets.colorFor(trim.material());
     }
 
     /* ---------------- SPINAL INJECTOR INVENTORY ---------------- */

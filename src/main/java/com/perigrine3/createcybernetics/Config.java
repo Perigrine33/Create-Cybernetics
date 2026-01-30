@@ -14,8 +14,15 @@ public class Config {
             .defineInRange("humanity", 100, 50, 1000);
 
     public static final ModConfigSpec.BooleanValue KEEP_CYBERWARE = BUILDER
-            .comment("Keep Cyberware on Death. If true, cyberware will not drop and will persist through death.")
+            .comment("Keep Cyberware on Death")
+            .comment("If true, cyberware will not drop and will persist through death.")
             .define("keepCyberware", false);
+
+    public static final ModConfigSpec.BooleanValue SURGERY_DAMAGE_SCALING = BUILDER
+            .comment("Scale Surgery Damage")
+            .comment("If true, the surgery chamber will apply damage that scales with the amount of cyberware being removed.")
+            .comment("If false, the surgery chamber will apply 10 damage.")
+            .define("scaleSurgeryDamage", false);
 
 
 

@@ -789,6 +789,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         renderRemovalWarning(gui, mouseX, mouseY);
         this.renderTooltip(gui, mouseX, mouseY);
 
+
     }
 
     private void renderHeadModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
@@ -798,139 +799,92 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-
-        gui.setColor(1f, 1f, 1f, fade);
         InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, skeletonPreview);
-
-        gui.setColor(1f, 1f, 1f, 1f - fade);
-        InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, minecraft.player);
-
-        gui.setColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
     }
 
-    private void renderTorsoModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
 
+
+    private void renderTorsoModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
         Quaternionf spin = new Quaternionf()
                 .rotateX((float)Math.toRadians(180))
-                .rotateY((float)Math.toRadians(10));
+                .rotateY((float)Math.toRadians(25));
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-
-        gui.setColor(1f, 1f, 1f, fade);
         InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, skeletonPreview);
-
-        gui.setColor(1f, 1f, 1f, 1f - fade);
-        InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, minecraft.player);
-
-        gui.setColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
     }
 
     private void renderRightArmModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
-
         Quaternionf spin = new Quaternionf()
                 .rotateX((float)Math.toRadians(180))
-                .rotateY((float)Math.toRadians(10));
+                .rotateY((float)Math.toRadians(25));
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-
-        gui.setColor(1f, 1f, 1f, fade);
         InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, skeletonPreview);
-
-        gui.setColor(1f, 1f, 1f, 1f - fade);
-        InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, minecraft.player);
-
-        gui.setColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
     }
 
     private void renderLeftArmModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
-
         Quaternionf spin = new Quaternionf()
                 .rotateX((float)Math.toRadians(180))
-                .rotateY((float)Math.toRadians(-10));
+                .rotateY((float)Math.toRadians(25));
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-
-        gui.setColor(1f, 1f, 1f, fade);
         InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, skeletonPreview);
-
-        gui.setColor(1f, 1f, 1f, 1f - fade);
-        InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, minecraft.player);
-
-        gui.setColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
     }
 
     private void renderRightLegModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
-
         Quaternionf spin = new Quaternionf()
                 .rotateX((float)Math.toRadians(180))
-                .rotateY((float)Math.toRadians(10));
+                .rotateY((float)Math.toRadians(25));
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-
-        gui.setColor(1f, 1f, 1f, fade);
         InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, skeletonPreview);
-
-        gui.setColor(1f, 1f, 1f, 1f - fade);
-        InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, minecraft.player);
-
-        gui.setColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
     }
 
     private void renderLeftLegModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
-
         Quaternionf spin = new Quaternionf()
                 .rotateX((float)Math.toRadians(180))
-                .rotateY((float)Math.toRadians(-10));
+                .rotateY((float)Math.toRadians(25));
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-
-        gui.setColor(1f, 1f, 1f, fade);
         InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, skeletonPreview);
-
-        gui.setColor(1f, 1f, 1f, 1f - fade);
-        InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, minecraft.player);
-
-        gui.setColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
     }
 
     private void renderSkinModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
-
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        gui.setColor(1f, 1f, 1f, 1f - fade);
-        InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), new Quaternionf().rotateX((float)Math.toRadians(180)), null, minecraft.player);
-        gui.setColor(1f, 1f, 1f, fade);
-        gui.pose().pushPose();
+        gui.setColor(1f, 1f, 1f, 1f); // keep clean for UI
 
+        gui.pose().pushPose();
         int baseX = x - 43;
         int baseY = y - 75;
         float itemScale = 1.5f;
 
         gui.pose().translate(baseX, baseY, 100f);
         gui.pose().scale(itemScale, itemScale, 1f);
-        gui.renderItem(renderSkin, 2, -10);
 
+        gui.renderItem(renderSkin, 2, -10);
         gui.pose().translate(20, 0, 0);
         gui.renderItem(renderMuscle, 0, -10);
-
         gui.pose().translate(20, 0, 0);
         gui.renderItem(renderBone, -2, -10);
 
         gui.pose().popPose();
-        gui.setColor(1f, 1f, 1f, 1f);
+
         RenderSystem.disableBlend();
     }
+
+
 
 
     // -----------------------

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumsheet"
+    },
+    "V": {
+      "item": "create:item_vault"
+    }
+  },
+  "pattern": [
+    " T ",
+    "TVT",
+    " T "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:component_storage"
+  }
+}

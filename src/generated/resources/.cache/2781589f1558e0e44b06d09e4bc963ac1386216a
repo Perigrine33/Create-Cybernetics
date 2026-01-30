@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-27T14:24:30.6057535	Tags for minecraft:item mod id createcybernetics
+// 1.21.1	2026-01-29T12:19:28.8790431	Tags for minecraft:item mod id createcybernetics
 facebceb0f7eaac59aec077332daccfdb5c937c8 data/createcybernetics/tags/item/arm_cannon_ammo.json
 0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
 c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
@@ -49,8 +49,9 @@ b9e6c7430065cec1908dca2076ae6cc155df3c11 data/createcybernetics/tags/item/scaven
 928d0482add2d806c85d1dd08124332556be68d7 data/createcybernetics/tags/item/wetware_item.json
 3437aedc7c4a91906c9ebbc8779bd8c96981af21 data/c/tags/item/foods/raw_meats.json
 89b3649c925de0aa729998bc84950bd4a7149852 data/c/tags/item/ingots.json
+89b3649c925de0aa729998bc84950bd4a7149852 data/c/tags/item/ingots/titanium.json
 7daae33367f5ab8aa49001cf0293a87e6d87bd64 data/c/tags/item/music_discs.json
 d180988ef3ddfa686b80b5dad7f7c4874a6eefd1 data/c/tags/item/nuggets.json
 ceef6193d9676edce5ab6d3a349549e107719ccb data/c/tags/item/potions.json
 5f7fc7a0d30c45266b6f9a5e3e10694b86f44723 data/farmersdelight/tags/item/tools/knives.json
-608f9611535988c25ddf9dc9a2cdc325f37e870e data/minecraft/tags/item/trimmable_armor.json
+c3f7f5af071c6f5b7de339745eb24b90b7580c04 data/minecraft/tags/item/trimmable_armor.json

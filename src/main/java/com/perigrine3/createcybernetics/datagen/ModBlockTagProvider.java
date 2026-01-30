@@ -73,5 +73,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .addOptional(ResourceLocation.fromNamespaceAndPath("create", "industrial_iron_block"));
 
 
+        tag(ModTags.Blocks.C_TITANIUM)
+                .add(ModBlocks.TITANIUMORE_BLOCK.get())
+                .add(ModBlocks.DEEPSLATE_TITANIUMORE_BLOCK.get());
     }
 }

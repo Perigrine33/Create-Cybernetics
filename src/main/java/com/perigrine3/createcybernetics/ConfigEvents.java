@@ -24,5 +24,6 @@ public final class ConfigEvents {
 
         ConfigValues.BASE_HUMANITY = Config.HUMANITY.get();
         ConfigValues.KEEP_CYBERWARE = Config.KEEP_CYBERWARE.get();
+        ConfigValues.SURGERY_DAMAGE_SCALING = Config.SURGERY_DAMAGE_SCALING.get();
     }
 }

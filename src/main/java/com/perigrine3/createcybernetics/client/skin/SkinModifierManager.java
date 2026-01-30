@@ -8,6 +8,7 @@ import com.perigrine3.createcybernetics.compat.ModCompats;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.HumanoidArm;
@@ -274,6 +275,316 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_slim_dyed.png");
 
 
+
+// CYBERWARE TRIMS
+    private static final ResourceLocation BOLT_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/bolt_left_leg.png");
+    private static final ResourceLocation BOLT_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/bolt_left_slim.png");
+    private static final ResourceLocation BOLT_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/bolt_left_wide.png");
+    private static final ResourceLocation BOLT_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/bolt_right_leg.png");
+    private static final ResourceLocation BOLT_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/bolt_right_slim.png");
+    private static final ResourceLocation BOLT_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/bolt_right_wide.png");
+    private static final ResourceLocation BOLT_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/bolt_full_body.png");
+    private static final ResourceLocation BOLT_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/bolt_slim_full_body.png");
+
+    private static final ResourceLocation COAST_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/coast_left_leg.png");
+    private static final ResourceLocation COAST_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/coast_left_slim.png");
+    private static final ResourceLocation COAST_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/coast_left_wide.png");
+    private static final ResourceLocation COAST_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/coast_right_leg.png");
+    private static final ResourceLocation COAST_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/coast_right_slim.png");
+    private static final ResourceLocation COAST_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/coast_right_wide.png");
+    private static final ResourceLocation COAST_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/coast_full_body.png");
+    private static final ResourceLocation COAST_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/coast_slim_full_body.png");
+
+    private static final ResourceLocation DUNE_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/dune_left_leg.png");
+    private static final ResourceLocation DUNE_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/dune_left_slim.png");
+    private static final ResourceLocation DUNE_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/dune_left_wide.png");
+    private static final ResourceLocation DUNE_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/dune_right_leg.png");
+    private static final ResourceLocation DUNE_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/dune_right_slim.png");
+    private static final ResourceLocation DUNE_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/dune_right_wide.png");
+    private static final ResourceLocation DUNE_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/dune_full_body.png");
+    private static final ResourceLocation DUNE_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/dune_slim_full_body.png");
+
+    private static final ResourceLocation EYE_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/eye_left_leg.png");
+    private static final ResourceLocation EYE_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/eye_left_slim.png");
+    private static final ResourceLocation EYE_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/eye_left_wide.png");
+    private static final ResourceLocation EYE_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/eye_right_leg.png");
+    private static final ResourceLocation EYE_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/eye_right_slim.png");
+    private static final ResourceLocation EYE_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/eye_right_wide.png");
+    private static final ResourceLocation EYE_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/eye_full_body.png");
+    private static final ResourceLocation EYE_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/eye_slim_full_body.png");
+
+    private static final ResourceLocation FLOW_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/flow_left_leg.png");
+    private static final ResourceLocation FLOW_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/flow_left_slim.png");
+    private static final ResourceLocation FLOW_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/flow_left_wide.png");
+    private static final ResourceLocation FLOW_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/flow_right_leg.png");
+    private static final ResourceLocation FLOW_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/flow_right_slim.png");
+    private static final ResourceLocation FLOW_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/flow_right_wide.png");
+    private static final ResourceLocation FLOW_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/flow_full_body.png");
+    private static final ResourceLocation FLOW_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/flow_slim_full_body.png");
+
+    private static final ResourceLocation HOST_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/host_left_leg.png");
+    private static final ResourceLocation HOST_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/host_left_slim.png");
+    private static final ResourceLocation HOST_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/host_left_wide.png");
+    private static final ResourceLocation HOST_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/host_right_leg.png");
+    private static final ResourceLocation HOST_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/host_right_slim.png");
+    private static final ResourceLocation HOST_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/host_right_wide.png");
+    private static final ResourceLocation HOST_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/host_full_body.png");
+    private static final ResourceLocation HOST_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/host_slim_full_body.png");
+
+    private static final ResourceLocation RAISER_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/raiser_left_leg.png");
+    private static final ResourceLocation RAISER_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/raiser_left_slim.png");
+    private static final ResourceLocation RAISER_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/raiser_left_wide.png");
+    private static final ResourceLocation RAISER_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/raiser_right_leg.png");
+    private static final ResourceLocation RAISER_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/raiser_right_slim.png");
+    private static final ResourceLocation RAISER_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/raiser_right_wide.png");
+    private static final ResourceLocation RAISER_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/raiser_full_body.png");
+    private static final ResourceLocation RAISER_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/raiser_slim_full_body.png");
+
+    private static final ResourceLocation RIB_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/rib_left_leg.png");
+    private static final ResourceLocation RIB_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/rib_left_slim.png");
+    private static final ResourceLocation RIB_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/rib_left_wide.png");
+    private static final ResourceLocation RIB_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/rib_right_leg.png");
+    private static final ResourceLocation RIB_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/rib_right_slim.png");
+    private static final ResourceLocation RIB_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/rib_right_wide.png");
+    private static final ResourceLocation RIB_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/rib_full_body.png");
+    private static final ResourceLocation RIB_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/rib_slim_full_body.png");
+
+    private static final ResourceLocation SENTRY_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/sentry_left_leg.png");
+    private static final ResourceLocation SENTRY_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/sentry_left_slim.png");
+    private static final ResourceLocation SENTRY_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/sentry_left_wide.png");
+    private static final ResourceLocation SENTRY_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/sentry_right_leg.png");
+    private static final ResourceLocation SENTRY_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/sentry_right_slim.png");
+    private static final ResourceLocation SENTRY_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/sentry_right_wide.png");
+    private static final ResourceLocation SENTRY_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/sentry_full_body.png");
+    private static final ResourceLocation SENTRY_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/sentry_slim_full_body.png");
+
+    private static final ResourceLocation SHAPER_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/shaper_left_leg.png");
+    private static final ResourceLocation SHAPER_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/shaper_left_slim.png");
+    private static final ResourceLocation SHAPER_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/shaper_left_wide.png");
+    private static final ResourceLocation SHAPER_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/shaper_right_leg.png");
+    private static final ResourceLocation SHAPER_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/shaper_right_slim.png");
+    private static final ResourceLocation SHAPER_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/shaper_right_wide.png");
+    private static final ResourceLocation SHAPER_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/shaper_full_body.png");
+    private static final ResourceLocation SHAPER_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/shaper_slim_full_body.png");
+
+    private static final ResourceLocation SILENCE_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/silence_left_leg.png");
+    private static final ResourceLocation SILENCE_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/silence_left_slim.png");
+    private static final ResourceLocation SILENCE_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/silence_left_wide.png");
+    private static final ResourceLocation SILENCE_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/silence_right_leg.png");
+    private static final ResourceLocation SILENCE_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/silence_right_slim.png");
+    private static final ResourceLocation SILENCE_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/silence_right_wide.png");
+    private static final ResourceLocation SILENCE_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/silence_full_body.png");
+    private static final ResourceLocation SILENCE_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/silence_slim_full_body.png");
+
+    private static final ResourceLocation SNOUT_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/snout_left_leg.png");
+    private static final ResourceLocation SNOUT_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/snout_left_slim.png");
+    private static final ResourceLocation SNOUT_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/snout_left_wide.png");
+    private static final ResourceLocation SNOUT_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/snout_right_leg.png");
+    private static final ResourceLocation SNOUT_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/snout_right_slim.png");
+    private static final ResourceLocation SNOUT_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/snout_right_wide.png");
+    private static final ResourceLocation SNOUT_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/snout_full_body.png");
+    private static final ResourceLocation SNOUT_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/snout_slim_full_body.png");
+
+    private static final ResourceLocation SPIRE_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/spire_left_leg.png");
+    private static final ResourceLocation SPIRE_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/spire_left_slim.png");
+    private static final ResourceLocation SPIRE_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/spire_left_wide.png");
+    private static final ResourceLocation SPIRE_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/spire_right_leg.png");
+    private static final ResourceLocation SPIRE_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/spire_right_slim.png");
+    private static final ResourceLocation SPIRE_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/spire_right_wide.png");
+    private static final ResourceLocation SPIRE_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/spire_full_body.png");
+    private static final ResourceLocation SPIRE_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/spire_slim_full_body.png");
+
+    private static final ResourceLocation TIDE_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/tide_left_leg.png");
+    private static final ResourceLocation TIDE_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/tide_left_slim.png");
+    private static final ResourceLocation TIDE_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/tide_left_wide.png");
+    private static final ResourceLocation TIDE_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/tide_right_leg.png");
+    private static final ResourceLocation TIDE_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/tide_right_slim.png");
+    private static final ResourceLocation TIDE_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/tide_right_wide.png");
+    private static final ResourceLocation TIDE_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/tide_full_body.png");
+    private static final ResourceLocation TIDE_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/tide_slim_full_body.png");
+
+    private static final ResourceLocation VEX_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/vex_left_leg.png");
+    private static final ResourceLocation VEX_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/vex_left_slim.png");
+    private static final ResourceLocation VEX_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/vex_left_wide.png");
+    private static final ResourceLocation VEX_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/vex_right_leg.png");
+    private static final ResourceLocation VEX_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/vex_right_slim.png");
+    private static final ResourceLocation VEX_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/vex_right_wide.png");
+    private static final ResourceLocation VEX_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/vex_full_body.png");
+    private static final ResourceLocation VEX_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/vex_slim_full_body.png");
+
+    private static final ResourceLocation WARD_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/ward_left_leg.png");
+    private static final ResourceLocation WARD_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/ward_left_slim.png");
+    private static final ResourceLocation WARD_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/ward_left_wide.png");
+    private static final ResourceLocation WARD_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/ward_right_leg.png");
+    private static final ResourceLocation WARD_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/ward_right_slim.png");
+    private static final ResourceLocation WARD_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/ward_right_wide.png");
+    private static final ResourceLocation WARD_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/ward_full_body.png");
+    private static final ResourceLocation WARD_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/ward_slim_full_body.png");
+
+    private static final ResourceLocation WAYFINDER_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wayfinder_left_leg.png");
+    private static final ResourceLocation WAYFINDER_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wayfinder_left_slim.png");
+    private static final ResourceLocation WAYFINDER_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wayfinder_left_wide.png");
+    private static final ResourceLocation WAYFINDER_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wayfinder_right_leg.png");
+    private static final ResourceLocation WAYFINDER_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wayfinder_right_slim.png");
+    private static final ResourceLocation WAYFINDER_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wayfinder_right_wide.png");
+    private static final ResourceLocation WAYFINDER_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wayfinder_full_body.png");
+    private static final ResourceLocation WAYFINDER_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wayfinder_slim_full_body.png");
+
+    private static final ResourceLocation WILD_LEFT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wild_left_leg.png");
+    private static final ResourceLocation WILD_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wild_left_slim.png");
+    private static final ResourceLocation WILD_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wild_left_wide.png");
+    private static final ResourceLocation WILD_RIGHT_LEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wild_right_leg.png");
+    private static final ResourceLocation WILD_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wild_right_slim.png");
+    private static final ResourceLocation WILD_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wild_right_wide.png");
+    private static final ResourceLocation WILD_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wild_full_body.png");
+    private static final ResourceLocation WILD_SLIM_FULL_BODY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/trims/wild_slim_full_body.png");
+
+
+
     public static SkinModifierState getPlayerSkinState(AbstractClientPlayer player) {
         if (!player.hasData(ModAttachments.CYBERWARE)) return null;
 
@@ -335,6 +646,17 @@ public class SkinModifierManager {
                 state.addModifier(new SkinModifier(LEFT_CYBERLEG_PRIMARY, LEFT_CYBERLEG_PRIMARY,
                         tint, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
             }
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                }
+            }
         }
 // RIGHT CYBERLEG
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
@@ -345,6 +667,17 @@ public class SkinModifierManager {
                 int tint = data.dyeColor(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
                 state.addModifier(new SkinModifier(RIGHT_CYBERLEG_PRIMARY, RIGHT_CYBERLEG_PRIMARY,
                         tint, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+            }
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                }
             }
         }
 // LEFT CYBERARM
@@ -357,6 +690,19 @@ public class SkinModifierManager {
                 state.addModifier(new SkinModifier(LEFT_CYBERARM_PRIMARY_WIDE, LEFT_CYBERARM_PRIMARY_SLIM,
                         tint, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
             }
+
+            boolean slim = isSlimArms(player);
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+                }
+            }
         }
 // RIGHT CYBERARM
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM)) {
@@ -366,7 +712,18 @@ public class SkinModifierManager {
             if (data.isDyed(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM)) {
                 int tint = data.dyeColor(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM);
                 state.addModifier(new SkinModifier(RIGHT_CYBERARM_PRIMARY_WIDE, RIGHT_CYBERARM_PRIMARY_SLIM,
-                        tint, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+                        tint, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE)));
+            }
+
+            boolean slim = isSlimArms(player);
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.ARM, slim);
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE), EnumSet.of(HumanoidArm.RIGHT)));
             }
         }
 
@@ -747,6 +1104,26 @@ public class SkinModifierManager {
             }
         }
 
+
+        // METAL PLATING (TRIMMED)
+        if (data.hasSpecificItem(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
+            if (data.isTrimmed(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN);
+                int tint = data.trimColor(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN);
+
+                ResourceLocation wide = resolveBodyTrimOverlay(patternId, false);
+                ResourceLocation slim = resolveBodyTrimOverlay(patternId, true);
+
+                if (wide != null && slim != null) {
+                    tint = (tint & 0x00FFFFFF) | 0xFF000000;
+                    state.addModifier(new SkinModifier(wide, slim,
+                            tint, false, EnumSet.noneOf(SkinModifier.HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), true));
+                    //return state;
+                }
+            }
+        }
+
+
 // SPINAL INJECTOR
         if (data.hasSpecificItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get(), CyberwareSlot.BONE)) {
             state.addModifier(new SkinModifier(SPINAL_INJECTOR_TEXTURE, SPINAL_INJECTOR_TEXTURE,
@@ -827,7 +1204,82 @@ public class SkinModifierManager {
 
 
 
-
         return state;
     }
+
+
+
+    private enum Limb {
+        ARM("arm"),
+        LEG("leg");
+
+        final String id;
+        Limb(String id) { this.id = id; }
+    }
+
+    private static ResourceLocation resolveTrimOverlay(ResourceLocation patternId, boolean left, Limb limb, boolean isSlimModelForArmsOrBody) {
+        if (patternId == null) return null;
+
+        String pattern = patternId.getPath(); // e.g. "flow"
+        String file;
+
+            String side = left ? "left" : "right";
+            if (limb == Limb.LEG) {
+                file = pattern + "_" + side + "_leg.png";
+            } else {
+                file = pattern + "_" + side + "_" + (isSlimModelForArmsOrBody ? "slim" : "wide") + ".png";
+            }
+
+        return ResourceLocation.fromNamespaceAndPath(
+                CreateCybernetics.MODID,
+                "textures/entity/trims/" + file
+        );
+    }
+
+    private static boolean isSlimArms(AbstractClientPlayer player) {
+        return player.getSkin().model() == PlayerSkin.Model.SLIM;
+    }
+
+    private record TrimInfo(ResourceLocation patternId, int tint) {}
+
+    private static TrimInfo getLimbTrim(PlayerCyberwareData data, AbstractClientPlayer player,
+                                        CyberwareSlot slot, net.minecraft.world.item.Item item) {
+        if (!data.isTrimmed(item, slot)) return null;
+        ResourceLocation patternId = data.trimPatternId(item, slot);
+        int tint = data.trimColor(item, slot);
+        if (patternId == null) return null;
+        return new TrimInfo(patternId, tint);
+    }
+
+    private static TrimInfo getUnifiedLimbTrim(PlayerCyberwareData data, AbstractClientPlayer player) {
+        TrimInfo lArm = getLimbTrim(data, player, CyberwareSlot.LARM, ModItems.BASECYBERWARE_LEFTARM.get());
+        TrimInfo rArm = getLimbTrim(data, player, CyberwareSlot.RARM, ModItems.BASECYBERWARE_RIGHTARM.get());
+        TrimInfo lLeg = getLimbTrim(data, player, CyberwareSlot.LLEG, ModItems.BASECYBERWARE_LEFTLEG.get());
+        TrimInfo rLeg = getLimbTrim(data, player, CyberwareSlot.RLEG, ModItems.BASECYBERWARE_RIGHTLEG.get());
+
+        if (lArm == null || rArm == null || lLeg == null || rLeg == null) return null;
+
+        if (!lArm.patternId().equals(rArm.patternId())) return null;
+        if (!lArm.patternId().equals(lLeg.patternId())) return null;
+        if (!lArm.patternId().equals(rLeg.patternId())) return null;
+
+        if (lArm.tint() != rArm.tint() || lArm.tint() != lLeg.tint() || lArm.tint() != rLeg.tint()) return null;
+
+        return lArm;
+    }
+
+    private static ResourceLocation resolveBodyTrimOverlay(ResourceLocation patternId, boolean slim) {
+        if (patternId == null) return null;
+
+        String pattern = patternId.getPath();
+        String file = slim
+                ? pattern + "_slim_full_body.png"
+                : pattern + "_full_body.png";
+
+        return ResourceLocation.fromNamespaceAndPath(
+                CreateCybernetics.MODID,
+                "textures/entity/trims/" + file
+        );
+    }
+
 }

@@ -89,11 +89,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
-        return Set.of(ModTags.Items.BRAIN_ITEMS);
-    }
-
-    @Override
     public Set<CyberwareSlot> getSupportedSlots() {
         return Set.of(CyberwareSlot.BRAIN);
     }

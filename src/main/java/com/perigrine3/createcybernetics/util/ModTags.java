@@ -13,6 +13,9 @@ public class ModTags {
     public static class Blocks {
 
         public static final TagKey<Block> METAL_DETECTABLE = createTag("metal_detectable");
+        public static final TagKey<Block> C_TITANIUM = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores/titanium"));
+
+
 
 
         private static TagKey<Block> createTag(String name) {
@@ -24,11 +27,10 @@ public class ModTags {
 
         public static final TagKey<Item> C_FOODS_RAW_MEATS =
                 TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "foods/raw_meats"));
-        private static final TagKey<Item> FD_KNIVES =
+        public static final TagKey<Item> FD_KNIVES =
                 ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/knives"));
-        private static final TagKey<Item> C_TITANIUM_INGOTS =
+        public static final TagKey<Item> C_TITANIUM =
                 ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/titanium"));
-
 
         public static final TagKey<Item> TOGGLEABLE_CYBERWARE = createTag("toggleable_cyberware");
         public static final TagKey<Item> ARM_CANNON_AMMO = createTag("arm_cannon_ammo");
