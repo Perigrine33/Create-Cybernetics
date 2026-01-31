@@ -85,13 +85,11 @@ public class CreateCybernetics {
         ModRecipes.register(eventBus);
         ModRecipeSerializers.register(eventBus);
 
-        ModAttachments.register(eventBus);
-        ModAttributes.register(eventBus);
-
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
         CompatBootstrap.bootstrap();
 
+        ModAttachments.register(eventBus);
+        ModAttributes.register(eventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

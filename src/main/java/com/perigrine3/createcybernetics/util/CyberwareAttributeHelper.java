@@ -9,9 +9,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.neoforged.neoforge.common.NeoForgeMod;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Helper class for managing attribute modifiers related to cyberware.
@@ -69,77 +71,45 @@ public class CyberwareAttributeHelper {
     private static final Map<String, AttributeModifierData> MODIFIER_REGISTRY = new HashMap<>();
 
     static {
-        Holder<Attribute> maxHealthAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.MAX_HEALTH.getKey())
-                .orElseThrow(() -> new IllegalStateException("Max health attribute not found in registry"));
-        Holder<Attribute> armorAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.ARMOR.getKey())
-                .orElseThrow(() -> new IllegalStateException("Armor attribute not found in registry"));
-        Holder<Attribute> armorToughnessAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.ARMOR_TOUGHNESS.getKey())
-                .orElseThrow(() -> new IllegalStateException("Armor toughness attribute not found in registry"));
-        Holder<Attribute> oxygenBonusAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.OXYGEN_BONUS.getKey())
-                .orElseThrow(() -> new IllegalStateException("Oxygen bonus attribute not found in registry"));
-        Holder<Attribute> speedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.MOVEMENT_SPEED.getKey())
-                .orElseThrow(() -> new IllegalStateException("Movement speed attribute not found in registry"));
-        Holder<Attribute> knockbackResistAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.KNOCKBACK_RESISTANCE.getKey())
-                .orElseThrow(() -> new IllegalStateException("Knockback resistance attribute not found in registry"));
-        Holder<Attribute> jumpStrengthAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.JUMP_STRENGTH.getKey())
-                .orElseThrow(() -> new IllegalStateException("Jump strength attribute not found in registry"));
-        Holder<Attribute> attackDamageAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.ATTACK_DAMAGE.getKey())
-                .orElseThrow(() -> new IllegalStateException("Attack damage attribute not found in registry"));
-        Holder<Attribute> attackSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.ATTACK_SPEED.getKey())
-                .orElseThrow(() -> new IllegalStateException("Attack speed attribute not found in registry"));
-        Holder<Attribute> attackKnockbackAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.ATTACK_KNOCKBACK.getKey())
-                .orElseThrow(() -> new IllegalStateException("Attack knockback attribute not found in registry"));
-        Holder<Attribute> luckAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.LUCK.getKey())
-                .orElseThrow(() -> new IllegalStateException("Luck attribute not found in registry"));
-        Holder<Attribute> blockReachAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.BLOCK_INTERACTION_RANGE.getKey())
-                .orElseThrow(() -> new IllegalStateException("Block reach attribute not found in registry"));
-        Holder<Attribute> entityReachAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.ENTITY_INTERACTION_RANGE.getKey())
-                .orElseThrow(() -> new IllegalStateException("Entity reach attribute not found in registry"));
-        Holder<Attribute> stepHeightAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.STEP_HEIGHT.getKey())
-                .orElseThrow(() -> new IllegalStateException("Step height attribute not found in registry"));
-        Holder<Attribute> swimSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.WATER_MOVEMENT_EFFICIENCY.getKey())
-                .orElseThrow(() -> new IllegalStateException("Swim speed attribute not found in registry"));
-        Holder<Attribute> gravityAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.GRAVITY.getKey())
-                .orElseThrow(() -> new IllegalStateException("Gravity attribute not found in registry"));
-        Holder<Attribute> scaleAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.SCALE.getKey())
-                .orElseThrow(() -> new IllegalStateException("Scale attribute not found in registry"));
-        Holder<Attribute> flyingSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.FLYING_SPEED.getKey())
-                .orElseThrow(() -> new IllegalStateException("Flying speed attribute not found in registry"));
-        Holder<Attribute> blockBreakSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.BLOCK_BREAK_SPEED.getKey())
-                .orElseThrow(() -> new IllegalStateException("Block break speed attribute not found in registry"));
-        Holder<Attribute> safeFallDistanceAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.SAFE_FALL_DISTANCE.getKey())
-                .orElseThrow(() -> new IllegalStateException("Safe fall distance attribute not found in registry"));
-        Holder<Attribute> burningTimeAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.BURNING_TIME.getKey())
-                .orElseThrow(() -> new IllegalStateException("Burning time attribute not found in registry"));
-        Holder<Attribute> underwaterMiningAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.SUBMERGED_MINING_SPEED.getKey())
-                .orElseThrow(() -> new IllegalStateException("Underwater mining attribute not found in registry"));
-        Holder<Attribute> underwaterMovementAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.WATER_MOVEMENT_EFFICIENCY.getKey())
-                .orElseThrow(() -> new IllegalStateException("Underwater movement attribute not found in registry"));
-        Holder<Attribute> miningSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.MINING_EFFICIENCY.getKey())
-                .orElseThrow(() -> new IllegalStateException("Mining speed attribute not found in registry"));
-        Holder<Attribute> crouchSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(Attributes.SNEAKING_SPEED.getKey())
-                .orElseThrow(() -> new IllegalStateException("Crouch speed attribute not found in registry"));
+        // Vanilla holders
+        Holder<Attribute> maxHealthAttribute = Attributes.MAX_HEALTH;
+        Holder<Attribute> armorAttribute = Attributes.ARMOR;
+        Holder<Attribute> armorToughnessAttribute = Attributes.ARMOR_TOUGHNESS;
+        Holder<Attribute> oxygenBonusAttribute = Attributes.OXYGEN_BONUS;
+        Holder<Attribute> speedAttribute = Attributes.MOVEMENT_SPEED;
+        Holder<Attribute> knockbackResistAttribute = Attributes.KNOCKBACK_RESISTANCE;
+        Holder<Attribute> jumpStrengthAttribute = Attributes.JUMP_STRENGTH;
+        Holder<Attribute> attackDamageAttribute = Attributes.ATTACK_DAMAGE;
+        Holder<Attribute> attackSpeedAttribute = Attributes.ATTACK_SPEED;
+        Holder<Attribute> attackKnockbackAttribute = Attributes.ATTACK_KNOCKBACK;
+        Holder<Attribute> luckAttribute = Attributes.LUCK;
+        Holder<Attribute> blockReachAttribute = Attributes.BLOCK_INTERACTION_RANGE;
+        Holder<Attribute> entityReachAttribute = Attributes.ENTITY_INTERACTION_RANGE;
+        Holder<Attribute> stepHeightAttribute = Attributes.STEP_HEIGHT;
+        Holder<Attribute> gravityAttribute = Attributes.GRAVITY;
+        Holder<Attribute> scaleAttribute = Attributes.SCALE;
+        Holder<Attribute> flyingSpeedAttribute = Attributes.FLYING_SPEED;
+        Holder<Attribute> blockBreakSpeedAttribute = Attributes.BLOCK_BREAK_SPEED;
+        Holder<Attribute> safeFallDistanceAttribute = Attributes.SAFE_FALL_DISTANCE;
+        Holder<Attribute> burningTimeAttribute = Attributes.BURNING_TIME;
+        Holder<Attribute> underwaterMiningAttribute = Attributes.SUBMERGED_MINING_SPEED;
+        Holder<Attribute> waterMovementEfficiency = Attributes.WATER_MOVEMENT_EFFICIENCY;
+        Holder<Attribute> miningSpeedAttribute = Attributes.MINING_EFFICIENCY;
+        Holder<Attribute> crouchSpeedAttribute = Attributes.SNEAKING_SPEED;
 
-        Holder<Attribute> xpMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.XP_GAIN_MULTIPLIER.getKey())
-                .orElseThrow(() -> new IllegalStateException("XP multiplier attribute not found in registry"));
-        Holder<Attribute> oreMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ORE_DROP_MULTIPLIER.getKey())
-                .orElseThrow(() -> new IllegalStateException("Ore drop multiplier attribute not found in registry"));
-        Holder<Attribute> hagglingAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.HAGGLING.getKey())
-                .orElseThrow(() -> new IllegalStateException("Haggling attribute not found in registry"));
-        Holder<Attribute> arrowInaccuracyAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ARROW_INACCURACY.getKey())
-                .orElseThrow(() -> new IllegalStateException("Arrow inaccuracy attribute not found in registry"));
-        Holder<Attribute> breedingMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.BREEDING_MULTIPLIER.getKey())
-                .orElseThrow(() -> new IllegalStateException("Breeding multiplier attribute not found in registry"));
-        Holder<Attribute> cropMultiplierAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.CROP_MULTIPLIER.getKey())
-                .orElseThrow(() -> new IllegalStateException("Crop multiplier attribute not found in registry"));
-        Holder<Attribute> elytraSpeedAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ELYTRA_SPEED.getKey())
-                .orElseThrow(() -> new IllegalStateException("Elytra speed attribute not found in registry"));
-        Holder<Attribute> elytraHandlingAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ELYTRA_HANDLING.getKey())
-                .orElseThrow(() -> new IllegalStateException("Elytra speed attribute not found in registry"));
-        Holder<Attribute> insomniaAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.INSOMNIA.getKey())
-                .orElseThrow(() -> new IllegalStateException("Insomnia attribute not found in registry"));
-        Holder<Attribute> enderDamageAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ModAttributes.ENDER_PEARL_DAMAGE.getKey())
-                .orElseThrow(() -> new IllegalStateException("Ender pearl damage attribute not found in registry"));
+        Holder<Attribute> swimSpeedAttribute = NeoForgeMod.SWIM_SPEED;
+
+        // Modded attributes
+        Holder<Attribute> xpMultiplierAttribute = ModAttributes.XP_GAIN_MULTIPLIER;
+        Holder<Attribute> oreMultiplierAttribute = ModAttributes.ORE_DROP_MULTIPLIER;
+        Holder<Attribute> hagglingAttribute = ModAttributes.HAGGLING;
+        Holder<Attribute> arrowInaccuracyAttribute = ModAttributes.ARROW_INACCURACY;
+        Holder<Attribute> breedingMultiplierAttribute = ModAttributes.BREEDING_MULTIPLIER;
+        Holder<Attribute> cropMultiplierAttribute = ModAttributes.CROP_MULTIPLIER;
+        Holder<Attribute> elytraSpeedAttribute = ModAttributes.ELYTRA_SPEED;
+        Holder<Attribute> elytraHandlingAttribute = ModAttributes.ELYTRA_HANDLING;
+        Holder<Attribute> insomniaAttribute = ModAttributes.INSOMNIA;
+        Holder<Attribute> enderDamageAttribute = ModAttributes.ENDER_PEARL_DAMAGE;
 
 
 
@@ -352,7 +322,7 @@ public class CyberwareAttributeHelper {
         registerModifier("blueshard_mining", new AttributeModifierData(underwaterMiningAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_mining_speed"),
                 1.5, AttributeModifier.Operation.ADD_VALUE));
-        registerModifier("blueshard_movement", new AttributeModifierData(underwaterMovementAttribute,
+        registerModifier("blueshard_movement", new AttributeModifierData(waterMovementEfficiency,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_movement_speed"),
                 4, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("blueshard_oxygen", new AttributeModifierData(oxygenBonusAttribute,
@@ -410,7 +380,7 @@ public class CyberwareAttributeHelper {
         registerModifier("samson_durability", new AttributeModifierData(armorAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "samson_durability_add"),
                 8, AttributeModifier.Operation.ADD_VALUE));
-        registerModifier("samson_watermove", new AttributeModifierData(underwaterMovementAttribute,
+        registerModifier("samson_watermove", new AttributeModifierData(waterMovementEfficiency,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "samson_watermove_subtract"),
                 -0.75, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("samson_weight", new AttributeModifierData(gravityAttribute,
@@ -441,7 +411,7 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "wingman_elytrahandling_add"),
                 4, AttributeModifier.Operation.ADD_VALUE));
 
-        registerModifier("aquarius_movement", new AttributeModifierData(underwaterMovementAttribute,
+        registerModifier("aquarius_movement", new AttributeModifierData(waterMovementEfficiency,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "aquarius_movement_add"),
                 5, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("aquarius_mining", new AttributeModifierData(underwaterMiningAttribute,
