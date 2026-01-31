@@ -34,6 +34,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.DATURA_FLOWER.get());
         basicItem(ModItems.DATURA_SEED_POD.get());
 
+        basicItem(ModItems.COPPER_UPGRADE_TEMPLATE.get());
+        basicItem(ModItems.IRON_UPGRADE_TEMPLATE.get());
+        basicItem(ModItems.GOLD_UPGRADE_TEMPLATE.get());
+
         //basicItem(ModItems.QUICKHACK_BURNING.get());
         //basicItem(ModItems.QUICKHACK_REBOOT.get());
         //basicItem(ModItems.QUICKHACK_ITEM.get());
@@ -111,6 +115,21 @@ public class ModItemModelProvider extends ItemModelProvider {
 //BASE
         {
         basicItem(ModItems.BASECYBERWARE_LINEARFRAME.get());
+
+        basicItem(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get());
+
+        basicItem(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get());
+
+        basicItem(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get());
+        basicItem(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get());
     }
 
 //EYES

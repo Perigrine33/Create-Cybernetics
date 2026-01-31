@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-29T12:19:28.8790431	Tags for minecraft:item mod id createcybernetics
+// 1.21.1	2026-01-30T23:12:21.9421952	Tags for minecraft:item mod id createcybernetics
 facebceb0f7eaac59aec077332daccfdb5c937c8 data/createcybernetics/tags/item/arm_cannon_ammo.json
 0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
 c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
@@ -23,10 +23,10 @@ f6c8399848801cefe03e09702a8354e1c24d9f1c data/createcybernetics/tags/item/brain_
 e1af38c781817bc5409595ced275f781bfbb55b8 data/createcybernetics/tags/item/heart_upgrades.json
 22dd43158827f4d7cda7a49ec4b5120807881949 data/createcybernetics/tags/item/humanoid_bodypart_drops.json
 f77f31c53de304afb4545db52f71eb35371e0eed data/createcybernetics/tags/item/intestines_items.json
-881b59e9e2c1e8f24c3637bce09d6a54aa69a6ff data/createcybernetics/tags/item/leftarm_items.json
-4375bcae2ef53ed286159270835700482806c86a data/createcybernetics/tags/item/leftarm_replacements.json
-22aaf07f309a9b7f064f7ef7b8c220baecc98c19 data/createcybernetics/tags/item/leftleg_items.json
-057c79d484ae46a44ad768b5d721df83b8f6b4e6 data/createcybernetics/tags/item/leftleg_replacements.json
+537377f770a9b203029e61e0a79c6579b8476a14 data/createcybernetics/tags/item/leftarm_items.json
+cd7e37d3105411a9423ae1db69cf0dec92307a20 data/createcybernetics/tags/item/leftarm_replacements.json
+53a1fa6f043f765abeb66783badfdf0ffad2cf3c data/createcybernetics/tags/item/leftleg_items.json
+c2ccdf9af4e8ba55185347bf5462b9e1a9ec04f9 data/createcybernetics/tags/item/leftleg_replacements.json
 da7baffdd7686e61aae4892efa529dd0912da73a data/createcybernetics/tags/item/leg_upgrades.json
 0558cf372a4b52e584cfd87fa0c8f5159045ae4f data/createcybernetics/tags/item/liver_items.json
 0858b679bfe6d72e59f508bf0537dd08291dd404 data/createcybernetics/tags/item/liver_replacements.json
@@ -37,10 +37,10 @@ e9266d2fa183c603158a34606b582a1deaa77fc0 data/createcybernetics/tags/item/lungs_
 57d5f1afed754bcee8e33afabe17c892ff80a49c data/createcybernetics/tags/item/muscle_upgrades.json
 785f912111fde14d2b3b439dddb577df9a7c9b11 data/createcybernetics/tags/item/offal.json
 21189b7057f39986677a3d65a0a16df49791a3de data/createcybernetics/tags/item/organ_upgrades.json
-390c6920c80265134a0b560d8e7ec9dc711e25bd data/createcybernetics/tags/item/rightarm_items.json
-459d2450f9b5cf6d20308e8847edf7ddc9190d61 data/createcybernetics/tags/item/rightarm_replacements.json
-fbddf84ded3f1122e79f3bceb64df7be268576c0 data/createcybernetics/tags/item/rightleg_items.json
-17d2d5695c104702189cbb1e9e965a128714244c data/createcybernetics/tags/item/rightleg_replacements.json
+78e046385e8f0671e620c2487c2c4ecb360af4b6 data/createcybernetics/tags/item/rightarm_items.json
+21915635d5c7a10daba519ee93336ba982a12c4f data/createcybernetics/tags/item/rightarm_replacements.json
+56586c0e415bb3df9bb429b37eef26603bc95bb4 data/createcybernetics/tags/item/rightleg_items.json
+92f20ddf482487ef82ff73d766cd6db606499926 data/createcybernetics/tags/item/rightleg_replacements.json
 b9e6c7430065cec1908dca2076ae6cc155df3c11 data/createcybernetics/tags/item/scavenged_cyberware.json
 8ce7e10898e951682ac6d7e73633f406a4dcfab2 data/createcybernetics/tags/item/skin_items.json
 0448defb676dcc2f9f023f4b6c517a055ce570b5 data/createcybernetics/tags/item/skin_replacements.json
@@ -54,4 +54,4 @@ b9e6c7430065cec1908dca2076ae6cc155df3c11 data/createcybernetics/tags/item/scaven
 d180988ef3ddfa686b80b5dad7f7c4874a6eefd1 data/c/tags/item/nuggets.json
 ceef6193d9676edce5ab6d3a349549e107719ccb data/c/tags/item/potions.json
 5f7fc7a0d30c45266b6f9a5e3e10694b86f44723 data/farmersdelight/tags/item/tools/knives.json
-c3f7f5af071c6f5b7de339745eb24b90b7580c04 data/minecraft/tags/item/trimmable_armor.json
+3524a30c7b9a695837c4fdbb9c36592a76dccd50 data/minecraft/tags/item/trimmable_armor.json

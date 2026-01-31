@@ -475,18 +475,30 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         tag(ModTags.Items.LEFTARM_ITEMS)
                 .add(ModItems.BASECYBERWARE_LEFTARM.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get())
                 .add(ModItems.BODYPART_LEFTARM.get());
 
         tag(ModTags.Items.RIGHTARM_ITEMS)
                 .add(ModItems.BASECYBERWARE_RIGHTARM.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
                 .add(ModItems.BODYPART_RIGHTARM.get());
 
         tag(ModTags.Items.LEFTLEG_ITEMS)
                 .add(ModItems.BASECYBERWARE_LEFTLEG.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get())
                 .add(ModItems.BODYPART_LEFTLEG.get());
 
         tag(ModTags.Items.RIGHTLEG_ITEMS)
                 .add(ModItems.BASECYBERWARE_RIGHTLEG.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get())
                 .add(ModItems.BODYPART_RIGHTLEG.get());
 
 
@@ -512,16 +524,29 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.LIVER_REPLACEMENTS)
                 .add(ModItems.ORGANSUPGRADES_LIVERFILTER.get());
 
+
         tag(ModTags.Items.LEFTARM_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get())
                 .add(ModItems.BASECYBERWARE_LEFTARM.get());
 
         tag(ModTags.Items.RIGHTARM_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM.get());
 
         tag(ModTags.Items.LEFTLEG_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get())
                 .add(ModItems.BASECYBERWARE_LEFTLEG.get());
 
         tag(ModTags.Items.RIGHTLEG_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTLEG.get());
 
 
@@ -567,7 +592,19 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_LEFTLEG.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM.get())
                 .add(ModItems.BASECYBERWARE_LEFTARM.get())
-                .add(ModItems.SKINUPGRADES_METALPLATING.get());
+                .add(ModItems.SKINUPGRADES_METALPLATING.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get());
 
         tag(ModTags.Items.C_FOODS_RAW_MEATS)
                 .add(ModItems.BODYPART_BRAIN.get())

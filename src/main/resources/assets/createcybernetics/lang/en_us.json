@@ -157,6 +157,11 @@
   "item.createcybernetics.component_titaniumrod": "Titanium Rod",
 
 
+  "item.createcybernetics.copper_upgrade_template": "Copper Plating Template",
+  "item.createcybernetics.iron_upgrade_template": "Iron Plating Template",
+  "item.createcybernetics.gold_upgrade_template": "Gold Plating Template",
+
+
   "item.createcybernetics.bodypart_rightleg": "Right Leg",
   "item.createcybernetics.bodypart_leftleg": "Left Leg",
   "item.createcybernetics.bodypart_rightarm": "Right Arm",
@@ -174,6 +179,22 @@
   "item.createcybernetics.bodypart_guardianretina": "Guardian Retina",
   "item.createcybernetics.bodypart_wardenesophagus": "Warden Esophagus",
   "item.createcybernetics.bodypart_gyroscopicbladder": "Gryoscopic Bladder",
+
+
+  "item.createcybernetics.basecyberware_rightleg_copperplated": "Copper Plated Right Cyberleg",
+  "item.createcybernetics.basecyberware_leftleg_copperplated": "Copper Plated Left Cyberleg",
+  "item.createcybernetics.basecyberware_rightarm_copperplated": "Copper Plated Right Cyberarm",
+  "item.createcybernetics.basecyberware_leftarm_copperplated": "Copper Plated Left Cyberarm",
+
+  "item.createcybernetics.basecyberware_rightleg_ironplated": "Iron Plated Right Cyberleg",
+  "item.createcybernetics.basecyberware_leftleg_ironplated": "Iron Plated Left Cyberleg",
+  "item.createcybernetics.basecyberware_rightarm_ironplated": "Iron Plated Right Cyberarm",
+  "item.createcybernetics.basecyberware_leftarm_ironplated": "Iron Plated Left Cyberarm",
+
+  "item.createcybernetics.basecyberware_rightleg_goldplated": "Gold Plated Right Cyberleg",
+  "item.createcybernetics.basecyberware_leftleg_goldplated": "Gold Plated Left Cyberleg",
+  "item.createcybernetics.basecyberware_rightarm_goldplated": "Gold Plated Right Cyberarm",
+  "item.createcybernetics.basecyberware_leftarm_goldplated": "Gold Plated Left Cyberarm",
 
 
   "item.createcybernetics.basecyberware_rightleg": "Right Cyberleg",

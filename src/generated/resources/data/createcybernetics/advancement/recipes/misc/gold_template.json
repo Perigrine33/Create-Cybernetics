@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_metal_plating": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:skinupgrades_metalplating"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createcybernetics:gold_template"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_metal_plating"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createcybernetics:gold_template"
+    ]
+  }
+}

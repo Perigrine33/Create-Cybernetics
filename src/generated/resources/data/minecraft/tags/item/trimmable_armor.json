@@ -4,6 +4,18 @@
     "createcybernetics:basecyberware_leftleg",
     "createcybernetics:basecyberware_rightarm",
     "createcybernetics:basecyberware_leftarm",
-    "createcybernetics:skinupgrades_metalplating"
+    "createcybernetics:skinupgrades_metalplating",
+    "createcybernetics:basecyberware_rightleg_copperplated",
+    "createcybernetics:basecyberware_leftleg_copperplated",
+    "createcybernetics:basecyberware_rightarm_copperplated",
+    "createcybernetics:basecyberware_leftarm_copperplated",
+    "createcybernetics:basecyberware_rightleg_ironplated",
+    "createcybernetics:basecyberware_leftleg_ironplated",
+    "createcybernetics:basecyberware_rightarm_ironplated",
+    "createcybernetics:basecyberware_leftarm_ironplated",
+    "createcybernetics:basecyberware_rightleg_goldplated",
+    "createcybernetics:basecyberware_leftleg_goldplated",
+    "createcybernetics:basecyberware_rightarm_goldplated",
+    "createcybernetics:basecyberware_leftarm_goldplated"
   ]
 }

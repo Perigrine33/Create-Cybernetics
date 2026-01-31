@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": {
+      "item": "createcybernetics:skinupgrades_metalplating"
+    },
+    "T": {
+      "item": "minecraft:copper_ingot"
+    },
+    "Z": {
+      "item": "minecraft:copper_block"
+    }
+  },
+  "pattern": [
+    "TTT",
+    "TMT",
+    "TZT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:copper_upgrade_template"
+  }
+}

@@ -466,6 +466,14 @@ public class ModItems {
             });
 
 
+//UPGRADE_TEMPLATES
+    public static final DeferredItem<Item> COPPER_UPGRADE_TEMPLATE = ITEMS.register("copper_upgrade_template",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> IRON_UPGRADE_TEMPLATE = ITEMS.register("iron_upgrade_template",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> GOLD_UPGRADE_TEMPLATE = ITEMS.register("gold_upgrade_template",
+            () -> new Item(new Item.Properties()));
+
 
 //BASE CYBERWARE
     public static final DeferredItem<Item> BASECYBERWARE_RIGHTLEG = ITEMS.register("basecyberware_rightleg",
@@ -553,7 +561,180 @@ public class ModItems {
                 }
             });
 
-//EYE UPGRADES
+    public static final DeferredItem<Item> BASECYBERWARE_RIGHTLEG_COPPERPLATED = ITEMS.register("basecyberware_rightleg_copperplated",
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.RLEG) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_rightleg.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_LEFTLEG_COPPERPLATED = ITEMS.register("basecyberware_leftleg_copperplated",
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.LLEG) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_leftleg.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_RIGHTARM_COPPERPLATED = ITEMS.register("basecyberware_rightarm_copperplated",
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.RARM) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_rightarm.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_LEFTARM_COPPERPLATED = ITEMS.register("basecyberware_leftarm_copperplated",
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.LARM) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_leftarm.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+
+    public static final DeferredItem<Item> BASECYBERWARE_RIGHTLEG_IRONPLATED = ITEMS.register("basecyberware_rightleg_ironplated",
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.RLEG) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_rightleg.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_LEFTLEG_IRONPLATED = ITEMS.register("basecyberware_leftleg_ironplated",
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.LLEG) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_leftleg.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_RIGHTARM_IRONPLATED = ITEMS.register("basecyberware_rightarm_ironplated",
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.RARM) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_rightarm.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_LEFTARM_IRONPLATED = ITEMS.register("basecyberware_leftarm_ironplated",
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.LARM) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_leftarm.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+
+    public static final DeferredItem<Item> BASECYBERWARE_RIGHTLEG_GOLDPLATED = ITEMS.register("basecyberware_rightleg_goldplated",
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.RLEG) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_rightleg.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_LEFTLEG_GOLDPLATED = ITEMS.register("basecyberware_leftleg_goldplated",
+            () -> new CyberlegItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.LLEG) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_leftleg.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_RIGHTARM_GOLDPLATED = ITEMS.register("basecyberware_rightarm_goldplated",
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.RARM) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_rightarm.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> BASECYBERWARE_LEFTARM_GOLDPLATED = ITEMS.register("basecyberware_leftarm_goldplated",
+            () -> new CyberarmItem(new Item.Properties().stacksTo(1), 5, CyberwareSlot.LARM) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_leftarm.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.basecyberware_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+
+
+
+    //EYE UPGRADES
     public static final DeferredItem<Item> EYEUPGRADES_HUDLENS = ITEMS.register("eyeupgrades_hudlens",
         () -> new HUDlensItem(new Item.Properties().stacksTo(1), 1) {
             @Override

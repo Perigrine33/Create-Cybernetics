@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_gold_template": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:gold_upgrade_template"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createcybernetics:goldplated_leftleg"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_gold_template"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createcybernetics:goldplated_leftleg"
+    ]
+  }
+}

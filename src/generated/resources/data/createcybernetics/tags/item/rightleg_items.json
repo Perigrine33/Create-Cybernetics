@@ -1,6 +1,9 @@
 {
   "values": [
     "createcybernetics:basecyberware_rightleg",
+    "createcybernetics:basecyberware_rightleg_copperplated",
+    "createcybernetics:basecyberware_rightleg_ironplated",
+    "createcybernetics:basecyberware_rightleg_goldplated",
     "createcybernetics:bodypart_rightleg"
   ]
 }

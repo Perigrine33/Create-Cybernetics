@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:gold_ingot"
+  },
+  "base": {
+    "item": "createcybernetics:basecyberware_rightarm"
+  },
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:basecyberware_rightarm_goldplated"
+  },
+  "template": {
+    "item": "createcybernetics:gold_upgrade_template"
+  }
+}

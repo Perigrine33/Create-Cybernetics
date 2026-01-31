@@ -89,12 +89,24 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/cybereyes_dye_secondary.png");
     private static final ResourceLocation RIGHT_CYBERLEG_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberleg.png");
+    private static final ResourceLocation COPPER_PLATED_RIGHT_CYBERLEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/copper_rightleg.png");
+    private static final ResourceLocation IRON_PLATED_RIGHT_CYBERLEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/iron_rightleg.png");
+    private static final ResourceLocation GOLD_PLATED_RIGHT_CYBERLEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/gold_rightleg.png");
     private static final ResourceLocation RIGHT_CYBERLEG_PRIMARY =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberleg_dye_primary.png");
     private static final ResourceLocation RIGHT_CYBERLEG_SECONDARY =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberleg_dye_secondary.png");
     private static final ResourceLocation LEFT_CYBERLEG_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberleg.png");
+    private static final ResourceLocation COPPER_PLATED_LEFT_CYBERLEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/copper_leftleg.png");
+    private static final ResourceLocation IRON_PLATED_LEFT_CYBERLEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/iron_leftleg.png");
+    private static final ResourceLocation GOLD_PLATED_LEFT_CYBERLEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/gold_leftleg.png");
     private static final ResourceLocation LEFT_CYBERLEG_PRIMARY =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberleg_dye_primary.png");
     private static final ResourceLocation LEFT_CYBERLEG_SECONDARY =
@@ -143,12 +155,24 @@ public class SkinModifierManager {
     //WIDE VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_wide.png");
+    private static final ResourceLocation COPPER_PLATED_LEFT_CYBERARM_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/copper_leftarm_wide.png");
+    private static final ResourceLocation IRON_PLATED_LEFT_CYBERARM_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/iron_leftarm_wide.png");
+    private static final ResourceLocation GOLD_PLATED_LEFT_CYBERARM_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/gold_leftarm_wide.png");
     private static final ResourceLocation LEFT_CYBERARM_PRIMARY_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_dye_primary_wide.png");
     private static final ResourceLocation LEFT_CYBERARM_SECONDARY_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_dye_secondary_wide.png");
     private static final ResourceLocation RIGHT_CYBERARM_TEXTURE_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_wide.png");
+    private static final ResourceLocation COPPER_PLATED_RIGHT_CYBERARM_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/copper_rightarm_wide.png");
+    private static final ResourceLocation IRON_PLATED_RIGHT_CYBERARM_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/iron_rightarm_wide.png");
+    private static final ResourceLocation GOLD_PLATED_RIGHT_CYBERARM_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/gold_rightarm_wide.png");
     private static final ResourceLocation RIGHT_CYBERARM_PRIMARY_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_dye_primary_wide.png");
     private static final ResourceLocation RIGHT_CYBERARM_SECONDARY_WIDE =
@@ -210,12 +234,24 @@ public class SkinModifierManager {
     //SLIM VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_slim.png");
+    private static final ResourceLocation COPPER_PLATED_LEFT_CYBERARM_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/copper_leftarm_slim.png");
+    private static final ResourceLocation IRON_PLATED_LEFT_CYBERARM_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/iron_leftarm_slim.png");
+    private static final ResourceLocation GOLD_PLATED_LEFT_CYBERARM_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/gold_leftarm_slim.png");
     private static final ResourceLocation LEFT_CYBERARM_PRIMARY_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_dye_primary_slim.png");
     private static final ResourceLocation LEFT_CYBERARM_SECONDARY_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_dye_secondary_slim.png");
     private static final ResourceLocation RIGHT_CYBERARM_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_slim.png");
+    private static final ResourceLocation COPPER_PLATED_RIGHT_CYBERARM_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/copper_rightarm_slim.png");
+    private static final ResourceLocation IRON_PLATED_RIGHT_CYBERARM_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/iron_rightarm_slim.png");
+    private static final ResourceLocation GOLD_PLATED_RIGHT_CYBERARM_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/gold_rightarm_slim.png");
     private static final ResourceLocation RIGHT_CYBERARM_PRIMARY_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/right_cyberarm_dye_primary_slim.png");
     private static final ResourceLocation RIGHT_CYBERARM_SECONDARY_SLIM =
@@ -658,6 +694,51 @@ public class SkinModifierManager {
                 }
             }
         }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG)) {
+            state.addModifier(new SkinModifier(COPPER_PLATED_LEFT_CYBERLEG, COPPER_PLATED_LEFT_CYBERLEG,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG)) {
+            state.addModifier(new SkinModifier(IRON_PLATED_LEFT_CYBERLEG, IRON_PLATED_LEFT_CYBERLEG,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG)) {
+            state.addModifier(new SkinModifier(GOLD_PLATED_LEFT_CYBERLEG, GOLD_PLATED_LEFT_CYBERLEG,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                }
+            }
+        }
 // RIGHT CYBERLEG
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
             state.addModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE,
@@ -672,6 +753,51 @@ public class SkinModifierManager {
             if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
                 ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
                 int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG)) {
+            state.addModifier(new SkinModifier(COPPER_PLATED_RIGHT_CYBERLEG, COPPER_PLATED_RIGHT_CYBERLEG,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG)) {
+            state.addModifier(new SkinModifier(IRON_PLATED_RIGHT_CYBERLEG, IRON_PLATED_RIGHT_CYBERLEG,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG)) {
+            state.addModifier(new SkinModifier(GOLD_PLATED_RIGHT_CYBERLEG, GOLD_PLATED_RIGHT_CYBERLEG,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG);
 
                 ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
                 if (tex != null) {
@@ -704,6 +830,57 @@ public class SkinModifierManager {
                 }
             }
         }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get(), CyberwareSlot.LARM)) {
+            state.addModifier(new SkinModifier(COPPER_PLATED_LEFT_CYBERARM_WIDE, COPPER_PLATED_LEFT_CYBERARM_SLIM,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get(), CyberwareSlot.LARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get(), CyberwareSlot.LARM);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get(), CyberwareSlot.LARM);
+
+                boolean slim = isSlimArms(player);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get(), CyberwareSlot.LARM)) {
+            state.addModifier(new SkinModifier(IRON_PLATED_LEFT_CYBERARM_WIDE, IRON_PLATED_LEFT_CYBERARM_SLIM,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get(), CyberwareSlot.LARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get(), CyberwareSlot.LARM);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get(), CyberwareSlot.LARM);
+
+                boolean slim = isSlimArms(player);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get(), CyberwareSlot.LARM)) {
+            state.addModifier(new SkinModifier(GOLD_PLATED_LEFT_CYBERARM_WIDE, GOLD_PLATED_LEFT_CYBERARM_SLIM,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get(), CyberwareSlot.LARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get(), CyberwareSlot.LARM);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get(), CyberwareSlot.LARM);
+
+                boolean slim = isSlimArms(player);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+                }
+            }
+        }
 // RIGHT CYBERARM
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM)) {
             state.addModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM,
@@ -722,12 +899,65 @@ public class SkinModifierManager {
                 int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM);
 
                 ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.ARM, slim);
+                if (tex != null) {
                     state.addModifier(new SkinModifier(tex, tex, tint, false,
                             EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE), EnumSet.of(HumanoidArm.RIGHT)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get(), CyberwareSlot.RARM)) {
+            state.addModifier(new SkinModifier(COPPER_PLATED_RIGHT_CYBERARM_WIDE, COPPER_PLATED_RIGHT_CYBERARM_SLIM,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get(), CyberwareSlot.RARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get(), CyberwareSlot.RARM);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get(), CyberwareSlot.RARM);
+
+                boolean slim = isSlimArms(player);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get(), CyberwareSlot.RARM)) {
+            state.addModifier(new SkinModifier(IRON_PLATED_RIGHT_CYBERARM_WIDE, IRON_PLATED_RIGHT_CYBERARM_SLIM,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get(), CyberwareSlot.RARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get(), CyberwareSlot.RARM);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get(), CyberwareSlot.RARM);
+
+                boolean slim = isSlimArms(player);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE)));
+                }
+            }
+        }
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get(), CyberwareSlot.RARM)) {
+            state.addModifier(new SkinModifier(GOLD_PLATED_RIGHT_CYBERARM_WIDE, GOLD_PLATED_RIGHT_CYBERARM_SLIM,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE)));
+
+            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get(), CyberwareSlot.RARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get(), CyberwareSlot.RARM);
+                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get(), CyberwareSlot.RARM);
+
+                boolean slim = isSlimArms(player);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(new SkinModifier(tex, tex, tint, false,
+                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE)));
+                }
             }
         }
 
-        // NETHERITE PLATING
+// NETHERITE PLATING
         if (data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN)) {
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));

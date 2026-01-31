@@ -46,6 +46,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.FACEPLATE);
                         output.accept(ModItems.EMP_GRENADE);
 
+                        output.accept(ModItems.COPPER_UPGRADE_TEMPLATE);
+                        output.accept(ModItems.IRON_UPGRADE_TEMPLATE);
+                        output.accept(ModItems.GOLD_UPGRADE_TEMPLATE);
+
                         output.accept(ModItems.MUSIC_DISC_CYBERPSYCHO);
                         output.accept(ModItems.MUSIC_DISC_NEON_OVERLORDS);
                         output.accept(ModItems.MUSIC_DISC_NEUROHACK);
@@ -194,7 +198,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BODYPART_LEFTARM);
                         output.accept(ModItems.BODYPART_RIGHTLEG);
                         output.accept(ModItems.BODYPART_LEFTLEG);
-                        //INTERNAL WETWARE
+
+
+                    //INTERNAL WETWARE
                         output.accept(ModItems.BODYPART_SKELETON);
                         output.accept(ModItems.BODYPART_BRAIN);
                         output.accept(ModItems.BODYPART_EYEBALLS);
@@ -321,6 +327,21 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WETWARE_AEROSTASISGYROBLADDER);
                         output.accept(ModItems.WETWARE_GRASSFEDSTOMACH);
                         output.accept(ModItems.WETWARE_SPINNERETTE);
+
+                        output.accept(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED);
+                        output.accept(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED);
+                        output.accept(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED);
+                        output.accept(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED);
+
+                        output.accept(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED);
+                        output.accept(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED);
+                        output.accept(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED);
+                        output.accept(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED);
+
+                        output.accept(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED);
+                        output.accept(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED);
+                        output.accept(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED);
+                        output.accept(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED);
 
 
 

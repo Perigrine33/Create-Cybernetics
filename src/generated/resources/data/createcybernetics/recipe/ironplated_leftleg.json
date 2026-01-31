@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:iron_ingot"
+  },
+  "base": {
+    "item": "createcybernetics:basecyberware_leftleg"
+  },
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:basecyberware_leftleg_ironplated"
+  },
+  "template": {
+    "item": "createcybernetics:iron_upgrade_template"
+  }
+}

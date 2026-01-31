@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:copper_ingot"
+  },
+  "base": {
+    "item": "createcybernetics:basecyberware_rightleg"
+  },
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:basecyberware_rightleg_copperplated"
+  },
+  "template": {
+    "item": "createcybernetics:copper_upgrade_template"
+  }
+}

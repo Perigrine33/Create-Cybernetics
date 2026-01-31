@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -60,6 +61,37 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('T', ModItems.TITANIUMNUGGET.get())
                 .unlockedBy("has_titaniumnugget", has(ModItems.TITANIUMNUGGET))
                 .save(recipeOutput, "createcybernetics:titaniumingot_from_titaniumnuggets");
+
+//COPPER TEMPLATE
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COPPER_UPGRADE_TEMPLATE.get())
+                .pattern("TTT")
+                .pattern("TMT")
+                .pattern("TZT")
+                .define('M', ModItems.SKINUPGRADES_METALPLATING.get())
+                .define('T', Items.COPPER_INGOT)
+                .define('Z', Items.COPPER_BLOCK)
+                .unlockedBy("has_metal_plating", has(ModItems.SKINUPGRADES_METALPLATING))
+                .save(recipeOutput, "createcybernetics:copper_template");
+//IRON TEMPLATE
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.IRON_UPGRADE_TEMPLATE.get())
+                .pattern("TTT")
+                .pattern("TMT")
+                .pattern("TZT")
+                .define('M', ModItems.SKINUPGRADES_METALPLATING.get())
+                .define('T', Items.IRON_INGOT)
+                .define('Z', Items.IRON_BLOCK)
+                .unlockedBy("has_metal_plating", has(ModItems.SKINUPGRADES_METALPLATING))
+                .save(recipeOutput, "createcybernetics:iron_template");
+//GOLD TEMPLATE
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.GOLD_UPGRADE_TEMPLATE.get())
+                .pattern("TTT")
+                .pattern("TMT")
+                .pattern("TZT")
+                .define('M', ModItems.SKINUPGRADES_METALPLATING.get())
+                .define('T', Items.GOLD_INGOT)
+                .define('Z', Items.GOLD_BLOCK)
+                .unlockedBy("has_metal_plating", has(ModItems.SKINUPGRADES_METALPLATING))
+                .save(recipeOutput, "createcybernetics:gold_template");
 
 
 //TITANIUM INGOT FROM BLOCK
@@ -149,7 +181,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
 
 
-//CORTICAL STACK SMITHING
+//SMITHING
         SmithingTransformRecipeBuilder.smithing(
                         Ingredient.of(ModItems.TITANIUMSHEET),
                         Ingredient.of(ModItems.XP_CAPSULE.get()),
@@ -158,6 +190,93 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         ModItems.BRAINUPGRADES_CORTICALSTACK.get())
                 .unlocks("has_xp_capsule", has(ModItems.XP_CAPSULE.get()))
                 .save(recipeOutput, "createcybernetics:cortical_stack_from_xp_capsule");
+
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.COPPER_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_LEFTARM.get()),
+                        Ingredient.of(Items.COPPER_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get())
+                .unlocks("has_copper_template", has(ModItems.COPPER_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:copperplated_leftarm");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.COPPER_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_RIGHTARM.get()),
+                        Ingredient.of(Items.COPPER_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
+                .unlocks("has_copper_template", has(ModItems.COPPER_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:copperplated_rightarm");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.COPPER_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_LEFTLEG.get()),
+                        Ingredient.of(Items.COPPER_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get())
+                .unlocks("has_copper_template", has(ModItems.COPPER_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:copperplated_leftleg");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.COPPER_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_RIGHTLEG.get()),
+                        Ingredient.of(Items.COPPER_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get())
+                .unlocks("has_copper_template", has(ModItems.COPPER_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:copperplated_rightleg");
+
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.IRON_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_LEFTARM.get()),
+                        Ingredient.of(Items.IRON_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get())
+                .unlocks("has_iron_template", has(ModItems.IRON_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:ironplated_leftarm");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.IRON_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_RIGHTARM.get()),
+                        Ingredient.of(Items.IRON_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
+                .unlocks("has_iron_template", has(ModItems.IRON_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:ironplated_rightarm");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.IRON_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_LEFTLEG.get()),
+                        Ingredient.of(Items.IRON_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get())
+                .unlocks("has_iron_template", has(ModItems.IRON_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:ironplated_leftleg");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.IRON_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_RIGHTLEG.get()),
+                        Ingredient.of(Items.IRON_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get())
+                .unlocks("has_iron_template", has(ModItems.IRON_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:ironplated_rightleg");
+
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.GOLD_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_LEFTARM.get()),
+                        Ingredient.of(Items.GOLD_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get())
+                .unlocks("has_gold_template", has(ModItems.GOLD_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:goldplated_leftarm");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.GOLD_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_RIGHTARM.get()),
+                        Ingredient.of(Items.GOLD_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
+                .unlocks("has_gold_template", has(ModItems.GOLD_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:goldplated_rightarm");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.GOLD_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_LEFTLEG.get()),
+                        Ingredient.of(Items.GOLD_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get())
+                .unlocks("has_gold_template", has(ModItems.GOLD_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:goldplated_leftleg");
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.GOLD_UPGRADE_TEMPLATE.get()),
+                        Ingredient.of(ModItems.BASECYBERWARE_RIGHTLEG.get()),
+                        Ingredient.of(Items.GOLD_INGOT),
+                        RecipeCategory.MISC, ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get())
+                .unlocks("has_gold_template", has(ModItems.GOLD_UPGRADE_TEMPLATE.get()))
+                .save(recipeOutput, "createcybernetics:goldplated_rightleg");
 
 
 //FOOD COOKING

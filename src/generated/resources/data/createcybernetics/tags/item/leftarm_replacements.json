@@ -1,5 +1,8 @@
 {
   "values": [
+    "createcybernetics:basecyberware_leftarm_copperplated",
+    "createcybernetics:basecyberware_leftarm_ironplated",
+    "createcybernetics:basecyberware_leftarm_goldplated",
     "createcybernetics:basecyberware_leftarm"
   ]
 }
