@@ -11,7 +11,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
@@ -21,7 +20,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.DragonFireball;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -166,7 +164,7 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
         final ServerLevel level = player.serverLevel();
         if (!player.isCrouching()) return;
         final PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null || !data.hasSpecificItem(ModItems.WETWARE_FIREBREATHINGGLAND.get(), CyberwareSlot.LUNGS)) return;
+        if (data == null || !data.hasSpecificItem(ModItems.WETWARE_FIREBREATHINGLUNGS.get(), CyberwareSlot.LUNGS)) return;
 
         final double reach = 5.0D;
         final Vec3 start = player.getEyePosition();

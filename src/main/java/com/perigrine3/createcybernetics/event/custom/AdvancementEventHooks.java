@@ -9,7 +9,6 @@ import com.perigrine3.createcybernetics.common.damage.ModDamageTypes;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -19,8 +18,6 @@ import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
-
-import java.util.UUID;
 
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
 public final class AdvancementEventHooks {
@@ -113,7 +110,8 @@ public final class AdvancementEventHooks {
         if (isFullBorgSetActive(player.getData(ModAttachments.CYBERWARE))) {
             ModCriteria.WEAK_FLESH.get().trigger(player);
         }
-        if (data.hasSpecificItem(ModItems.WETWARE_SPINNERETTE.get(), CyberwareSlot.RARM) || data.hasSpecificItem(ModItems.WETWARE_SPINNERETTE.get(), CyberwareSlot.LARM)
+        if (data.hasSpecificItem(ModItems.WETWARE_WEBSHOOTING_RIGHTARM.get(), CyberwareSlot.RARM) || data.hasSpecificItem(ModItems.WETWARE_WEBSHOOTING_LEFTARM.get(), CyberwareSlot.LARM) ||
+                data.hasSpecificItem(ModItems.WETWARE_WEBSHOOTINGINTESTINES.get(), CyberwareSlot.LARM)
                 && data.hasSpecificItem(ModItems.SKINUPGRADES_SYNTHETICSETULES.get(), CyberwareSlot.SKIN)) {
             ModCriteria.SPIDER_MAN.get().trigger(player);
         }
@@ -242,7 +240,7 @@ public final class AdvancementEventHooks {
                 data.hasMultipleSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG) &&
                 data.hasSpecificItem(ModItems.EYEUPGRADES_UNDERWATERVISION.get(), CyberwareSlot.EYES) &&
                 data.hasSpecificItem(ModItems.LUNGSUPGRADES_OXYGEN.get(), CyberwareSlot.LUNGS) &&
-                data.hasSpecificItem(ModItems.WETWARE_GILLS.get(), CyberwareSlot.LUNGS)) {
+                data.hasSpecificItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get(), CyberwareSlot.LUNGS)) {
             return true;
         }
         if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM) && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM) &&

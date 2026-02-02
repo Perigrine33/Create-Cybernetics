@@ -5,7 +5,6 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
@@ -25,7 +24,7 @@ public final class OxygenOverlayHider {
         Player player = Minecraft.getInstance().player;
         boolean underwater = player.isUnderWater();
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        boolean hasGills = data.hasSpecificItem(ModItems.WETWARE_GILLS.get(), CyberwareSlot.LUNGS);
+        boolean hasGills = data.hasSpecificItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get(), CyberwareSlot.LUNGS);
 
         if (player == null) return;
         if (!underwater) return;

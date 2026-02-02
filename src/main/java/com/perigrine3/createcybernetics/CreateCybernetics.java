@@ -23,7 +23,6 @@ import com.perigrine3.createcybernetics.screen.custom.*;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
@@ -198,10 +197,12 @@ public class CreateCybernetics {
         public static void registerScreens(RegisterMenuScreensEvent event) {
             event.register(ModMenuTypes.ROBOSURGEON_MENU.get(), RobosurgeonScreen::new);
             event.register(ModMenuTypes.ENGINEERING_TABLE_MENU.get(), EngineeringTableScreen::new);
+            event.register(ModMenuTypes.GRAFTING_TABLE_MENU.get(), GraftingTableScreen::new);
             event.register(ModMenuTypes.EXPANDED_INVENTORY_MENU.get(), ExpandedInventoryScreen::new);
             event.register(ModMenuTypes.CHIPWARE_MINI_MENU.get(), ChipwareMiniScreen::new);
             event.register(ModMenuTypes.SPINAL_INJECTOR_MENU.get(), SpinalInjectorScreen::new);
             event.register(ModMenuTypes.ARM_CANNON_MENU.get(), ArmCannonScreen::new);
+            event.register(ModMenuTypes.HEAT_ENGINE_MENU.get(), HeatEngineScreen::new);
         }
     }
 

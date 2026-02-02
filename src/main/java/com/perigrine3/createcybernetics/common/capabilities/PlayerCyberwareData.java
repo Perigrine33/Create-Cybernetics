@@ -18,12 +18,19 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -59,6 +66,26 @@ public class PlayerCyberwareData implements ICyberwareData {
     private static final String NBT_CHIPWARE_INV = "ChipwareInv";
     private final ItemStack[] chipwareInv = new ItemStack[CHIPWARE_SLOT_COUNT];
 
+    // ---- Heat Engine (fuel/input/output + timers) ----
+    public static final int HEAT_ENGINE_SLOT_COUNT = 3;
+    public static final int HEAT_ENGINE_FUEL = 0;
+    public static final int HEAT_ENGINE_INPUT = 1;
+    public static final int HEAT_ENGINE_OUTPUT = 2;
+
+    private static final String NBT_HEAT_ENGINE_INV = "HeatEngineInv";
+    private static final String NBT_HEAT_ENGINE_BURN = "HeatEngineBurn";
+    private static final String NBT_HEAT_ENGINE_BURN_TOTAL = "HeatEngineBurnTotal";
+    private static final String NBT_HEAT_ENGINE_COOK = "HeatEngineCook";
+    private static final String NBT_HEAT_ENGINE_COOK_TOTAL = "HeatEngineCookTotal";
+
+    private final ItemStack[] heatEngineInv = new ItemStack[HEAT_ENGINE_SLOT_COUNT];
+
+    private int heatEngineBurnTime = 0;
+    private int heatEngineBurnTimeTotal = 0;
+    private int heatEngineCookTime = 0;
+    private int heatEngineCookTimeTotal = 200;
+
+
     private final EnumMap<CyberwareSlot, InstalledCyberware[]> slots =
             new EnumMap<>(CyberwareSlot.class);
 
@@ -89,6 +116,10 @@ public class PlayerCyberwareData implements ICyberwareData {
         for (int i = 0; i < chipwareInv.length; i++) {
             chipwareInv[i] = ItemStack.EMPTY;
         }
+        for (int i = 0; i < heatEngineInv.length; i++) {
+            heatEngineInv[i] = ItemStack.EMPTY;
+        }
+
 
         armCannonSelected = 0;
     }
@@ -695,6 +726,14 @@ public class PlayerCyberwareData implements ICyberwareData {
         for (int i = 0; i < chipwareInv.length; i++) {
             chipwareInv[i] = ItemStack.EMPTY;
         }
+        for (int i = 0; i < heatEngineInv.length; i++) {
+            heatEngineInv[i] = ItemStack.EMPTY;
+        }
+
+        heatEngineBurnTime = 0;
+        heatEngineBurnTimeTotal = 0;
+        heatEngineCookTime = 0;
+        heatEngineCookTimeTotal = 200;
 
         armCannonSelected = 0;
         copernicusOxygen = 0;
@@ -740,6 +779,163 @@ public class PlayerCyberwareData implements ICyberwareData {
         }
 
         setCopernicusOxygen(oxy, maxDisplayUnits);
+    }
+
+    /* ---------------- HEAT ENGINE ---------------- */
+
+    public boolean isHeatEngineActive() {
+        return heatEngineBurnTime > 0;
+    }
+
+    public int getHeatEngineBurnTime() { return Math.max(0, heatEngineBurnTime); }
+    public int getHeatEngineBurnTimeTotal() { return Math.max(0, heatEngineBurnTimeTotal); }
+    public int getHeatEngineCookTime() { return Math.max(0, heatEngineCookTime); }
+    public int getHeatEngineCookTimeTotal() { return Math.max(1, heatEngineCookTimeTotal); }
+
+    public ItemStack getHeatEngineStack(int slot) {
+        if (slot < 0 || slot >= heatEngineInv.length) return ItemStack.EMPTY;
+        ItemStack st = heatEngineInv[slot];
+        return st == null ? ItemStack.EMPTY : st;
+    }
+
+    public void setHeatEngineStack(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= heatEngineInv.length) return;
+
+        if (stack == null || stack.isEmpty()) {
+            heatEngineInv[slot] = ItemStack.EMPTY;
+            dirty = true;
+            return;
+        }
+
+        ItemStack copy = stack.copy();
+        int cap = Math.max(1, copy.getMaxStackSize());
+        if (copy.getCount() > cap) copy.setCount(cap);
+
+        heatEngineInv[slot] = copy;
+        dirty = true;
+    }
+
+    public ItemStack removeHeatEngineStack(int slot, int amount) {
+        if (amount <= 0) return ItemStack.EMPTY;
+        ItemStack cur = getHeatEngineStack(slot);
+        if (cur.isEmpty()) return ItemStack.EMPTY;
+
+        int taken = Math.min(amount, cur.getCount());
+        ItemStack out = cur.copy();
+        out.setCount(taken);
+
+        cur.shrink(taken);
+        if (cur.isEmpty()) heatEngineInv[slot] = ItemStack.EMPTY;
+
+        dirty = true;
+        return out;
+    }
+
+    public void tickHeatEngine(ServerPlayer player) {
+        if (player == null) return;
+
+        Level level = player.level();
+        if (level.isClientSide) return;
+
+        if (heatEngineBurnTime <= 0) {
+            ItemStack fuel = getHeatEngineStack(HEAT_ENGINE_FUEL);
+            if (!fuel.isEmpty() && AbstractFurnaceBlockEntity.isFuel(fuel)) {
+                int burn = fuel.getBurnTime(RecipeType.SMELTING);
+                if (burn > 0) {
+                    removeHeatEngineStack(HEAT_ENGINE_FUEL, 1);
+                    heatEngineBurnTime = burn;
+                    heatEngineBurnTimeTotal = burn;
+                    dirty = true;
+                }
+            }
+        }
+
+        if (heatEngineBurnTime > 0) {
+            heatEngineBurnTime--;
+            receiveEnergy(player, 50);
+            dirty = true;
+
+            tickHeatEngineSmelt(level);
+        } else {
+            if (heatEngineCookTime != 0) {
+                heatEngineCookTime = 0;
+                dirty = true;
+            }
+        }
+    }
+
+    private void tickHeatEngineSmelt(Level level) {
+        ItemStack in = getHeatEngineStack(HEAT_ENGINE_INPUT);
+        if (in.isEmpty()) {
+            if (heatEngineCookTime != 0) {
+                heatEngineCookTime = 0;
+                dirty = true;
+            }
+            return;
+        }
+
+        SingleRecipeInput input = new SingleRecipeInput(in);
+        var opt = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, input, level);
+        if (opt.isEmpty()) {
+            if (heatEngineCookTime != 0) {
+                heatEngineCookTime = 0;
+                dirty = true;
+            }
+            return;
+        }
+
+        RecipeHolder<SmeltingRecipe> holder = opt.get();
+        ItemStack result = holder.value().assemble(input, level.registryAccess());
+        if (result.isEmpty() || !canAcceptSmeltResult(result)) {
+            if (heatEngineCookTime != 0) {
+                heatEngineCookTime = 0;
+                dirty = true;
+            }
+            return;
+        }
+
+        heatEngineCookTimeTotal = Math.max(1, holder.value().getCookingTime());
+        heatEngineCookTime++;
+        dirty = true;
+
+        if (heatEngineCookTime >= heatEngineCookTimeTotal) {
+            removeHeatEngineStack(HEAT_ENGINE_INPUT, 1);
+            ItemStack out = getHeatEngineStack(HEAT_ENGINE_OUTPUT);
+            if (out.isEmpty()) {
+                setHeatEngineStack(HEAT_ENGINE_OUTPUT, result);
+            } else {
+                out.grow(result.getCount());
+                setHeatEngineStack(HEAT_ENGINE_OUTPUT, out);
+            }
+
+            heatEngineCookTime = 0;
+            dirty = true;
+        }
+    }
+
+    private boolean canAcceptSmeltResult(ItemStack result) {
+        ItemStack out = getHeatEngineStack(HEAT_ENGINE_OUTPUT);
+        if (out.isEmpty()) return true;
+        if (!ItemStack.isSameItemSameComponents(out, result)) return false;
+
+        int max = out.getMaxStackSize();
+        return out.getCount() + result.getCount() <= max;
+    }
+
+    public void setHeatEngineBurnTime(int v) {
+        heatEngineBurnTime = Math.max(0, v); dirty = true;
+    }
+
+    public void setHeatEngineBurnTimeTotal(int v) {
+        heatEngineBurnTimeTotal = Math.max(0, v); dirty = true;
+    }
+
+    public void setHeatEngineCookTime(int v) {
+        heatEngineCookTime = Math.max(0, v); dirty = true;
+    }
+
+    public void setHeatEngineCookTimeTotal(int v) {
+        heatEngineCookTimeTotal = Math.max(1, v); dirty = true;
     }
 
     /* ---------------- DATA AND RESET ---------------- */
@@ -892,6 +1088,7 @@ public class PlayerCyberwareData implements ICyberwareData {
     }
 
     /* ---------------- NBT ---------------- */
+
     private static CompoundTag cc$saveStackToCompound(HolderLookup.Provider provider, ItemStack stack) {
         Tag t = stack.save(provider);
         return (t instanceof CompoundTag ct) ? ct : new CompoundTag();
@@ -973,6 +1170,19 @@ public class PlayerCyberwareData implements ICyberwareData {
                 chip.add(new CompoundTag());
             }
         }
+
+        ListTag heat = new ListTag();
+        for (int i = 0; i < heatEngineInv.length; i++) {
+            ItemStack st = heatEngineInv[i];
+            heat.add((st != null && !st.isEmpty()) ? cc$saveStackToCompound(provider, st) : new CompoundTag());
+        }
+        tag.put(NBT_HEAT_ENGINE_INV, heat);
+
+        tag.putInt(NBT_HEAT_ENGINE_BURN, heatEngineBurnTime);
+        tag.putInt(NBT_HEAT_ENGINE_BURN_TOTAL, heatEngineBurnTimeTotal);
+        tag.putInt(NBT_HEAT_ENGINE_COOK, heatEngineCookTime);
+        tag.putInt(NBT_HEAT_ENGINE_COOK_TOTAL, heatEngineCookTimeTotal);
+
         tag.put(NBT_CHIPWARE_INV, chip);
 
         tag.putInt(NBT_NEUROPOZYNE_APPLY_COUNT, neuropozyneApplyCount);
@@ -1076,6 +1286,20 @@ public class PlayerCyberwareData implements ICyberwareData {
                 chipwareInv[i] = st;
             }
         }
+
+        for (int i = 0; i < heatEngineInv.length; i++) heatEngineInv[i] = ItemStack.EMPTY;
+
+        if (tag.contains(NBT_HEAT_ENGINE_INV, Tag.TAG_LIST)) {
+            ListTag heat = tag.getList(NBT_HEAT_ENGINE_INV, Tag.TAG_COMPOUND);
+            for (int i = 0; i < heatEngineInv.length && i < heat.size(); i++) {
+                heatEngineInv[i] = ItemStack.parseOptional(provider, heat.getCompound(i));
+            }
+        }
+
+        heatEngineBurnTime = tag.contains(NBT_HEAT_ENGINE_BURN, Tag.TAG_INT) ? Math.max(0, tag.getInt(NBT_HEAT_ENGINE_BURN)) : 0;
+        heatEngineBurnTimeTotal = tag.contains(NBT_HEAT_ENGINE_BURN_TOTAL, Tag.TAG_INT) ? Math.max(0, tag.getInt(NBT_HEAT_ENGINE_BURN_TOTAL)) : 0;
+        heatEngineCookTime = tag.contains(NBT_HEAT_ENGINE_COOK, Tag.TAG_INT) ? Math.max(0, tag.getInt(NBT_HEAT_ENGINE_COOK)) : 0;
+        heatEngineCookTimeTotal = tag.contains(NBT_HEAT_ENGINE_COOK_TOTAL, Tag.TAG_INT) ? Math.max(1, tag.getInt(NBT_HEAT_ENGINE_COOK_TOTAL)) : 200;
 
         neuropozyneApplyCount = tag.contains(NBT_NEUROPOZYNE_APPLY_COUNT, Tag.TAG_INT)
                 ? Math.max(0, tag.getInt(NBT_NEUROPOZYNE_APPLY_COUNT))

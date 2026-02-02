@@ -20,6 +20,8 @@ public class ModMenuTypes {
             registerMenuType("robosurgeon_menu", RobosurgeonMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<EngineeringTableMenu>> ENGINEERING_TABLE_MENU =
             registerMenuType("engineering_table_menu", EngineeringTableMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<GraftingTableMenu>> GRAFTING_TABLE_MENU =
+            registerMenuType("grafting_table_menu", GraftingTableMenu::new);
 
     public static final DeferredHolder<MenuType<?>, MenuType<ExpandedInventoryMenu>> EXPANDED_INVENTORY_MENU =
             registerMenuType("expanded_inventory_menu", ExpandedInventoryMenu::new);
@@ -30,6 +32,8 @@ public class ModMenuTypes {
             registerMenuType("spinal_injector_menu", SpinalInjectorMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<ArmCannonMenu>> ARM_CANNON_MENU =
             registerMenuType("arm_cannon_menu", ArmCannonMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<HeatEngineMenu>> HEAT_ENGINE_MENU =
+            registerMenuType("heat_engine_menu", HeatEngineMenu::new);
 
 
     private static <T extends AbstractContainerMenu>DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {

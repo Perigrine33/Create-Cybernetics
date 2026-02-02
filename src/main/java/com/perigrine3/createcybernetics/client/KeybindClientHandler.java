@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.network.payload.ArmCannonWheelPayloads;
 import com.perigrine3.createcybernetics.network.payload.OpenArmCannonPayload;
+import com.perigrine3.createcybernetics.network.payload.OpenHeatEnginePayload;
 import com.perigrine3.createcybernetics.network.payload.OpenSpinalInjectorPayload;
 import com.perigrine3.createcybernetics.screen.custom.ArmCannonWheelScreen;
 import com.perigrine3.createcybernetics.screen.custom.CyberwareToggleWheelScreen;
@@ -62,6 +63,12 @@ public final class KeybindClientHandler {
         while (ModKeyMappings.ARM_CANNON.get().consumeClick()) {
             if (mc.screen != null) continue;
             OpenArmCannonPayload payload = new OpenArmCannonPayload();
+            PacketDistributor.sendToServer(payload);
+        }
+
+        while (ModKeyMappings.HEAT_ENGINE.get().consumeClick()) {
+            if (mc.screen != null) continue;
+            OpenHeatEnginePayload payload = new OpenHeatEnginePayload();
             PacketDistributor.sendToServer(payload);
         }
     }

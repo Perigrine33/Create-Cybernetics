@@ -2,7 +2,7 @@
   "values": [
     "createcybernetics:bodypart_skeleton",
     "createcybernetics:bodypart_eyeballs",
-    "createcybernetics:wetware_gills",
+    "createcybernetics:bodypart_gills",
     "createcybernetics:bodypart_muscle"
   ]
 }

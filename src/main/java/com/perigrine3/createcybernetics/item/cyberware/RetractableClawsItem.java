@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -69,10 +70,10 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public Set<Item> requiresCyberware(ItemStack installedStack, CyberwareSlot slot) {
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         return switch (slot) {
-            case RARM -> Set.of(ModItems.BASECYBERWARE_RIGHTARM.get());
-            case LARM -> Set.of(ModItems.BASECYBERWARE_LEFTARM.get());
+            case RARM -> Set.of(ModTags.Items.RIGHTARM_REPLACEMENTS);
+            case LARM -> Set.of(ModTags.Items.LEFTARM_REPLACEMENTS);
             default -> Set.of();
         };
     }

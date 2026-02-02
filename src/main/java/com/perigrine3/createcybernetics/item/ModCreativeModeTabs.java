@@ -6,10 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ItemLike;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -27,6 +24,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.ROBOSURGEON);
                         output.accept(ModBlocks.SURGERY_CHAMBER_BOTTOM);
                         output.accept(ModBlocks.ENGINEERING_TABLE);
+                        output.accept(ModBlocks.GRAFTING_TABLE);
                         output.accept(ModBlocks.CHARGING_BLOCK);
                         output.accept(ModItems.NEUROPOZYNE_AUTOINJECTOR);
                         output.accept(ModItems.EMPTY_AUTOINJECTOR);
@@ -92,6 +90,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BODYPART_GUARDIANRETINA);
                         output.accept(ModItems.BODYPART_WARDENESOPHAGUS);
                         output.accept(ModItems.BODYPART_GYROSCOPICBLADDER);
+                        output.accept(ModItems.BODYPART_SPINNERETTE);
+                        output.accept(ModItems.BODYPART_FIREGLAND);
+                        output.accept(ModItems.BODYPART_GILLS);
 
                         //SCAVENGED PARTS
                         output.accept(ModItems.SCAVENGED_RIGHTLEG);
@@ -165,6 +166,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_LIVERFILTER);
                         output.accept(ModItems.SCAVENGED_METABOLIC);
                         output.accept(ModItems.SCAVENGED_DENSEBATTERY);
+                        output.accept(ModItems.SCAVENGED_HEATENGINE);
                         output.accept(ModItems.SCAVENGED_ARTERIALTURBINE);
                         output.accept(ModItems.SCAVENGED_CHROMATOPHORES);
                         output.accept(ModItems.SCAVENGED_SYNTHSKIN);
@@ -292,6 +294,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ORGANSUPGRADES_MAGICCATALYST);
                         output.accept(ModItems.ORGANSUPGRADES_METABOLIC);
                         output.accept(ModItems.ORGANSUPGRADES_DENSEBATTERY);
+                        output.accept(ModItems.ORGANSUPGRADES_HEATENGINE);
                     //SKIN UPGRADES
                         output.accept(ModItems.SKINUPGRADES_ARTERIALTURBINE);
                         output.accept(ModItems.SKINUPGRADES_CHROMATOPHORES);
@@ -317,8 +320,8 @@ public class ModCreativeModeTabs {
                             output.accept(ModItems.WETWARE_BLUBBER);
                         }
 
-                        output.accept(ModItems.WETWARE_FIREBREATHINGGLAND);
-                        output.accept(ModItems.WETWARE_GILLS);
+                        output.accept(ModItems.WETWARE_FIREBREATHINGLUNGS);
+                        output.accept(ModItems.WETWARE_WATERBREATHINGLUNGS);
                         output.accept(ModItems.WETWARE_GUARDIANEYE);
                         output.accept(ModItems.WETWARE_POLARBEARFUR);
                         output.accept(ModItems.WETWARE_RAVAGERTENDONS);
@@ -326,7 +329,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WETWARE_TACTICALINKSAC);
                         output.accept(ModItems.WETWARE_AEROSTASISGYROBLADDER);
                         output.accept(ModItems.WETWARE_GRASSFEDSTOMACH);
-                        output.accept(ModItems.WETWARE_SPINNERETTE);
+                        output.accept(ModItems.WETWARE_WEBSHOOTING_RIGHTARM);
+                        output.accept(ModItems.WETWARE_WEBSHOOTING_LEFTARM);
+                        output.accept(ModItems.WETWARE_WEBSHOOTINGINTESTINES);
+                        output.accept(ModItems.WETWARE_SPIDEREYES);
 
                         output.accept(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED);
                         output.accept(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED);

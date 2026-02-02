@@ -1,0 +1,10 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "minecraft:spider_eye" },
+    { "item": "minecraft:spider_eye" },
+    { "item": "minecraft:spider_eye" },
+    { "item": "minecraft:spider_eye" }
+  ],
+  "result": { "id": "createcybernetics:wetware_spidereyes", "count": 1 }
+}

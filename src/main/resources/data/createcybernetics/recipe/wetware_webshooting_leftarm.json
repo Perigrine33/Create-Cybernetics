@@ -1,0 +1,8 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:bodypart_leftarm" },
+    { "item": "createcybernetics:bodypart_spinnerette" }
+  ],
+  "result": { "id": "createcybernetics:wetware_webshooting_leftarm", "count": 1 }
+}

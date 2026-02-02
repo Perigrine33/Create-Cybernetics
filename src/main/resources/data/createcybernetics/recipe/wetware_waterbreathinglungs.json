@@ -1,0 +1,8 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:bodypart_lungs" },
+    { "item": "createcybernetics:bodypart_gills" }
+  ],
+  "result": { "id": "createcybernetics:wetware_waterbreathinglungs", "count": 1 }
+}

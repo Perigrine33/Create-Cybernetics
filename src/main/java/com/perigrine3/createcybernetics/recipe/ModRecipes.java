@@ -24,6 +24,13 @@ public class ModRecipes {
                 }
             });
 
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GraftingTableRecipe>> GRAFTING_TABLE_SERIALIZER =
+            SERIALIZERS.register("grafting_table", GraftingTableRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<GraftingTableRecipe>> GRAFTING_TABLE_TYPE =
+            TYPES.register("grafting_table", () -> new RecipeType<GraftingTableRecipe>() {
+                @Override public String toString() { return "grafting_table"; }
+            });
+
 
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);

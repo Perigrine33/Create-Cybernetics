@@ -1,0 +1,10 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:bodypart_intestines" },
+    { "item": "createcybernetics:bodypart_intestines" },
+    { "item": "createcybernetics:bodypart_intestines" },
+    { "item": "createcybernetics:bodypart_intestines" }
+  ],
+  "result": { "id": "createcybernetics:wetware_grassfedstomach", "count": 1 }
+}

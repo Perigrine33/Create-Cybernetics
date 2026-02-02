@@ -32,7 +32,8 @@ public final class ClientMobEffectExtensions {
                 ModEffects.PROJECTILE_DODGE_EFFECT,
                 ModEffects.BREATHLESS_EFFECT,
                 ModEffects.SCULK_LUNGS_EFFECT,
-                ModEffects.SANDEVISTAN_EFFECT
+                ModEffects.SANDEVISTAN_EFFECT,
+                ModEffects.SPIDER_EYES_EFFECT
         );
     }
 }

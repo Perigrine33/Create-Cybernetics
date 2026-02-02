@@ -1,8 +1,8 @@
 package com.perigrine3.createcybernetics.block;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.item.ConditionalNameBlockItem;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.screen.custom.GraftingTableMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
@@ -82,6 +82,9 @@ public class ModBlocks {
                     .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> ENGINEERING_TABLE = registerBlock("engineering_table",
             () -> new EngineeringTableBlock(BlockBehaviour.Properties.of()
+                    .noOcclusion().sound(SoundType.METAL)), true);
+    public static final DeferredBlock<Block> GRAFTING_TABLE = registerBlock("grafting_table",
+            () -> new GraftingTableBlock(BlockBehaviour.Properties.of()
                     .noOcclusion().sound(SoundType.METAL)), true);
 
 //PLANT BLOCKS

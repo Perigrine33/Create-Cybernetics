@@ -156,6 +156,15 @@ public final class ModPayloads {
                 CopernicusOxygenSyncPayload::handle
         );
 
+        r.playToServer(
+                OpenHeatEnginePayload.TYPE,
+                OpenHeatEnginePayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> {
+                    if (!(ctx.player() instanceof ServerPlayer sp)) return;
+                    OpenHeatEnginePayloadHandler.handle(payload, sp);
+                })
+        );
+
 
         /* ---------------- TOGGLE WHEEL PAYLOADS ---------------- */
 

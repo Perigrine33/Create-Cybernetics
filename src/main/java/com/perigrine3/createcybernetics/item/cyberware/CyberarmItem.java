@@ -6,9 +6,11 @@ import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.HumanoidArm;
@@ -76,6 +78,17 @@ public class CyberarmItem extends Item implements ICyberwareItem {
     @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(side); }
     @Override public boolean replacesOrgan() { return true; }
     @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(side); }
+
+    @Override
+    public Set<TagKey<Item>> incompatibleCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+        if (slot == CyberwareSlot.LARM) {
+            return Set.of(ModTags.Items.LEFTARM_REPLACEMENTS);
+        }
+        if (slot == CyberwareSlot.RARM) {
+            return Set.of(ModTags.Items.RIGHTARM_REPLACEMENTS);
+        }
+        return Set.of();
+    }
 
     @Override
     public void onInstalled(Player player) {

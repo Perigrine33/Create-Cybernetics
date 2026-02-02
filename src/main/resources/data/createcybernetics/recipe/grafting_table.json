@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "N": {
+      "item": "createcybernetics:titaniumnugget"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "S": {
+      "item": "minecraft:shears"
+    }
+  },
+  "pattern": [
+    "N S",
+    "TTT",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:grafting_table"
+  }
+}

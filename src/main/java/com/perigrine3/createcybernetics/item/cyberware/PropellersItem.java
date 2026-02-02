@@ -7,9 +7,11 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,10 +45,10 @@ public class PropellersItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public Set<Item> requiresCyberware(ItemStack installedStack, CyberwareSlot slot) {
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         return switch (slot) {
-            case RLEG -> Set.of(ModItems.BASECYBERWARE_RIGHTLEG.get());
-            case LLEG -> Set.of(ModItems.BASECYBERWARE_LEFTLEG.get());
+            case RARM -> Set.of(ModTags.Items.RIGHTLEG_REPLACEMENTS);
+            case LARM -> Set.of(ModTags.Items.LEFTLEG_REPLACEMENTS);
             default -> Set.of();
         };
     }

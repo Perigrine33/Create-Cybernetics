@@ -110,6 +110,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BODYPART_GUARDIANRETINA.get());
         basicItem(ModItems.BODYPART_WARDENESOPHAGUS.get());
         basicItem(ModItems.BODYPART_GYROSCOPICBLADDER.get());
+        basicItem(ModItems.BODYPART_SPINNERETTE.get());
+        basicItem(ModItems.BODYPART_FIREGLAND.get());
+        basicItem(ModItems.BODYPART_GILLS.get());
     }
 
 //BASE
@@ -229,6 +232,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.ORGANSUPGRADES_MAGICCATALYST.get());
         basicItem(ModItems.ORGANSUPGRADES_METABOLIC.get());
         basicItem(ModItems.ORGANSUPGRADES_DENSEBATTERY.get());
+        basicItem(ModItems.ORGANSUPGRADES_HEATENGINE.get());
     }
 
 //SKIN
@@ -261,8 +265,8 @@ public class ModItemModelProvider extends ItemModelProvider {
                 basicItem(ModItems.WETWARE_BLUBBER.get());
             }
 
-            basicItem(ModItems.WETWARE_FIREBREATHINGGLAND.get());
-            basicItem(ModItems.WETWARE_GILLS.get());
+            basicItem(ModItems.WETWARE_FIREBREATHINGLUNGS.get());
+            basicItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get());
             basicItem(ModItems.WETWARE_GUARDIANEYE.get());
             basicItem(ModItems.WETWARE_POLARBEARFUR.get());
             basicItem(ModItems.WETWARE_RAVAGERTENDONS.get());
@@ -270,7 +274,10 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.WETWARE_TACTICALINKSAC.get());
             basicItem(ModItems.WETWARE_AEROSTASISGYROBLADDER.get());
             basicItem(ModItems.WETWARE_GRASSFEDSTOMACH.get());
-            basicItem(ModItems.WETWARE_SPINNERETTE.get());
+            basicItem(ModItems.WETWARE_WEBSHOOTINGINTESTINES.get());
+            basicItem(ModItems.WETWARE_WEBSHOOTING_RIGHTARM.get());
+            basicItem(ModItems.WETWARE_WEBSHOOTING_LEFTARM.get());
+            basicItem(ModItems.WETWARE_SPIDEREYES.get());
         }
 
 
@@ -348,6 +355,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.SCAVENGED_LIVERFILTER.get());
             basicItem(ModItems.SCAVENGED_METABOLIC.get());
             basicItem(ModItems.SCAVENGED_DENSEBATTERY.get());
+            basicItem(ModItems.SCAVENGED_HEATENGINE.get());
             basicItem(ModItems.SCAVENGED_ARTERIALTURBINE.get());
             basicItem(ModItems.SCAVENGED_CHROMATOPHORES.get());
             basicItem(ModItems.SCAVENGED_SYNTHSKIN.get());

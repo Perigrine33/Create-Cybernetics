@@ -3,7 +3,6 @@ package com.perigrine3.createcybernetics.datagen;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.loot.AddItemModifier;
-import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -2462,7 +2461,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/salmon")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.01f).build()
-                        }, ModItems.WETWARE_GILLS.get()));
+                        }, ModItems.BODYPART_GILLS.get()));
             }
 
 //COD LOOT ADDS
@@ -2471,7 +2470,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/cod")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.01f).build()
-                        }, ModItems.WETWARE_GILLS.get()));
+                        }, ModItems.BODYPART_GILLS.get()));
             }
 
 
@@ -2641,7 +2640,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/spider")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.05f).build()
-                        }, ModItems.WETWARE_SPINNERETTE.get()));
+                        }, ModItems.BODYPART_SPINNERETTE.get()));
             }
 
 
@@ -2652,7 +2651,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/ender_dragon")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.05f).build()
-                        }, ModItems.WETWARE_FIREBREATHINGGLAND.get()));
+                        }, ModItems.BODYPART_FIREGLAND.get()));
             }
 
 //WARDEN LOOT ADDS

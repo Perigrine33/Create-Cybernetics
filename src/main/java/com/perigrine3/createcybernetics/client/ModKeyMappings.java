@@ -27,11 +27,15 @@ public final class ModKeyMappings {
     public static final Lazy<KeyMapping> ARM_CANNON_WHEEL = Lazy.of(() ->
             new KeyMapping("key.createcybernetics.arm_cannon_wheel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY));
 
+    public static final Lazy<KeyMapping> HEAT_ENGINE = Lazy.of(() ->
+            new KeyMapping("key.createcybernetics.heat_engine", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY));
+
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(CYBERWARE_WHEEL.get());
         event.register(SPINAL_INJECTOR.get());
         event.register(ARM_CANNON.get());
         event.register(ARM_CANNON_WHEEL.get());
+        event.register(HEAT_ENGINE.get());
     }
 }

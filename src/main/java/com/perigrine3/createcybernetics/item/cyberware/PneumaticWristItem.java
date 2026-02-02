@@ -8,10 +8,12 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -55,10 +57,10 @@ public class PneumaticWristItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public Set<Item> requiresCyberware(ItemStack installedStack, CyberwareSlot slot) {
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         return switch (slot) {
-            case RARM -> Set.of(ModItems.BASECYBERWARE_RIGHTARM.get());
-            case LARM -> Set.of(ModItems.BASECYBERWARE_LEFTARM.get());
+            case RARM -> Set.of(ModTags.Items.RIGHTARM_REPLACEMENTS);
+            case LARM -> Set.of(ModTags.Items.LEFTARM_REPLACEMENTS);
             default -> Set.of();
         };
     }

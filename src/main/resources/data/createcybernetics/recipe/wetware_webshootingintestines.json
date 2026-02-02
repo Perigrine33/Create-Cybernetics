@@ -1,0 +1,8 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:bodypart_intestines" },
+    { "item": "createcybernetics:bodypart_spinnerette" }
+  ],
+  "result": { "id": "createcybernetics:wetware_webshootingintestines", "count": 1 }
+}

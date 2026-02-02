@@ -129,6 +129,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.ORGANSUPGRADES_MAGICCATALYST.get())
                 .add(ModItems.ORGANSUPGRADES_METABOLIC.get())
                 .add(ModItems.ORGANSUPGRADES_DENSEBATTERY.get())
+                .add(ModItems.ORGANSUPGRADES_HEATENGINE.get())
                 .add(ModItems.SKINUPGRADES_ARTERIALTURBINE.get())
                 .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
                 .add(ModItems.SKINUPGRADES_SYNTHSKIN.get())
@@ -174,7 +175,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.FISH_BODYPART_DROPS)
                 .add(ModItems.BODYPART_SKELETON.get())
                 .add(ModItems.BODYPART_EYEBALLS.get())
-                .add(ModItems.WETWARE_GILLS.get())
+                .add(ModItems.BODYPART_GILLS.get())
                 .add(ModItems.BODYPART_MUSCLE.get());
 
 //HUMANOID BODYPART DROPS
@@ -212,9 +213,12 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BODYPART_GUARDIANRETINA.get())
                 .add(ModItems.BODYPART_WARDENESOPHAGUS.get())
                 .add(ModItems.BODYPART_GYROSCOPICBLADDER.get())
+                .add(ModItems.BODYPART_SPINNERETTE.get())
+                .add(ModItems.BODYPART_FIREGLAND.get())
+                .add(ModItems.BODYPART_GILLS.get())
 
-                .add(ModItems.WETWARE_FIREBREATHINGGLAND.get())
-                .add(ModItems.WETWARE_GILLS.get())
+                .add(ModItems.WETWARE_FIREBREATHINGLUNGS.get())
+                .add(ModItems.WETWARE_WATERBREATHINGLUNGS.get())
                 .add(ModItems.WETWARE_GUARDIANEYE.get())
                 .add(ModItems.WETWARE_SCULKLUNGS.get())
                 .add(ModItems.WETWARE_TACTICALINKSAC.get())
@@ -222,7 +226,10 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
                 .add(ModItems.WETWARE_RAVAGERTENDONS.get())
                 .add(ModItems.WETWARE_GRASSFEDSTOMACH.get())
-                .add(ModItems.WETWARE_SPINNERETTE.get())
+                .add(ModItems.WETWARE_WEBSHOOTING_LEFTARM.get())
+                .add(ModItems.WETWARE_WEBSHOOTING_RIGHTARM.get())
+                .add(ModItems.WETWARE_WEBSHOOTINGINTESTINES.get())
+                .add(ModItems.WETWARE_SPIDEREYES.get())
                 .addOptional(resourceLocation("createcybernetics:wetware_blubber"));
 //BODY PARTS
         tag(ModTags.Items.BODY_PARTS)
@@ -298,7 +305,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.ORGANSUPGRADES_LIVERFILTER.get())
                 .add(ModItems.ORGANSUPGRADES_MAGICCATALYST.get())
                 .add(ModItems.ORGANSUPGRADES_METABOLIC.get())
-                .add(ModItems.ORGANSUPGRADES_DENSEBATTERY.get());
+                .add(ModItems.ORGANSUPGRADES_DENSEBATTERY.get())
+                .add(ModItems.ORGANSUPGRADES_HEATENGINE.get());
 //HEART UPGRADES
         tag(ModTags.Items.HEART_UPGRADES)
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get())
@@ -404,6 +412,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_LIVERFILTER.get())
                 .add(ModItems.SCAVENGED_METABOLIC.get())
                 .add(ModItems.SCAVENGED_DENSEBATTERY.get())
+                .add(ModItems.SCAVENGED_HEATENGINE.get())
 
                 .add(ModItems.SCAVENGED_ARTERIALTURBINE.get())
                 .add(ModItems.SCAVENGED_CHROMATOPHORES.get())
@@ -431,7 +440,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         tag(ModTags.Items.EYE_ITEMS)
                 .add(ModItems.BASECYBERWARE_CYBEREYES.get())
-                .add(Items.SPIDER_EYE)
+                .add(ModItems.WETWARE_SPIDEREYES.get())
                 .add(ModItems.BODYPART_EYEBALLS.get());
 
         tag(ModTags.Items.SKIN_ITEMS)
@@ -462,6 +471,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.LUNGS_ITEMS)
                 .add(ModItems.WETWARE_SCULKLUNGS.get())
                 .add(ModItems.WETWARE_AEROSTASISGYROBLADDER.get())
+                .add(ModItems.WETWARE_FIREBREATHINGLUNGS.get())
                 .add(ModItems.BODYPART_LUNGS.get());
 
         tag(ModTags.Items.LIVER_ITEMS)
@@ -471,6 +481,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.INTESTINES_ITEMS)
                 .add(ModItems.WETWARE_TACTICALINKSAC.get())
                 .add(ModItems.WETWARE_GRASSFEDSTOMACH.get())
+                .add(ModItems.WETWARE_WEBSHOOTINGINTESTINES.get())
                 .add(ModItems.BODYPART_INTESTINES.get());
 
         tag(ModTags.Items.LEFTARM_ITEMS)
@@ -478,6 +489,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get())
                 .add(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get())
                 .add(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get())
+                .add(ModItems.WETWARE_WEBSHOOTING_LEFTARM.get())
                 .add(ModItems.BODYPART_LEFTARM.get());
 
         tag(ModTags.Items.RIGHTARM_ITEMS)
@@ -485,6 +497,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
+                .add(ModItems.WETWARE_WEBSHOOTING_RIGHTARM.get())
                 .add(ModItems.BODYPART_RIGHTARM.get());
 
         tag(ModTags.Items.LEFTLEG_ITEMS)
@@ -507,6 +520,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_CYBERBRAIN.get());
 
         tag(ModTags.Items.EYE_REPLACEMENTS)
+                .add(ModItems.WETWARE_SPIDEREYES.get())
                 .add(ModItems.BASECYBERWARE_CYBEREYES.get());
 
         tag(ModTags.Items.SKIN_REPLACEMENTS)
@@ -529,12 +543,14 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get())
                 .add(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get())
                 .add(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get())
+                .add(ModItems.WETWARE_WEBSHOOTING_LEFTARM.get())
                 .add(ModItems.BASECYBERWARE_LEFTARM.get());
 
         tag(ModTags.Items.RIGHTARM_REPLACEMENTS)
                 .add(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
+                .add(ModItems.WETWARE_WEBSHOOTING_RIGHTARM.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM.get());
 
         tag(ModTags.Items.LEFTLEG_REPLACEMENTS)

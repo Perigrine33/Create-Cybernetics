@@ -82,7 +82,7 @@ public record HarvesterEnchantmentEffect() implements EnchantmentEntityEffect {
             return new ItemStack(ModItems.BODYPART_GYROSCOPICBLADDER.get());
         }
         if (entity instanceof EnderDragon) {
-            return new ItemStack(ModItems.WETWARE_FIREBREATHINGGLAND.get());
+            return new ItemStack(ModItems.WETWARE_FIREBREATHINGLUNGS.get());
         }
         return ItemStack.EMPTY;
     }

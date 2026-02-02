@@ -70,24 +70,6 @@ public class GillsItem extends Item implements ICyberwareItem {
 
     @Override
     public void onTick(Player player) {
-        if (player.level().isClientSide) return;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-
-        boolean inWater = player.isUnderWater() || player.isInWaterOrRain();
-        boolean hasLungs = data.hasAnyTagged(ModTags.Items.LUNGS_ITEMS, CyberwareSlot.LUNGS);
-
-        if (inWater) {
-            player.removeEffect(ModEffects.BREATHLESS_EFFECT);
-            player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 20, 0, false, false, false));
-        } else {
-            player.removeEffect(MobEffects.WATER_BREATHING);
-            if (!hasLungs) {
-                player.addEffect(new MobEffectInstance(ModEffects.BREATHLESS_EFFECT, 20, 0, false, false, false));
-            } else {
-                player.removeEffect(ModEffects.BREATHLESS_EFFECT);
-            }
-        }
     }
-
 }

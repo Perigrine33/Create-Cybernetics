@@ -13,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -61,10 +62,10 @@ public class MetalDetectorItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public Set<Item> requiresCyberware(ItemStack installedStack, CyberwareSlot slot) {
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         return switch (slot) {
-            case RLEG -> Set.of(ModItems.BASECYBERWARE_RIGHTLEG.get());
-            case LLEG -> Set.of(ModItems.BASECYBERWARE_LEFTLEG.get());
+            case RLEG -> Set.of(ModTags.Items.RIGHTLEG_REPLACEMENTS);
+            case LLEG -> Set.of(ModTags.Items.LEFTLEG_REPLACEMENTS);
             default -> Set.of();
         };
     }

@@ -12,7 +12,6 @@ import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.HumanoidArm;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -133,6 +132,15 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/chipware_inactive.png");
     private static final ResourceLocation CHIPWARE_ACTIVE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/chipware_active.png");
+    private static final ResourceLocation FURNACE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/furnace.png");
+    private static final ResourceLocation FURNACE_ACTIVE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/furnace_lit.png");
+    private static final ResourceLocation FURNACE_HIGHLIGHT =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/furnace_lit_highlight.png");
+    private static final ResourceLocation SPIDER_EYES =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/spider_eyes.png");
+
     private static final ResourceLocation SAMSON_EYES_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_eyes_dyed.png");
     private static final ResourceLocation ECLIPSE_EYES_DYED =
@@ -663,9 +671,9 @@ public class SkinModifierManager {
             return state;
         }
 // GILLS
-        if (data.hasSpecificItem(ModItems.WETWARE_GILLS.get(), CyberwareSlot.LUNGS)) {
+        if (data.hasSpecificItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get(), CyberwareSlot.LUNGS)) {
             state.addModifier(new SkinModifier(GILLS_TEXTURE, GILLS_TEXTURE,
-                    0xFFFFFFFF, true));
+                    0xFFFFFFFF, false));
         }
 // MISSING SKIN
         if (!data.hasAnyTagged(ModTags.Items.SKIN_ITEMS, CyberwareSlot.SKIN)) {
@@ -1131,7 +1139,7 @@ public class SkinModifierManager {
                 data.hasMultipleSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG) &&
                 data.hasSpecificItem(ModItems.EYEUPGRADES_UNDERWATERVISION.get(), CyberwareSlot.EYES) &&
                 data.hasSpecificItem(ModItems.LUNGSUPGRADES_OXYGEN.get(), CyberwareSlot.LUNGS) &&
-                data.hasSpecificItem(ModItems.WETWARE_GILLS.get(), CyberwareSlot.LUNGS)) {
+                data.hasSpecificItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get(), CyberwareSlot.LUNGS)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1353,7 +1361,11 @@ public class SkinModifierManager {
             }
         }
 
-
+// POLAR BEAR FUR
+        if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
+            state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE,
+                    0xFFFFFFFF, true));
+        }
 // SPINAL INJECTOR
         if (data.hasSpecificItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get(), CyberwareSlot.BONE)) {
             state.addModifier(new SkinModifier(SPINAL_INJECTOR_TEXTURE, SPINAL_INJECTOR_TEXTURE,
@@ -1426,9 +1438,23 @@ public class SkinModifierManager {
             state.addHighlight(new SkinHighlight(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
                     0xFFFFFFFF, true));
         }
-// POLAR BEAR FUR
-        if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
-            state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE,
+// HEAT ENGINE
+        if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_HEATENGINE.get(), CyberwareSlot.ORGANS)) {
+            state.addModifier(new SkinModifier(FURNACE, FURNACE,
+                    0xFFFFFFFF, false));
+
+            if (data.isHeatEngineActive()) {
+                state.addModifier(new SkinModifier(FURNACE_ACTIVE, FURNACE_ACTIVE,
+                        0xFFFFFFFF, false));
+                state.addHighlight(new SkinHighlight(FURNACE_HIGHLIGHT, FURNACE_HIGHLIGHT,
+                        0xFFFFFFFF, true));
+            }
+        }
+// SPIDER EYES
+        if (data.hasSpecificItem(ModItems.WETWARE_SPIDEREYES.get(), CyberwareSlot.EYES)) {
+            state.addModifier(new SkinModifier(SPIDER_EYES, SPIDER_EYES,
+                    0xFFFFFFFF, false));
+            state.addHighlight(new SkinHighlight(SPIDER_EYES, SPIDER_EYES,
                     0xFFFFFFFF, true));
         }
 

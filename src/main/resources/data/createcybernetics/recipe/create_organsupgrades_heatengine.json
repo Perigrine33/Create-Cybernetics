@@ -1,0 +1,36 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "F": {
+      "item": "minecraft:blast_furnace"
+    },
+    "A": {
+      "item": "createcybernetics:component_actuator"
+    },
+    "T": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "S": {
+      "item": "createcybernetics:titaniumsheet"
+    },
+    "P": {
+      "item": "create:propeller"
+    }
+  },
+
+  "pattern": [
+    "    T",
+    " SAST",
+    " SFPT",
+    " SSS ",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:organsupgrades_heatengine"
+  }
+}

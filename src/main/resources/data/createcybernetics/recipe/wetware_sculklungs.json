@@ -1,28 +1,8 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    {
-      "item": "createcybernetics:bodypart_wardenesophagus"
-    },
-    {
-      "item": "createcybernetics:bodypart_lungs"
-    },
-    {
-      "item": "createcybernetics:component_mesh"
-    },
-    {
-      "item": "minecraft:shears"
-    },
-    {
-      "item": "minecraft:string"
-    },
-    {
-      "item": "minecraft:ghast_tear"
-    }
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:bodypart_lungs" },
+    { "item": "createcybernetics:bodypart_wardenesophagus" }
   ],
-  "result": {
-    "count": 1,
-    "id": "createcybernetics:wetware_sculklungs"
-  }
+  "result": { "id": "createcybernetics:wetware_sculklungs", "count": 1 }
 }

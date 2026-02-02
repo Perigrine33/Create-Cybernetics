@@ -2,6 +2,8 @@ package com.perigrine3.createcybernetics.item.organs;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.util.ModTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -35,6 +37,11 @@ public class RightArmItem extends Item implements ICyberwareItem {
     @Override
     public Set<CyberwareSlot> getReplacedOrgans() {
         return Set.of(CyberwareSlot.RARM);
+    }
+
+    @Override
+    public Set<TagKey<Item>> incompatibleCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModTags.Items.RIGHTARM_REPLACEMENTS);
     }
 
     @Override

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "createcybernetics:block/grafting_table", "y": 180 },
+    "facing=south": { "model": "createcybernetics:block/grafting_table", "y": 0 },
+    "facing=west":  { "model": "createcybernetics:block/grafting_table", "y": 90 },
+    "facing=east":  { "model": "createcybernetics:block/grafting_table", "y": 270 }
+  }
+}

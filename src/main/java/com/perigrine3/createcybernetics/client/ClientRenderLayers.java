@@ -17,6 +17,7 @@ public final class ClientRenderLayers {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.TITANIUM_GRATE.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.GRAFTING_TABLE.get(), RenderType.cutout());
 
         });
     }

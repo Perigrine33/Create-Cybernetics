@@ -1,7 +1,7 @@
 {
   "values": [
     "createcybernetics:basecyberware_cybereyes",
-    "minecraft:spider_eye",
+    "createcybernetics:wetware_spidereyes",
     "createcybernetics:bodypart_eyeballs"
   ]
 }

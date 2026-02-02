@@ -22,7 +22,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -118,11 +117,11 @@ public final class MissingOrganController {
         }
 
         /* -------------------- LUNGS -------------------- */
-        boolean hasGills = data.hasSpecificItem(ModItems.WETWARE_GILLS.get(), CyberwareSlot.LUNGS);
-        boolean underwater = player.isUnderWater();
+        boolean hasGills = data.hasSpecificItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get(), CyberwareSlot.LUNGS);
+        boolean inWater = player.isUnderWater() || player.isInWaterOrRain();
 
         if (!hasLungs) {
-            boolean canBreatheHere = hasGills && underwater;
+            boolean canBreatheHere = hasGills && inWater;
 
             if (canBreatheHere) {
                 player.getPersistentData().remove(NO_LUNGS_AIR);
@@ -145,7 +144,6 @@ public final class MissingOrganController {
                 player.setAirSupply(air);
             }
         } else {
-            // Lungs present: clear custom tracking.
             player.getPersistentData().remove(NO_LUNGS_AIR);
         }
 

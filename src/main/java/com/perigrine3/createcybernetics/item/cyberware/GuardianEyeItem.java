@@ -2,35 +2,16 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
-import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.*;
 
 import java.util.List;
 import java.util.Set;
@@ -72,7 +53,7 @@ public class GuardianEyeItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
-        return Set.of(ModItems.WETWARE_SCULKLUNGS.get(), ModItems.WETWARE_FIREBREATHINGGLAND.get());
+        return Set.of(ModItems.WETWARE_SCULKLUNGS.get(), ModItems.WETWARE_FIREBREATHINGLUNGS.get());
     }
 
     @Override

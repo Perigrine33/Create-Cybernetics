@@ -13,7 +13,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,10 +32,10 @@ import java.util.List;
 import java.util.Set;
 
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
-public class SpinneretteItem extends Item implements ICyberwareItem {
+public class ArmSpinneretteItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
-    public SpinneretteItem(Properties props, int humanityCost) {
+    public ArmSpinneretteItem(Properties props, int humanityCost) {
         super(props);
         this.humanityCost = humanityCost;
     }
@@ -52,44 +54,44 @@ public class SpinneretteItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<CyberwareSlot> getSupportedSlots() {
-        return Set.of(CyberwareSlot.ORGANS, CyberwareSlot.RARM, CyberwareSlot.LARM);
+        return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
     }
 
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
+    @Override public boolean replacesOrgan() { return true; }
+    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM); }
 
     @Override
-    public TagKey<Item> getReplacedOrganItemTag(ItemStack installedStack, CyberwareSlot slot) {
-        return ModTags.Items.INTESTINES_ITEMS;
+    public Set<TagKey<Item>> incompatibleCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+        if (slot == CyberwareSlot.LARM) {
+            return Set.of(ModTags.Items.LEFTARM_REPLACEMENTS);
+        }
+        if (slot == CyberwareSlot.RARM) {
+            return Set.of(ModTags.Items.RIGHTARM_REPLACEMENTS);
+        }
+        return Set.of();
     }
 
     /* -------------------- INTERACTION (INSTALLED CYBERWARE) -------------------- */
 
-    private static boolean hasSpinneretteInstalled(Player player) {
+    private static boolean hasSpinneretteOnSide(Player player, CyberwareSlot slot) {
         if (player == null) return false;
-        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return false;
 
-        for (var entry : data.getAll().entrySet()) {
-            CyberwareSlot slot = entry.getKey();
-            InstalledCyberware[] arr = entry.getValue();
-            if (arr == null) continue;
+        InstalledCyberware[] arr = data.getAll().get(slot);
+        if (arr == null) return false;
 
-            for (int i = 0; i < arr.length; i++) {
-                InstalledCyberware cw = arr[i];
-                if (cw == null) continue;
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware cw = arr[i];
+            if (cw == null) continue;
 
-                ItemStack st = cw.getItem();
-                if (st == null || st.isEmpty()) continue;
+            ItemStack st = cw.getItem();
+            if (st == null || st.isEmpty()) continue;
 
-                if (st.getItem() instanceof SpinneretteItem) {
-                    // Optional: respect your enable/disable system.
-                    // If you want it to work even when disabled, remove this check.
-                    if (!data.isEnabled(slot, i)) continue;
-                    return true;
-                }
+            if (st.getItem() instanceof ArmSpinneretteItem) {
+                if (!data.isEnabled(slot, i)) continue;
+                return true;
             }
         }
 
@@ -117,7 +119,9 @@ public class SpinneretteItem extends Item implements ICyberwareItem {
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         Player player = event.getEntity();
         if (player == null || !player.isCrouching()) return;
-        if (!hasSpinneretteInstalled(player)) return;
+
+        CyberwareSlot slot = slotForHand(player, event.getHand());
+        if (!hasSpinneretteOnSide(player, slot)) return;
 
         Level level = event.getLevel();
         if (level.isClientSide) return;
@@ -137,7 +141,9 @@ public class SpinneretteItem extends Item implements ICyberwareItem {
     public static void onRightClickEntity(PlayerInteractEvent.EntityInteract event) {
         Player player = event.getEntity();
         if (player == null || !player.isCrouching()) return;
-        if (!hasSpinneretteInstalled(player)) return;
+
+        CyberwareSlot slot = slotForHand(player, event.getHand());
+        if (!hasSpinneretteOnSide(player, slot)) return;
 
         Level level = player.level();
         if (level.isClientSide) return;
@@ -149,5 +155,17 @@ public class SpinneretteItem extends Item implements ICyberwareItem {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.CONSUME);
         }
+    }
+
+    private static HumanoidArm armForHand(Player player, InteractionHand hand) {
+        HumanoidArm main = player.getMainArm();
+        if (hand == InteractionHand.MAIN_HAND) return main;
+        return (main == HumanoidArm.RIGHT) ? HumanoidArm.LEFT : HumanoidArm.RIGHT;
+    }
+
+    private static CyberwareSlot slotForHand(Player player, InteractionHand hand) {
+        return armForHand(player, hand) == HumanoidArm.LEFT
+                ? CyberwareSlot.LARM
+                : CyberwareSlot.RARM;
     }
 }

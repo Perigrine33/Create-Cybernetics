@@ -15,8 +15,10 @@
 
   "gui.robosurgeon.title": "Robosurgeon Interface",
   "gui.engineeringtable.title": "Engineering Table",
+  "gui.createcybernetics.grafting_table.title": "Grafting Table",
   "gui.armcannon.title": "Arm Cannon",
   "gui.spinalinjector.title": "Spinal Injector",
+  "gui.heatengine.title": "Heat Engine",
   "gui.chipwarecreative.title": "Creative Chiware Slots",
 
   "gui.chipware.button": "Chipware",
@@ -179,6 +181,9 @@
   "item.createcybernetics.bodypart_guardianretina": "Guardian Retina",
   "item.createcybernetics.bodypart_wardenesophagus": "Warden Esophagus",
   "item.createcybernetics.bodypart_gyroscopicbladder": "Gryoscopic Bladder",
+  "item.createcybernetics.bodypart_spinnerette": "Spider's Spinneret",
+  "item.createcybernetics.bodypart_firegland": "Igniphorus Gland",
+  "item.createcybernetics.bodypart_gills": "Fish Gills",
 
 
   "item.createcybernetics.basecyberware_rightleg_copperplated": "Copper Plated Right Cyberleg",
@@ -267,6 +272,7 @@
   "item.createcybernetics.organsupgrades_magiccatalyst": "Magic Catalyst",
   "item.createcybernetics.organsupgrades_metabolic": "Metabolic Converter",
   "item.createcybernetics.organsupgrade_densebattery": "Dense Battery",
+  "item.createcybernetics.organsupgrades_heatengine": "Heat Engine",
 
   "item.createcybernetics.skinupgrades_arterialturbine": "Arterial Turbine",
   "item.createcybernetics.skinupgrades_chromatophores": "Synthetic Chromatophores",
@@ -285,8 +291,8 @@
   "item.createcybernetics.muscleupgrades_wiredreflexes": "Wired Reflexes",
 
   "item.createcybernetics.wetware_blubber": "Polar Bear Fat",
-  "item.createcybernetics.wetware_firebreathinggland": "Igniphorus Gland",
-  "item.createcybernetics.wetware_gills": "Fish Gills",
+  "item.createcybernetics.wetware_firebreathinglungs": "Dragon Lungs",
+  "item.createcybernetics.wetware_waterbreathinglungs": "Waterbreathing Lungs",
   "item.createcybernetics.wetware_guardianeye": "Guardian Eye",
   "item.createcybernetics.wetware_polarbearfur": "Polar Bear Fur",
   "item.createcybernetics.wetware_ravagertendons": "Ravager Tendons",
@@ -294,7 +300,10 @@
   "item.createcybernetics.wetware_tacticalinksac": "Tactical Ink Sac",
   "item.createcybernetics.wetware_aerostasisgyrobladder": "Aerostatic Gryobladder",
   "item.createcybernetics.wetware_grassfedstomach": "Grassfed Stomach",
-  "item.createcybernetics.wetware_spinnerette": "Spider's Spinneret",
+  "item.createcybernetics.wetware_webshootingintestines": "Webshooting Intestines",
+  "item.createcybernetics.wetware_webshooting_leftarm": "Webshooting Left Arm",
+  "item.createcybernetics.wetware_webshooting_rightarm": "Webshooting Right Arm",
+  "item.createcybernetics.wetware_spidereyes": "Spider Eyes",
 
 
   "item.createcybernetics.scavenged_rightleg": "Right Cyberleg",
@@ -392,6 +401,7 @@
   "block.createcybernetics.robosurgeon": "Robosurgeon",
   "block.createcybernetics.surgery_chamber": "Surgery Chamber",
   "block.createcybernetics.engineering_table": "Engineering Table",
+  "block.createcybernetics.grafting_table": "Grafting Table",
   "block.createcybernetics.charging_block": "Charging Block",
 
   "block.createcybernetics.datura_bush": "Datura Bush",
@@ -411,6 +421,7 @@
   "key.createcybernetics.spinal_injector": "Open Spinal Injector",
   "key.createcybernetics.arm_cannon": "Open Arm Cannon",
   "key.createcybernetics.arm_cannon_wheel": "Open Arm Cannon Wheel",
+  "key.createcybernetics.heat_engine": "Open Heat Engine",
 
 
   "advancement.cybernetics": "Cybernetics",
@@ -714,6 +725,8 @@
           "tooltip.createcybernetics.organsupgrades_metabolic.energy": "Adds 25 Energy While Metabolizing",
       "tooltip.createcybernetics.organsupgrade_densebattery.tooltip1": "§1Stores a large amount of energy from a Charging Block",
       "tooltip.createcybernetics.organsupgrade_densebattery.energy": "Stores 5000 Energy From Charging Block",
+      "tooltip.createcybernetics.organsupgrades_heatengine.tooltip1": "§1Generates energy from burning fuels",
+          "tooltip.createcybernetics.organsupgrades_heatengine.energy": "Adds 50 energy from fuel",
 
       "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip1": "§1Generates energy from user movement",
           "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip2": "§3Stacks up to 4x",
@@ -740,8 +753,8 @@
       "tooltip.createcybernetics.muscleupgrades_wiredreflexes.energy": "Costs 3 Energy",
 
       "tooltip.createcybernetics.wetware_blubber.tooltip1": "§cInsulates the user against the cold",
-      "tooltip.createcybernetics.wetware_firebreathinggland.tooltip1": "§cAllows the user to shoot Dragon Fireballs",
-      "tooltip.createcybernetics.wetware_gills.tooltip1": "§cAllows the user to breathe underwater",
+      "tooltip.createcybernetics.wetware_firebreathinglungs.tooltip1": "§cAllows the user to shoot Dragon Fireballs",
+      "tooltip.createcybernetics.wetware_waterbreathinglungs.tooltip1": "§cAllows the user to breathe underwater",
       "tooltip.createcybernetics.wetware_guardianeye.tooltip1": "§cAllows the user to shoot Guardian Lasers",
       "tooltip.createcybernetics.wetware_polarbearfur.tooltip1": "§cNegates the freezing status effect",
       "tooltip.createcybernetics.wetware_ravagertendons.tooltip1": "§cProvides strength and durability to the user",
@@ -749,7 +762,9 @@
       "tooltip.createcybernetics.wetware_tacticalinksac.tooltip1": "§cUser inflicts blindness on attackers",
       "tooltip.createcybernetics.wetware_aerostasisgyrobladder.tooltip1": "§cUser gains some flight abilities",
       "tooltip.createcybernetics.wetware_grassfedstomach.tooltip1": "§cUser gains the ability to eat grass and wheat",
-      "tooltip.createcybernetics.wetware_spinnerette.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey"
-
+      "tooltip.createcybernetics.wetware_webshootingintestines.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey",
+      "tooltip.createcybernetics.wetware_webshooting_leftarm.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey",
+      "tooltip.createcybernetics.wetware_webshooting_rightarm.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey",
+      "tooltip.createcybernetics.wetware_spidereyes.tooltip1": "§cUser gains The visual abilities of a spider"
 
 }

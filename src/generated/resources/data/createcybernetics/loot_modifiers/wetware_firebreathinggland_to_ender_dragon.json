@@ -10,5 +10,5 @@
       "condition": "minecraft:random_chance"
     }
   ],
-  "item": "createcybernetics:wetware_firebreathinggland"
+  "item": "createcybernetics:bodypart_firegland"
 }

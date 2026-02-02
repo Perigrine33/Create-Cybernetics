@@ -88,7 +88,9 @@ public class ModEffects {
                                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "breathless_effect"), 0,
                                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         public static final Holder<MobEffect> SANDEVISTAN_EFFECT = MOB_EFFECTS.register("sandevistan_effect",
-                () -> new SandevistanEffect());
+                SandevistanEffect::new);
+        public static final Holder<MobEffect> SPIDER_EYES_EFFECT = MOB_EFFECTS.register("spider_eyes_effect",
+                SpiderEyesEffect::new);
 
 
     public static void register(IEventBus eventBus) {

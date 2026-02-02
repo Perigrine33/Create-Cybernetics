@@ -7,6 +7,7 @@
     "createcybernetics:organsupgrades_liverfilter",
     "createcybernetics:organsupgrades_magiccatalyst",
     "createcybernetics:organsupgrades_metabolic",
-    "createcybernetics:organsupgrade_densebattery"
+    "createcybernetics:organsupgrade_densebattery",
+    "createcybernetics:organsupgrades_heatengine"
   ]
 }
