@@ -263,14 +263,6 @@ public final class SurgeryController {
         }
     }
 
-    /**
-     * Cascades removals: if a cyberware item requires an item that was removed this surgery, and it no longer
-     * has any of its required items present, it gets force-removed (with refund/drop + onRemoved + change record).
-     *
-     * This function is intentionally conservative:
-     * - It only considers items that were installed BEFORE this surgery began.
-     * - It only triggers on requirements that intersect removedItemsThisSurgery.
-     */
     private static int forceRemoveDependents(
             Player player,
             RobosurgeonBlockEntity surgeon,
@@ -302,20 +294,42 @@ public final class SurgeryController {
                     if (!(installedStack.getItem() instanceof ICyberwareItem cw)) continue;
 
                     Set<Item> requiredItems = cw.requiresCyberware(installedStack, slot);
-                    if (requiredItems == null || requiredItems.isEmpty()) continue;
+                    Set<TagKey<Item>> requiredTags = cw.requiresCyberwareTags(installedStack, slot);
 
-                    // Only cascade if this item depended on something actually removed this surgery.
+                    boolean hasReqItems = requiredItems != null && !requiredItems.isEmpty();
+                    boolean hasReqTags  = requiredTags  != null && !requiredTags.isEmpty();
+
+                    if (!hasReqItems && !hasReqTags) continue;
+
                     boolean intersectsRemoved = false;
-                    for (Item req : requiredItems) {
-                        if (req != null && removedItemsThisSurgery.contains(req)) {
-                            intersectsRemoved = true;
-                            break;
+
+                    if (hasReqItems) {
+                        for (Item req : requiredItems) {
+                            if (req != null && removedItemsThisSurgery.contains(req)) {
+                                intersectsRemoved = true;
+                                break;
+                            }
                         }
                     }
+
+                    if (!intersectsRemoved && hasReqTags) {
+                        // If any removed item matches any required tag -> intersects
+                        for (TagKey<Item> tag : requiredTags) {
+                            if (tag == null) continue;
+                            if (anyRemovedItemMatchesTag(removedItemsThisSurgery, tag)) {
+                                intersectsRemoved = true;
+                                break;
+                            }
+                        }
+                    }
+
                     if (!intersectsRemoved) continue;
 
-                    // If any required item still exists anywhere, keep it.
-                    if (hasAnyInstalledItem(data, requiredItems)) continue;
+                    boolean itemsSatisfied = hasReqItems && hasAnyInstalledItem(data, requiredItems);
+                    boolean tagsSatisfied  = hasReqTags  && hasAnyInstalledItemWithAnyTag(data, requiredTags);
+
+                    if (itemsSatisfied || tagsSatisfied) continue;
+
 
                     // FORCE REMOVE
                     InstalledCyberware removed = data.remove(slot, i);
@@ -330,7 +344,7 @@ public final class SurgeryController {
 
                     Item removedItem = removed.getItem().getItem();
                     if (removedItem != null) {
-                        removedItemsThisSurgery.add(removedItem); // enable multi-level cascades
+                        removedItemsThisSurgery.add(removedItem);
                     }
 
                     removedChanges.add(new CyberwareSurgeryEvent.Change(slot, i, removed.getItem().copy()));
@@ -373,6 +387,38 @@ public final class SurgeryController {
             }
         }
 
+        return false;
+    }
+
+    private static boolean hasAnyInstalledItemWithAnyTag(PlayerCyberwareData data, Set<TagKey<Item>> tags) {
+        if (tags == null || tags.isEmpty()) return true;
+
+        for (var entry : data.getAll().entrySet()) {
+            InstalledCyberware[] arr = entry.getValue();
+            if (arr == null) continue;
+
+            for (InstalledCyberware inst : arr) {
+                if (inst == null || inst.getItem() == null) continue;
+                ItemStack st = inst.getItem();
+                if (st.isEmpty()) continue;
+
+                for (TagKey<Item> tag : tags) {
+                    if (tag != null && st.is(tag)) return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean anyRemovedItemMatchesTag(Set<Item> removedItems, TagKey<Item> tag) {
+        if (removedItems == null || removedItems.isEmpty()) return false;
+        if (tag == null) return false;
+
+        for (Item item : removedItems) {
+            if (item == null) continue;
+            if (new ItemStack(item).is(tag)) return true;
+        }
         return false;
     }
 

@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-26T14:30:03.3361808	Advancements
+// 1.21.1	2026-02-04T16:36:04.5657125	Advancements
 e04da642af951742161c867c54567aea48b10a1d data/createcybernetics/advancement/cyberware/boneless.json
 9ebb46919c8bdd33b37526ad70616de35b165949 data/createcybernetics/advancement/cyberware/bones_and_all.json
 07f4575e41338daafc8fede5581eef5d2ca9d329 data/createcybernetics/advancement/cyberware/chest_pains.json
@@ -12,7 +12,7 @@ d55dfceee49a14d5199f47b02191b0ef308d1b48 data/createcybernetics/advancement/cybe
 a84d3814d87171dad8abdf7375a282d93c50a50c data/createcybernetics/advancement/cyberware/first_ripperdoc_visit.json
 bacc2d49de35706fe0c65480455013b7e5e77399 data/createcybernetics/advancement/cyberware/first_scavenged_cyberware.json
 d24bdd399f27d2b43a433e312dc867747532e935 data/createcybernetics/advancement/cyberware/kung_fu.json
-132e89c446530ed8284fa5dd7917f8a109d23f53 data/createcybernetics/advancement/cyberware/lets_dance.json
+d847e46966d6046fd1af1fa91ebfb6775b41cf57 data/createcybernetics/advancement/cyberware/lets_dance.json
 446a76b789f7913a3bbb54be1136f5e49e543c55 data/createcybernetics/advancement/cyberware/liver_removed.json
 fee63f4b9506d92a57d6846673aea9a04c3e487e data/createcybernetics/advancement/cyberware/lungs_removed.json
 8e9852fce88b525e28908b252b81ab91426f3b93 data/createcybernetics/advancement/cyberware/missing_limbs.json

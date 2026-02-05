@@ -76,6 +76,8 @@ public final class CyberwareHudLayer {
     private static final float BATTERY_SCALE = 1.5f;
     private static final float VALUE_SCALE = 0.8f;
     private static final int VALUE_PADDING_PX = 2;
+
+    // Default "white" (kept), but now "white" is just fallback when not dyed.
     private static final int VALUE_COLOR = 0xFFFFFF;
     private static final int VALUE_COLOR_LOW = 0xFF5555;
     private static final boolean VALUE_SHADOW = true;
@@ -88,6 +90,10 @@ public final class CyberwareHudLayer {
     private static final int OXYGEN_TEXT_COLOR_LOW = 0xFF5555;
     private static final boolean OXYGEN_TEXT_SHADOW = true;
     private static final float OXYGEN_LOW_THRESHOLD = 0.25f;
+
+    // ---------- NEW: HUD tint behavior ----------
+    private static final int HUD_TINT_WHITE_ARGB = 0xFFFFFFFF;
+    private static final int HUD_TINT_LOW_RED_ARGB = 0xFFFF5555;
 
     @SubscribeEvent
     public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
@@ -106,10 +112,8 @@ public final class CyberwareHudLayer {
         int screenW = gg.guiWidth();
         int screenH = gg.guiHeight();
 
-        if (OVERLAY_DRAW_BEHIND_BATTERY) {
-            renderCenteredImageAutoFit(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, screenW, screenH,
-                    OVERLAY_MAX_SCREEN_FRACTION, OVERLAY_ALPHA);
-        }
+        // Resolve base tint (dyed -> that color, else white).
+        int hudTintArgb = resolveHudTintArgb(player);
 
         TickSnapshot s = ClientEnergyState.getSnapshot();
 
@@ -132,19 +136,30 @@ public final class CyberwareHudLayer {
         float pct = Mth.clamp(current / (float) capForPct, 0f, 1f);
         boolean low = pct <= LOW_THRESHOLD;
 
+        // Battery visuals are overridden by red when low.
+        int batteryTintArgb = low ? HUD_TINT_LOW_RED_ARGB : hudTintArgb;
+
+        // Overlay/spinner: tinted like the HUD; you can swap to batteryTintArgb if you want it to go red on low.
+        if (OVERLAY_DRAW_BEHIND_BATTERY) {
+            renderCenteredImageAutoFitTinted(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, screenW, screenH,
+                    OVERLAY_MAX_SCREEN_FRACTION, OVERLAY_ALPHA, hudTintArgb);
+        }
+
         int scaledW = Math.round(TEX_W * BATTERY_SCALE);
         int scaledH = Math.round(TEX_H * BATTERY_SCALE);
 
         int x = MARGIN_X;
         int y = screenH - scaledH - MARGIN_Y;
 
-        renderEnergyValueAboveBattery(gg, mc, current, capacity, x, y, scaledW, low);
-        renderBatteryScaled(gg, x, y, current, capForPct, net);
-        renderCopernicusOxygenIndicator(gg, mc, player, screenW, screenH);
+        renderEnergyValueAboveBatteryTinted(gg, mc, current, capacity, x, y, scaledW, low, hudTintArgb);
+        renderBatteryScaledTinted(gg, x, y, current, capForPct, net, low, batteryTintArgb);
+
+        // Oxygen text: overridden by red when oxygen low; otherwise tinted.
+        renderCopernicusOxygenIndicatorTinted(gg, mc, player, screenW, screenH, hudTintArgb);
 
         if (!OVERLAY_DRAW_BEHIND_BATTERY) {
-            renderCenteredImageAutoFit(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, screenW, screenH,
-                    OVERLAY_MAX_SCREEN_FRACTION, OVERLAY_ALPHA);
+            renderCenteredImageAutoFitTinted(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, screenW, screenH,
+                    OVERLAY_MAX_SCREEN_FRACTION, OVERLAY_ALPHA, hudTintArgb);
         }
     }
 
@@ -166,7 +181,9 @@ public final class CyberwareHudLayer {
             partialTick = 0.0f;
         }
 
-        renderSpinningCenteredImageAutoFit(
+        int hudTintArgb = resolveHudTintArgb(player);
+
+        renderSpinningCenteredImageAutoFitTinted(
                 gg,
                 CENTER_SPINNER,
                 SPINNER_W, SPINNER_H,
@@ -177,12 +194,52 @@ public final class CyberwareHudLayer {
                 partialTick,
                 SPINNER_DEG_PER_SECOND,
                 SPINNER_OFFSET_X_PX,
-                SPINNER_OFFSET_Y_PX
+                SPINNER_OFFSET_Y_PX,
+                hudTintArgb
         );
     }
 
-    private static void renderCenteredImageAutoFit(GuiGraphics gg, ResourceLocation tex, int texW, int texH,
-                                                   int screenW, int screenH, float maxScreenFraction, float alpha) {
+    // -------------------- NEW: tint resolution --------------------
+
+    /**
+     * Base HUD tint:
+     * - If Cybereyes are dyed, use that dye.
+     * - Otherwise fallback to white.
+     *
+     * Battery/Oxygen "low" states override this elsewhere with red.
+     */
+    private static int resolveHudTintArgb(LocalPlayer player) {
+        var data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return HUD_TINT_WHITE_ARGB;
+
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)
+                && data.isDyed(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
+
+            int rgb = data.dyeColor(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES);
+            return (rgb & 0x00FFFFFF) | 0xFF000000;
+        }
+
+        return HUD_TINT_WHITE_ARGB;
+    }
+
+    private static int argbWithAlphaFromFloat(int argb, float alpha) {
+        int a = Mth.clamp(Math.round(alpha * 255f), 0, 255);
+        return (argb & 0x00FFFFFF) | (a << 24);
+    }
+
+    private static void setShaderColorFromArgb(int argb) {
+        float a = ((argb >>> 24) & 0xFF) / 255f;
+        float r = ((argb >>> 16) & 0xFF) / 255f;
+        float g = ((argb >>> 8) & 0xFF) / 255f;
+        float b = (argb & 0xFF) / 255f;
+        RenderSystem.setShaderColor(r, g, b, a);
+    }
+
+    // -------------------- Tinted overlay render --------------------
+
+    private static void renderCenteredImageAutoFitTinted(GuiGraphics gg, ResourceLocation tex, int texW, int texH,
+                                                         int screenW, int screenH, float maxScreenFraction, float alpha,
+                                                         int tintArgb) {
         float sx = (screenW * maxScreenFraction) / (float) texW;
         float sy = (screenH * maxScreenFraction) / (float) texH;
         float scale = Math.min(sx, sy);
@@ -200,7 +257,9 @@ public final class CyberwareHudLayer {
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
+
+        int argb = argbWithAlphaFromFloat(tintArgb, alpha);
+        setShaderColorFromArgb(argb);
 
         gg.blit(tex, 0, 0, 0, 0, texW, texH, texW, texH);
 
@@ -210,8 +269,13 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    private static void renderSpinningCenteredImageAutoFit(GuiGraphics gg, ResourceLocation tex, int texW, int texH, int screenW, int screenH,
-                                                           float maxScreenFraction, float alpha, int tickCount, float partialTick, float degPerSecond, float offsetXPx, float offsetYPx) {
+    private static void renderSpinningCenteredImageAutoFitTinted(GuiGraphics gg, ResourceLocation tex, int texW, int texH,
+                                                                 int screenW, int screenH,
+                                                                 float maxScreenFraction, float alpha,
+                                                                 int tickCount, float partialTick,
+                                                                 float degPerSecond,
+                                                                 float offsetXPx, float offsetYPx,
+                                                                 int tintArgb) {
         float sx = (screenW * maxScreenFraction) / (float) texW;
         float sy = (screenH * maxScreenFraction) / (float) texH;
         float scale = Math.min(sx, sy);
@@ -228,7 +292,9 @@ public final class CyberwareHudLayer {
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
+
+        int argb = argbWithAlphaFromFloat(tintArgb, alpha);
+        setShaderColorFromArgb(argb);
 
         gg.blit(tex, 0, 0, 0, 0, texW, texH, texW, texH);
 
@@ -238,11 +304,14 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    private static void renderEnergyValueAboveBattery(
+    // -------------------- Tinted battery + text --------------------
+
+    private static void renderEnergyValueAboveBatteryTinted(
             GuiGraphics gg, Minecraft mc,
             int current, int capacity,
             int batteryX, int batteryY, int scaledBatteryW,
-            boolean low
+            boolean low,
+            int hudTintArgb
     ) {
         String text = current + "/" + capacity;
 
@@ -252,7 +321,11 @@ public final class CyberwareHudLayer {
         int scaledTextW = Math.round(mc.font.width(text) * VALUE_SCALE);
         int textX = batteryX + (scaledBatteryW / 2) - (scaledTextW / 2);
 
-        int color = low ? VALUE_COLOR_LOW : VALUE_COLOR;
+        // Text tint:
+        // - low => red override
+        // - else => dye tint (RGB) if dyed, else white (matches current behavior)
+        int rgbTint = hudTintArgb & 0x00FFFFFF;
+        int color = low ? VALUE_COLOR_LOW : (rgbTint != 0 ? rgbTint : VALUE_COLOR);
 
         gg.pose().pushPose();
         gg.pose().translate(textX, textY, 0);
@@ -261,15 +334,52 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    private static void renderBatteryScaled(GuiGraphics gg, int x, int y, int currentPower, int maxPower, int netPowerPerTick) {
+    private static void renderBatteryScaledTinted(GuiGraphics gg, int x, int y,
+                                                  int currentPower, int maxPower, int netPowerPerTick,
+                                                  boolean low,
+                                                  int tintArgb) {
         gg.pose().pushPose();
         gg.pose().translate(x, y, 0);
         gg.pose().scale(BATTERY_SCALE, BATTERY_SCALE, 1.0f);
-        renderBattery(gg, 0, 0, currentPower, maxPower, netPowerPerTick);
+        renderBatteryTinted(gg, 0, 0, currentPower, maxPower, netPowerPerTick, low, tintArgb);
         gg.pose().popPose();
     }
 
-    private static void renderCopernicusOxygenIndicator(GuiGraphics gg, Minecraft mc, LocalPlayer player, int screenW, int screenH) {
+    private static void renderBatteryTinted(GuiGraphics gg, int x, int y,
+                                            int currentPower, int maxPower, int netPowerPerTick,
+                                            boolean low,
+                                            int tintArgb) {
+        float pct = (maxPower <= 0) ? 0f : (currentPower / (float) maxPower);
+        pct = Mth.clamp(pct, 0f, 1f);
+
+        int fillPx = Math.round(pct * INNER_H);
+        fillPx = Mth.clamp(fillPx, 0, INNER_H);
+
+        int usedPx = INNER_H - fillPx;
+
+        ResourceLocation frame = low ? FRAME_EMPTY : FRAME;
+        ResourceLocation bars1 = low ? BARS1_EMPTY : BARS1;
+        ResourceLocation bars2 = low ? BARS2_EMPTY : BARS2;
+
+        if (fillPx > 0) {
+            int dstX = x + INNER_X;
+            int dstY = y + INNER_Y + usedPx;
+
+            int srcU = INNER_X;
+            int srcV = INNER_Y + usedPx;
+
+            blitTinted(gg, bars2, dstX, dstY, srcU, srcV, INNER_W, fillPx, TEX_W, TEX_H, tintArgb);
+            blitTinted(gg, bars1, dstX, dstY, srcU, srcV, INNER_W, fillPx, TEX_W, TEX_H, tintArgb);
+        }
+
+        blitTinted(gg, frame, x, y, 0, 0, TEX_W, TEX_H, TEX_W, TEX_H, tintArgb);
+    }
+
+    // -------------------- Tinted Copernicus oxygen --------------------
+
+    private static void renderCopernicusOxygenIndicatorTinted(GuiGraphics gg, Minecraft mc, LocalPlayer player,
+                                                              int screenW, int screenH,
+                                                              int hudTintArgb) {
         if (!CopernicusSuitPredicate.hasCopernicusSetInstalled(player)) return;
 
         int oxygen = ClientCopernicusOxygenState.get();
@@ -280,7 +390,8 @@ public final class CyberwareHudLayer {
         float pct = (max <= 0) ? 0f : (oxygen / (float) max);
         boolean low = pct <= OXYGEN_LOW_THRESHOLD;
 
-        int color = low ? OXYGEN_TEXT_COLOR_LOW : OXYGEN_TEXT_COLOR;
+        int rgbTint = hudTintArgb & 0x00FFFFFF;
+        int color = low ? OXYGEN_TEXT_COLOR_LOW : (rgbTint != 0 ? rgbTint : OXYGEN_TEXT_COLOR);
 
         int airRightX = (screenW / 2) + 91;
         int airY = screenH - 52;
@@ -298,6 +409,28 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
+    // -------------------- Generic tinted blit helper --------------------
+
+    private static void blitTinted(GuiGraphics gg, ResourceLocation tex,
+                                   int x, int y, int u, int v, int w, int h,
+                                   int texW, int texH,
+                                   int argb) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        setShaderColorFromArgb(argb);
+        gg.blit(tex, x, y, u, v, w, h, texW, texH);
+
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        RenderSystem.disableBlend();
+    }
+
+    // Kept for compatibility (unused by the tinted battery path now)
+    @SuppressWarnings("unused")
+    private static void blit(GuiGraphics gg, ResourceLocation tex, int x, int y, int u, int v, int w, int h) {
+        gg.blit(tex, x, y, u, v, w, h, TEX_W, TEX_H);
+    }
+
     public static final class CyberwareInstallQueries {
         private CyberwareInstallQueries() {}
 
@@ -308,39 +441,6 @@ public final class CyberwareHudLayer {
             return data.hasSpecificItem(ModItems.EYEUPGRADES_HUDLENS.get(), CyberwareSlot.EYES)
                     || data.hasSpecificItem(ModItems.EYEUPGRADES_HUDJACK.get(), CyberwareSlot.EYES);
         }
-    }
-
-    private static void renderBattery(GuiGraphics gg, int x, int y, int currentPower, int maxPower, int netPowerPerTick) {
-        float pct = (maxPower <= 0) ? 0f : (currentPower / (float) maxPower);
-        pct = Mth.clamp(pct, 0f, 1f);
-
-        int fillPx = Math.round(pct * INNER_H);
-        fillPx = Mth.clamp(fillPx, 0, INNER_H);
-
-        int usedPx = INNER_H - fillPx;
-
-        boolean low = pct <= LOW_THRESHOLD;
-
-        ResourceLocation frame = low ? FRAME_EMPTY : FRAME;
-        ResourceLocation bars1 = low ? BARS1_EMPTY : BARS1;
-        ResourceLocation bars2 = low ? BARS2_EMPTY : BARS2;
-
-        if (fillPx > 0) {
-            int dstX = x + INNER_X;
-            int dstY = y + INNER_Y + usedPx;
-
-            int srcU = INNER_X;
-            int srcV = INNER_Y + usedPx;
-
-            blit(gg, bars2, dstX, dstY, srcU, srcV, INNER_W, fillPx);
-            blit(gg, bars1, dstX, dstY, srcU, srcV, INNER_W, fillPx);
-        }
-
-        blit(gg, frame, x, y, 0, 0, TEX_W, TEX_H);
-    }
-
-    private static void blit(GuiGraphics gg, ResourceLocation tex, int x, int y, int u, int v, int w, int h) {
-        gg.blit(tex, x, y, u, v, w, h, TEX_W, TEX_H);
     }
 
     public record TickSnapshot(

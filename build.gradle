@@ -119,6 +119,10 @@ repositories {
         name = "C4's Maven"
         url = "https://maven.theillusivec4.top/"
     }
+    maven {
+        name = "Iron's Maven - Release"
+        url = "https://code.redspace.io/releases"
+    }
 }
 
 dependencies {
@@ -127,6 +131,7 @@ dependencies {
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
+
     implementation ("curse.maven:create-enchantment-industry-688768:7216917")
     implementation ("curse.maven:create-dragons-plus-1216624:7231493")
 
@@ -146,7 +151,11 @@ dependencies {
     implementation "curse.maven:northstar-redux-1318310:7476517"
     implementation "curse.maven:geckolib-388172:7415496"
 
-    implementation "curse.maven:female-gender-neoforge-481655:5579007"
+    compileOnly "io.redspace:irons_spellbooks:1.21.1-3.15.2:api"
+    localRuntime "io.redspace:irons_spellbooks:1.21.1-3.15.2"
+
+    compileOnly "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1:api"
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

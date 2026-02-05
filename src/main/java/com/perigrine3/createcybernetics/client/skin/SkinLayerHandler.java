@@ -62,20 +62,24 @@ public final class SkinLayerHandler extends RenderLayer<AbstractClientPlayer, Pl
         try {
             for (SkinModifier modifier : state.getModifiers()) {
                 poseStack.pushPose();
-
-                float scale = 1.0F;
-                poseStack.scale(scale, scale, scale);
+                poseStack.scale(1.0F, 1.0F, 1.0F);
 
                 PlayerSkin.Model modelType = player.getSkin().model();
                 ResourceLocation texture = modifier.getTexture(modelType);
 
                 int color = modifier.getColor();
 
-                var vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
-                model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, color);
+                var baseVc = buffer.getBuffer(RenderType.entityTranslucent(texture));
+                model.renderToBuffer(poseStack, baseVc, packedLight, OverlayTexture.NO_OVERLAY, color);
+
+                if (modifier.hasGlint()) {
+                    var glintVc = buffer.getBuffer(RenderType.entityGlint());
+                    model.renderToBuffer(poseStack, glintVc, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                }
 
                 poseStack.popPose();
             }
+
         } finally {
             model.hat.visible = prevHat;
             model.jacket.visible = prevJacket;

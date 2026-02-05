@@ -37,6 +37,11 @@ public final class CyberneticsCommand {
     private static final String KEY_REMOVE_OK    = "commands.createcybernetics.implants.remove_success";
     private static final String KEY_CLEAR_OK     = "commands.createcybernetics.implants.clear_success";
 
+    // ---- Persistent key + translation key for Energy Debug ----
+    private static final String PKEY_ENERGY_DEBUG = "cc_energy_debug_enabled";
+    private static final String KEY_ENERGY_DEBUG_SET = "commands.createcybernetics.energy_debug.set";
+
+
     private static final SuggestionProvider<CommandSourceStack> CYBERWARE_ITEM_SUGGESTIONS =
             (context, builder) -> SharedSuggestionProvider.suggestResource(
                     BuiltInRegistries.ITEM.entrySet().stream()
@@ -116,6 +121,21 @@ public final class CyberneticsCommand {
                                         )
                                 )
 
+                                .then(Commands.literal("energyDebug")
+                                        .then(Commands.argument("value", BoolArgumentType.bool())
+                                                .executes(c -> {
+                                                    ServerPlayer target = c.getSource().getPlayerOrException();
+                                                    boolean value = BoolArgumentType.getBool(c, "value");
+                                                    setEnergyDebug(target, value);
+
+                                                    Component state = Component.translatable(value ? "options.on" : "options.off");
+                                                    c.getSource().sendSuccess(
+                                                            () -> Component.translatable(KEY_ENERGY_DEBUG_SET, state),
+                                                            false);
+                                                    return 1;
+                                })
+                        )
+                )
         );
     }
 
@@ -207,4 +227,9 @@ public final class CyberneticsCommand {
         src.sendSuccess(() -> Component.translatable(KEY_CLEAR_OK, target.getDisplayName()), false);
         return 1;
     }
+
+    private static void setEnergyDebug(ServerPlayer player, boolean value) {
+        player.getPersistentData().putBoolean(PKEY_ENERGY_DEBUG, value);
+    }
+
 }

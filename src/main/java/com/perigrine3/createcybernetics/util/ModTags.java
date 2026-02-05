@@ -83,6 +83,11 @@ public class ModTags {
         public static final TagKey<Item> RIGHTARM_REPLACEMENTS = createTag("rightarm_replacements");
         public static final TagKey<Item> LEFTLEG_REPLACEMENTS = createTag("leftleg_replacements");
         public static final TagKey<Item> RIGHTLEG_REPLACEMENTS = createTag("rightleg_replacements");
+
+        public static final TagKey<Item> MEAT_LIMBS = createTag("meat_limbs");
+        public static final TagKey<Item> MEAT_ARMS = createTag("meat_arms");
+        public static final TagKey<Item> MEAT_LEGS = createTag("meat_legs");
+
         public static final TagKey<Item> DEFAULTS_FAIL_AS_MISSING_WHEN_UNPOWERED = createTag("defaults_fail_as_missing_when_unpowered");
 
         private static TagKey<Item> createTag(String name) {

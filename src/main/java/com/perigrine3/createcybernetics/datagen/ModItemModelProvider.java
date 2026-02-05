@@ -204,6 +204,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BRAINUPGRADES_CYBERDECK.get());
         basicItem(ModItems.BRAINUPGRADES_IDEM.get());
         basicItem(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get());
+
+            if (ModItems.BRAINUPGRADES_SPELLJAMMER != null) {
+                basicItem(ModItems.BRAINUPGRADES_SPELLJAMMER.get());
+            }
     }
 
 //HEART
@@ -233,6 +237,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.ORGANSUPGRADES_METABOLIC.get());
         basicItem(ModItems.ORGANSUPGRADES_DENSEBATTERY.get());
         basicItem(ModItems.ORGANSUPGRADES_HEATENGINE.get());
+            if (ModItems.ORGANSUPGRADES_MANABATTERY != null) {
+                basicItem(ModItems.ORGANSUPGRADES_MANABATTERY.get());
+            }
     }
 
 //SKIN
@@ -250,6 +257,9 @@ public class ModItemModelProvider extends ItemModelProvider {
 
             if (ModItems.SKINUPGRADES_SWEAT != null) {
                 basicItem(ModItems.SKINUPGRADES_SWEAT.get());
+            }
+            if (ModItems.SKINUPGRADES_MANASKIN != null) {
+                basicItem(ModItems.SKINUPGRADES_MANASKIN.get());
             }
     }
 

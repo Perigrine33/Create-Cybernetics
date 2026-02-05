@@ -1361,6 +1361,21 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
+    public static final DeferredItem<Item> BRAINUPGRADES_SPELLJAMMER = registerIfLoaded("irons_spellbooks", "brainupgrades_spelljammer",
+        () -> new SpellJammerItem(new Item.Properties().stacksTo(1), 6) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_spelljammer.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_spelljammer.tooltip2"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
 
 //HEART UPGRADES
     public static final DeferredItem<Item> HEARTUPGRADES_CYBERHEART = ITEMS.register("heartupgrades_cyberheart",
@@ -1614,6 +1629,20 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
+    public static final DeferredItem<Item> ORGANSUPGRADES_MANABATTERY = registerIfLoaded("irons_spellbooks", "organsupgrades_manabattery",
+        () -> new ManaBatteryItem(new Item.Properties().stacksTo(1), 5) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.organsupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.organsupgrades_manabattery.tooltip1"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.organsupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
 
 //SKIN UPGRADES
     public static final DeferredItem<Item> SKINUPGRADES_ARTERIALTURBINE = ITEMS.register("skinupgrades_arterialturbine",
@@ -1765,6 +1794,20 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_metalplating.tooltip1"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
+    public static final DeferredItem<Item> SKINUPGRADES_MANASKIN = registerIfLoaded("irons_spellbooks", "skinupgrades_manaskin",
+        () -> new ManaSkinItem(new Item.Properties().stacksTo(1), 5) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_manaskin.tooltip1"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));

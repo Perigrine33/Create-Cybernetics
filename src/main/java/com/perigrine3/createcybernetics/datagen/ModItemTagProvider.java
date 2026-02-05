@@ -145,9 +145,12 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.MUSCLEUPGRADES_WIREDREFLEXES.get())
                 .addOptional(resourceLocation("createcybernetics:boneupgrades_elytra"))
                 .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"))
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_manaskin"))
                 .addOptional(resourceLocation("createcybernetics:eyeupgrades_navigationchip"))
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_consciousnesstransmitter"))
-                .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"));
+                .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"))
+                .addOptional(resourceLocation("createcybernetics:brainupgrades_spelljammer"))
+                .addOptional(resourceLocation("createcybernetics:organsupgrades_manabattery"));
 
 //BODYPART DROPS
         tag(ModTags.Items.BODYPART_DROPS)
@@ -295,7 +298,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get())
                 .add(ModItems.SKINUPGRADES_SYNTHETICSETULES.get())
                 .add(ModItems.SKINUPGRADES_METALPLATING.get())
-                .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"));
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"))
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_manaskin"));
 //ORGAN UPGRADES
         tag(ModTags.Items.ORGAN_UPGRADES)
                 .add(ModItems.ORGANSUPGRADES_ADRENALINE.get())
@@ -306,7 +310,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.ORGANSUPGRADES_MAGICCATALYST.get())
                 .add(ModItems.ORGANSUPGRADES_METABOLIC.get())
                 .add(ModItems.ORGANSUPGRADES_DENSEBATTERY.get())
-                .add(ModItems.ORGANSUPGRADES_HEATENGINE.get());
+                .add(ModItems.ORGANSUPGRADES_HEATENGINE.get())
+                .addOptional(resourceLocation("createcybernetics:organsupgrades_manabattery"));
 //HEART UPGRADES
         tag(ModTags.Items.HEART_UPGRADES)
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get())
@@ -340,7 +345,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_IDEM.get())
                 .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_consciousnesstransmitter"))
-                .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"));
+                .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"))
+                .addOptional(resourceLocation("createcybernetics:brainupgrades_spelljammer"));
 
 //MUSCLE UPGRADES
         tag(ModTags.Items.MUSCLE_UPGRADES)
@@ -453,7 +459,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
                 .add(ModItems.BODYPART_SKIN.get())
-                .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"));
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"))
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_manaskin"));
 
         tag(ModTags.Items.MUSCLE_ITEMS)
                 .add(ModItems.WETWARE_RAVAGERTENDONS.get())
@@ -524,7 +531,16 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_CYBEREYES.get());
 
         tag(ModTags.Items.SKIN_REPLACEMENTS)
-                .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get());
+                .add(ModItems.SKINUPGRADES_METALPLATING.get())
+                .add(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get())
+                .add(ModItems.SKINUPGRADES_SUBDERMALARMOR.get())
+                .add(ModItems.SKINUPGRADES_SOLARSKIN.get())
+                .add(ModItems.SKINUPGRADES_NETHERITEPLATING.get())
+                .add(ModItems.SKINUPGRADES_SYNTHSKIN.get())
+                .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
+                .add(ModItems.WETWARE_POLARBEARFUR.get())
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"))
+                .addOptional(resourceLocation("createcybernetics:skinupgrades_manaskin"));
 
         tag(ModTags.Items.MUSCLE_REPLACEMENTS)
                 .add(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get());
@@ -564,6 +580,21 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTLEG.get());
+
+
+        tag(ModTags.Items.MEAT_LIMBS)
+                .add(ModItems.BODYPART_LEFTLEG.get())
+                .add(ModItems.BODYPART_LEFTARM.get())
+                .add(ModItems.BODYPART_RIGHTLEG.get())
+                .add(ModItems.BODYPART_RIGHTARM.get());
+
+        tag(ModTags.Items.MEAT_LEGS)
+                .add(ModItems.BODYPART_LEFTLEG.get())
+                .add(ModItems.BODYPART_RIGHTLEG.get());
+
+        tag(ModTags.Items.MEAT_ARMS)
+                .add(ModItems.BODYPART_LEFTARM.get())
+                .add(ModItems.BODYPART_RIGHTARM.get());
 
 
         tag(ModTags.Items.DEFAULTS_FAIL_AS_MISSING_WHEN_UNPOWERED)

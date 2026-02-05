@@ -17,33 +17,36 @@ public class SkinModifier {
     private final int color;
     private final boolean hideVanillaLayers;
     private final EnumSet<HideVanilla> hideMask;
-
     private final EnumSet<HumanoidArm> replaceVanillaArms;
-
     private final boolean needsPlayerSkinUnderlay;
+    private final boolean glint;
 
     public SkinModifier(ResourceLocation wideTexture, ResourceLocation slimTexture) {
         this(wideTexture, slimTexture, FastColor.ARGB32.color(255, 255, 255, 255),
-                true, EnumSet.noneOf(HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), false);
+                false, false, EnumSet.noneOf(HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), false);
     }
 
     public SkinModifier(ResourceLocation wideTexture, ResourceLocation slimTexture, int color, boolean hideVanillaLayers) {
-        this(wideTexture, slimTexture, color, hideVanillaLayers, EnumSet.noneOf(HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), false);
-    }
-
-    public SkinModifier(ResourceLocation wideTexture, ResourceLocation slimTexture, int color, boolean hideVanillaLayers, EnumSet<HideVanilla> hideMask) {
-        this(wideTexture, slimTexture, color, hideVanillaLayers, hideMask, EnumSet.noneOf(HumanoidArm.class), false);
-    }
-
-    public SkinModifier(ResourceLocation wideTexture, ResourceLocation slimTexture, int color, boolean hideVanillaLayers, EnumSet<HideVanilla> hideMask, EnumSet<HumanoidArm> replaceVanillaArms) {
-        this(wideTexture, slimTexture, color, hideVanillaLayers, hideMask, replaceVanillaArms, false);
+        this(wideTexture, slimTexture, color, false, hideVanillaLayers, EnumSet.noneOf(HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), false);
     }
 
     public SkinModifier(ResourceLocation wideTexture, ResourceLocation slimTexture, int color, boolean hideVanillaLayers,
+                        EnumSet<HideVanilla> hideMask) {
+        this(wideTexture, slimTexture, color, false, hideVanillaLayers, hideMask, EnumSet.noneOf(HumanoidArm.class), false);
+    }
+
+    public SkinModifier(ResourceLocation wideTexture, ResourceLocation slimTexture, int color, boolean hideVanillaLayers,
+                        EnumSet<HideVanilla> hideMask, EnumSet<HumanoidArm> replaceVanillaArms) {
+        this(wideTexture, slimTexture, color, false, hideVanillaLayers, hideMask, replaceVanillaArms, false);
+    }
+
+
+    public SkinModifier(ResourceLocation wideTexture, ResourceLocation slimTexture, int color, boolean glint, boolean hideVanillaLayers,
                         EnumSet<HideVanilla> hideMask, EnumSet<HumanoidArm> replaceVanillaArms, boolean needsPlayerSkinUnderlay) {
         this.wideTexture = wideTexture;
         this.slimTexture = slimTexture;
         this.color = color;
+        this.glint = glint;
         this.hideVanillaLayers = hideVanillaLayers;
         this.hideMask = (hideMask == null) ? EnumSet.noneOf(HideVanilla.class) : hideMask.clone();
         this.replaceVanillaArms = (replaceVanillaArms == null) ? EnumSet.noneOf(HumanoidArm.class) : replaceVanillaArms.clone();
@@ -72,5 +75,9 @@ public class SkinModifier {
 
     public boolean needsPlayerSkinUnderlay() {
         return needsPlayerSkinUnderlay;
+    }
+
+    public boolean hasGlint() {
+        return glint;
     }
 }

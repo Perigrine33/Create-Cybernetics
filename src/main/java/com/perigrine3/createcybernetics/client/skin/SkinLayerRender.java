@@ -280,11 +280,22 @@ public final class SkinLayerRender {
 
                 for (SkinModifier modifier : state.getModifiers()) {
                     ResourceLocation overlayTex = modifier.getTexture(modelType);
-                    var vc = buffer.getBuffer(RenderType.entityTranslucent(overlayTex));
 
+                    var vc = buffer.getBuffer(RenderType.entityTranslucent(overlayTex));
                     int color = modifier.getColor();
+
                     armPart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
-                    sleevePart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                    if (!hideSleeve) {
+                        sleevePart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                    }
+
+                    if (modifier.hasGlint()) {
+                        var glintVc = buffer.getBuffer(RenderType.entityGlint());
+                        armPart.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                        if (!hideSleeve) {
+                            sleevePart.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                        }
+                    }
                 }
 
                 RenderSystem.colorMask(true, true, true, true);

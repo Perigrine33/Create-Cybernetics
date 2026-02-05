@@ -1,5 +1,20 @@
 {
   "values": [
-    "createcybernetics:skinupgrades_chromatophores"
+    "createcybernetics:skinupgrades_metalplating",
+    "createcybernetics:skinupgrades_subdermalspikes",
+    "createcybernetics:skinupgrades_subdermalarmor",
+    "createcybernetics:skinupgrades_solarskin",
+    "createcybernetics:skinupgrades_netheriteplating",
+    "createcybernetics:skinupgrades_synthskin",
+    "createcybernetics:skinupgrades_chromatophores",
+    "createcybernetics:wetware_polarbearfur",
+    {
+      "id": "createcybernetics:skinupgrades_sweat",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:skinupgrades_manaskin",
+      "required": false
+    }
   ]
 }

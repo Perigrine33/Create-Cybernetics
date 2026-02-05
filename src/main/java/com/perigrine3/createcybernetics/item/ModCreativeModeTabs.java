@@ -275,6 +275,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BRAINUPGRADES_CYBERDECK);
                         output.accept(ModItems.BRAINUPGRADES_IDEM);
                         output.accept(ModItems.BRAINUPGRADES_CHIPWARESLOTS);
+
+                        if (ModItems.BRAINUPGRADES_SPELLJAMMER != null) {
+                            output.accept(ModItems.BRAINUPGRADES_SPELLJAMMER);
+                        }
                     //HEART UPGRADES
                         output.accept(ModItems.HEARTUPGRADES_CYBERHEART);
                         output.accept(ModItems.HEARTUPGRADES_COUPLER);
@@ -295,6 +299,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ORGANSUPGRADES_METABOLIC);
                         output.accept(ModItems.ORGANSUPGRADES_DENSEBATTERY);
                         output.accept(ModItems.ORGANSUPGRADES_HEATENGINE);
+
+                        if (ModItems.ORGANSUPGRADES_MANABATTERY != null) {
+                            output.accept(ModItems.ORGANSUPGRADES_MANABATTERY);
+                        }
                     //SKIN UPGRADES
                         output.accept(ModItems.SKINUPGRADES_ARTERIALTURBINE);
                         output.accept(ModItems.SKINUPGRADES_CHROMATOPHORES);
@@ -310,6 +318,9 @@ public class ModCreativeModeTabs {
 
                         if (ModItems.SKINUPGRADES_SWEAT != null) {
                             output.accept(ModItems.SKINUPGRADES_SWEAT);
+                        }
+                        if (ModItems.SKINUPGRADES_MANASKIN != null) {
+                            output.accept(ModItems.SKINUPGRADES_MANASKIN);
                         }
 
                     //MUSCLE UPGRADES

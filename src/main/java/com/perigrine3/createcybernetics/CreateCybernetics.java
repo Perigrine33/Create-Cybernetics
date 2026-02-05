@@ -6,6 +6,8 @@ import com.perigrine3.createcybernetics.block.entity.ModBlockEntities;
 import com.perigrine3.createcybernetics.common.attributes.ModAttributes;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.compat.CompatBootstrap;
+import com.perigrine3.createcybernetics.compat.ironsspells.IronsSpellbooksCastSuppressCompat;
+import com.perigrine3.createcybernetics.compat.ironsspells.IronsSpellbooksCyberwareAttributes;
 import com.perigrine3.createcybernetics.component.ModDataComponents;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.effect.PneumaticCalvesEffect;
@@ -92,6 +94,7 @@ public class CreateCybernetics {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
+        IronsSpellbooksCyberwareAttributes.register();
 
     }
 

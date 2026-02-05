@@ -79,6 +79,10 @@
       "required": false
     },
     {
+      "id": "createcybernetics:skinupgrades_manaskin",
+      "required": false
+    },
+    {
       "id": "createcybernetics:eyeupgrades_navigationchip",
       "required": false
     },
@@ -88,6 +92,14 @@
     },
     {
       "id": "createcybernetics:brainupgrades_corticalstack",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:brainupgrades_spelljammer",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:organsupgrades_manabattery",
       "required": false
     }
   ]

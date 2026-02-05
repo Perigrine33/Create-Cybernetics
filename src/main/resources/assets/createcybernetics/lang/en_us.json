@@ -12,6 +12,8 @@
   "commands.createcybernetics.implants.clear_success": "Cleared all cyberware and restored default organs for %s.",
   "command.createcybernetics.keep_cyberware.query": "Keep Cyberware set to %s (runtime only).",
   "command.createcybernetics.keep_cyberware.set": "Keep Cyberware is currently %s (runtime only, to make permanent, change in config).",
+  "commands.createcybernetics.energy_debug.set": "Energy Debug: %s",
+
 
   "gui.robosurgeon.title": "Robosurgeon Interface",
   "gui.engineeringtable.title": "Engineering Table",
@@ -253,6 +255,7 @@
   "item.createcybernetics.brainupgrades_cyberdeck": "Cyberdeck",
   "item.createcybernetics.brainupgrades_idem": "I.D.E.M.",
   "item.createcybernetics.brainupgrades_chipwareslots": "Chipware Slots",
+  "item.createcybernetics.brainupgrades_spelljammer": "Spelljammer",
 
   "item.createcybernetics.heartupgrades_cyberheart": "Mechanical Heart",
   "item.createcybernetics.heartupgrades_coupler": "Cardiovascular Coupler",
@@ -273,6 +276,7 @@
   "item.createcybernetics.organsupgrades_metabolic": "Metabolic Converter",
   "item.createcybernetics.organsupgrade_densebattery": "Dense Battery",
   "item.createcybernetics.organsupgrades_heatengine": "Heat Engine",
+  "item.createcybernetics.organsupgrades_manabattery": "Mana Capacitor",
 
   "item.createcybernetics.skinupgrades_arterialturbine": "Arterial Turbine",
   "item.createcybernetics.skinupgrades_chromatophores": "Synthetic Chromatophores",
@@ -286,6 +290,7 @@
   "item.createcybernetics.skinupgrades_syntheticsetules": "Synthetic Setules",
   "item.createcybernetics.skinupgrades_sweat": "Enhanced Sweat Glands",
   "item.createcybernetics.skinupgrades_metalplating": "Metal Plating",
+  "item.createcybernetics.skinupgrades_manaskin": "Mana Assimilator",
 
   "item.createcybernetics.muscleupgrades_synthmuscle": "Myomer Muscle",
   "item.createcybernetics.muscleupgrades_wiredreflexes": "Wired Reflexes",
@@ -683,6 +688,8 @@
           "tooltip.createcybernetics.brainupgrades_idem.energy": "Costs 50 Energy",
       "tooltip.createcybernetics.brainupgrades_chipwareslots.tooltip1": "§1Allows the user to install Data Shards to upgrade basic skills",
           "tooltip.createcybernetics.brainupgrades_chipwareslots.tooltip2": "§7Requires §cBrain §7or §9Cerebral Processing Unit",
+      "tooltip.createcybernetics.brainupgrades_spelljammer.tooltip1": "§1Prevents the casting of most spells in a 25 block radius",
+          "tooltip.createcybernetics.brainupgrades_spelljammer.tooltip2": "§7Requires §cBrain §7or §9Cerebral Processing Unit",
 
       "tooltip.createcybernetics.heartupgrades_cyberheart.tooltip1": "§1Negates weakness status effects",
       "tooltip.createcybernetics.heartupgrades_cyberheart.energy": "Costs 6 Energy",
@@ -710,7 +717,7 @@
       "tooltip.createcybernetics.organsupgrades_adrenaline.tooltip1": "§1Grants the user Speed and Strength when attacked",
       "tooltip.createcybernetics.organsupgrades_adrenaline.energy": "Costs 10 Energy",
       "tooltip.createcybernetics.organsupgrades_battery.tooltip1": "§1Stores energy",
-          "tooltip.createcybernetics.organsupgrades_battery.tooltip2": "§3Stacks up to 5x",
+          "tooltip.createcybernetics.organsupgrades_battery.tooltip2": "§3Stacks up to 4x",
           "tooltip.createcybernetics.organsupgrades_battery.energy": "Stores 500 Energy",
       "tooltip.createcybernetics.organsupgrades_diamondwaferstack.tooltip1": "§1Generates a slow trickle of energy",
           "tooltip.createcybernetics.organsupgrades_diamondwaferstack.tooltip2": "§3Stacks up to 3x",
@@ -727,6 +734,9 @@
       "tooltip.createcybernetics.organsupgrade_densebattery.energy": "Stores 5000 Energy From Charging Block",
       "tooltip.createcybernetics.organsupgrades_heatengine.tooltip1": "§1Generates energy from burning fuels",
           "tooltip.createcybernetics.organsupgrades_heatengine.energy": "Adds 50 energy from fuel",
+      "tooltip.createcybernetics.organsupgrades_manabattery.tooltip1": "§1Stores extra pools of mana",
+          "tooltip.createcybernetics.organsupgrades_manabattery.tooltip2": "§3Stacks up to 3x",
+          "tooltip.createcybernetics.organsupgrades_manabattery.energy": "Stores 100 mana",
 
       "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip1": "§1Generates energy from user movement",
           "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip2": "§3Stacks up to 4x",
@@ -746,6 +756,8 @@
       "tooltip.createcybernetics.skinupgrades_metalplating.tooltip1": "§1Titanium plate skin replacement",
       "tooltip.createcybernetics.skinupgrades_sweat.tooltip1": "§1Releases large amounts of sweat to release heat",
       "tooltip.createcybernetics.skinupgrades_sweat.energy": "Costs 5 Energy",
+      "tooltip.createcybernetics.skinupgrades_manaskin.tooltip1": "§1Absorbs mana and converts it into energy",
+      "tooltip.createcybernetics.skinupgrades_manaskin.energy": "Adds 35 energy from each spell that hits, and more from mana in the air",
 
       "tooltip.createcybernetics.muscleupgrades_synthmuscle.tooltip1": "§1Grants extra speed and strength",
       "tooltip.createcybernetics.muscleupgrades_synthmuscle.energy": "Costs 3 Energy",

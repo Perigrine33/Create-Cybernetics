@@ -15,6 +15,10 @@
     {
       "id": "createcybernetics:brainupgrades_corticalstack",
       "required": false
+    },
+    {
+      "id": "createcybernetics:brainupgrades_spelljammer",
+      "required": false
     }
   ]
 }

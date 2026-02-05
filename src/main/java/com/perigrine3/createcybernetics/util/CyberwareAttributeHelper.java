@@ -4,6 +4,7 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.common.attributes.ModAttributes;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -11,6 +12,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.common.NeoForgeMod;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -460,53 +462,100 @@ public class CyberwareAttributeHelper {
 
     }
 
+
+
+
     public static void registerModifier(String id, AttributeModifierData data) {
         MODIFIER_REGISTRY.put(id, data);
     }
 
-    public static void applyModifier(Player player, String modifierId) {
+    public static void registerModifierDynamicAttribute(String id, ResourceLocation attributeId,
+                                                        ResourceLocation modifierName, double amount,
+                                                        AttributeModifier.Operation op) {
+        registerModifier(id, new AttributeModifierData(attributeId, modifierName, amount, op));
+    }
+
+    public static void applyModifier(LivingEntity entity, String modifierId) {
         AttributeModifierData data = MODIFIER_REGISTRY.get(modifierId);
         if (data == null) {
             CreateCybernetics.LOGGER.error("Attempted to apply unknown modifier: " + modifierId);
             return;
         }
 
-        removeModifier(player, modifierId);
+        Holder<Attribute> attr = data.resolveAttribute();
+        if (attr == null) return;
 
-        player.getAttribute(data.attribute).addOrReplacePermanentModifier(
-                new AttributeModifier(data.name, data.amount, data.operation)
-        );
+        removeModifier(entity, modifierId);
+
+        var inst = entity.getAttribute(attr);
+        if (inst == null) return;
+
+        inst.addOrReplacePermanentModifier(new AttributeModifier(data.name, data.amount, data.operation));
     }
 
-    public static void removeModifier(Player player, String modifierId) {
+    public static void removeModifier(LivingEntity entity, String modifierId) {
         AttributeModifierData data = MODIFIER_REGISTRY.get(modifierId);
         if (data == null) {
             CreateCybernetics.LOGGER.error("Attempted to remove unknown modifier: " + modifierId);
             return;
         }
 
-        player.getAttribute(data.attribute).removeModifier(data.name);
+        Holder<Attribute> attr = data.resolveAttribute();
+        if (attr == null) return;
+
+        var inst = entity.getAttribute(attr);
+        if (inst == null) return;
+
+        inst.removeModifier(data.name);
     }
 
-    public static boolean hasModifier(Player player, String modifierId) {
+    public static boolean hasModifier(LivingEntity entity, String modifierId) {
         AttributeModifierData data = MODIFIER_REGISTRY.get(modifierId);
         if (data == null) return false;
 
-        return player.getAttribute(data.attribute).getModifier(data.name) != null;
+        Holder<Attribute> attr = data.resolveAttribute();
+        if (attr == null) return false;
+
+        var inst = entity.getAttribute(attr);
+        return inst != null && inst.getModifier(data.name) != null;
     }
+
+
 
     private static class AttributeModifierData {
         final Holder<Attribute> attribute;
+        final ResourceLocation attributeId;
         final ResourceLocation name;
         final double amount;
         final AttributeModifier.Operation operation;
 
-        AttributeModifierData(Holder<Attribute> attribute, ResourceLocation name, 
-                            double amount, AttributeModifier.Operation operation) {
+        AttributeModifierData(Holder<Attribute> attribute, ResourceLocation name,
+                              double amount, AttributeModifier.Operation operation) {
             this.attribute = attribute;
+            this.attributeId = null;
             this.name = name;
             this.amount = amount;
             this.operation = operation;
+        }
+
+        AttributeModifierData(ResourceLocation attributeId, ResourceLocation name,
+                              double amount, AttributeModifier.Operation operation) {
+            this.attribute = null;
+            this.attributeId = attributeId;
+            this.name = name;
+            this.amount = amount;
+            this.operation = operation;
+        }
+
+        @Nullable
+        Holder<Attribute> resolveAttribute() {
+            if (attribute != null) return attribute;
+            if (attributeId == null) return null;
+
+            var key = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ATTRIBUTE, attributeId);
+            return net.minecraft.core.registries.BuiltInRegistries.ATTRIBUTE.getHolder(key)
+                    .map(h -> (Holder<Attribute>) h)
+                    .orElse(null);
         }
     }
 }
