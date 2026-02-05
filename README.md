@@ -7,4 +7,7 @@ This mod adds Cybernetic technology to Minecraft! Based on the 1.10.2 mod, Cyber
 Credits: 
 ==========
 
-Ukranian Lang: Roll54
+Modeling Artists: Artistic VoidK
+
+Translators: 
+    Roll54 - Ukranian
