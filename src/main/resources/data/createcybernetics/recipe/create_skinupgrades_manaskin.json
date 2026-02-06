@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "irons_spellbooks:arcane_ingot"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    },
+    "A": {
+      "item": "irons_spellbooks:mithril_ingot"
+    },
+    "B": {
+      "item": "irons_spellbooks:lightning_bottle"
+    }
+  },
+  "pattern": [
+    "     ",
+    "PPPPP",
+    "ASBSA",
+    "N N N",
+    "     "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:skinupgrades_manaskin"
+  }
+}

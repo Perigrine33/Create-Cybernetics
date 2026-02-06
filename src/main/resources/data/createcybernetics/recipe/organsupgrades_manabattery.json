@@ -1,0 +1,36 @@
+{
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "G": {
+      "item": "irons_spellbooks:mithril_ingot"
+    },
+    "R": {
+      "item": "irons_spellbooks:arcane_rune"
+    },
+    "O": {
+      "item": "irons_spellbooks:mana_upgrade_orb"
+    },
+    "P": {
+      "item": "irons_spellbooks:arcane_ingot"
+    },
+    "S": {
+      "item": "createcybernetics:component_storage"
+    }
+  },
+
+  "pattern": [
+    "  PPG",
+    " PSRP",
+    "PSOSP",
+    "PRSP ",
+    "GPP  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:organsupgrades_manabattery"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "A": {
+      "item": "irons_spellbooks:arcane_ingot"
+    },
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "S": {
+      "item": "irons_spellbooks:shriving_stone"
+    },
+    "M": {
+      "item": "irons_spellbooks:mithril_ingot"
+    },
+    "D": {
+      "item": "createcybernetics:component_diodes"
+    }
+  },
+
+  "pattern": [
+    "   AA",
+    "  AM ",
+    "P MA ",
+    "ASA  ",
+    "DAP  "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_spelljammer"
+  }
+}

@@ -1239,9 +1239,7 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
-
-    //Create: Enchantment Industry compat
-        public static final DeferredItem<Item> BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER = registerIfLoaded("create_enchantment_industry","brainupgrades_consciousnesstransmitter",
+    public static final DeferredItem<Item> BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER = registerIfLoaded("create_enchantment_industry","brainupgrades_consciousnesstransmitter",
             () -> new NeedlecasterItem(new Item.Properties().stacksTo(1), 5) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -1256,7 +1254,7 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
-        public static final DeferredItem<Item> BRAINUPGRADES_CORTICALSTACK = registerIfLoaded("create_enchantment_industry","brainupgrades_corticalstack",
+    public static final DeferredItem<Item> BRAINUPGRADES_CORTICALSTACK = registerIfLoaded("create_enchantment_industry","brainupgrades_corticalstack",
             () -> new CorticalStackItem(new Item.Properties().stacksTo(1), 10) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -1271,7 +1269,6 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
-
     public static final DeferredItem<Item> BRAINUPGRADES_ENDERJAMMER = ITEMS.register("brainupgrades_enderjammer",
         () -> new EnderJammerItem(new Item.Properties().stacksTo(1), 2) {
             @Override
@@ -1362,7 +1359,7 @@ public class ModItems {
             }
         });
     public static final DeferredItem<Item> BRAINUPGRADES_SPELLJAMMER = registerIfLoaded("irons_spellbooks", "brainupgrades_spelljammer",
-        () -> new SpellJammerItem(new Item.Properties().stacksTo(1), 6) {
+            () -> new SpellJammerItem(new Item.Properties().stacksTo(1), 6) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
                 if (Screen.hasShiftDown()) {
