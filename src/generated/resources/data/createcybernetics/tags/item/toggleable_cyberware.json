@@ -10,6 +10,7 @@
     "createcybernetics:boneupgrades_spinalinjector",
     "createcybernetics:boneupgrades_sandevistan",
     "createcybernetics:armupgrades_armcannon",
+    "createcybernetics:legupgrades_jumpboost",
     {
       "id": "createcybernetics:boneupgrades_elytra",
       "required": false

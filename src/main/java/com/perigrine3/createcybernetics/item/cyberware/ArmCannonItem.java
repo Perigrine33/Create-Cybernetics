@@ -62,6 +62,15 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
     private static final String PD_ARM_CANNON = "cc_arm_cannon_projectile";
     private static final String PD_LAST_FIRE_TICK = "cc_arm_cannon_last_fire_tick";
 
+    private static final String PD_COOLDOWNS_ROOT = "cc_arm_cannon_cooldowns";
+
+    private static final int TICKS_PER_SECOND = 20;
+    private static final int CD_NUGGETS = 10;                       // 0.5s
+    private static final int CD_ARROWS = 2 * TICKS_PER_SECOND;      // 2s
+    private static final int CD_CHARGES = 3 * TICKS_PER_SECOND;     // 3s (wind + fire)
+    private static final int CD_FIREWORKS = 5 * TICKS_PER_SECOND;   // 5s
+    private static final int CD_TNT = 5 * TICKS_PER_SECOND;         // 5s
+
     private final int humanityCost;
 
     public ArmCannonItem(Properties props, int humanityCost) {
@@ -80,7 +89,7 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         };
     }
 
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.LARM); }
+    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.LARM, CyberwareSlot.RARM); }
     @Override public boolean replacesOrgan() { return false; }
     @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
 
@@ -88,34 +97,39 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         return stack != null && !stack.isEmpty() && stack.is(ModTags.Items.ARM_CANNON_AMMO);
     }
 
-    /* ---------------- CLIENT TRIGGER: RIGHT CLICK AIR WITH EMPTY HAND ----------------
-     *
-     * RightClickEmpty is client-only and NOT cancellable.
-     * We must tell the server ourselves via a payload.
-     */
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
     public static final class ClientFireTrigger {
         private ClientFireTrigger() {}
 
-        // Client debounce: don't send twice in the same client tick
         private static long lastSentGameTime = Long.MIN_VALUE;
 
         @SubscribeEvent
         public static void onRightClickEmpty(PlayerInteractEvent.RightClickEmpty event) {
             Player p = event.getEntity();
             if (p == null) return;
-
-            // "empty left hand" => offhand must be empty
             if (!p.getOffhandItem().isEmpty()) return;
-
-            // Avoid firing while any GUI is open (optional but recommended)
             if (net.minecraft.client.Minecraft.getInstance().screen != null) return;
 
             long now = p.level().getGameTime();
             if (now == lastSentGameTime) return;
             lastSentGameTime = now;
 
-            // Ask server to attempt firing (server will validate enabled/installed/ammo).
+            PacketDistributor.sendToServer(new ArmCannonFirePayload());
+        }
+
+        @SubscribeEvent
+        public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+            Player p = event.getEntity();
+            if (p == null) return;
+            if (event.getHand() != net.minecraft.world.InteractionHand.MAIN_HAND) return;
+            if (!p.getMainHandItem().isEmpty()) return;
+            if (!p.getOffhandItem().isEmpty()) return;
+            if (net.minecraft.client.Minecraft.getInstance().screen != null) return;
+
+            long now = p.level().getGameTime();
+            if (now == lastSentGameTime) return;
+            lastSentGameTime = now;
+
             PacketDistributor.sendToServer(new ArmCannonFirePayload());
         }
     }
@@ -244,13 +258,11 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
 
     public static boolean fireLoaded(ServerPlayer sp) {
         if (sp == null) return false;
-
-        // "empty left hand" => offhand must be empty
         if (!sp.getOffhandItem().isEmpty()) return false;
 
-        // Server debounce: at most one fire per tick per player
         long now = sp.level().getGameTime();
         CompoundTag pd = sp.getPersistentData();
+
         if (pd.getLong(PD_LAST_FIRE_TICK) == now) return false;
         pd.putLong(PD_LAST_FIRE_TICK, now);
 
@@ -260,8 +272,6 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
 
         CannonRef ref = findInstalledArmCannon(data);
         if (ref == null) return false;
-
-        // Must be enabled by toggle wheel
         if (!data.isEnabled(ref.slot(), ref.index())) return false;
 
         ItemStack cannonStack = ref.stack();
@@ -276,9 +286,23 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         ItemStack ammo = inv.getItem(selected);
         if (ammo.isEmpty() || !isValidStoredItem(ammo)) return false;
 
+        int cooldownTicks = getCooldownTicks(ammo);
+        String cooldownKey = getCooldownKey(ammo);
+        if (cooldownTicks > 0 && cooldownKey != null) {
+            long nextAllowed = getNextAllowedTick(pd, cooldownKey);
+            if (now < nextAllowed) {
+                return false;
+            }
+        }
+
         ItemStack ammoOne = ammo.copyWithCount(1);
+
         boolean fired = spawnAmmoProjectile(sp, ammoOne);
         if (!fired) return false;
+
+        if (cooldownTicks > 0 && cooldownKey != null) {
+            setNextAllowedTick(pd, cooldownKey, now + cooldownTicks);
+        }
 
         ammo.shrink(1);
         inv.setItem(selected, ammo.isEmpty() ? ItemStack.EMPTY : ammo);
@@ -311,11 +335,50 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         return null;
     }
 
+    // =========================
+    // COOLDOWN HELPERS (NEW)
+    // =========================
+
+    private static int getCooldownTicks(ItemStack ammo) {
+        if (ammo == null || ammo.isEmpty()) return 0;
+        if (ammo.is(Tags.Items.NUGGETS)) return CD_NUGGETS;
+        if (ammo.is(Items.WIND_CHARGE) || ammo.is(Items.FIRE_CHARGE)) return CD_CHARGES;
+        if (ammo.getItem() instanceof FireworkRocketItem) return CD_FIREWORKS;
+        if (ammo.is(Items.TNT)) return CD_TNT;
+        if (ammo.getItem() instanceof ArrowItem) return CD_ARROWS;
+
+        return 0;
+    }
+
+    private static String getCooldownKey(ItemStack ammo) {
+        if (ammo == null || ammo.isEmpty()) return null;
+
+        if (ammo.is(Tags.Items.NUGGETS)) return "nuggets";
+        if (ammo.is(Items.WIND_CHARGE)) return "wind_charge";
+        if (ammo.is(Items.FIRE_CHARGE)) return "fire_charge";
+        if (ammo.getItem() instanceof FireworkRocketItem) return "firework_rocket";
+        if (ammo.is(Items.TNT)) return "tnt";
+        if (ammo.getItem() instanceof ArrowItem) return "arrows";
+
+        return null;
+    }
+
+    private static long getNextAllowedTick(CompoundTag playerPd, String key) {
+        if (playerPd == null || key == null) return Long.MIN_VALUE;
+        CompoundTag root = playerPd.getCompound(PD_COOLDOWNS_ROOT);
+        return root.getLong(key);
+    }
+
+    private static void setNextAllowedTick(CompoundTag playerPd, String key, long tick) {
+        if (playerPd == null || key == null) return;
+        CompoundTag root = playerPd.getCompound(PD_COOLDOWNS_ROOT);
+        root.putLong(key, tick);
+        playerPd.put(PD_COOLDOWNS_ROOT, root);
+    }
+
     private static boolean spawnAmmoProjectile(ServerPlayer sp, ItemStack ammoOne) {
         var level = sp.level();
         Vec3 look = sp.getLookAngle().normalize();
-
-        // Push spawn point out a bit.
         Vec3 start = sp.getEyePosition().add(look.scale(1.0));
 
         final float genericSpeed = 4.0f;
@@ -324,12 +387,9 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         final double tntSpeed = 1.8;
         final float nuggetSpeed = 5.0f;
 
-        // Faster for hurty projectiles; also set delta movement explicitly.
         final double hurtingProjectileSpeed = 4.0;
-
         final float inaccuracy = 0.0f;
 
-        // NUGGETS: keep your existing projectile, but do server-side hitscan for consistent damage.
         if (ammoOne.is(Tags.Items.NUGGETS)) {
             NuggetProjectile bullet = new NuggetProjectile(ModEntities.NUGGET_PROJECTILE.get(), level, sp, ammoOne);
             bullet.setOwner(sp);
@@ -337,28 +397,13 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
             bullet.shoot(look.x, look.y, look.z, nuggetSpeed, inaccuracy);
             level.addFreshEntity(bullet);
 
-            // Hitscan damage (server authoritative)
             double range = 64.0;
             Vec3 eye = sp.getEyePosition();
             Vec3 end = eye.add(look.scale(range));
 
-            BlockHitResult blockHit = level.clip(new ClipContext(
-                    eye, end,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    sp
-            ));
-
+            BlockHitResult blockHit = level.clip(new ClipContext(eye, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, sp));
             Vec3 cappedEnd = (blockHit.getType() == HitResult.Type.MISS) ? end : blockHit.getLocation();
-
-            EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
-                    level,
-                    sp,
-                    eye,
-                    cappedEnd,
-                    sp.getBoundingBox().expandTowards(look.scale(range)).inflate(1.0),
-                    e -> e.isPickable() && e != sp
-            );
+            EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, sp, eye, cappedEnd, sp.getBoundingBox().expandTowards(look.scale(range)).inflate(1.0), e -> e.isPickable() && e != sp);
 
             if (entityHit != null) {
                 Entity target = entityHit.getEntity();
@@ -371,7 +416,6 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
             return true;
         }
 
-        // TNT (unchanged)
         if (ammoOne.is(Items.TNT)) {
             PrimedTnt tnt = new PrimedTnt(level, start.x, start.y, start.z, sp);
             tnt.setFuse(60);
@@ -379,8 +423,6 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
             level.addFreshEntity(tnt);
             return true;
         }
-
-        // FIRE CHARGE: spawn a proper SmallFireball with explicit velocity
         if (ammoOne.is(Items.FIRE_CHARGE)) {
             Vec3 vel = look.scale(hurtingProjectileSpeed);
             SmallFireball fb = new SmallFireball(level, sp, vel);
@@ -390,8 +432,6 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
             level.addFreshEntity(fb);
             return true;
         }
-
-        // WIND CHARGE: spawn a proper WindCharge with explicit velocity
         if (ammoOne.is(Items.WIND_CHARGE)) {
             Vec3 vel = look.scale(hurtingProjectileSpeed);
             WindCharge wc = new WindCharge(level, start.x, start.y, start.z, vel);
@@ -401,8 +441,6 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
             level.addFreshEntity(wc);
             return true;
         }
-
-        // FIREWORK ROCKETS: spawn normally, but tag so our tick handler can force an impact explosion.
         if (ammoOne.getItem() instanceof FireworkRocketItem) {
             FireworkRocketEntity rocket = new FireworkRocketEntity(level, ammoOne, sp, start.x, start.y, start.z, true);
             rocket.setOwner(sp);
@@ -414,8 +452,6 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
             level.addFreshEntity(rocket);
             return true;
         }
-
-        // Everything else that is a ProjectileItem
         if (ammoOne.getItem() instanceof ProjectileItem projItem) {
             Direction dir = Direction.getNearest(look.x, look.y, look.z);
             Projectile proj = projItem.asProjectile(level, start, ammoOne, dir);
@@ -434,14 +470,6 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         return false;
     }
 
-    /**
-     * Force arm-cannon-fired fireworks to explode visually at the exact impact point (block OR entity).
-     * We do NOT spawn a second rocket entity; instead we:
-     * - detect collision
-     * - move the already-tracked rocket to the hit location
-     * - broadcast the vanilla entity event used to render the explosion
-     * - discard the rocket
-     */
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class ArmCannonRocketImpactFix {
         private ArmCannonRocketImpactFix() {}
@@ -487,11 +515,10 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
             Vec3 at = (entityHit != null) ? entityHit.getLocation()
                     : (blockHit.getType() != HitResult.Type.MISS ? blockHit.getLocation() : rocket.position());
 
-            // Move tracked rocket to impact point, then trigger the vanilla explosion render event.
             rocket.setPos(at.x, at.y, at.z);
             rocket.setDeltaMovement(Vec3.ZERO);
 
-            ((ServerLevel) rocket.level()).broadcastEntityEvent(rocket, (byte) 17);
+            rocket.level().broadcastEntityEvent(rocket, (byte) 17);
 
             rocket.discard();
         }

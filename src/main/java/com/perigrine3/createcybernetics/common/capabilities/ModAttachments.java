@@ -37,6 +37,11 @@ public final class ModAttachments {
                     .sync(new CyberwareSyncHandler())
                     .build();
 
+    public static void syncCyberware(ServerPlayer player) {
+        if (player == null) return;
+        player.syncData(CYBERWARE);
+    }
+
     private static final class CyberwareSyncHandler implements AttachmentSyncHandler<PlayerCyberwareData> {
 
         @Override
@@ -61,7 +66,7 @@ public final class ModAttachments {
 
         @Override
         public boolean sendToPlayer(IAttachmentHolder holder, ServerPlayer to) {
-            return holder == to;
+            return true;
         }
     }
 

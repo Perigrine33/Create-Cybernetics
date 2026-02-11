@@ -130,10 +130,10 @@ public class CyberwareAttributeHelper {
 
         registerModifier("cyberarm_strength", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberarm_strength_boost"),
-                1.0, AttributeModifier.Operation.ADD_VALUE));
-        registerModifier("cyberarm_blockbreak", new AttributeModifierData(attackDamageAttribute,
+                1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        registerModifier("cyberarm_blockbreak", new AttributeModifierData(blockBreakSpeedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberarm_blockbreak_speed"),
-                0.5, AttributeModifier.Operation.ADD_VALUE));
+                0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 
         registerModifier("linear_frame_health", new AttributeModifierData(maxHealthAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "linear_frame_health_boost"),
@@ -254,7 +254,7 @@ public class CyberwareAttributeHelper {
 
         registerModifier("reinforced_knuckles_damage", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "reinforced_knuckles_damage_boost"),
-                3.0, AttributeModifier.Operation.ADD_VALUE));
+                3.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 
         registerModifier("calves_sprint", new AttributeModifierData(speedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "calves_sprint_boost"),
@@ -291,13 +291,13 @@ public class CyberwareAttributeHelper {
 //CHIPWARE
         registerModifier("redshard_strength", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_strength_boost"),
-                5, AttributeModifier.Operation.ADD_VALUE));
+                5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         registerModifier("redshard_speed", new AttributeModifierData(attackSpeedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_speed_boost"),
-                3, AttributeModifier.Operation.ADD_VALUE));
-        registerModifier("redshard_knockback", new AttributeModifierData(attackSpeedAttribute,
+                3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        registerModifier("redshard_knockback", new AttributeModifierData(attackKnockbackAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_knockback_boost"),
-                3, AttributeModifier.Operation.ADD_VALUE));
+                3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE ));
 
         registerModifier("orangeshard_ore", new AttributeModifierData(oreMultiplierAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "orangeshard_ore_multiplier"),
@@ -329,7 +329,7 @@ public class CyberwareAttributeHelper {
                 4, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("blueshard_oxygen", new AttributeModifierData(oxygenBonusAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_oxygen_boost"),
-                7, AttributeModifier.Operation.ADD_VALUE));
+                7, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         registerModifier("purpleshard_pearl", new AttributeModifierData(enderDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "purpleshard_pearl_negate"),

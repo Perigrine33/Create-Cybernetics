@@ -24,6 +24,10 @@ public class ModBlockEntities {
             (ModBlocks.ENGINEERING_TABLE == null) ? null : BLOCK_ENTITIES.register("engineering_table",
                     () -> BlockEntityType.Builder.of(EngineeringTableBlockEntity::new, ModBlocks.ENGINEERING_TABLE.get()).build(null));
 
+    public static final Supplier<BlockEntityType<HoloprojectorBlockEntity>> HOLOPROJECTOR_BLOCKENTITY =
+            BLOCK_ENTITIES.register("holoprojector_blockentity", () -> BlockEntityType.Builder.of(
+                    HoloprojectorBlockEntity::new, ModBlocks.HOLOPROJECTOR.get()).build(null));
+
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

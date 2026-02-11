@@ -219,7 +219,11 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
 
             pose.pushPose();
             try {
-                armPart.translateAndRotate(pose);
+                pose.translate(armPart.x / 16.0F, armPart.y / 16.0F, armPart.z / 16.0F);
+
+                pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(/* pitch */ 0.0F));
+                pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(/* yaw   */ 0.0F));
+                pose.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(/* roll  */ 5F));
 
                 AttachmentAnchor anchor = (arm == HumanoidArm.LEFT)
                         ? AttachmentAnchor.LEFT_ARM

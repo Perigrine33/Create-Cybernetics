@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.client;
+package com.perigrine3.createcybernetics.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -8,6 +8,8 @@ import com.perigrine3.createcybernetics.client.skin.SkinModifier;
 import com.perigrine3.createcybernetics.client.skin.SkinModifierManager;
 import com.perigrine3.createcybernetics.client.skin.SkinModifierState;
 import com.perigrine3.createcybernetics.effect.ModEffects;
+import com.perigrine3.createcybernetics.network.payload.SandevistanSnapshotC2SPayload;
+import com.perigrine3.createcybernetics.network.payload.SandevistanSnapshotPayload;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -31,6 +33,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -47,28 +50,40 @@ public final class SandevistanMirageTrail {
 
     private SandevistanMirageTrail() {}
 
+    /* ---------------- TUNABLES ---------------- */
+
+    // How many snapshots to draw per player (newest -> oldest). Increase for “more frames”.
     private static final int RENDER_SNAPSHOTS = 241;
-    private static final int TRAIL_LIFETIME_TICKS = 12 * 20;
+
+    // Desired lifetime: 3–5 seconds. Pick 4 seconds default.
+    private static final int TRAIL_LIFETIME_TICKS = 4 * 20;
+
+    // Lower alpha -> more transparent ghosts.
+    private static final int MAX_BODY_ALPHA = 130;
 
     private static final float MIRAGE_MODEL_SCALE = 0.9375F;
 
-    private static final double RENDER_DELAY_TICKS = 0.6725;
-    private static final double SAMPLES_PER_SECOND = 60.0;
-    private static final double SAMPLE_PERIOD_TICKS = 20.0 / SAMPLES_PER_SECOND;
+    // Keep a small delay to avoid drawing the most recent sample on top of the real player.
+    private static final double RENDER_DELAY_TICKS = 0.75;
 
+    // Server/client network sampling is tick-based (20Hz).
+    private static final double SAMPLE_PERIOD_TICKS = 1.0;
+
+    // Avoid drawing in your face in first-person.
     private static final float MIN_CAMERA_DIST = 0.55F;
     private static final float MIN_CAMERA_DIST_SQR = MIN_CAMERA_DIST * MIN_CAMERA_DIST;
 
+    // Cap snapshots per player (lifetime / period + slack + render delay).
     private static final int MAX_SNAPSHOTS = Math.max(
-            (int) Math.ceil(TRAIL_LIFETIME_TICKS / SAMPLE_PERIOD_TICKS) + 2,
-            RENDER_SNAPSHOTS + (int) Math.ceil(RENDER_DELAY_TICKS / SAMPLE_PERIOD_TICKS) + 2);
+            (int) Math.ceil(TRAIL_LIFETIME_TICKS / SAMPLE_PERIOD_TICKS) + 8,
+            RENDER_SNAPSHOTS + (int) Math.ceil(RENDER_DELAY_TICKS / SAMPLE_PERIOD_TICKS) + 8
+    );
 
     private static final Map<UUID, Deque<Snapshot>> TRAILS = new HashMap<>();
 
-    private static double lastFrameTimeTicks = Double.NaN;
-    private static double accumulatorTicks = 0.0;
-
     private static final int FULL_BRIGHT = 0xF000F0;
+
+    /* ---------------- DATA ---------------- */
 
     private static final class OverlayPass {
         final ResourceLocation texture;
@@ -113,41 +128,64 @@ public final class SandevistanMirageTrail {
         }
     }
 
+    /**
+     * Snapshot stores absolute model-part rotations (radians) captured on the sender client.
+     * This makes remote rendering match the sender’s pose, instead of “viewer-side guessing”.
+     */
     private static final class Snapshot {
         final Vec3 pos;
-        final float bodyYaw;
-        final float headYaw;
-        final float pitch;
+        final float bodyYawDeg;
         final boolean crouching;
 
-        final float limbSwing;
-        final float limbSwingAmount;
-        final float ageInTicks;
+        final float headX, headY, headZ;
+        final float bodyX, bodyY, bodyZ;
+        final float rArmX, rArmY, rArmZ;
+        final float lArmX, lArmY, lArmZ;
+        final float rLegX, rLegY, rLegZ;
+        final float lLegX, lLegY, lLegZ;
 
+        final float ageInTicks;
         final SkinSnapshot skin;
 
         int ageTicks;
 
-        Snapshot(Vec3 pos, float bodyYaw, float headYaw, float pitch, boolean crouching,
-                 float limbSwing, float limbSwingAmount, float ageInTicks, SkinSnapshot skin) {
+        Snapshot(Vec3 pos,
+                 float bodyYawDeg,
+                 boolean crouching,
+                 float headX, float headY, float headZ,
+                 float bodyX, float bodyY, float bodyZ,
+                 float rArmX, float rArmY, float rArmZ,
+                 float lArmX, float lArmY, float lArmZ,
+                 float rLegX, float rLegY, float rLegZ,
+                 float lLegX, float lLegY, float lLegZ,
+                 float ageInTicks,
+                 SkinSnapshot skin) {
             this.pos = pos;
-            this.bodyYaw = bodyYaw;
-            this.headYaw = headYaw;
-            this.pitch = pitch;
+            this.bodyYawDeg = bodyYawDeg;
             this.crouching = crouching;
-            this.limbSwing = limbSwing;
-            this.limbSwingAmount = limbSwingAmount;
+
+            this.headX = headX; this.headY = headY; this.headZ = headZ;
+            this.bodyX = bodyX; this.bodyY = bodyY; this.bodyZ = bodyZ;
+            this.rArmX = rArmX; this.rArmY = rArmY; this.rArmZ = rArmZ;
+            this.lArmX = lArmX; this.lArmY = lArmY; this.lArmZ = lArmZ;
+            this.rLegX = rLegX; this.rLegY = rLegY; this.rLegZ = rLegZ;
+            this.lLegX = lLegX; this.lLegY = lLegY; this.lLegZ = lLegZ;
+
             this.ageInTicks = ageInTicks;
             this.skin = (skin == null) ? SkinSnapshot.empty() : skin;
+
             this.ageTicks = 0;
         }
     }
+
+    /* ---------------- LIFECYCLE ---------------- */
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;
 
+        // Age & prune all trails.
         for (Iterator<Map.Entry<UUID, Deque<Snapshot>>> it = TRAILS.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<UUID, Deque<Snapshot>> e = it.next();
             Deque<Snapshot> q = e.getValue();
@@ -159,6 +197,18 @@ public final class SandevistanMirageTrail {
             while (!q.isEmpty() && q.peekFirst().ageTicks > TRAIL_LIFETIME_TICKS) q.pollFirst();
             if (q.isEmpty()) it.remove();
         }
+
+        // Send one snapshot per tick from local player to server (server relays to trackers + self).
+        if (!(mc.player instanceof AbstractClientPlayer self)) return;
+        if (!self.isAlive()) return;
+
+        boolean active = self.hasEffect(ModEffects.SANDEVISTAN_EFFECT) && self.isSprinting();
+        if (!active) {
+            // If server stops relaying, trails will naturally age out; optional local cleanup:
+            return;
+        }
+
+        sendSnapshotToServer(self);
     }
 
     @SubscribeEvent
@@ -174,15 +224,12 @@ public final class SandevistanMirageTrail {
         Vec3 camPos = event.getCamera().getPosition();
         float partial = event.getPartialTick().getGameTimeDeltaPartialTick(true);
 
-        recordSubTickSnapshots(mc, partial);
-
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
 
         for (var p : mc.level.players()) {
             if (!(p instanceof AbstractClientPlayer player)) continue;
 
-            UUID id = player.getUUID();
-            Deque<Snapshot> q = TRAILS.get(id);
+            Deque<Snapshot> q = TRAILS.get(player.getUUID());
             if (q == null || q.isEmpty()) continue;
 
             EntityRenderer<? super AbstractClientPlayer> er = mc.getEntityRenderDispatcher().getRenderer(player);
@@ -194,74 +241,122 @@ public final class SandevistanMirageTrail {
         buffer.endBatch();
     }
 
-    private static void recordSubTickSnapshots(Minecraft mc, float currentPartial) {
+    /* ---------------- NETWORK PATH ---------------- */
+
+    /**
+     * Called from your ModPayloads playToClient handler.
+     * Payload contains sender-captured pose rotations.
+     */
+    public static void acceptNetworkSnapshot(SandevistanSnapshotPayload p) {
+        Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;
 
-        double nowTimeTicks = (double) mc.level.getGameTime() + (double) currentPartial;
+        var ent = mc.level.getPlayerByUUID(p.playerId());
+        if (!(ent instanceof AbstractClientPlayer player)) return;
 
-        if (Double.isNaN(lastFrameTimeTicks)) {
-            lastFrameTimeTicks = nowTimeTicks;
-            accumulatorTicks = 0.0;
-            return;
-        }
+        // Still capture overlays locally (good enough; if a viewer doesn’t know sender overlays, that’s expected).
+        SkinSnapshot skin = captureSkinSnapshot(player);
 
-        double deltaTicks = nowTimeTicks - lastFrameTimeTicks;
-        if (deltaTicks < 0.0) deltaTicks = 0.0;
-        if (deltaTicks > 5.0) deltaTicks = 5.0;
+        Snapshot snap = new Snapshot(
+                new Vec3(p.x(), p.y(), p.z()),
+                p.bodyYaw(),
+                p.crouching(),
 
-        lastFrameTimeTicks = nowTimeTicks;
-        accumulatorTicks += deltaTicks;
+                p.headX(), p.headY(), p.headZ(),
+                p.bodyX(), p.bodyY(), p.bodyZ(),
+                p.rArmX(), p.rArmY(), p.rArmZ(),
+                p.lArmX(), p.lArmY(), p.lArmZ(),
+                p.rLegX(), p.rLegY(), p.rLegZ(),
+                p.lLegX(), p.lLegY(), p.lLegZ(),
 
-        while (accumulatorTicks >= SAMPLE_PERIOD_TICKS) {
-            accumulatorTicks -= SAMPLE_PERIOD_TICKS;
+                p.ageInTicks(),
+                skin
+        );
 
-            double sampleTimeTicks = nowTimeTicks - accumulatorTicks;
+        Deque<Snapshot> q = TRAILS.computeIfAbsent(p.playerId(), k -> new ArrayDeque<>());
+        q.addLast(snap);
+        while (q.size() > MAX_SNAPSHOTS) q.pollFirst();
+    }
 
-            float samplePartial = (float) (sampleTimeTicks - Math.floor(sampleTimeTicks));
-            samplePartial = Mth.clamp(samplePartial, 0.0F, 1.0F);
+    private static void sendSnapshotToServer(AbstractClientPlayer player) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) return;
 
-            for (var p : mc.level.players()) {
-                if (!(p instanceof AbstractClientPlayer player)) continue;
+        var er = mc.getEntityRenderDispatcher().getRenderer(player);
+        if (!(er instanceof PlayerRenderer pr)) return;
 
-                boolean active = player.hasEffect(ModEffects.SANDEVISTAN_EFFECT) && player.isSprinting();
-                UUID id = player.getUUID();
+        PlayerModel<AbstractClientPlayer> model = pr.getModel();
 
-                if (!active) {
-                    TRAILS.remove(id);
-                    continue;
-                }
+        // Save current model state so we can safely call setupAnim and read out rotations.
+        var prevRightPose = model.rightArmPose;
+        var prevLeftPose = model.leftArmPose;
+        boolean prevCrouching = model.crouching;
+        float prevSwimAmount = model.swimAmount;
+        float prevAttackTime = model.attackTime;
 
-                double x = Mth.lerp(samplePartial, player.xo, player.getX());
-                double y = Mth.lerp(samplePartial, player.yo, player.getY());
-                double z = Mth.lerp(samplePartial, player.zo, player.getZ());
+        // Save part rotations.
+        float shX = model.head.xRot, shY = model.head.yRot, shZ = model.head.zRot;
+        float sbX = model.body.xRot, sbY = model.body.yRot, sbZ = model.body.zRot;
+        float sraX = model.rightArm.xRot, sraY = model.rightArm.yRot, sraZ = model.rightArm.zRot;
+        float slaX = model.leftArm.xRot, slaY = model.leftArm.yRot, slaZ = model.leftArm.zRot;
+        float srlX = model.rightLeg.xRot, srlY = model.rightLeg.yRot, srlZ = model.rightLeg.zRot;
+        float sllX = model.leftLeg.xRot, sllY = model.leftLeg.yRot, sllZ = model.leftLeg.zRot;
 
-                float bodyYaw = rotLerp(samplePartial, player.yRotO, player.getYRot());
-                float headYaw = rotLerp(samplePartial, player.yHeadRotO, player.getYHeadRot());
-                float pitch = rotLerp(samplePartial, player.xRotO, player.getXRot());
+        try {
+            model.attackTime = 0.0F;
+            model.crouching = player.isCrouching();
+            model.swimAmount = 0.0F;
+            model.rightArmPose = HumanoidModel.ArmPose.EMPTY;
+            model.leftArmPose = HumanoidModel.ArmPose.EMPTY;
 
-                float limbSwing = safeWalkPosition(player, samplePartial);
-                float limbSwingAmount = safeWalkSpeed(player, samplePartial);
+            // Use “current tick” state. This is what makes it deterministic across viewers.
+            float limbSwing = safeWalkPosition(player, 1.0F);
+            float limbSwingAmount = safeWalkSpeed(player, 1.0F);
 
-                SkinSnapshot skin = captureSkinSnapshot(player);
+            float bodyYaw = player.getYRot();
+            float headYaw = player.getYHeadRot();
+            float pitch = player.getXRot();
+            float netHeadYaw = wrapDegrees(headYaw - bodyYaw);
 
-                Snapshot snap = new Snapshot(
-                        new Vec3(x, y, z),
-                        bodyYaw,
-                        headYaw,
-                        pitch,
-                        player.isCrouching(),
-                        limbSwing,
-                        limbSwingAmount,
-                        (float) sampleTimeTicks,
-                        skin
-                );
+            float ageInTicks = (float) player.tickCount;
 
-                Deque<Snapshot> q = TRAILS.computeIfAbsent(id, k -> new ArrayDeque<>());
-                q.addLast(snap);
-                while (q.size() > MAX_SNAPSHOTS) q.pollFirst();
-            }
+            model.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, pitch);
+
+            var payload = new SandevistanSnapshotC2SPayload(
+                    player.getX(), player.getY(), player.getZ(),
+                    bodyYaw,
+                    player.isCrouching(),
+
+                    model.head.xRot, model.head.yRot, model.head.zRot,
+                    model.body.xRot, model.body.yRot, model.body.zRot,
+                    model.rightArm.xRot, model.rightArm.yRot, model.rightArm.zRot,
+                    model.leftArm.xRot, model.leftArm.yRot, model.leftArm.zRot,
+                    model.rightLeg.xRot, model.rightLeg.yRot, model.rightLeg.zRot,
+                    model.leftLeg.xRot, model.leftLeg.yRot, model.leftLeg.zRot,
+
+                    ageInTicks
+            );
+
+            PacketDistributor.sendToServer(payload);
+
+        } finally {
+            // Restore model state.
+            model.rightArmPose = prevRightPose;
+            model.leftArmPose = prevLeftPose;
+            model.crouching = prevCrouching;
+            model.swimAmount = prevSwimAmount;
+            model.attackTime = prevAttackTime;
+
+            model.head.xRot = shX; model.head.yRot = shY; model.head.zRot = shZ;
+            model.body.xRot = sbX; model.body.yRot = sbY; model.body.zRot = sbZ;
+            model.rightArm.xRot = sraX; model.rightArm.yRot = sraY; model.rightArm.zRot = sraZ;
+            model.leftArm.xRot = slaX; model.leftArm.yRot = slaY; model.leftArm.zRot = slaZ;
+            model.rightLeg.xRot = srlX; model.rightLeg.yRot = srlY; model.rightLeg.zRot = srlZ;
+            model.leftLeg.xRot = sllX; model.leftLeg.yRot = sllY; model.leftLeg.zRot = sllZ;
         }
     }
+
+    /* ---------------- RENDERING ---------------- */
 
     private static void renderTrailForPlayer(
             PoseStack poseStack,
@@ -292,6 +387,14 @@ public final class SandevistanMirageTrail {
         boolean prevRightPants = model.rightPants.visible;
         boolean prevYoung = model.young;
 
+        // Save rotations to restore after per-snapshot applyPose.
+        float shX = model.head.xRot, shY = model.head.yRot, shZ = model.head.zRot;
+        float sbX = model.body.xRot, sbY = model.body.yRot, sbZ = model.body.zRot;
+        float sraX = model.rightArm.xRot, sraY = model.rightArm.yRot, sraZ = model.rightArm.zRot;
+        float slaX = model.leftArm.xRot, slaY = model.leftArm.yRot, slaZ = model.leftArm.zRot;
+        float srlX = model.rightLeg.xRot, srlY = model.rightLeg.yRot, srlZ = model.rightLeg.zRot;
+        float sllX = model.leftLeg.xRot, sllY = model.leftLeg.yRot, sllZ = model.leftLeg.zRot;
+
         try {
             model.young = false;
             model.hat.visible = true;
@@ -304,7 +407,6 @@ public final class SandevistanMirageTrail {
             Snapshot[] arr = q.toArray(new Snapshot[0]);
 
             int delaySamples = (int) Math.ceil(RENDER_DELAY_TICKS / SAMPLE_PERIOD_TICKS);
-
             int endExclusive = Math.max(0, arr.length - delaySamples);
             if (endExclusive <= 0) return;
 
@@ -322,10 +424,11 @@ public final class SandevistanMirageTrail {
                 float t = s.ageTicks / (float) TRAIL_LIFETIME_TICKS;
                 if (t < 0.0F || t > 1.0F) continue;
 
-                float alpha = (1.0F - t);
+                // Smooth-ish falloff; more “ghost” than “sticker”.
+                float alpha = 1.0F - t;
                 alpha *= alpha;
 
-                int aBody = (int) (alpha * 170.0F);
+                int aBody = (int) (alpha * (float) MAX_BODY_ALPHA);
                 if (aBody <= 0) continue;
 
                 float indexNorm = (i - start) / (float) Math.max(1, (renderCount - 1));
@@ -349,8 +452,8 @@ public final class SandevistanMirageTrail {
                 model.rightArmPose = HumanoidModel.ArmPose.EMPTY;
                 model.leftArmPose = HumanoidModel.ArmPose.EMPTY;
 
-                float netHeadYaw = wrapDegrees(s.headYaw - s.bodyYaw);
-                model.setupAnim(player, s.limbSwing, s.limbSwingAmount, s.ageInTicks, netHeadYaw, s.pitch);
+                // Apply sender-captured pose rotations (fixes “stiff” remote ghosts).
+                applyPoseToModel(model, s);
 
                 double dx = renderPos.x - camPos.x;
                 double dy = renderPos.y - camPos.y;
@@ -359,7 +462,7 @@ public final class SandevistanMirageTrail {
                 poseStack.pushPose();
                 try {
                     poseStack.translate(dx, dy, dz);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - s.bodyYaw));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - s.bodyYawDeg));
                     poseStack.scale(-1.0F, -1.0F, 1.0F);
                     poseStack.scale(mirageScale, mirageScale, mirageScale);
                     poseStack.translate(0.0F, -1.501F / mirageScale, 0.0F);
@@ -414,8 +517,35 @@ public final class SandevistanMirageTrail {
             model.leftPants.visible = prevLeftPants;
             model.rightPants.visible = prevRightPants;
             model.young = prevYoung;
+
+            model.head.xRot = shX; model.head.yRot = shY; model.head.zRot = shZ;
+            model.body.xRot = sbX; model.body.yRot = sbY; model.body.zRot = sbZ;
+            model.rightArm.xRot = sraX; model.rightArm.yRot = sraY; model.rightArm.zRot = sraZ;
+            model.leftArm.xRot = slaX; model.leftArm.yRot = slaY; model.leftArm.zRot = slaZ;
+            model.rightLeg.xRot = srlX; model.rightLeg.yRot = srlY; model.rightLeg.zRot = srlZ;
+            model.leftLeg.xRot = sllX; model.leftLeg.yRot = sllY; model.leftLeg.zRot = sllZ;
         }
     }
+
+    private static void applyPoseToModel(PlayerModel<?> model, Snapshot s) {
+        // Base parts (what you already do)
+        model.head.xRot = s.headX; model.head.yRot = s.headY; model.head.zRot = s.headZ;
+        model.body.xRot = s.bodyX; model.body.yRot = s.bodyY; model.body.zRot = s.bodyZ;
+        model.rightArm.xRot = s.rArmX; model.rightArm.yRot = s.rArmY; model.rightArm.zRot = s.rArmZ;
+        model.leftArm.xRot = s.lArmX; model.leftArm.yRot = s.lArmY; model.leftArm.zRot = s.lArmZ;
+        model.rightLeg.xRot = s.rLegX; model.rightLeg.yRot = s.rLegY; model.rightLeg.zRot = s.rLegZ;
+        model.leftLeg.xRot = s.lLegX; model.leftLeg.yRot = s.lLegY; model.leftLeg.zRot = s.lLegZ;
+
+        model.hat.copyFrom(model.head);
+        model.jacket.copyFrom(model.body);
+        model.leftSleeve.copyFrom(model.leftArm);
+        model.rightSleeve.copyFrom(model.rightArm);
+        model.leftPants.copyFrom(model.leftLeg);
+        model.rightPants.copyFrom(model.rightLeg);
+    }
+
+
+    /* ---------------- SKIN SNAPSHOT ---------------- */
 
     private static SkinSnapshot captureSkinSnapshot(AbstractClientPlayer player) {
         SkinModifierState state = SkinModifierManager.getPlayerSkinState(player);
@@ -515,6 +645,8 @@ public final class SandevistanMirageTrail {
         if (skin.hideRightPants) model.rightPants.visible = false;
     }
 
+    /* ---------------- COLOR HELPERS ---------------- */
+
     private static int multiplyAlpha(int argb, int alphaMul0to255) {
         alphaMul0to255 = Mth.clamp(alphaMul0to255, 0, 255);
         int a = FastColor.ARGB32.alpha(argb);
@@ -534,6 +666,8 @@ public final class SandevistanMirageTrail {
 
         return FastColor.ARGB32.color(a, outR, outG, outB);
     }
+
+    /* ---------------- REFLECTION HELPERS ---------------- */
 
     private static String enumName(Object enumValue) {
         if (enumValue instanceof Enum<?> e) return e.name();
@@ -641,6 +775,8 @@ public final class SandevistanMirageTrail {
         return null;
     }
 
+    /* ---------------- WALK ANIM SAFE ACCESS ---------------- */
+
     private static float safeWalkPosition(AbstractClientPlayer player, float partial) {
         try {
             Object wa = player.walkAnimation;
@@ -677,15 +813,12 @@ public final class SandevistanMirageTrail {
         }
     }
 
+    /* ---------------- ANGLE HELPERS ---------------- */
+
     private static float wrapDegrees(float deg) {
         deg = deg % 360.0F;
         if (deg >= 180.0F) deg -= 360.0F;
         if (deg < -180.0F) deg += 360.0F;
         return deg;
-    }
-
-    private static float rotLerp(float t, float a, float b) {
-        float delta = wrapDegrees(b - a);
-        return a + delta * t;
     }
 }

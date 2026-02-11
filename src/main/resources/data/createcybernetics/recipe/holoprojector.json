@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "L": {
+      "item": "createcybernetics:component_fiberoptics"
+    },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "TLT",
+    "TRT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:holoprojector"
+  }
+}

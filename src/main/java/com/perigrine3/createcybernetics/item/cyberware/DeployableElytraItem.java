@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.event.custom.FullBorgHandler;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -188,6 +189,11 @@ public class DeployableElytraItem extends Item implements ICyberwareItem {
         if (player.isFallFlying()) {
             if (!data.tryConsumeEnergy(GLIDE_COST_PER_TICK)) {
                 return false;
+            }
+            if (FullBorgHandler.isWingman(data)) {
+                if (!player.isShiftKeyDown()) {
+                    player.displayClientMessage(Component.literal("Hold SHIFT to slow down"), true);
+                }
             }
         }
 

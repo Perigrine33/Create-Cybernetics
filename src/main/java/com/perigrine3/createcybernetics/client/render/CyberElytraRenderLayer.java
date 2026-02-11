@@ -1,8 +1,9 @@
-package com.perigrine3.createcybernetics.client;
+package com.perigrine3.createcybernetics.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.client.CyberElytraClient;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.client.model.ElytraModel;

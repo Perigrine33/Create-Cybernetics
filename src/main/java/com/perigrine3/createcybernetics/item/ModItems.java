@@ -53,10 +53,12 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> TITANIUM_HAND = ITEMS.register("titanium_hand",
             () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> HOLOIMPRINT_CHIP = ITEMS.register("holoimprint_chip",
+            () -> new HoloProjectionChipItem(new Item.Properties()));
     public static final DeferredItem<Item> XP_CAPSULE = ITEMS.register("expcapsule",
             () -> new XPCapsuleItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> FACEPLATE = ITEMS.register("faceplate",
-            () -> new XPCapsuleItem(new Item.Properties().stacksTo(1)));
+            () -> new FaceplateMaskItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> NETHERITE_QPU = ITEMS.register("netherite_qpu",
             () -> new Item(new Item.Properties()){
                 @Override
@@ -1812,9 +1814,7 @@ public class ModItems {
                 super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
             }
         });
-
-    //COLD SWEAT COMPAT
-        public static final DeferredItem<Item> SKINUPGRADES_SWEAT = registerIfLoaded("cold_sweat","skinupgrades_sweat",
+    public static final DeferredItem<Item> SKINUPGRADES_SWEAT = registerIfLoaded("cold_sweat","skinupgrades_sweat",
             () -> new SweatGlandsItem(new Item.Properties().stacksTo(1), 3) {
             @Override
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {

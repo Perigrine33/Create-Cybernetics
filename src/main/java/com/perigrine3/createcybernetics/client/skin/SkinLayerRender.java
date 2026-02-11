@@ -21,7 +21,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RenderArmEvent;
 
 import java.util.HashMap;
@@ -236,6 +235,8 @@ public final class SkinLayerRender {
                     RenderSystem.colorMask(true, true, true, true);
 
                     if (replaceVanillaArm && baseArmModifier != null) {
+                        // IMPORTANT: this is your replacement texture, not vanilla.
+                        // Even if hideSleeve == true, we still want the sleeve geometry rendered with the replacement texture.
                         ResourceLocation baseTex = baseArmModifier.getTexture(modelType);
                         var baseVc = buffer.getBuffer(RenderType.entityTranslucent(baseTex));
                         int whiteOpaque = 0xFFFFFFFF;
@@ -243,6 +244,7 @@ public final class SkinLayerRender {
                         armPart.render(poseStack, baseVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
                         sleevePart.render(poseStack, baseVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
                     } else {
+                        // Vanilla skin base: DO NOT render sleeve if it's being hidden, to avoid top-layers bleeding through.
                         ResourceLocation baseSkinTex = player.getSkin().texture();
                         var baseVc = buffer.getBuffer(RenderType.entitySolid(baseSkinTex));
                         int whiteOpaque = 0xFFFFFFFF;
@@ -268,6 +270,7 @@ public final class SkinLayerRender {
                         int whiteOpaque = 0xFFFFFFFF;
 
                         armPart.render(poseStack, underlayVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
+                        // Keep vanilla sleeve underlay hidden when requested.
                         if (!hideSleeve) {
                             sleevePart.render(poseStack, underlayVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
                         }
@@ -285,16 +288,16 @@ public final class SkinLayerRender {
                     int color = modifier.getColor();
 
                     armPart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
-                    if (!hideSleeve) {
-                        sleevePart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
-                    }
+
+                    // KEY CHANGE:
+                    // If vanilla sleeve is hidden, we STILL render the sleeve geometry for overlays,
+                    // so your "outer layer" exists in first-person.
+                    sleevePart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
 
                     if (modifier.hasGlint()) {
                         var glintVc = buffer.getBuffer(RenderType.entityGlint());
                         armPart.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-                        if (!hideSleeve) {
-                            sleevePart.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-                        }
+                        sleevePart.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
                     }
                 }
 

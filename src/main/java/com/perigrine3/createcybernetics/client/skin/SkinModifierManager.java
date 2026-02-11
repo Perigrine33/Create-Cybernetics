@@ -10,14 +10,18 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Central manager for all skin modifications in the game.
@@ -79,6 +83,29 @@ import java.util.UUID;
  */
 public class SkinModifierManager {
     private static final Map<UUID, SkinModifierState> PLAYER_STATES = new HashMap<>();
+
+    private static final String ENTITY_HOLO_SNAPSHOT_KEY = "cc_holo_snapshot";
+
+    private static boolean SNAP_REFLECT_READY = false;
+    private static boolean SNAP_REFLECT_FAILED = false;
+    private static java.lang.reflect.Constructor<?> SNAP_CTOR;
+    private static java.lang.reflect.Method SNAP_DESERIALIZE_1;
+    private static java.lang.reflect.Method SNAP_DESERIALIZE_2;
+
+
+
+    // ---- MERMOD COMPONENT-BASED MODIFIER DETECTION (soft compat) ----
+    private static final ResourceLocation MERMOD_SEA_NECKLACE_ID =
+            ResourceLocation.fromNamespaceAndPath("mermod", "sea_necklace");
+
+    private static DataComponentType<?> MERMOD_NECKLACE_MODIFIERS_COMPONENT;
+    private static boolean MERMOD_REFLECTION_READY = false;
+    private static boolean MERMOD_REFLECTION_FAILED = false;
+    private static Method MERMOD_COMPONENT_MODIFIERS_METHOD;
+    private static Method MERMOD_MODIFIER_ID_METHOD;
+
+
+
 
     //INTERCHANGEABLES
     private static final ResourceLocation MISSING_SKIN_TEXTURE =
@@ -160,6 +187,11 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_eyes_dyed.png");
     private static final ResourceLocation GENOS_HIGHLIGHT =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_highlight.png");
+
+    private static final ResourceLocation ECLIPSE_VISOR_TRIMMED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/eclipse_visor_trimmed.png");
+    private static final ResourceLocation SPYDER_VISOR_TRIMMED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/spyder_visor_trimmed.png");
 
     //WIDE VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_WIDE =
@@ -635,14 +667,52 @@ public class SkinModifierManager {
 
 
     public static SkinModifierState getPlayerSkinState(AbstractClientPlayer player) {
-        if (!player.hasData(ModAttachments.CYBERWARE)) return null;
-
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        PlayerCyberwareData data = PlayerCyberwareData.getForVisual(player, player.registryAccess());
+        if (data == null) {
+            data = tryBuildCyberwareDataFromSnapshot(player);
+        }
         if (data == null) return null;
 
         UUID playerId = player.getUUID();
         SkinModifierState state = PLAYER_STATES.computeIfAbsent(playerId, k -> new SkinModifierState());
         state.clearModifiers();
+
+
+// --- FACEPLATE BASE-SKIN OVERRIDE (alias -> Mojang skin) ---
+        Component custom = player.getCustomName();
+        if (custom != null) {
+            String alias = custom.getString();
+            FaceplateSkinOverrideClient.ResolvedSkin resolved = FaceplateSkinOverrideClient.getOrRequest(alias);
+            if (resolved != null) {
+                state.addModifier(new SkinModifier(resolved.texture(), resolved.texture(),
+                        0xFFFFFFFF, true));
+            }
+        }
+
+
+// COMPAT STUFF
+        boolean mermodTailActive = false;
+        if (ModCompats.isInstalled("mermod")) {
+            ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+            if (!chest.isEmpty()) {
+                ResourceLocation key = BuiltInRegistries.ITEM.getKey(chest.getItem());
+                if (MERMOD_SEA_NECKLACE_ID.equals(key)) {
+
+                    boolean inWater = player.isInWaterOrBubble();
+
+                    var moisturizerTag = net.minecraft.tags.TagKey.create(
+                            net.minecraft.core.registries.Registries.ITEM,
+                            ResourceLocation.fromNamespaceAndPath("mermod", "tail_moisturizer_modifier"));
+
+                    boolean hasMoisturizerByItemTag = chest.getTags().anyMatch(t -> t.equals(moisturizerTag));
+
+                    boolean hasMoisturizerByComponent = hasMermodMoisturizerComponent(chest);
+
+                    mermodTailActive = inWater || hasMoisturizerByItemTag || hasMoisturizerByComponent;
+                }
+            }
+        }
+
 
 
 
@@ -656,8 +726,13 @@ public class SkinModifierManager {
                         tint, true, true));
             }
         }
-// SYNTHSKIN
-        if (data.hasSpecificItem(ModItems.SKINUPGRADES_SYNTHSKIN.get(), CyberwareSlot.SKIN)) {
+// --- SYNTHSKIN / NETHERITE PLATING INTERACTION ---
+        boolean hasSynthSkin = data.hasSpecificItem(ModItems.SKINUPGRADES_SYNTHSKIN.get(), CyberwareSlot.SKIN);
+        boolean hasNetheritePlating = data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN);
+
+        if (hasSynthSkin && hasNetheritePlating) {
+
+        } else if (hasSynthSkin) {
             int alpha = 100;
             int tint = FastColor.ARGB32.color(alpha, 255, 255, 255);
 
@@ -665,14 +740,25 @@ public class SkinModifierManager {
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
             state.removeModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM));
-            state.removeModifier(new SkinModifier(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY));
-            state.clearModifiers();
 
             if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
                 state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE));
             }
+
             state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM,
-                    tint, false, false, EnumSet.noneOf(SkinModifier.HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), true));
+                    tint, false, false,
+                    EnumSet.noneOf(SkinModifier.HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), true));
+
+            return state;
+        } else if (hasNetheritePlating) {
+            state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM));
+
+            state.addModifier(new SkinModifier(NETHERPLATED_SKIN_TEXTURE_WIDE, NETHERPLATED_SKIN_TEXTURE_SLIM,
+                    0xFFFFFFFF, true));
+
             return state;
         }
 // GILLS
@@ -686,136 +772,140 @@ public class SkinModifierManager {
                     0xFFFFFFFF, true));
         }
 // LEFT CYBERLEG
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
-            state.addModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE,
-                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+        if (!mermodTailActive) {
+            if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
+                state.addModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE,
+                        0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
 
-            if (data.isDyed(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
-                int tint = data.dyeColor(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
-                state.addModifier(new SkinModifier(LEFT_CYBERLEG_PRIMARY, LEFT_CYBERLEG_PRIMARY,
-                        tint, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
-            }
+                if (data.isDyed(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
+                    int tint = data.dyeColor(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
+                    state.addModifier(new SkinModifier(LEFT_CYBERLEG_PRIMARY, LEFT_CYBERLEG_PRIMARY,
+                            tint, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                }
 
-            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
-                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
-                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
+                if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
+                    int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG);
 
-                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
-                if (tex != null) {
-                    state.addModifier(new SkinModifier(tex, tex, tint, false,
-                            EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                    ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
+                    if (tex != null) {
+                        state.addModifier(new SkinModifier(tex, tex, tint, false,
+                                EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                    }
                 }
             }
-        }
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG)) {
-            state.addModifier(new SkinModifier(COPPER_PLATED_LEFT_CYBERLEG, COPPER_PLATED_LEFT_CYBERLEG,
-                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+            if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG)) {
+                state.addModifier(new SkinModifier(COPPER_PLATED_LEFT_CYBERLEG, COPPER_PLATED_LEFT_CYBERLEG,
+                        0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
 
-            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG)) {
-                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG);
-                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG);
+                if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG);
+                    int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get(), CyberwareSlot.LLEG);
 
-                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
-                if (tex != null) {
-                    state.addModifier(new SkinModifier(tex, tex, tint, false,
-                            EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                    ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
+                    if (tex != null) {
+                        state.addModifier(new SkinModifier(tex, tex, tint, false,
+                                EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                    }
                 }
             }
-        }
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG)) {
-            state.addModifier(new SkinModifier(IRON_PLATED_LEFT_CYBERLEG, IRON_PLATED_LEFT_CYBERLEG,
-                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+            if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG)) {
+                state.addModifier(new SkinModifier(IRON_PLATED_LEFT_CYBERLEG, IRON_PLATED_LEFT_CYBERLEG,
+                        0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
 
-            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG)) {
-                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG);
-                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG);
+                if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG);
+                    int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get(), CyberwareSlot.LLEG);
 
-                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
-                if (tex != null) {
-                    state.addModifier(new SkinModifier(tex, tex, tint, false,
-                            EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                    ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
+                    if (tex != null) {
+                        state.addModifier(new SkinModifier(tex, tex, tint, false,
+                                EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                    }
                 }
             }
-        }
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG)) {
-            state.addModifier(new SkinModifier(GOLD_PLATED_LEFT_CYBERLEG, GOLD_PLATED_LEFT_CYBERLEG,
-                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+            if (data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG)) {
+                state.addModifier(new SkinModifier(GOLD_PLATED_LEFT_CYBERLEG, GOLD_PLATED_LEFT_CYBERLEG,
+                        0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
 
-            if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG)) {
-                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG);
-                int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG);
+                if (data.isTrimmed(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG);
+                    int tint = data.trimColor(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get(), CyberwareSlot.LLEG);
 
-                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
-                if (tex != null) {
-                    state.addModifier(new SkinModifier(tex, tex, tint, false,
-                            EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                    ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.LEG, false);
+                    if (tex != null) {
+                        state.addModifier(new SkinModifier(tex, tex, tint, false,
+                                EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+                    }
                 }
             }
         }
 // RIGHT CYBERLEG
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
-            state.addModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE,
-                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+        if (!mermodTailActive) {
+            if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
+                state.addModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE,
+                        0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
 
-            if (data.isDyed(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
-                int tint = data.dyeColor(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
-                state.addModifier(new SkinModifier(RIGHT_CYBERLEG_PRIMARY, RIGHT_CYBERLEG_PRIMARY,
-                        tint, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
-            }
+                if (data.isDyed(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
+                    int tint = data.dyeColor(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
+                    state.addModifier(new SkinModifier(RIGHT_CYBERLEG_PRIMARY, RIGHT_CYBERLEG_PRIMARY,
+                            tint, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                }
 
-            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
-                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
-                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
+                if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
+                    int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG);
 
-                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
-                if (tex != null) {
-                    state.addModifier(new SkinModifier(tex, tex, tint, false,
-                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                    ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
+                    if (tex != null) {
+                        state.addModifier(new SkinModifier(tex, tex, tint, false,
+                                EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                    }
                 }
             }
-        }
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG)) {
-            state.addModifier(new SkinModifier(COPPER_PLATED_RIGHT_CYBERLEG, COPPER_PLATED_RIGHT_CYBERLEG,
-                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+            if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG)) {
+                state.addModifier(new SkinModifier(COPPER_PLATED_RIGHT_CYBERLEG, COPPER_PLATED_RIGHT_CYBERLEG,
+                        0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
 
-            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG)) {
-                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG);
-                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG);
+                if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG);
+                    int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get(), CyberwareSlot.RLEG);
 
-                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
-                if (tex != null) {
-                    state.addModifier(new SkinModifier(tex, tex, tint, false,
-                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                    ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
+                    if (tex != null) {
+                        state.addModifier(new SkinModifier(tex, tex, tint, false,
+                                EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                    }
                 }
             }
-        }
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG)) {
-            state.addModifier(new SkinModifier(IRON_PLATED_RIGHT_CYBERLEG, IRON_PLATED_RIGHT_CYBERLEG,
-                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+            if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG)) {
+                state.addModifier(new SkinModifier(IRON_PLATED_RIGHT_CYBERLEG, IRON_PLATED_RIGHT_CYBERLEG,
+                        0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
 
-            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG)) {
-                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG);
-                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG);
+                if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG);
+                    int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get(), CyberwareSlot.RLEG);
 
-                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
-                if (tex != null) {
-                    state.addModifier(new SkinModifier(tex, tex, tint, false,
-                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                    ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
+                    if (tex != null) {
+                        state.addModifier(new SkinModifier(tex, tex, tint, false,
+                                EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                    }
                 }
             }
-        }
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG)) {
-            state.addModifier(new SkinModifier(GOLD_PLATED_RIGHT_CYBERLEG, GOLD_PLATED_RIGHT_CYBERLEG,
-                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+            if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG)) {
+                state.addModifier(new SkinModifier(GOLD_PLATED_RIGHT_CYBERLEG, GOLD_PLATED_RIGHT_CYBERLEG,
+                        0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
 
-            if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG)) {
-                ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG);
-                int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG);
+                if (data.isTrimmed(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG);
+                    int tint = data.trimColor(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get(), CyberwareSlot.RLEG);
 
-                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
-                if (tex != null) {
-                    state.addModifier(new SkinModifier(tex, tex, tint, false,
-                            EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                    ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.LEG, false);
+                    if (tex != null) {
+                        state.addModifier(new SkinModifier(tex, tex, tint, false,
+                                EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+                    }
                 }
             }
         }
@@ -970,32 +1060,10 @@ public class SkinModifierManager {
             }
         }
 
-// NETHERITE PLATING
-        if (data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN)) {
-            state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
-            state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
-            state.removeModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
-            state.removeModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM));
-            state.removeModifier(new SkinModifier(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY));
-            state.clearHighlights();
-            state.clearModifiers();
 
-            if (data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM) && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM) &&
-                    data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG) && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG) &&
-                    data.hasSpecificItem(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN) && data.hasSpecificItem(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get(), CyberwareSlot.MUSCLE) &&
-                    data.hasSpecificItem(ModItems.HEARTUPGRADES_CYBERHEART.get(), CyberwareSlot.HEART) && data.hasSpecificItem(ModItems.BASECYBERWARE_LINEARFRAME.get(), CyberwareSlot.BONE) &&
-                    data.hasMultipleSpecificItem(ModItems.LUNGSUPGRADES_OXYGEN.get(), CyberwareSlot.LUNGS, 3) &&
-                    data.hasSpecificItem(ModItems.SKINUPGRADES_SOLARSKIN.get(), CyberwareSlot.SKIN) &&
-                    data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN)) {
-                state.removeModifier(new SkinModifier(NETHERPLATED_SKIN_TEXTURE_WIDE, NETHERPLATED_SKIN_TEXTURE_SLIM));
-            } else {
-                state.addModifier(new SkinModifier(NETHERPLATED_SKIN_TEXTURE_WIDE, NETHERPLATED_SKIN_TEXTURE_SLIM,
-                        0xFFFFFFFF, true));
-            }
-        }
 
         // SAMSON MODEL
-        if (FullBorgHandler.isSamson(player.getData(ModAttachments.CYBERWARE))) {
+        if (FullBorgHandler.isSamson(data)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1025,7 +1093,7 @@ public class SkinModifierManager {
             }
         }
 // ECLIPSE MODEL
-        if (FullBorgHandler.isEclipse(player.getData(ModAttachments.CYBERWARE))) {
+        if (FullBorgHandler.isEclipse(data)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1053,9 +1121,14 @@ public class SkinModifierManager {
                 state.addHighlight(new SkinHighlight(ECLIPSE_EYES_DYED, ECLIPSE_EYES_DYED,
                         tint, true, true));
             }
+
+            if (data.isTrimmed(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
+                int tint = data.trimColor(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN);
+                state.addModifier(new SkinModifier(ECLIPSE_VISOR_TRIMMED, ECLIPSE_VISOR_TRIMMED, tint, false));
+            }
         }
 // SPYDER MODEL
-        if (FullBorgHandler.isSpyder(player.getData(ModAttachments.CYBERWARE))) {
+        if (FullBorgHandler.isSpyder(data)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1083,9 +1156,14 @@ public class SkinModifierManager {
                 state.addHighlight(new SkinHighlight(SPYDER_EYES_DYED, SPYDER_EYES_DYED,
                         tint, true, true));
             }
+
+            if (data.isTrimmed(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
+                int tint = data.trimColor(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN);
+                state.addModifier(new SkinModifier(SPYDER_VISOR_TRIMMED, SPYDER_VISOR_TRIMMED, tint, false));
+            }
         }
 // WINGMAN MODEL
-        if (FullBorgHandler.isAquarius(player.getData(ModAttachments.CYBERWARE))) {
+        if (FullBorgHandler.isWingman(data)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1106,7 +1184,7 @@ public class SkinModifierManager {
             }
         }
 // AQUARIUS MODEL
-        if (FullBorgHandler.isAquarius(player.getData(ModAttachments.CYBERWARE))) {
+        if (FullBorgHandler.isAquarius(data)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1136,7 +1214,7 @@ public class SkinModifierManager {
             }
         }
 // DYMOND MODEL
-        if (FullBorgHandler.isDymond(player.getData(ModAttachments.CYBERWARE))) {
+        if (FullBorgHandler.isDymond(data)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1166,7 +1244,7 @@ public class SkinModifierManager {
             }
         }
 // DRAGOON MODEL
-        if (FullBorgHandler.isDragoon(player.getData(ModAttachments.CYBERWARE))) {
+        if (FullBorgHandler.isDragoon(data)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1197,7 +1275,7 @@ public class SkinModifierManager {
         }
 // COPERNICUS MODEL
         if (ModCompats.isInstalled("northstar")) {
-            if (FullBorgHandler.isCopernicus(player.getData(ModAttachments.CYBERWARE))) {
+            if (FullBorgHandler.isCopernicus(data)) {
 
                 state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
                 state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1228,7 +1306,7 @@ public class SkinModifierManager {
         }
 
 // GENOS MODEL
-        if (FullBorgHandler.isGenos(player.getData(ModAttachments.CYBERWARE))) {
+        if (FullBorgHandler.isGenos(data)) {
 
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
@@ -1304,7 +1382,7 @@ public class SkinModifierManager {
                     0xFFFFFFFF, true);
         }
 // DEPLOYABLE ELYTRA
-        if (data.hasSpecificItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get(), CyberwareSlot.BONE)) {
+        if (data.hasSpecificItem(ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE)) {
             state.addModifier(new SkinModifier(DEPLOYABLE_ELYTRA_TEXTURE, DEPLOYABLE_ELYTRA_TEXTURE,
                     0xFFFFFFFF, false));
             SkinHighlightRender.apply(state, true, DEPLOYABLE_ELYTRA_HIGHLIGHT_TEXTURE, DEPLOYABLE_ELYTRA_HIGHLIGHT_TEXTURE,
@@ -1466,6 +1544,148 @@ public class SkinModifierManager {
                 CreateCybernetics.MODID,
                 "textures/entity/trims/" + file
         );
+    }
+
+
+
+
+    private static boolean hasMermodMoisturizerComponent(ItemStack necklace) {
+        DataComponentType<?> type = getMermodNecklaceModifiersComponentType();
+        if (type == null) return false;
+        Object componentValue = necklace.get(type);
+        if (componentValue == null) return false;
+        return componentContainsMoisturizer(componentValue);
+    }
+
+    private static DataComponentType<?> getMermodNecklaceModifiersComponentType() {
+        if (MERMOD_NECKLACE_MODIFIERS_COMPONENT != null) return MERMOD_NECKLACE_MODIFIERS_COMPONENT;
+        DataComponentType<?> t;
+
+        t = BuiltInRegistries.DATA_COMPONENT_TYPE.get(ResourceLocation.fromNamespaceAndPath("mermod", "necklace_modifiers"));
+        if (t != null) return MERMOD_NECKLACE_MODIFIERS_COMPONENT = t;
+
+        t = BuiltInRegistries.DATA_COMPONENT_TYPE.get(ResourceLocation.fromNamespaceAndPath("mermod", "necklace_modifiers_component_type"));
+        if (t != null) return MERMOD_NECKLACE_MODIFIERS_COMPONENT = t;
+
+        t = BuiltInRegistries.DATA_COMPONENT_TYPE.get(ResourceLocation.fromNamespaceAndPath("mermod", "necklace_modifiers_component"));
+        if (t != null) return MERMOD_NECKLACE_MODIFIERS_COMPONENT = t;
+
+        DataComponentType<?> best = null;
+        int bestScore = -1;
+
+        for (ResourceLocation id : BuiltInRegistries.DATA_COMPONENT_TYPE.keySet()) {
+            if (!"mermod".equals(id.getNamespace())) continue;
+            String p = id.getPath();
+
+            int score = 0;
+            if (p.contains("necklace")) score += 3;
+            if (p.contains("modifier")) score += 3;
+            if (p.contains("modifiers")) score += 2;
+            if (p.contains("component")) score += 1;
+
+            if (score > bestScore) {
+                DataComponentType<?> candidate = BuiltInRegistries.DATA_COMPONENT_TYPE.get(id);
+                if (candidate != null) {
+                    best = candidate;
+                    bestScore = score;
+                }
+            }
+        }
+
+        MERMOD_NECKLACE_MODIFIERS_COMPONENT = best;
+        return best;
+    }
+
+    private static boolean componentContainsMoisturizer(Object necklaceModifiersComponent) {
+        if (MERMOD_REFLECTION_FAILED) return false;
+        if (!MERMOD_REFLECTION_READY) {
+            try {
+                MERMOD_COMPONENT_MODIFIERS_METHOD = necklaceModifiersComponent.getClass().getMethod("modifiers");
+
+                Class<?> necklaceModifierClass = Class.forName("io.github.thatpreston.mermod.item.modifier.NecklaceModifier");
+                MERMOD_MODIFIER_ID_METHOD = necklaceModifierClass.getMethod("id");
+                MERMOD_REFLECTION_READY = true;
+            } catch (Throwable t) {
+                MERMOD_REFLECTION_FAILED = true;
+                return false;
+            }
+        }
+
+        try {
+            Object mapObj = MERMOD_COMPONENT_MODIFIERS_METHOD.invoke(necklaceModifiersComponent);
+            if (!(mapObj instanceof Map<?, ?> map)) return false;
+
+            Collection<?> values = map.values();
+            for (Object mod : values) {
+                if (mod == null) continue;
+
+                Object idObj = MERMOD_MODIFIER_ID_METHOD.invoke(mod);
+                if (!(idObj instanceof String rawId)) continue;
+
+                if (isMoisturizerId(rawId)) return true;
+            }
+        } catch (Throwable ignored) {}
+
+        return false;
+    }
+
+    private static boolean isMoisturizerId(String rawId) {
+        if (rawId == null || rawId.isBlank()) return false;
+        String s = rawId;
+
+        int colon = s.indexOf(':');
+        if (colon >= 0 && colon + 1 < s.length()) s = s.substring(colon + 1);
+
+        if (s.endsWith("_modifier")) s = s.substring(0, s.length() - "_modifier".length());
+
+        return "tail_moisturizer".equals(s);
+    }
+
+
+
+    private static PlayerCyberwareData tryBuildCyberwareDataFromSnapshot(AbstractClientPlayer player) {
+        if (SNAP_REFLECT_FAILED) return null;
+
+        CompoundTag snap = player.getPersistentData().getCompound(ENTITY_HOLO_SNAPSHOT_KEY);
+        if (snap == null || snap.isEmpty()) return null;
+
+        try {
+            if (!SNAP_REFLECT_READY) {
+                Class<?> cls = PlayerCyberwareData.class;
+
+                SNAP_CTOR = cls.getDeclaredConstructor();
+                SNAP_CTOR.setAccessible(true);
+
+                try {
+                    SNAP_DESERIALIZE_1 = cls.getMethod("deserializeNBT", net.minecraft.core.HolderLookup.Provider.class, CompoundTag.class);
+                } catch (NoSuchMethodException ignored) {}
+
+                try {
+                    SNAP_DESERIALIZE_2 = cls.getMethod("deserializeNBT", CompoundTag.class);
+                } catch (NoSuchMethodException ignored) {}
+
+                SNAP_REFLECT_READY = true;
+            }
+
+            Object obj = SNAP_CTOR.newInstance();
+            PlayerCyberwareData data = (PlayerCyberwareData) obj;
+
+            if (SNAP_DESERIALIZE_1 != null) {
+                SNAP_DESERIALIZE_1.invoke(data, player.registryAccess(), snap);
+                return data;
+            }
+
+            if (SNAP_DESERIALIZE_2 != null) {
+                SNAP_DESERIALIZE_2.invoke(data, snap);
+                return data;
+            }
+
+            SNAP_REFLECT_FAILED = true;
+            return null;
+        } catch (Throwable t) {
+            SNAP_REFLECT_FAILED = true;
+            return null;
+        }
     }
 
 }

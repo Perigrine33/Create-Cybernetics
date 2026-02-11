@@ -2,12 +2,13 @@ package com.perigrine3.createcybernetics.network;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.client.render.SandevistanMirageTrail;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.*;
+import com.perigrine3.createcybernetics.event.custom.SandevistanSnapshotRelay;
 import com.perigrine3.createcybernetics.network.handler.*;
 import com.perigrine3.createcybernetics.network.payload.*;
-import com.perigrine3.createcybernetics.screen.custom.hud.CyberwareHudLayer;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -164,6 +165,26 @@ public final class ModPayloads {
                     OpenHeatEnginePayloadHandler.handle(payload, sp);
                 })
         );
+
+        r.playToClient(
+                SandevistanSnapshotPayload.TYPE,
+                SandevistanSnapshotPayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> {
+                    SandevistanMirageTrail.acceptNetworkSnapshot(payload);
+                })
+        );
+
+        r.playToServer(
+                SandevistanSnapshotC2SPayload.TYPE,
+                SandevistanSnapshotC2SPayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> {
+                    if (ctx.player() instanceof net.minecraft.server.level.ServerPlayer sp) {
+                        SandevistanSnapshotRelay.handle(sp, payload);
+                    }
+                })
+        );
+
+
 
 
         /* ---------------- TOGGLE WHEEL PAYLOADS ---------------- */

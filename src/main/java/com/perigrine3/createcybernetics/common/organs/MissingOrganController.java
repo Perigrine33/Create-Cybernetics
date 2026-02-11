@@ -24,6 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -35,6 +36,9 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 public final class MissingOrganController {
 
     private MissingOrganController() {}
+
+    private static final String HOLO_SNAPSHOT_FLAG = "cc_holo_snapshot";
+
     private static final ResourceLocation NO_BONE_SPEED = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "missing_bone_speed");
     private static final ResourceLocation NO_BONE_JUMP = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "missing_bone_jump");
     private static final ResourceLocation NO_LEFT_LEG_SPEED = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "missing_left_leg_speed");
@@ -54,6 +58,8 @@ public final class MissingOrganController {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         if (player.level().isClientSide) return;
+
+        if (player.getPersistentData().getBoolean(HOLO_SNAPSHOT_FLAG)) return;
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
@@ -270,6 +276,7 @@ public final class MissingOrganController {
         Player player = event.getPlayer();
         if (player == null) return;
         if (player.level().isClientSide) return;
+        if (player instanceof FakePlayer) return;
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;

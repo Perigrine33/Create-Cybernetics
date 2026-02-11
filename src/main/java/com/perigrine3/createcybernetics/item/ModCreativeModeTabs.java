@@ -26,6 +26,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.ENGINEERING_TABLE);
                         output.accept(ModBlocks.GRAFTING_TABLE);
                         output.accept(ModBlocks.CHARGING_BLOCK);
+                        output.accept(ModBlocks.HOLOPROJECTOR);
                         output.accept(ModItems.NEUROPOZYNE_AUTOINJECTOR);
                         output.accept(ModItems.EMPTY_AUTOINJECTOR);
 
@@ -36,6 +37,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TITANIUMSHEET);
                         output.accept(ModItems.EYEUPGRADEBASE);
                         output.accept(ModItems.TITANIUM_HAND);
+                        output.accept(ModItems.HOLOIMPRINT_CHIP);
                         output.accept(ModItems.FRONTAL_LOBE);
                         output.accept(ModItems.PARIETAL_LOBE);
                         output.accept(ModItems.TEMPORAL_LOBE);

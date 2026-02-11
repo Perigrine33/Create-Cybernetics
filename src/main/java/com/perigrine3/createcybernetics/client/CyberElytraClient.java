@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.client;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.client.render.CyberElytraRenderLayer;
 import net.minecraft.client.model.ElytraModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.resources.PlayerSkin;

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": {
+      "item": "createcybernetics:titaniumsheet"
+    },
+    "S": {
+      "item": "createcybernetics:skinupgrades_synthskin"
+    },
+    "N": {
+      "item": "createcybernetics:component_synthnerves"
+    }
+  },
+  "pattern": [
+    "NSN",
+    "STS",
+    "NSN"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:faceplate"
+  }
+}

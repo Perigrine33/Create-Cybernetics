@@ -60,6 +60,7 @@
 
   "item.createcybernetics.eyeupgradebase": "Cybereye Module Base",
   "item.createcybernetics.titanium_hand": "Titanium Hand",
+  "item.createcybernetics.holoimprint_chip": "Entity Imprint Chip",
   "item.createcybernetics.neuropozyne_autoinjector": "Neuropozyne Autoinjector",
   "item.createcybernetics.neuropozyne_autoinjector.duration": "Neuropozyne (20:00)",
   "item.createcybernetics.neuropozyne_autoinjector.desc": "Injection Extends Duration to a Full Day",
@@ -408,6 +409,7 @@
   "block.createcybernetics.engineering_table": "Engineering Table",
   "block.createcybernetics.grafting_table": "Grafting Table",
   "block.createcybernetics.charging_block": "Charging Block",
+  "block.createcybernetics.holoprojector": "Holoprojector",
 
   "block.createcybernetics.datura_bush": "Datura Bush",
 
@@ -485,6 +487,8 @@
   "advancement.pretty_in_pink.desc": "Dyed A Full Body Conversion Pink",
   "advancement.lets_dance": "Let's Dance",
   "advancement.lets_dance.desc": "Killed A Full Borg As A Full 'Ganic",
+  "advancement.bodysnatcher": "Bodysnatcher",
+  "advancement.bodysnatcher.desc": "Installed An Interchangeable Faceplate",
 
 
   "death.attack.createcybernetics.cyberware_surgery": "%1$s didn’t survive the procedure...",
@@ -616,7 +620,7 @@
         "tooltip.createcybernetics.armupgrades_crafthands.tooltip2": "§7Requires §9Cyberarm",
         "tooltip.createcybernetics.armupgrades_crafthands.energy": "Costs 2 Energy",
       "tooltip.createcybernetics.armupgrades_drillfist.tooltip1": "§1Allows the user to mine anything without a tool (at the cost of a useable hand)",
-        "tooltip.createcybernetics.armupgrades_drillfist.tooltip2": "§7Requires §9Cyberarm)",
+        "tooltip.createcybernetics.armupgrades_drillfist.tooltip2": "§7Requires §9Cyberarm",
       "tooltip.createcybernetics.armupgrades_firestarter.tooltip1": "§1Can ignite creatures and blocks",
         "tooltip.createcybernetics.armupgrades_firestarter.tooltip2": "§7Requires §9Cyberarm",
         "tooltip.createcybernetics.armupgrades_firestarter.energy": "Costs 3 Energy",

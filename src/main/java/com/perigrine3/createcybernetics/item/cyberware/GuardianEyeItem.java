@@ -43,7 +43,7 @@ public class GuardianEyeItem extends Item implements ICyberwareItem {
 
     @Override
     public boolean replacesOrgan() {
-        return true;
+        return false;
     }
 
     @Override

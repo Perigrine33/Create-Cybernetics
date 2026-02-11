@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-04T22:51:34.2530075	Item Models: createcybernetics
+// 1.21.1	2026-02-08T01:05:15.8584286	Item Models: createcybernetics
 8570733f6ab9231502efdbe6dd1695f08dc806b1 assets/createcybernetics/models/item/andouille_sausage.json
 ae78f051d9328e5a204530b7fc2e3d88362b4e68 assets/createcybernetics/models/item/armupgrades_armcannon.json
 37f82cc0ca47be7b60c54ef6d3b7059b9b671846 assets/createcybernetics/models/item/armupgrades_claws.json
@@ -113,6 +113,7 @@ bffb81f64f2036852a361cad7b228315127f89e8 assets/createcybernetics/models/item/fr
 47984eea95573b562ff795894625a77c8a041c7f assets/createcybernetics/models/item/heartupgrades_defibrillator.json
 7715080ec20c3a85d8b2f69a95890f524332bfc0 assets/createcybernetics/models/item/heartupgrades_platelets.json
 1ae9fddfb899b3e98afdd66fc3e6cd5f32d29815 assets/createcybernetics/models/item/heartupgrades_stemcell.json
+f9fd948a3012749c06ac5de414f5aa4e1572140e assets/createcybernetics/models/item/holoimprint_chip.json
 d0149ed15f036392062a2ea56dd70a219ebe681a assets/createcybernetics/models/item/iron_upgrade_template.json
 4c3412be5db1787ca2d4a577ffc440186e527870 assets/createcybernetics/models/item/legupgrades_anklebracers.json
 8fbb1befb738168dd168f50316bedbb90b886b37 assets/createcybernetics/models/item/legupgrades_jumpboost.json

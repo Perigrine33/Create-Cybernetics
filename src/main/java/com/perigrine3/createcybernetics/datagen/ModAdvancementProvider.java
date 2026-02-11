@@ -235,6 +235,13 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                         .addCriterion("lets_dance", LetsDanceTrigger.Instance.any())
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/lets_dance"), existingFileHelper);
 
+            AdvancementHolder bodySnatcher = Advancement.Builder.advancement().parent(firstRipperdocVisit).display(ModItems.FACEPLATE.get(),
+                            Component.translatable("advancement.bodysnatcher"),
+                            Component.translatable("advancement.bodysnatcher.desc"),
+                            TITANIUM_BG, AdvancementType.TASK, true, false, false)
+                        .addCriterion("bodysnatcher", LetsDanceTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/bodysnatcher"), existingFileHelper);
+
 
 
 

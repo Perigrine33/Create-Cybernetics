@@ -37,6 +37,9 @@ import java.util.Map;
 
 public class PlayerCyberwareData implements ICyberwareData {
 
+    public static final String HOLO_SNAPSHOT_FLAG = "cc_holo_snapshot";
+    public static final String HOLO_SNAPSHOT_CYBERWARE = "cc_holo_snapshot_cyberware";
+
     private static final String NBT_CYBERWARE = "Cyberware";
     private static final String NBT_HUMANITY = "Humanity";
     private static final String NBT_ENERGY = "Energy";
@@ -1487,4 +1490,31 @@ public class PlayerCyberwareData implements ICyberwareData {
 
         return null;
     }
+
+    public static CompoundTag createSnapshotTagFor(Player player, HolderLookup.Provider provider) {
+        PlayerCyberwareData data = PlayerCyberwareData.getForVisual(player, player.registryAccess());
+        if (data == null) return new CompoundTag();
+        return data.serializeNBT(provider);
+    }
+
+    public static PlayerCyberwareData fromSnapshotTag(CompoundTag tag, HolderLookup.Provider provider) {
+        PlayerCyberwareData d = new PlayerCyberwareData();
+        if (tag != null && !tag.isEmpty()) {
+            d.deserializeNBT(tag, provider);
+        }
+        return d;
+    }
+
+    public static PlayerCyberwareData getForVisual(Player player, HolderLookup.Provider provider) {
+        if (player == null) return null;
+
+        CompoundTag pd = player.getPersistentData();
+        if (pd.getBoolean(HOLO_SNAPSHOT_FLAG) && pd.contains(HOLO_SNAPSHOT_CYBERWARE, Tag.TAG_COMPOUND)) {
+            CompoundTag snap = pd.getCompound(HOLO_SNAPSHOT_CYBERWARE);
+            return fromSnapshotTag(snap, provider);
+        }
+
+        return player.getData(ModAttachments.CYBERWARE);
+    }
+
 }

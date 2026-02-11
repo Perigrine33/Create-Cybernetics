@@ -173,6 +173,10 @@ public final class AdvancementEventHooks {
             if (data.hasSpecificItem(ModItems.BRAINUPGRADES_CYBERBRAIN.get())) {
                 ModCriteria.COGITO_ERGO_SUM.get().trigger(player);
             }
+
+            if (data.hasSpecificItem(ModItems.SKINUPGRADES_FACEPLATE.get())) {
+                ModCriteria.BODYSNATCHER.get().trigger(player);
+            }
         }
     }
 

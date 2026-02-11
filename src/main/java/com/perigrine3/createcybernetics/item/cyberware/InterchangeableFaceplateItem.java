@@ -36,7 +36,7 @@ public class InterchangeableFaceplateItem extends Item implements ICyberwareItem
 
     @Override
     public Set<CyberwareSlot> getSupportedSlots() {
-        return Set.of(CyberwareSlot.ORGANS);
+        return Set.of(CyberwareSlot.SKIN);
     }
 
     @Override

@@ -24,10 +24,27 @@ public final class TargetingModuleClientOutline {
 
     private TargetingModuleClientOutline() {}
 
+    public static void clearTarget() {
+        TARGET_ID.clear();
+        expiresAtGameTime = 0L;
+    }
+
     public static void setTarget(int entityId, int durationTicks) {
         Minecraft mc = Minecraft.getInstance();
         ClientLevel level = mc.level;
+        LocalPlayer player = mc.player;
+
         if (level == null) return;
+
+        if (player != null && entityId == player.getId()) {
+            clearTarget();
+            return;
+        }
+
+        if (entityId < 0) {
+            clearTarget();
+            return;
+        }
 
         TARGET_ID.clear();
         TARGET_ID.add(entityId);
@@ -47,14 +64,32 @@ public final class TargetingModuleClientOutline {
 
         if (TARGET_ID.isEmpty()) return;
         if (level.getGameTime() >= expiresAtGameTime) {
-            TARGET_ID.clear();
+            clearTarget();
             return;
         }
 
         int id = TARGET_ID.iterator().nextInt();
+
+        if (id == player.getId()) {
+            clearTarget();
+            return;
+        }
+
         var ent = level.getEntity(id);
-        if (!(ent instanceof LivingEntity living)) return;
-        if (!living.isAlive()) return;
+        if (!(ent instanceof LivingEntity living)) {
+            clearTarget();
+            return;
+        }
+
+        if (living == player) {
+            clearTarget();
+            return;
+        }
+
+        if (!living.isAlive()) {
+            clearTarget();
+            return;
+        }
 
         EntityRenderDispatcher dispatcher = mc.getEntityRenderDispatcher();
         Vec3 cam = mc.gameRenderer.getMainCamera().getPosition();

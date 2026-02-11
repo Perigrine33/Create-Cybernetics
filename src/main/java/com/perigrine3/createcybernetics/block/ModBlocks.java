@@ -86,6 +86,9 @@ public class ModBlocks {
     public static final DeferredBlock<Block> GRAFTING_TABLE = registerBlock("grafting_table",
             () -> new GraftingTableBlock(BlockBehaviour.Properties.of()
                     .noOcclusion().sound(SoundType.METAL)), true);
+    public static final DeferredBlock<Block> HOLOPROJECTOR = registerBlock("holoprojector",
+            () -> new HoloprojectorBlock(BlockBehaviour.Properties.of()
+                    .noOcclusion().sound(SoundType.METAL)), true);
 
 //PLANT BLOCKS
     public static final DeferredBlock<Block> DATURA_BUSH = BLOCKS.register("datura_bush",

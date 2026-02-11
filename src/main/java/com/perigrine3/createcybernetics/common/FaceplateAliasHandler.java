@@ -13,6 +13,7 @@ import net.minecraft.nbt.Tag; // ADDED
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -88,6 +89,9 @@ public final class FaceplateAliasHandler {
         player.setCustomName(Component.literal(alias));
         player.setCustomNameVisible(true);
 
+        player.refreshDisplayName();
+        player.refreshTabListName();
+
         return true;
     }
 
@@ -113,10 +117,16 @@ public final class FaceplateAliasHandler {
 
     @SubscribeEvent
     public static void onNameFormat(PlayerEvent.NameFormat event) {
-        if (!(event.getEntity() instanceof ServerPlayer sp)) return;
-        if (!hasActive(sp)) return;
+        Player p = event.getEntity();
+        Component custom = p.getCustomName();
+        if (custom != null) {
+            event.setDisplayname(custom);
+            return;
+        }
 
-        event.setDisplayname(Component.literal(getAlias(sp)));
+        if (p instanceof ServerPlayer sp && hasActive(sp)) {
+            event.setDisplayname(Component.literal(getAlias(sp)));
+        }
     }
 
     @SubscribeEvent
@@ -133,10 +143,16 @@ public final class FaceplateAliasHandler {
         if (sp == null) return;
         if (!hasActive(sp)) return;
 
+        event.setCanceled(true);
+
         Component name = Component.literal(getAlias(sp));
         Component content = Component.literal(event.getRawText());
-        event.setMessage(Component.translatable("chat.type.text", name, content));
+
+        Component line = Component.translatable("chat.type.text", name, content);
+
+        sp.server.getPlayerList().broadcastSystemMessage(line, false);
     }
+
 
     @SubscribeEvent
     public static void onRightClickAnvil(PlayerInteractEvent.RightClickBlock event) {

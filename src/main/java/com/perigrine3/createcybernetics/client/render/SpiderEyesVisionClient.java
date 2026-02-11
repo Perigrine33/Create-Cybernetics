@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.client;
+package com.perigrine3.createcybernetics.client.render;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.effect.ModEffects;

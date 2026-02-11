@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.client;
+package com.perigrine3.createcybernetics.client.render;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
@@ -8,6 +8,7 @@ import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -24,23 +25,34 @@ public final class CyberwareLimbHider {
 
     private static final Map<Integer, VisibilitySnapshot> SNAPSHOTS = new HashMap<>();
 
+    private static final String ENTITY_HOLO_SNAPSHOT_KEY = "cc_holo_snapshot";
+
     @SubscribeEvent
     public static void onRenderLivingPre(RenderLivingEvent.Pre<?, ?> event) {
         if (!(event.getEntity() instanceof AbstractClientPlayer player)) return;
         if (!(event.getRenderer() instanceof PlayerRenderer renderer)) return;
-
         if (!(renderer.getModel() instanceof PlayerModel<?> model)) return;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
+        PlayerCyberwareData data = player.hasData(ModAttachments.CYBERWARE) ? player.getData(ModAttachments.CYBERWARE) : null;
 
         SNAPSHOTS.put(player.getId(), VisibilitySnapshot.capture(model));
 
-        boolean hasLeftArm  = data.hasAnyTagged(ModTags.Items.LEFTARM_ITEMS,  CyberwareSlot.LARM);
-        boolean hasRightArm = data.hasAnyTagged(ModTags.Items.RIGHTARM_ITEMS, CyberwareSlot.RARM);
-        boolean hasLeftLeg  = data.hasAnyTagged(ModTags.Items.LEFTLEG_ITEMS,  CyberwareSlot.LLEG);
-        boolean hasRightLeg = data.hasAnyTagged(ModTags.Items.RIGHTLEG_ITEMS, CyberwareSlot.RLEG);
+        if (data != null) {
+            boolean hasLeftArm  = data.hasAnyTagged(ModTags.Items.LEFTARM_ITEMS,  CyberwareSlot.LARM);
+            boolean hasRightArm = data.hasAnyTagged(ModTags.Items.RIGHTARM_ITEMS, CyberwareSlot.RARM);
+            boolean hasLeftLeg  = data.hasAnyTagged(ModTags.Items.LEFTLEG_ITEMS,  CyberwareSlot.LLEG);
+            boolean hasRightLeg = data.hasAnyTagged(ModTags.Items.RIGHTLEG_ITEMS, CyberwareSlot.RLEG);
 
+            apply(model, event, hasLeftArm, hasRightArm, hasLeftLeg, hasRightLeg);
+            return;
+        }
+
+        CompoundTag snap = player.getPersistentData().getCompound(ENTITY_HOLO_SNAPSHOT_KEY);
+        if (snap.isEmpty()) return;
+    }
+
+    private static void apply(PlayerModel<?> model, RenderLivingEvent.Pre<?, ?> event,
+                              boolean hasLeftArm, boolean hasRightArm, boolean hasLeftLeg, boolean hasRightLeg) {
         setLeftArmVisible(model, hasLeftArm);
         setRightArmVisible(model, hasRightArm);
         setLeftLegVisible(model, hasLeftLeg);
@@ -62,24 +74,22 @@ public final class CyberwareLimbHider {
         snap.restore(model);
     }
 
-    /* ---------------- helpers ---------------- */
-
-    private static void setLeftArmVisible(PlayerModel<?> model, boolean visible) {
+    public static void setLeftArmVisible(PlayerModel<?> model, boolean visible) {
         model.leftArm.visible = visible;
         model.leftSleeve.visible = visible;
     }
 
-    private static void setRightArmVisible(PlayerModel<?> model, boolean visible) {
+    public static void setRightArmVisible(PlayerModel<?> model, boolean visible) {
         model.rightArm.visible = visible;
         model.rightSleeve.visible = visible;
     }
 
-    private static void setLeftLegVisible(PlayerModel<?> model, boolean visible) {
+    public static void setLeftLegVisible(PlayerModel<?> model, boolean visible) {
         model.leftLeg.visible = visible;
         model.leftPants.visible = visible;
     }
 
-    private static void setRightLegVisible(PlayerModel<?> model, boolean visible) {
+    public static void setRightLegVisible(PlayerModel<?> model, boolean visible) {
         model.rightLeg.visible = visible;
         model.rightPants.visible = visible;
     }

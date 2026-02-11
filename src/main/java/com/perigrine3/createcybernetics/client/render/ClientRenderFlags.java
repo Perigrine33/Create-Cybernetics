@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.client;
+package com.perigrine3.createcybernetics.client.render;
 
 public final class ClientRenderFlags {
     private static final ThreadLocal<Boolean> GUI_ENTITY_RENDER =

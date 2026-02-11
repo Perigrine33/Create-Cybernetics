@@ -21,6 +21,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         basicItem(ModItems.EYEUPGRADEBASE.get());
         basicItem(ModItems.TITANIUM_HAND.get());
+        basicItem(ModItems.HOLOIMPRINT_CHIP.get());
         basicItem(ModItems.FRONTAL_LOBE.get());
         basicItem(ModItems.PARIETAL_LOBE.get());
         basicItem(ModItems.TEMPORAL_LOBE.get());

@@ -252,7 +252,9 @@ public final class SurgeryController {
 
             // --- SAVE + SYNC ---
             data.setDirty();
-            player.syncData(ModAttachments.CYBERWARE);
+            if (player instanceof ServerPlayer sp) {
+                ModAttachments.syncCyberware(sp);
+            }
 
             surgeon.clearSlotStates();
             surgeon.setChanged();

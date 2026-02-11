@@ -39,6 +39,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_SPINALINJECTOR.get())
                 .add(ModItems.BONEUPGRADES_SANDEVISTAN.get())
                 .add(ModItems.ARMUPGRADES_ARMCANNON.get())
+                .add(ModItems.LEGUPGRADES_JUMPBOOST.get())
                 .addOptional(resourceLocation("createcybernetics:boneupgrades_elytra"));
 
 //ARM CANNON AMMO
