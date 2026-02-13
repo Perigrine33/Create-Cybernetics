@@ -691,6 +691,7 @@ public class SkinModifierManager {
 
 
 // COMPAT STUFF
+        //MERMOD TAIL
         boolean mermodTailActive = false;
         if (ModCompats.isInstalled("mermod")) {
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
@@ -1382,11 +1383,13 @@ public class SkinModifierManager {
                     0xFFFFFFFF, true);
         }
 // DEPLOYABLE ELYTRA
-        if (data.hasSpecificItem(ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE)) {
-            state.addModifier(new SkinModifier(DEPLOYABLE_ELYTRA_TEXTURE, DEPLOYABLE_ELYTRA_TEXTURE,
-                    0xFFFFFFFF, false));
-            SkinHighlightRender.apply(state, true, DEPLOYABLE_ELYTRA_HIGHLIGHT_TEXTURE, DEPLOYABLE_ELYTRA_HIGHLIGHT_TEXTURE,
-                    0xFFFFFFFF, true);
+        if (ModItems.BONEUPGRADES_ELYTRA != null) {
+            if (data.hasSpecificItem(ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE)) {
+                state.addModifier(new SkinModifier(DEPLOYABLE_ELYTRA_TEXTURE, DEPLOYABLE_ELYTRA_TEXTURE,
+                        0xFFFFFFFF, false));
+                SkinHighlightRender.apply(state, true, DEPLOYABLE_ELYTRA_HIGHLIGHT_TEXTURE, DEPLOYABLE_ELYTRA_HIGHLIGHT_TEXTURE,
+                        0xFFFFFFFF, true);
+            }
         }
 // SANDEVISTAN
         if (data.hasSpecificItem(ModItems.BONEUPGRADES_SANDEVISTAN.get(), CyberwareSlot.BONE)) {

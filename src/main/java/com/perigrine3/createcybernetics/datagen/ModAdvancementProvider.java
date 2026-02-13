@@ -239,8 +239,15 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                             Component.translatable("advancement.bodysnatcher"),
                             Component.translatable("advancement.bodysnatcher.desc"),
                             TITANIUM_BG, AdvancementType.TASK, true, false, false)
-                        .addCriterion("bodysnatcher", LetsDanceTrigger.Instance.any())
+                        .addCriterion("bodysnatcher", BodysnatcherTrigger.Instance.any())
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/bodysnatcher"), existingFileHelper);
+
+            AdvancementHolder destroyerOfWorlds = Advancement.Builder.advancement().parent(firstRipperdocVisit).display(ModItems.HEARTUPGRADES_CREEPERHEART.get(),
+                            Component.translatable("advancement.destroyer_of_worlds"),
+                            Component.translatable("advancement.destroyer_of_worlds.desc"),
+                            TITANIUM_BG, AdvancementType.TASK, true, true, false)
+                        .addCriterion("destroyer_of_worlds", DestroyerOfWorldsTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/destroyer_of_worlds"), existingFileHelper);
 
 
 

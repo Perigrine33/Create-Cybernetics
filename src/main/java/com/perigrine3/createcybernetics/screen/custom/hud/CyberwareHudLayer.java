@@ -71,11 +71,17 @@ public final class CyberwareHudLayer {
     private static final int INNER_Y = 2;
     private static final int INNER_W = 10;
     private static final int INNER_H = 21;
-    private static final int MARGIN_X = 122;
-    private static final int MARGIN_Y = 2;
-    private static final float BATTERY_SCALE = 1.5f;
-    private static final float VALUE_SCALE = 0.8f;
+
+    // -------------------- Battery user-tunable knobs --------------------
+    private enum Anchor { TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT }
+    private static Anchor BATTERY_ANCHOR = Anchor.BOTTOM_RIGHT;
+    private static int BATTERY_OFFSET_X_PX = 200;
+    private static int BATTERY_OFFSET_Y_PX = 130;
+    private static float BATTERY_SCALE_PX = 4f;
+
+    private static final float VALUE_SCALE_REL = 0.75f;
     private static final int VALUE_PADDING_PX = 2;
+    // -------------------------------------------------------------------
 
     // Default "white" (kept), but now "white" is just fallback when not dyed.
     private static final int VALUE_COLOR = 0xFFFFFF;
@@ -91,7 +97,7 @@ public final class CyberwareHudLayer {
     private static final boolean OXYGEN_TEXT_SHADOW = true;
     private static final float OXYGEN_LOW_THRESHOLD = 0.25f;
 
-    // ---------- NEW: HUD tint behavior ----------
+    // ---------- HUD tint behavior ----------
     private static final int HUD_TINT_WHITE_ARGB = 0xFFFFFFFF;
     private static final int HUD_TINT_LOW_RED_ARGB = 0xFFFF5555;
 
@@ -109,10 +115,9 @@ public final class CyberwareHudLayer {
         if (!Minecraft.getInstance().options.getCameraType().isFirstPerson()) return;
         if (!CyberwareInstallQueries.hasHudAccess(player)) return;
 
-        int screenW = gg.guiWidth();
-        int screenH = gg.guiHeight();
+        int guiW = gg.guiWidth();
+        int guiH = gg.guiHeight();
 
-        // Resolve base tint (dyed -> that color, else white).
         int hudTintArgb = resolveHudTintArgb(player);
 
         TickSnapshot s = ClientEnergyState.getSnapshot();
@@ -136,31 +141,66 @@ public final class CyberwareHudLayer {
         float pct = Mth.clamp(current / (float) capForPct, 0f, 1f);
         boolean low = pct <= LOW_THRESHOLD;
 
-        // Battery visuals are overridden by red when low.
         int batteryTintArgb = low ? HUD_TINT_LOW_RED_ARGB : hudTintArgb;
 
-        // Overlay/spinner: tinted like the HUD; you can swap to batteryTintArgb if you want it to go red on low.
+        // Center overlay still GUI-scales normally.
         if (OVERLAY_DRAW_BEHIND_BATTERY) {
-            renderCenteredImageAutoFitTinted(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, screenW, screenH,
+            renderCenteredImageAutoFitTinted(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, guiW, guiH,
                     OVERLAY_MAX_SCREEN_FRACTION, OVERLAY_ALPHA, hudTintArgb);
         }
 
-        int scaledW = Math.round(TEX_W * BATTERY_SCALE);
-        int scaledH = Math.round(TEX_H * BATTERY_SCALE);
+        // ---- Battery: render in real pixels (independent of GUI scale) ----
+        renderBatteryHudUnscaled(gg, mc, current, capacity, capForPct, net, low, hudTintArgb, batteryTintArgb);
+        // ------------------------------------------------------------------
 
-        int x = MARGIN_X;
-        int y = screenH - scaledH - MARGIN_Y;
-
-        renderEnergyValueAboveBatteryTinted(gg, mc, current, capacity, x, y, scaledW, low, hudTintArgb);
-        renderBatteryScaledTinted(gg, x, y, current, capForPct, net, low, batteryTintArgb);
-
-        // Oxygen text: overridden by red when oxygen low; otherwise tinted.
-        renderCopernicusOxygenIndicatorTinted(gg, mc, player, screenW, screenH, hudTintArgb);
+        // Oxygen stays GUI-scaled for now.
+        renderCopernicusOxygenIndicatorTinted(gg, mc, player, guiW, guiH, hudTintArgb);
 
         if (!OVERLAY_DRAW_BEHIND_BATTERY) {
-            renderCenteredImageAutoFitTinted(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, screenW, screenH,
+            renderCenteredImageAutoFitTinted(gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H, guiW, guiH,
                     OVERLAY_MAX_SCREEN_FRACTION, OVERLAY_ALPHA, hudTintArgb);
         }
+    }
+
+    /**
+     * Draws the battery + value text in REAL SCREEN PIXELS and supports:
+     * - anchor corner
+     * - offsets in pixels
+     * - independent battery size scale in pixels
+     */
+    private static void renderBatteryHudUnscaled(
+            GuiGraphics gg,
+            Minecraft mc,
+            int current,
+            int capacity,
+            int capForPct,
+            int net,
+            boolean low,
+            int hudTintArgb,
+            int batteryTintArgb
+    ) {
+        // Convert to "real pixel" coordinate space by undoing GUI scaling.
+        double guiScale = mc.getWindow().getGuiScale();
+        int screenPxW = mc.getWindow().getScreenWidth();
+        int screenPxH = mc.getWindow().getScreenHeight();
+
+        // These are the final on-screen dimensions in real pixels.
+        int scaledW = Math.round(TEX_W * BATTERY_SCALE_PX);
+        int scaledH = Math.round(TEX_H * BATTERY_SCALE_PX);
+
+        int x = computeAnchoredX(screenPxW, scaledW, BATTERY_ANCHOR, BATTERY_OFFSET_X_PX);
+        int y = computeAnchoredY(screenPxH, scaledH, BATTERY_ANCHOR, BATTERY_OFFSET_Y_PX);
+
+        gg.pose().pushPose();
+        gg.pose().scale((float) (1.0 / guiScale), (float) (1.0 / guiScale), 1.0f);
+
+        // Text scale tracks battery size by default.
+        float valueScale = BATTERY_SCALE_PX * VALUE_SCALE_REL;
+
+        renderEnergyValueAboveBatteryUnscaled(gg, mc, current, capacity, x, y, scaledW, low, hudTintArgb, valueScale);
+        renderBatteryScaledUnscaled(gg, x, y, current, capForPct, net, low, batteryTintArgb, BATTERY_SCALE_PX);
+
+        gg.pose().popPose();
     }
 
     private static void renderCrosshairOverlay(GuiGraphics gg, DeltaTracker delta) {
@@ -174,7 +214,7 @@ public final class CyberwareHudLayer {
         int screenW = gg.guiWidth();
         int screenH = gg.guiHeight();
 
-        float partialTick = 0.0f;
+        float partialTick;
         try {
             partialTick = delta.getGameTimeDeltaPartialTick(true);
         } catch (Throwable ignored) {
@@ -199,15 +239,24 @@ public final class CyberwareHudLayer {
         );
     }
 
-    // -------------------- NEW: tint resolution --------------------
+    // -------------------- Battery anchor math --------------------
 
-    /**
-     * Base HUD tint:
-     * - If Cybereyes are dyed, use that dye.
-     * - Otherwise fallback to white.
-     *
-     * Battery/Oxygen "low" states override this elsewhere with red.
-     */
+    private static int computeAnchoredX(int screenW, int widgetW, Anchor anchor, int offsetX) {
+        return switch (anchor) {
+            case TOP_LEFT, BOTTOM_LEFT -> offsetX;
+            case TOP_RIGHT, BOTTOM_RIGHT -> screenW - widgetW - offsetX;
+        };
+    }
+
+    private static int computeAnchoredY(int screenH, int widgetH, Anchor anchor, int offsetY) {
+        return switch (anchor) {
+            case TOP_LEFT, TOP_RIGHT -> offsetY;
+            case BOTTOM_LEFT, BOTTOM_RIGHT -> screenH - widgetH - offsetY;
+        };
+    }
+
+    // -------------------- Tint resolution --------------------
+
     private static int resolveHudTintArgb(LocalPlayer player) {
         var data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return HUD_TINT_WHITE_ARGB;
@@ -304,43 +353,41 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    // -------------------- Tinted battery + text --------------------
+    // -------------------- Unscaled battery + text --------------------
 
-    private static void renderEnergyValueAboveBatteryTinted(
+    private static void renderEnergyValueAboveBatteryUnscaled(
             GuiGraphics gg, Minecraft mc,
             int current, int capacity,
             int batteryX, int batteryY, int scaledBatteryW,
             boolean low,
-            int hudTintArgb
+            int hudTintArgb,
+            float valueScale
     ) {
         String text = current + "/" + capacity;
 
-        int scaledTextH = Math.round(mc.font.lineHeight * VALUE_SCALE);
+        int scaledTextH = Math.round(mc.font.lineHeight * valueScale);
         int textY = batteryY - VALUE_PADDING_PX - scaledTextH;
 
-        int scaledTextW = Math.round(mc.font.width(text) * VALUE_SCALE);
+        int scaledTextW = Math.round(mc.font.width(text) * valueScale);
         int textX = batteryX + (scaledBatteryW / 2) - (scaledTextW / 2);
 
-        // Text tint:
-        // - low => red override
-        // - else => dye tint (RGB) if dyed, else white (matches current behavior)
-        int rgbTint = hudTintArgb & 0x00FFFFFF;
-        int color = low ? VALUE_COLOR_LOW : (rgbTint != 0 ? rgbTint : VALUE_COLOR);
+        int color = low ? VALUE_COLOR_LOW : VALUE_COLOR;
 
         gg.pose().pushPose();
         gg.pose().translate(textX, textY, 0);
-        gg.pose().scale(VALUE_SCALE, VALUE_SCALE, 1.0f);
+        gg.pose().scale(valueScale, valueScale, 1.0f);
         gg.drawString(mc.font, text, 0, 0, color, VALUE_SHADOW);
         gg.pose().popPose();
     }
 
-    private static void renderBatteryScaledTinted(GuiGraphics gg, int x, int y,
-                                                  int currentPower, int maxPower, int netPowerPerTick,
-                                                  boolean low,
-                                                  int tintArgb) {
+    private static void renderBatteryScaledUnscaled(GuiGraphics gg, int x, int y,
+                                                    int currentPower, int maxPower, int netPowerPerTick,
+                                                    boolean low,
+                                                    int tintArgb,
+                                                    float batteryScalePx) {
         gg.pose().pushPose();
         gg.pose().translate(x, y, 0);
-        gg.pose().scale(BATTERY_SCALE, BATTERY_SCALE, 1.0f);
+        gg.pose().scale(batteryScalePx, batteryScalePx, 1.0f);
         renderBatteryTinted(gg, 0, 0, currentPower, maxPower, netPowerPerTick, low, tintArgb);
         gg.pose().popPose();
     }
@@ -425,7 +472,6 @@ public final class CyberwareHudLayer {
         RenderSystem.disableBlend();
     }
 
-    // Kept for compatibility (unused by the tinted battery path now)
     @SuppressWarnings("unused")
     private static void blit(GuiGraphics gg, ResourceLocation tex, int x, int y, int u, int v, int w, int h) {
         gg.blit(tex, x, y, u, v, w, h, TEX_W, TEX_H);

@@ -17,6 +17,9 @@ public final class ClientItemProperties {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
+            ItemProperties.register(ModItems.DATA_SHARD_INFOLOG.get(), ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dyed"),
+                    (stack, level, entity, seed) -> stack.has(DataComponents.DYED_COLOR) ? 1.0F : 0.0F);
+
             ItemProperties.register(ModItems.BASECYBERWARE_LEFTARM.get(), ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dyed"),
                     (stack, level, entity, seed) -> stack.has(DataComponents.DYED_COLOR) ? 1.0F : 0.0F);
             ItemProperties.register(ModItems.BASECYBERWARE_RIGHTARM.get(), ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dyed"),

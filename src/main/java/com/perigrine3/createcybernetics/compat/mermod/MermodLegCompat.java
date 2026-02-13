@@ -7,9 +7,11 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -30,7 +32,12 @@ public final class MermodLegCompat {
     private static final ResourceLocation SEA_NECKLACE_ID =
             ResourceLocation.fromNamespaceAndPath(MERMOD_MODID, "sea_necklace");
 
+    private static final TagKey<net.minecraft.world.item.Item> TAIL_MOISTURIZER_TAG =
+            TagKey.create(net.minecraft.core.registries.Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(MERMOD_MODID, "tail_moisturizer_modifier"));
+
     private static final String MOISTURIZER_BASE_ID = "tail_moisturizer";
+
     private static final Map<Integer, VisibilitySnapshot> SNAPSHOTS = new HashMap<>();
     private static DataComponentType<?> CACHED_COMPONENT;
 
@@ -39,11 +46,11 @@ public final class MermodLegCompat {
     private static Method MAP_VALUES_METHOD;
     private static Method MODIFIER_ID_METHOD;
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRenderLivingPre(RenderLivingEvent.Pre<?, ?> event) {
         if (!(event.getEntity() instanceof AbstractClientPlayer player)) return;
         if (!(event.getRenderer() instanceof PlayerRenderer renderer)) return;
-        PlayerModel<?> model = (PlayerModel<?>) renderer.getModel();
+        if (!(renderer.getModel() instanceof PlayerModel<?> model)) return;
 
         if (!shouldHideLegs(player)) return;
 
@@ -63,7 +70,7 @@ public final class MermodLegCompat {
         if (snap == null) return;
 
         if (!(event.getRenderer() instanceof PlayerRenderer renderer)) return;
-        PlayerModel<?> model = (PlayerModel<?>) renderer.getModel();
+        if (!(renderer.getModel() instanceof PlayerModel<?> model)) return;
 
         snap.restore(model);
     }
@@ -77,6 +84,8 @@ public final class MermodLegCompat {
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(chest.getItem());
         if (!SEA_NECKLACE_ID.equals(id)) return false;
         if (player.isInWaterOrBubble()) return true;
+        boolean hasMoisturizerByItemTag = chest.getTags().anyMatch(t -> t.equals(TAIL_MOISTURIZER_TAG));
+        if (hasMoisturizerByItemTag) return true;
 
         return hasMoisturizerModifierViaComponent(chest);
     }
@@ -91,6 +100,7 @@ public final class MermodLegCompat {
         try {
             Object mapObj = COMPONENT_MODIFIERS_METHOD.invoke(componentValue);
             if (mapObj == null) return false;
+
             Object valuesObj = MAP_VALUES_METHOD.invoke(mapObj);
             if (!(valuesObj instanceof Collection<?> values)) return false;
 
@@ -100,12 +110,9 @@ public final class MermodLegCompat {
                 Object idObj = MODIFIER_ID_METHOD.invoke(modifierObj);
                 if (!(idObj instanceof String rawId)) continue;
 
-                if (isMoisturizerId(rawId)) {
-                    return true;
-                }
+                if (isMoisturizerId(rawId)) return true;
             }
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) {}
 
         return false;
     }
@@ -114,15 +121,10 @@ public final class MermodLegCompat {
         if (rawId == null || rawId.isBlank()) return false;
 
         String s = rawId;
-
         int colon = s.indexOf(':');
-        if (colon >= 0 && colon + 1 < s.length()) {
-            s = s.substring(colon + 1);
-        }
+        if (colon >= 0 && colon + 1 < s.length()) s = s.substring(colon + 1);
 
-        if (s.endsWith("_modifier")) {
-            s = s.substring(0, s.length() - "_modifier".length());
-        }
+        if (s.endsWith("_modifier")) s = s.substring(0, s.length() - "_modifier".length());
 
         return MOISTURIZER_BASE_ID.equals(s);
     }
@@ -191,31 +193,22 @@ public final class MermodLegCompat {
         }
     }
 
-    private static final class VisibilitySnapshot {
-        private final boolean leftLeg, rightLeg;
-        private final boolean leftPants, rightPants;
-
-        private VisibilitySnapshot(boolean leftLeg, boolean rightLeg, boolean leftPants, boolean rightPants) {
-            this.leftLeg = leftLeg;
-            this.rightLeg = rightLeg;
-            this.leftPants = leftPants;
-            this.rightPants = rightPants;
-        }
+    private record VisibilitySnapshot(boolean leftLeg, boolean rightLeg, boolean leftPants, boolean rightPants) {
 
         static VisibilitySnapshot capture(PlayerModel<?> model) {
-            return new VisibilitySnapshot(
-                    model.leftLeg.visible,
-                    model.rightLeg.visible,
-                    model.leftPants.visible,
-                    model.rightPants.visible
-            );
-        }
+                return new VisibilitySnapshot(
+                        model.leftLeg.visible,
+                        model.rightLeg.visible,
+                        model.leftPants.visible,
+                        model.rightPants.visible
+                );
+            }
 
-        void restore(PlayerModel<?> model) {
-            model.leftLeg.visible = leftLeg;
-            model.rightLeg.visible = rightLeg;
-            model.leftPants.visible = leftPants;
-            model.rightPants.visible = rightPants;
+            void restore(PlayerModel<?> model) {
+                model.leftLeg.visible = leftLeg;
+                model.rightLeg.visible = rightLeg;
+                model.leftPants.visible = leftPants;
+                model.rightPants.visible = rightPants;
+            }
         }
-    }
 }

@@ -27,6 +27,8 @@ public final class ClientItemColors {
         },
 
             //DYEABLE ITEMS
+                ModItems.DATA_SHARD_INFOLOG.get(),
+
                 ModItems.BASECYBERWARE_LEFTARM.get(),
                 ModItems.BASECYBERWARE_RIGHTARM.get(),
                 ModItems.BASECYBERWARE_LEFTLEG.get(),

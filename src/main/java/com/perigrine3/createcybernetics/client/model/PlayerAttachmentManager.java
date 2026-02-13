@@ -281,8 +281,9 @@ public final class PlayerAttachmentManager {
     }
 
     public static void applyDrillFistTransform(PoseStack pose, AttachmentAnchor armAnchor) {
-        pose.translate(0.05F, -0.15F, 0.39F);
+        pose.translate(0.07F, -0.25F, 0.45F);
         pose.mulPose(Axis.YP.rotationDegrees(90.0F));
+        pose.scale(1.15F, 1.15F, 1.15F); // 15% bigger
 
         if (armAnchor == AttachmentAnchor.LEFT_ARM) {
             pose.translate(-0.02F, 0.0F, 0.0F);

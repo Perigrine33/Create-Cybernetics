@@ -18,8 +18,8 @@ public class DenseBatteryItem extends Item implements ICyberwareItem {
 
     private final int humanityCost;
 
-    private static final int CAPACITY = 5000;
-    private static final int CHARGE_CYCLE_TICKS = 6;
+    private static final int CAPACITY = 1200000;
+    private static final int CHARGE_AMOUNT_PER_TICK = 1000;
 
     public DenseBatteryItem(Properties props, int humanityCost) {
         super(props);
@@ -55,7 +55,7 @@ public class DenseBatteryItem extends Item implements ICyberwareItem {
 
     @Override
     public int getChargerEnergyReceivePerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return (player.tickCount % CHARGE_CYCLE_TICKS) == 0 ? 0 : 1;
+        return CHARGE_AMOUNT_PER_TICK;
     }
 
     /* ---------------- ICyberwareItem basics ---------------- */

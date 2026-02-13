@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-09T17:29:26.3961496	Tags for minecraft:item mod id createcybernetics
+// 1.21.1	2026-02-13T03:28:28.7970388	Tags for minecraft:item mod id createcybernetics
 facebceb0f7eaac59aec077332daccfdb5c937c8 data/createcybernetics/tags/item/arm_cannon_ammo.json
 0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
 c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
@@ -11,7 +11,7 @@ c1c6008b29c475ecc00649282b6c8ca2fce1fa36 data/createcybernetics/tags/item/brain_
 f6c8399848801cefe03e09702a8354e1c24d9f1c data/createcybernetics/tags/item/brain_replacements.json
 947a0ad8b74ea82a300ee6b6fd43fc91bed32bec data/createcybernetics/tags/item/brain_upgrades.json
 b28fc2c0773a7583cdf45ffea5de31c09be9dbc3 data/createcybernetics/tags/item/cyberware_item.json
-570b1fe5d500b7914189745556e9c8d776a0b102 data/createcybernetics/tags/item/data_shards.json
+d95ceae1647cc30922f27dbc04237703f132127b data/createcybernetics/tags/item/data_shards.json
 334b677712c730f32620517e83e87c9ee661ffda data/createcybernetics/tags/item/defaults_fail_as_missing_when_unpowered.json
 0ccc92202129c4ed77276e329b581b3ba63bf9a9 data/createcybernetics/tags/item/eye_items.json
 44906197e61130bc7375b34f8a3a36efaed67412 data/createcybernetics/tags/item/eye_replacements.json
@@ -48,7 +48,7 @@ eaa9409423d86c3dfba78acd1a6e09b4810cfc76 data/createcybernetics/tags/item/righta
 4cee43f14863cd2db81b63589fd2246ccc087966 data/createcybernetics/tags/item/skin_items.json
 36d680c7dfdb816609668da5b5dfaa4bec523f35 data/createcybernetics/tags/item/skin_replacements.json
 16fbb0baa45a59c06100adfff8a02043877b4e76 data/createcybernetics/tags/item/skin_upgrades.json
-2f37b4c78a6ee5b2bf739e548b292f82182654e2 data/createcybernetics/tags/item/toggleable_cyberware.json
+ad1b37e5e56e051bb76c5080ed709f4c2f274236 data/createcybernetics/tags/item/toggleable_cyberware.json
 de66f841687e8cabd8afa47f4996159c39f5de52 data/createcybernetics/tags/item/wetware_item.json
 3437aedc7c4a91906c9ebbc8779bd8c96981af21 data/c/tags/item/foods/raw_meats.json
 89b3649c925de0aa729998bc84950bd4a7149852 data/c/tags/item/ingots.json

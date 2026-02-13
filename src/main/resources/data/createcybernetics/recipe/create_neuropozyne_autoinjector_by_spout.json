@@ -7,7 +7,7 @@
     {
       "type": "fluid_stack",
       "fluid": "create:potion",
-      "amount": 50,
+      "amount": 333,
       "components":
       {
         "create:potion_fluid_bottle_type": "regular",

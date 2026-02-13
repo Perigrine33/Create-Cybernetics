@@ -1,4 +1,5 @@
-// 1.21.1	2026-02-04T16:36:04.5657125	Advancements
+// 1.21.1	2026-02-13T03:40:25.5897473	Advancements
+14aa82152b7c3095371acf49f866e720e4e3357f data/createcybernetics/advancement/cyberware/bodysnatcher.json
 e04da642af951742161c867c54567aea48b10a1d data/createcybernetics/advancement/cyberware/boneless.json
 9ebb46919c8bdd33b37526ad70616de35b165949 data/createcybernetics/advancement/cyberware/bones_and_all.json
 07f4575e41338daafc8fede5581eef5d2ca9d329 data/createcybernetics/advancement/cyberware/chest_pains.json
@@ -7,6 +8,7 @@ d64992a60910a10ae28d3f8e7f7d0a8a9a8ee412 data/createcybernetics/advancement/cybe
 d55dfceee49a14d5199f47b02191b0ef308d1b48 data/createcybernetics/advancement/cyberware/cortical_stack.json
 22231c5104a9e53b2b2be0a023f0fed0b393845d data/createcybernetics/advancement/cyberware/cyberpsychosis.json
 14176b83106689007f0dd3df652a00bd5a6dd8de data/createcybernetics/advancement/cyberware/david_special.json
+922f4f35e876278d8675b3c3f81cb6499c7788b5 data/createcybernetics/advancement/cyberware/destroyer_of_worlds.json
 0c67647591afdef44c032429a24923c7847b0da2 data/createcybernetics/advancement/cyberware/deus_ex_machina.json
 4d29e3b08ecd2ccb20061785a94075d1de38ad0d data/createcybernetics/advancement/cyberware/first_cyberware.json
 a84d3814d87171dad8abdf7375a282d93c50a50c data/createcybernetics/advancement/cyberware/first_ripperdoc_visit.json

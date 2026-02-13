@@ -94,7 +94,7 @@ public class CybereyeItem extends Item implements ICyberwareItem {
     public static final class PowerFailHooks {
         private PowerFailHooks() {}
 
-        private static final int DURATION = 220;
+        private static final int DURATION = 30;
         private static final int BLINDNESS_AMPLIFIER = 1;
         private static final int DARKNESS_AMPLIFIER = 0;
 
@@ -114,11 +114,8 @@ public class CybereyeItem extends Item implements ICyberwareItem {
             EyesStatus status = getEyesStatus(player, data);
 
             if (status.hasCybereyes && status.unpowered) {
-                refreshEffect(player, MobEffects.BLINDNESS, DURATION, BLINDNESS_AMPLIFIER);
-                refreshEffect(player, MobEffects.DARKNESS, DURATION, DARKNESS_AMPLIFIER);
-            } else {
-                player.removeEffect(MobEffects.BLINDNESS);
-                player.removeEffect(MobEffects.DARKNESS);
+                player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, DURATION, BLINDNESS_AMPLIFIER, false, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, DURATION, DARKNESS_AMPLIFIER, false, false, false));
             }
         }
 
@@ -142,24 +139,12 @@ public class CybereyeItem extends Item implements ICyberwareItem {
 
                 hasEyes = true;
 
-                // EnergyController is authoritative: if it couldn't pay, it sets powered=false.
-                // If your InstalledCyberware doesn't expose isPowered(), this line will fail to compile.
-                // In that case tell me and I'll swap in the same reflection reader you used in Cyberarm hooks.
                 if (!installed.isPowered()) {
                     return new EyesStatus(true, true);
                 }
             }
 
             return new EyesStatus(hasEyes, false);
-        }
-
-        private static void refreshEffect(Player player, Holder<MobEffect> effect, int duration, int amplifier) {
-            MobEffectInstance cur = player.getEffect(effect);
-
-            // Refresh only if missing / near expiry / amp mismatch
-            if (cur == null || cur.getDuration() < 40 || cur.getAmplifier() != amplifier) {
-                player.addEffect(new MobEffectInstance(effect, duration, amplifier, false, false, false));
-            }
         }
     }
 }

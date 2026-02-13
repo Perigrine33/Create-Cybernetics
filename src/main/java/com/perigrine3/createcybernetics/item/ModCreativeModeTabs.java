@@ -68,6 +68,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.DATA_SHARD_GRAY);
                         output.accept(ModItems.DATA_SHARD_BLACK);
                         output.accept(ModItems.DATA_SHARD_BIOCHIP);
+                        output.accept(ModItems.DATA_SHARD_INFOLOG);
 
                         //COMPONENTS
                         output.accept(ModItems.COMPONENT_ACTUATOR);

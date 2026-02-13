@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "createcybernetics:item/data_shard_infolog",
+    "layer1": "createcybernetics:item/data_shard_infolog_mask"
+  }
+}

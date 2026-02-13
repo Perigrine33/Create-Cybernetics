@@ -6,12 +6,6 @@
       "item": "createcybernetics:empty_autoinjector"
     },
     {
-      "item": "createcybernetics:empty_autoinjector"
-    },
-    {
-      "item": "createcybernetics:empty_autoinjector"
-    },
-    {
       "type": "neoforge:components",
       "items": "minecraft:potion",
       "components": {
@@ -24,7 +18,7 @@
   ],
   "result": {
     "id": "createcybernetics:neuropozyne_autoinjector",
-    "count": 3
+    "count": 1
   },
   "show_notification": false
 }

@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.CreateCybernetics; // ADDED
+import com.perigrine3.createcybernetics.advancement.ModCriteria;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments; // ADDED
@@ -10,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel; // ADDED
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity; // ADDED
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -82,10 +84,10 @@ public class CreeperheartItem extends Item implements ICyberwareItem {
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class Events {
-        private static final float EXPLOSION_POWER = 6.0F;
 
         @SubscribeEvent
         public static void onLivingDeath(LivingDeathEvent event) {
+
             if (!(event.getEntity() instanceof Player player)) return;
             if (player.level().isClientSide) return;
             if (!(player.level() instanceof ServerLevel level)) return;
@@ -95,13 +97,21 @@ public class CreeperheartItem extends Item implements ICyberwareItem {
 
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
-            if (!hasCreeperHeartInstalled(data)) return;
+            if (data.hasSpecificItem(ModItems.HEARTUPGRADES_CREEPERHEART.get(), CyberwareSlot.HEART)) {
 
-            level.explode(player, player.getX(), player.getY(), player.getZ(), EXPLOSION_POWER, false, Level.ExplosionInteraction.MOB);
-        }
+                if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_MAGICCATALYST.get(), CyberwareSlot.ORGANS)) {
+                    level.explode(player, player.getX(), player.getY()-2, player.getZ(), 50, true, Level.ExplosionInteraction.MOB);
 
-        private static boolean hasCreeperHeartInstalled(PlayerCyberwareData data) {
-            return data.hasSpecificItem(ModItems.HEARTUPGRADES_CREEPERHEART.get(), CyberwareSlot.HEART);
+                    if (!(event.getEntity() instanceof ServerPlayer sp)) return;
+                    ModCriteria.DESTROYER_OF_WORLDS.get().trigger(sp);
+
+                } else if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_DUALISTICCONVERTER.get(), CyberwareSlot.ORGANS)) {
+                    level.explode(player, player.getX(), player.getY()-2, player.getZ(), 25, true, Level.ExplosionInteraction.MOB);
+
+                } else {
+                    level.explode(player, player.getX(), player.getY(), player.getZ(), 6, false, Level.ExplosionInteraction.MOB);
+                }
+            }
         }
 
         private Events() {}

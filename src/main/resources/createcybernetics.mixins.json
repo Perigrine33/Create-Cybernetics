@@ -17,6 +17,7 @@
     "client.CreativeModeInventoryChipwareButtonMixin",
     "client.CreativeSlotWrapperHideChipwareMixin",
     "client.InventoryScreenChipwareSlotsMixin",
+    "client.ItemInHandRendererMixin",
     "client.ScreenInvoker"
   ],
   "injectors": {

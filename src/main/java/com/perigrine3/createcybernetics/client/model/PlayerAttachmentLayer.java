@@ -36,6 +36,7 @@ public final class PlayerAttachmentLayer extends RenderLayer<AbstractClientPlaye
         Entity cam = mc.getCameraEntity();
         boolean isFirstPerson = mc.options.getCameraType().isFirstPerson();
         boolean isLocalViewTarget = (cam == player);
+        boolean isGuiRender = mc.screen != null;
 
         boolean viewerCanSee = shouldRenderToViewer(player);
 
@@ -44,7 +45,7 @@ public final class PlayerAttachmentLayer extends RenderLayer<AbstractClientPlaye
 
             // IMPORTANT: "thirdPersonOnly" should only suppress rendering on the LOCAL player in first person.
             // It should NOT hide attachments on other players just because the camera is first-person.
-            if (att.thirdPersonOnly() && isFirstPerson && isLocalViewTarget) {
+            if (att.thirdPersonOnly() && isFirstPerson && isLocalViewTarget && !isGuiRender) {
                 continue;
             }
 

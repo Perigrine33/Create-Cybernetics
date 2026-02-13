@@ -11,6 +11,7 @@
     "createcybernetics:data_shard_brown",
     "createcybernetics:data_shard_gray",
     "createcybernetics:data_shard_black",
-    "createcybernetics:data_shard_biochip"
+    "createcybernetics:data_shard_biochip",
+    "createcybernetics:data_shard_infolog"
   ]
 }

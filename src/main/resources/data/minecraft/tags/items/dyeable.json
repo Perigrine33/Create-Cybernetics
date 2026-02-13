@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
+    "createcybernetics:data_shard_infolog",
+
     "createcybernetics:basecyberware_cybereyes",
 
     "createcybernetics:basecyberware_rightleg",

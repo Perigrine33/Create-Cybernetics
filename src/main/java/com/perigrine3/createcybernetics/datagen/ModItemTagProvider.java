@@ -40,6 +40,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_SANDEVISTAN.get())
                 .add(ModItems.ARMUPGRADES_ARMCANNON.get())
                 .add(ModItems.LEGUPGRADES_JUMPBOOST.get())
+                .add(ModItems.SKINUPGRADES_SYNTHETICSETULES.get())
                 .addOptional(resourceLocation("createcybernetics:boneupgrades_elytra"));
 
 //ARM CANNON AMMO
@@ -69,7 +70,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.DATA_SHARD_BROWN.get())
                 .add(ModItems.DATA_SHARD_GRAY.get())
                 .add(ModItems.DATA_SHARD_BLACK.get())
-                .add(ModItems.DATA_SHARD_BIOCHIP.get());
+                .add(ModItems.DATA_SHARD_BIOCHIP.get())
+                .add(ModItems.DATA_SHARD_INFOLOG.get());
 
 
 //CYBERWARE

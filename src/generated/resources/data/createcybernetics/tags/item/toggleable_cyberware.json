@@ -11,6 +11,7 @@
     "createcybernetics:boneupgrades_sandevistan",
     "createcybernetics:armupgrades_armcannon",
     "createcybernetics:legupgrades_jumpboost",
+    "createcybernetics:skinupgrades_syntheticsetules",
     {
       "id": "createcybernetics:boneupgrades_elytra",
       "required": false

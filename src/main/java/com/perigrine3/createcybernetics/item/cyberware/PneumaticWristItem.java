@@ -100,9 +100,9 @@ public class PneumaticWristItem extends Item implements ICyberwareItem {
 
     @Override
     public void onInstalled(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "pneumatic_wrist_block");
-        CyberwareAttributeHelper.removeModifier(player, "pneumatic_wrist_entity");
-        CyberwareAttributeHelper.removeModifier(player, "pneumatic_wrist_knockback");
+        CyberwareAttributeHelper.applyModifier(player, "pneumatic_wrist_block");
+        CyberwareAttributeHelper.applyModifier(player, "pneumatic_wrist_entity");
+        CyberwareAttributeHelper.applyModifier(player, "pneumatic_wrist_knockback");
     }
 
     @Override

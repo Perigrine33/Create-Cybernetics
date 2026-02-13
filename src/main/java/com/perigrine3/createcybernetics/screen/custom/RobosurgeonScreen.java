@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Skeleton;
@@ -268,7 +269,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         RenderSystem.disableBlend();
     }
 
-
     // -----------------------
     // Humanity Bar
     // -----------------------
@@ -282,27 +282,34 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         int humanity = calculatePreviewHumanity();
         int maxHumanity = getConfiguredBaseHumanity();
         maxHumanity = Math.max(1, maxHumanity);
-        float percent = Math.max(0f, Math.min(1f, humanity / (float) maxHumanity));
 
+        float raw = humanity / (float) maxHumanity;
+        float percent = Mth.clamp(raw, 0f, 1f);
 
         int x = leftPos + 10;
         int y = topPos + 30;
 
-        // BACKGROUND
         gui.fill(x, y, x + HUMANITY_BAR_WIDTH, y + HUMANITY_BAR_HEIGHT, 0xFF202020);
 
-        // FILLED HEIGHT (bottom-up)
-        int filled = (int)(HUMANITY_BAR_HEIGHT * percent);
+        int filled = (int) (HUMANITY_BAR_HEIGHT * percent);
         int color = getHumanityColor(percent);
 
         gui.fill(x, y + (HUMANITY_BAR_HEIGHT - filled), x + HUMANITY_BAR_WIDTH, y + HUMANITY_BAR_HEIGHT, color);
 
-        // LABEL
+        String text = Integer.toString(humanity);
+
+        float labelScale = 0.5f;
+        int textW = this.font.width(text);
+        int textX = x + (HUMANITY_BAR_WIDTH / 2) - Math.round((textW * labelScale) / 2f);
+
         gui.pose().pushPose();
-        gui.pose().scale(0.5f, 0.5f, 1f);
-        gui.drawString(minecraft.font, "" + humanity, (int)(x * 2), (int)((y - 7) * 2), 0xFF34D5EB, false);
+        gui.pose().scale(labelScale, labelScale, 1f);
+
+        gui.drawString(minecraft.font, text, (int) (textX / labelScale), (int) ((y - 7) / labelScale), 0xFF34D5EB, false);
+
         gui.pose().popPose();
     }
+
 
     private int getConfiguredBaseHumanity() {
         return com.perigrine3.createcybernetics.Config.HUMANITY.get();
@@ -378,7 +385,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             }
         }
 
-        return Math.max(0, humanity);
+        return humanity;
     }
 
     // -----------------------

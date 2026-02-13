@@ -10,6 +10,8 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.function.Supplier;
+
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ModKeyMappings {
     private ModKeyMappings() {}
@@ -30,6 +32,10 @@ public final class ModKeyMappings {
     public static final Lazy<KeyMapping> HEAT_ENGINE = Lazy.of(() ->
             new KeyMapping("key.createcybernetics.heat_engine", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY));
 
+    public static final Lazy<KeyMapping> INFOLOG = Lazy.of(() ->
+            new KeyMapping("key.createcybernetics.infolog_gui", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY));
+
+
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(CYBERWARE_WHEEL.get());
@@ -37,5 +43,6 @@ public final class ModKeyMappings {
         event.register(ARM_CANNON.get());
         event.register(ARM_CANNON_WHEEL.get());
         event.register(HEAT_ENGINE.get());
+        event.register(INFOLOG.get());
     }
 }

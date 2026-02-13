@@ -1,11 +1,10 @@
 package com.perigrine3.createcybernetics.screen.custom;
 
 import com.perigrine3.createcybernetics.item.ModItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.joml.Quaternionf;
@@ -23,10 +22,9 @@ public class ModelViewer {
 
     private static final float FRICTION = 0.92f;
 
-    private final ItemStack renderSkin = new ItemStack(ModItems.BODYPART_SKIN.get());
+    private final ItemStack renderSkin   = new ItemStack(ModItems.BODYPART_SKIN.get());
     private final ItemStack renderMuscle = new ItemStack(ModItems.BODYPART_MUSCLE.get());
-    private final ItemStack renderBone = new ItemStack(Items.BONE);
-
+    private final ItemStack renderBone   = new ItemStack(Items.BONE);
 
     public void beginDrag(double mouseX) {
         dragging = true;
@@ -46,8 +44,9 @@ public class ModelViewer {
         } else {
             spinVelocity *= FRICTION;
             rotation += spinVelocity;
-            if (Math.abs(spinVelocity) < 0.1f)
+            if (Math.abs(spinVelocity) < 0.1f) {
                 rotation += 0.3f;
+            }
         }
     }
 
@@ -69,29 +68,24 @@ public class ModelViewer {
     }
 
     public void render(GuiGraphics gui, int modelX, int modelY, int baseScale, Player player, RobosurgeonScreen.ViewMode viewMode) {
-
         gui.enableScissor(modelX - 78, modelY - 85, modelX + 72, modelY + 75);
 
-        // Smooth intro zoom
         if (introScale < 1f) {
-            introScale += (1 - introScale) * 0.1f;
+            introScale += (1f - introScale) * 0.1f;
             if (introScale > 1f) introScale = 1f;
         }
 
-        int scale = (int) (baseScale * introScale);
-        modelY += (int) ((1f - introScale) * 20f);
+        final float slideY = (1f - introScale) * 20f;
 
         Quaternionf spin = new Quaternionf()
                 .rotateX((float) Math.toRadians(180))
                 .rotateY((float) Math.toRadians(rotation));
 
-        // Backup rotations
         float b1 = player.yBodyRot, b2 = player.yBodyRotO;
         float h1 = player.yHeadRot, h2 = player.yHeadRotO;
         float yaw = player.getYRot(), yawO = player.yRotO;
         float pitch = player.getXRot(), pitchO = player.xRotO;
 
-        // Lock pose
         player.yBodyRot = player.yBodyRotO = 180f;
         player.yHeadRot = player.yHeadRotO = 180f;
         player.setYRot(180f);
@@ -99,16 +93,31 @@ public class ModelViewer {
         player.setXRot(0f);
         player.xRotO = 0f;
 
-        InventoryScreen.renderEntityInInventory(gui, modelX, modelY, scale, new Vector3f(), spin, null, player);
+        float entityScale = player.getScale();
+        if (!Float.isFinite(entityScale) || entityScale <= 0f) entityScale = 1f;
 
+        float counterScale = 1f / entityScale;
+        float uiScale = introScale * counterScale;
+        uiScale = Mth.clamp(uiScale, 0.0001f, 1000f);
+
+        final int entityRenderScale = baseScale;
+
+        gui.pose().pushPose();
+        gui.pose().translate(modelX, modelY + slideY, 0f);
+        gui.pose().scale(uiScale, uiScale, 1f);
+        gui.pose().translate(-modelX, -modelY, 0f);
+
+        InventoryScreen.renderEntityInInventory(gui, modelX, modelY, entityRenderScale, new Vector3f(), spin, null, player);
+
+        gui.pose().popPose();
 
         itemTick++;
-        ItemStack[] itemsToCycle = new ItemStack[] { renderSkin, renderMuscle, renderBone };
+        ItemStack[] itemsToCycle = new ItemStack[]{renderSkin, renderMuscle, renderBone};
         int currentIndex = (itemTick / itemDisplayTime) % itemsToCycle.length;
         ItemStack currentItem = itemsToCycle[currentIndex];
 
         gui.pose().pushPose();
-        int itemX = modelX - -43;
+        int itemX = modelX + 43;
         int itemY = modelY - 57;
         gui.pose().translate(itemX, itemY, 100f);
         float itemScale = 1.75f;
@@ -116,8 +125,6 @@ public class ModelViewer {
         gui.renderItem(currentItem, 0, 0);
         gui.pose().popPose();
 
-
-        // Restore pose
         player.yBodyRot = b1; player.yBodyRotO = b2;
         player.yHeadRot = h1; player.yHeadRotO = h2;
         player.setYRot(yaw); player.yRotO = yawO;

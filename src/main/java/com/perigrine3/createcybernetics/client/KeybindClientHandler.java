@@ -4,14 +4,15 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.network.payload.ArmCannonWheelPayloads;
-import com.perigrine3.createcybernetics.network.payload.OpenArmCannonPayload;
-import com.perigrine3.createcybernetics.network.payload.OpenHeatEnginePayload;
-import com.perigrine3.createcybernetics.network.payload.OpenSpinalInjectorPayload;
+import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.item.generic.InfologTextData;
+import com.perigrine3.createcybernetics.network.payload.*;
 import com.perigrine3.createcybernetics.screen.custom.ArmCannonWheelScreen;
 import com.perigrine3.createcybernetics.screen.custom.CyberwareToggleWheelScreen;
+import com.perigrine3.createcybernetics.screen.custom.InfologEditScreen;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -70,6 +71,34 @@ public final class KeybindClientHandler {
             if (mc.screen != null) continue;
             OpenHeatEnginePayload payload = new OpenHeatEnginePayload();
             PacketDistributor.sendToServer(payload);
+        }
+
+        while (ModKeyMappings.INFOLOG.get().consumeClick()) {
+            if (mc.screen != null) continue;
+            if (mc.player == null) continue;
+            if (!mc.player.hasData(ModAttachments.CYBERWARE)) continue;
+
+            PlayerCyberwareData data = mc.player.getData(ModAttachments.CYBERWARE);
+            if (data == null) continue;
+
+            int found = -1;
+            ItemStack foundStack = ItemStack.EMPTY;
+
+            for (int i = 0; i < PlayerCyberwareData.CHIPWARE_SLOT_COUNT; i++) {
+                ItemStack st = data.getChipwareStack(i);
+                if (st.isEmpty()) continue;
+
+                if (st.is(ModItems.DATA_SHARD_INFOLOG.get())) {
+                    found = i;
+                    foundStack = st;
+                    break;
+                }
+            }
+
+            if (found == -1) continue;
+
+            String initial = InfologTextData.getText(foundStack);
+            mc.setScreen(new InfologEditScreen(found, initial));
         }
     }
 

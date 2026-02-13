@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.recipe;
 
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.item.generic.InfologDataShardItem;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.DyeItem;
@@ -27,21 +28,19 @@ public final class CyberwarePrimaryDyeRecipe extends CustomRecipe {
         boolean hasDye = false;
 
         for (int i = 0; i < input.size(); i++) {
-            ItemStack st = input.getItem(i);
-            if (st.isEmpty()) continue;
+            ItemStack stack = input.getItem(i);
+            if (stack.isEmpty()) continue;
 
-            if (st.getItem() instanceof DyeItem) {
+            if (stack.getItem() instanceof DyeItem) {
                 hasDye = true;
                 continue;
             }
 
-            // non-dye item: must be exactly one dyeable cyberware target
+            // Only allow exactly one non-dye item in the grid.
             if (!target.isEmpty()) return false;
 
-            if (!(st.getItem() instanceof ICyberwareItem cw)) return false;
-            if (!cw.isDyeable(st)) return false;
-
-            target = st;
+            if (!isValidTarget(stack)) return false;
+            target = stack;
         }
 
         return !target.isEmpty() && hasDye;
@@ -53,17 +52,19 @@ public final class CyberwarePrimaryDyeRecipe extends CustomRecipe {
         List<DyeItem> dyes = new ArrayList<>();
 
         for (int i = 0; i < input.size(); i++) {
-            ItemStack st = input.getItem(i);
-            if (st.isEmpty()) continue;
+            ItemStack stack = input.getItem(i);
+            if (stack.isEmpty()) continue;
 
-            if (st.getItem() instanceof DyeItem dye) {
+            if (stack.getItem() instanceof DyeItem dye) {
                 dyes.add(dye);
                 continue;
             }
 
-            if (target.isEmpty()) {
-                target = st;
-            }
+            // Only allow exactly one non-dye item in the grid.
+            if (!target.isEmpty()) return ItemStack.EMPTY;
+
+            if (!isValidTarget(stack)) return ItemStack.EMPTY;
+            target = stack;
         }
 
         if (target.isEmpty() || dyes.isEmpty()) return ItemStack.EMPTY;
@@ -71,13 +72,24 @@ public final class CyberwarePrimaryDyeRecipe extends CustomRecipe {
         ItemStack out = target.copy();
         out.setCount(1);
 
-        // Vanilla helper: computes resulting color and writes the dyed-color component.
-        // This is the key to “works like dyeing normally works”.
         int rgb = cc$mixDyeRgb(out, dyes);
         out.set(DataComponents.DYED_COLOR, new DyedItemColor(rgb, true));
 
         return out;
+    }
 
+    private static boolean isValidTarget(ItemStack stack) {
+        // Case 1: Cyberware item that opts into dyeing (your existing ICyberwareItem API)
+        if (stack.getItem() instanceof ICyberwareItem cyberwareItem) {
+            return cyberwareItem.isDyeable(stack);
+        }
+
+        // Case 2: Infolog data shard (or similar) that has its own dyeable flag
+        if (stack.getItem() instanceof InfologDataShardItem dataShardItem) {
+            return dataShardItem.isDyeable(stack);
+        }
+
+        return false;
     }
 
     private static int cc$mixDyeRgb(ItemStack base, List<DyeItem> dyes) {
@@ -88,7 +100,6 @@ public final class CyberwarePrimaryDyeRecipe extends CustomRecipe {
         int maxTotal = 0;
         int count = 0;
 
-        // If the item was already dyed, include its current color in the mix (re-dye behavior)
         DyedItemColor existing = base.get(DataComponents.DYED_COLOR);
         if (existing != null) {
             int rgb = existing.rgb();

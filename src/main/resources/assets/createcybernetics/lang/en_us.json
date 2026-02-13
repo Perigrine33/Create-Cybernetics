@@ -22,6 +22,7 @@
   "gui.spinalinjector.title": "Spinal Injector",
   "gui.heatengine.title": "Heat Engine",
   "gui.chipwarecreative.title": "Creative Chiware Slots",
+  "gui.infolog.title": "Infolog",
 
   "gui.chipware.button": "Chipware",
 
@@ -139,6 +140,10 @@
   "item.createcybernetics.data_shard_biochip.desc": "Stores consciousness if installed for 28 days",
   "item.createcybernetics.data_shard_biochip.downloaded": "Consciousness: downloaded",
   "item.createcybernetics.data_shard_biochip.downloading": "Consciousness Download: %s%%",
+
+  "item.createcybernetics.data_shard_infolog": "§bInfolog Data Shard",
+  "item.createcybernetics.data_shard_infolog.desc": "Stores information",
+
 
   "item.createcybernetics.cyberzombie_spawn_egg": "Cyberzombie Spawn Egg",
   "item.createcybernetics.cyberskeleton_spawn_egg": "Cyberskeleton Spawn Egg",
@@ -429,6 +434,7 @@
   "key.createcybernetics.arm_cannon": "Open Arm Cannon",
   "key.createcybernetics.arm_cannon_wheel": "Open Arm Cannon Wheel",
   "key.createcybernetics.heat_engine": "Open Heat Engine",
+  "key.createcybernetics.infolog_gui": "Open A Slotted Infolog",
 
 
   "advancement.cybernetics": "Cybernetics",
@@ -489,6 +495,8 @@
   "advancement.lets_dance.desc": "Killed A Full Borg As A Full 'Ganic",
   "advancement.bodysnatcher": "Bodysnatcher",
   "advancement.bodysnatcher.desc": "Installed An Interchangeable Faceplate",
+  "advancement.destroyer_of_worlds": "I Am Become Death, Destroyer Of Worlds...",
+  "advancement.destroyer_of_worlds.desc": "Self Destructed With A Creeper Heart While A Magic Catalyst Was Installed",
 
 
   "death.attack.createcybernetics.cyberware_surgery": "%1$s didn’t survive the procedure...",
@@ -524,6 +532,7 @@
   "effect.createcybernetics.cyberware_rejection": "Cyberware Rejection",
   "effect.createcybernetics.synthetic_setules_effect": "Synthetic Setules",
   "effect.createcybernetics.aerostasis_gyrobladder_effect": "Aerostasis Gyrobladder",
+  "effect.createcybernetics.inked_effect": "Inked",
 
   "painting.createcybernetics.technomancer.title": "Technomancer 1",
   "painting.createcybernetics.technomancer.author": "Perigrine3",
@@ -735,7 +744,7 @@
           "tooltip.createcybernetics.organsupgrades_metabolic.tooltip2": "§7Requires §cIntestines",
           "tooltip.createcybernetics.organsupgrades_metabolic.energy": "Adds 25 Energy While Metabolizing",
       "tooltip.createcybernetics.organsupgrade_densebattery.tooltip1": "§1Stores a large amount of energy from a Charging Block",
-      "tooltip.createcybernetics.organsupgrade_densebattery.energy": "Stores 5000 Energy From Charging Block",
+      "tooltip.createcybernetics.organsupgrade_densebattery.energy": "Stores 1.2 Million Energy From Charging Block",
       "tooltip.createcybernetics.organsupgrades_heatengine.tooltip1": "§1Generates energy from burning fuels",
           "tooltip.createcybernetics.organsupgrades_heatengine.energy": "Adds 50 energy from fuel",
       "tooltip.createcybernetics.organsupgrades_manabattery.tooltip1": "§1Stores extra pools of mana",

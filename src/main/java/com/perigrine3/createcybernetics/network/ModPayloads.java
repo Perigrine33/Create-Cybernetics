@@ -184,6 +184,17 @@ public final class ModPayloads {
                 })
         );
 
+        r.playToServer(
+                InfologSaveChipwarePayload.TYPE,
+                InfologSaveChipwarePayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> {
+                    if (ctx.player() instanceof ServerPlayer sp) {
+                        InfologSaveChipwareHandler.handle(payload, sp);
+                    }
+                })
+        );
+
+
 
 
 

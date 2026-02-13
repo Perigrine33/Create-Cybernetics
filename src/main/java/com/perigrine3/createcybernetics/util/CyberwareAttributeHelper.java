@@ -17,58 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Helper class for managing attribute modifiers related to cyberware.
- * 
- * <p>This class provides a centralized system for registering, applying, and removing
- * attribute modifiers for cyberware effects on players.
- *
- * <h2>Usage Guide:</h2>
- *
- * <h3>1. Registering a New Modifier</h3>
- * Modifiers are automatically registered in the static initializer. To add a new modifier:
- * <pre>
- * static {
- *     registerModifier("your_modifier_id",
- *         new AttributeModifierData(
- *             attributeHolder,  // The attribute to modify
- *             new ResourceLocation(CreateCybernetics.MODID, "your_modifier_name"),
- *             value,           // The modification amount
- *             operation        // The operation type (ADD, MULTIPLY_BASE, etc.)
- *         ));
- * }
- * </pre>
- *
- * <h3>2. Applying Modifiers</h3>
- * To apply a modifier to a player, use:
- * <pre>
- * CyberwareAttributeHelper.applyModifier(player, "your_modifier_id");
- * </pre>
- * This is typically done in {@code onInstalled()} methods of cyberware items.
- *
- * <h3>3. Removing Modifiers</h3>
- * To remove a modifier from a player, use:
- * <pre>
- * CyberwareAttributeHelper.removeModifier(player, "your_modifier_id");
- * </pre>
- * This is typically done in {@code onRemoved()} methods of cyberware items.
- *
- * <h3>4. Checking Modifier Status</h3>
- * To check if a player has a specific modifier:
- * <pre>
- * boolean hasModifier = CyberwareAttributeHelper.hasModifier(player, "your_modifier_id");
- * </pre>
- *
- * <h2>Example Implementation:</h2>
- * <pre>
- * public class CyberLegItem implements ICyberwareItem {
- *     @Override
- *     public void onInstalled(Player player) {
- *         CyberwareAttributeHelper.applyModifier(player, "cyberleg_speed");
- *     }
- *
- *     @Override
- */
 public class CyberwareAttributeHelper {
     private static final Map<String, AttributeModifierData> MODIFIER_REGISTRY = new HashMap<>();
 
@@ -254,7 +202,7 @@ public class CyberwareAttributeHelper {
 
         registerModifier("reinforced_knuckles_damage", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "reinforced_knuckles_damage_boost"),
-                3.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                3.0, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("calves_sprint", new AttributeModifierData(speedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "calves_sprint_boost"),
@@ -291,7 +239,7 @@ public class CyberwareAttributeHelper {
 //CHIPWARE
         registerModifier("redshard_strength", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_strength_boost"),
-                5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                2.5, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("redshard_speed", new AttributeModifierData(attackSpeedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_speed_boost"),
                 3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));

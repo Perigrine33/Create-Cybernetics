@@ -225,7 +225,7 @@ public class PlayerCyberwareData implements ICyberwareData {
             }
         }
 
-        humanity = Math.max(0, base);
+        humanity = base;
         dirty = true;
     }
 
