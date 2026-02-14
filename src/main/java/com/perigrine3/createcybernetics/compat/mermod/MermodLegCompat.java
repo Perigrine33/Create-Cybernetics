@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.compat.mermod;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.compat.curios.CuriosCompat;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -78,16 +79,36 @@ public final class MermodLegCompat {
     private static boolean shouldHideLegs(AbstractClientPlayer player) {
         if (!ModList.get().isLoaded(MERMOD_MODID)) return false;
 
-        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chest.isEmpty()) return false;
+        ItemStack necklace = findEquippedSeaNecklace(player);
+        if (necklace.isEmpty()) return false;
 
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(chest.getItem());
-        if (!SEA_NECKLACE_ID.equals(id)) return false;
         if (player.isInWaterOrBubble()) return true;
-        boolean hasMoisturizerByItemTag = chest.getTags().anyMatch(t -> t.equals(TAIL_MOISTURIZER_TAG));
+
+        boolean hasMoisturizerByItemTag = necklace.getTags().anyMatch(t -> t.equals(TAIL_MOISTURIZER_TAG));
         if (hasMoisturizerByItemTag) return true;
 
-        return hasMoisturizerModifierViaComponent(chest);
+        return hasMoisturizerModifierViaComponent(necklace);
+    }
+
+    private static ItemStack findEquippedSeaNecklace(AbstractClientPlayer player) {
+        // Armor slot still supported
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (!chest.isEmpty()) {
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(chest.getItem());
+            if (SEA_NECKLACE_ID.equals(id)) {
+                return chest;
+            }
+        }
+
+        // Robust Curios scan: don't assume the slot id is literally "necklace"
+        return CuriosCompat
+                .findFirstCurioAnywhere(player, st -> {
+                    if (st == null || st.isEmpty()) return false;
+                    ResourceLocation id = BuiltInRegistries.ITEM.getKey(st.getItem());
+                    return SEA_NECKLACE_ID.equals(id);
+                })
+                .map(CuriosCompat.FoundCurio::stack)
+                .orElse(ItemStack.EMPTY);
     }
 
     private static boolean hasMoisturizerModifierViaComponent(ItemStack necklace) {
@@ -196,19 +217,19 @@ public final class MermodLegCompat {
     private record VisibilitySnapshot(boolean leftLeg, boolean rightLeg, boolean leftPants, boolean rightPants) {
 
         static VisibilitySnapshot capture(PlayerModel<?> model) {
-                return new VisibilitySnapshot(
-                        model.leftLeg.visible,
-                        model.rightLeg.visible,
-                        model.leftPants.visible,
-                        model.rightPants.visible
-                );
-            }
-
-            void restore(PlayerModel<?> model) {
-                model.leftLeg.visible = leftLeg;
-                model.rightLeg.visible = rightLeg;
-                model.leftPants.visible = leftPants;
-                model.rightPants.visible = rightPants;
-            }
+            return new VisibilitySnapshot(
+                    model.leftLeg.visible,
+                    model.rightLeg.visible,
+                    model.leftPants.visible,
+                    model.rightPants.visible
+            );
         }
+
+        void restore(PlayerModel<?> model) {
+            model.leftLeg.visible = leftLeg;
+            model.rightLeg.visible = rightLeg;
+            model.leftPants.visible = leftPants;
+            model.rightPants.visible = rightPants;
+        }
+    }
 }

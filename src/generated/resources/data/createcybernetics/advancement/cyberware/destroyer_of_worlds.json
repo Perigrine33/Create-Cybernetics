@@ -1,0 +1,27 @@
+{
+  "parent": "createcybernetics:cyberware/first_ripperdoc_visit",
+  "criteria": {
+    "destroyer_of_worlds": {
+      "trigger": "createcybernetics:destroyer_of_worlds"
+    }
+  },
+  "display": {
+    "background": "createcybernetics:textures/block/titanium_block.png",
+    "description": {
+      "translate": "advancement.destroyer_of_worlds.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:heartupgrades_creeperheart"
+    },
+    "title": {
+      "translate": "advancement.destroyer_of_worlds"
+    }
+  },
+  "requirements": [
+    [
+      "destroyer_of_worlds"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

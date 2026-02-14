@@ -5,6 +5,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.compat.ModCompats;
+import com.perigrine3.createcybernetics.compat.curios.CuriosCompat;
 import com.perigrine3.createcybernetics.event.custom.FullBorgHandler;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
@@ -690,29 +691,45 @@ public class SkinModifierManager {
         }
 
 
-// COMPAT STUFF
-        //MERMOD TAIL
+// MERMOD TAIL
         boolean mermodTailActive = false;
         if (ModCompats.isInstalled("mermod")) {
+
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+            ItemStack necklaceCurio = CuriosCompat.findFirstCurio(player, "necklace", st -> {
+                        ResourceLocation k = BuiltInRegistries.ITEM.getKey(st.getItem());return MERMOD_SEA_NECKLACE_ID.equals(k);
+                    })
+                    .orElse(ItemStack.EMPTY);
+
+            boolean hasNecklaceEquipped = false;
+            ItemStack necklaceStack = ItemStack.EMPTY;
+
             if (!chest.isEmpty()) {
                 ResourceLocation key = BuiltInRegistries.ITEM.getKey(chest.getItem());
                 if (MERMOD_SEA_NECKLACE_ID.equals(key)) {
-
-                    boolean inWater = player.isInWaterOrBubble();
-
-                    var moisturizerTag = net.minecraft.tags.TagKey.create(
-                            net.minecraft.core.registries.Registries.ITEM,
-                            ResourceLocation.fromNamespaceAndPath("mermod", "tail_moisturizer_modifier"));
-
-                    boolean hasMoisturizerByItemTag = chest.getTags().anyMatch(t -> t.equals(moisturizerTag));
-
-                    boolean hasMoisturizerByComponent = hasMermodMoisturizerComponent(chest);
-
-                    mermodTailActive = inWater || hasMoisturizerByItemTag || hasMoisturizerByComponent;
+                    hasNecklaceEquipped = true;
+                    necklaceStack = chest;
                 }
             }
+
+            if (!hasNecklaceEquipped && !necklaceCurio.isEmpty()) {
+                hasNecklaceEquipped = true;
+                necklaceStack = necklaceCurio;
+            }
+
+            if (hasNecklaceEquipped) {
+                boolean inWater = player.isInWaterOrBubble();
+
+                var moisturizerTag = net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath("mermod", "tail_moisturizer_modifier"));
+
+                boolean hasMoisturizerByItemTag = necklaceStack.getTags().anyMatch(t -> t.equals(moisturizerTag));
+                boolean hasMoisturizerByComponent = hasMermodMoisturizerComponent(necklaceStack);
+
+                mermodTailActive = inWater || hasMoisturizerByItemTag || hasMoisturizerByComponent;
+            }
         }
+
 
 
 

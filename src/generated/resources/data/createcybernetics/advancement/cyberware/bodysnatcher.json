@@ -1,0 +1,28 @@
+{
+  "parent": "createcybernetics:cyberware/first_ripperdoc_visit",
+  "criteria": {
+    "bodysnatcher": {
+      "trigger": "createcybernetics:bodysnatcher"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "createcybernetics:textures/block/titanium_block.png",
+    "description": {
+      "translate": "advancement.bodysnatcher.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:faceplate"
+    },
+    "title": {
+      "translate": "advancement.bodysnatcher"
+    }
+  },
+  "requirements": [
+    [
+      "bodysnatcher"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
