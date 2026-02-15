@@ -11,10 +11,10 @@
       "item": "minecraft:redstone_block"
     },
     "V": {
-      "item": "minecraft:glass_pane"
+      "tag": "c:glass_panes"
     },
     "T": {
-      "item": "createcybernetics:titanium_block"
+      "item": "createcybernetics:titaniumsheet"
     },
     "Q": {
       "item": "createcybernetics:netherite_qpu"

@@ -1,4 +1,13 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "create"
+      }
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
@@ -9,7 +18,7 @@
       "item": "createcybernetics:titaniumsheet"
     },
     "E": {
-      "item": "create:electron_tube"
+      "item": "createcybernetics:component_led"
     },
     "G": {
       "item": "minecraft:gold_nugget"

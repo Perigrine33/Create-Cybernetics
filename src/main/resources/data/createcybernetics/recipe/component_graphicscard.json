@@ -9,10 +9,10 @@
       "item": "createcybernetics:component_led"
     },
     "D": {
-      "item": "minecraft:diamond"
+      "tag": "c:gems/diamond"
     },
     "G": {
-      "item": "minecraft:gold_nugget"
+      "tag": "c:nuggets/gold"
     },
     "R": {
       "item": "minecraft:redstone"

@@ -242,10 +242,10 @@ public class CyberwareAttributeHelper {
                 2.5, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("redshard_speed", new AttributeModifierData(attackSpeedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_speed_boost"),
-                3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         registerModifier("redshard_knockback", new AttributeModifierData(attackKnockbackAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "redshard_knockback_boost"),
-                3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE ));
+                3, AttributeModifier.Operation.ADD_VALUE ));
 
         registerModifier("orangeshard_ore", new AttributeModifierData(oreMultiplierAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "orangeshard_ore_multiplier"),
@@ -293,17 +293,17 @@ public class CyberwareAttributeHelper {
 
         registerModifier("grayshard_speed", new AttributeModifierData(cropMultiplierAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "grayshard_speed_boost"),
-                5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                5, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("grayshard_handling", new AttributeModifierData(cropMultiplierAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "grayshard_handling_boost"),
-                5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                5, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("blackshard_crouch", new AttributeModifierData(crouchSpeedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blackshard_crouch_speed"),
-                2.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                2.5, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("blackshard_sprint", new AttributeModifierData(crouchSpeedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blackshard_crouch_sprint"),
-                3.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                3.5, AttributeModifier.Operation.ADD_VALUE));
 
 
 

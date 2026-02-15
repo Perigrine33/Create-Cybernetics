@@ -9,10 +9,10 @@
       "item": "minecraft:redstone"
     },
     "G": {
-      "item": "minecraft:gold_nugget"
+      "tag": "c:nuggets/gold"
     },
     "D": {
-      "item": "minecraft:diamond"
+      "tag": "c:gems/diamond"
     }
   },
   "pattern": [

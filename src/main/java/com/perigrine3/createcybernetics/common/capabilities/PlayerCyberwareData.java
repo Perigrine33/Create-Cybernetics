@@ -843,9 +843,24 @@ public class PlayerCyberwareData implements ICyberwareData {
         if (heatEngineBurnTime <= 0) {
             ItemStack fuel = getHeatEngineStack(HEAT_ENGINE_FUEL);
             if (!fuel.isEmpty() && AbstractFurnaceBlockEntity.isFuel(fuel)) {
+
                 int burn = fuel.getBurnTime(RecipeType.SMELTING);
                 if (burn > 0) {
+
+                    ItemStack remainder = ItemStack.EMPTY;
+                    Item remainderItem = fuel.getItem().getCraftingRemainingItem();
+                    if (remainderItem != null) {
+                        remainder = new ItemStack(remainderItem);
+                    }
+
                     removeHeatEngineStack(HEAT_ENGINE_FUEL, 1);
+
+                    if (!remainder.isEmpty()) {
+                        if (!player.getInventory().add(remainder)) {
+                            player.drop(remainder, false);
+                        }
+                    }
+
                     heatEngineBurnTime = burn;
                     heatEngineBurnTimeTotal = burn;
                     dirty = true;

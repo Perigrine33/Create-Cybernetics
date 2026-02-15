@@ -7,8 +7,8 @@
     }
   },
   "pattern": [
-    "TTT",
-    "TTT"
+    " T ",
+    " T "
   ],
   "result": {
     "count": 1,

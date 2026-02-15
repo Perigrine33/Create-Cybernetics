@@ -1,16 +1,8 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "T": {
-      "item": "createcybernetics:titaniumingot"
-    }
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "createcybernetics:titaniumingot"
   },
-  "pattern": [
-    "   ",
-    "TTT",
-    "   "
-  ],
   "result": {
     "count": 1,
     "id": "createcybernetics:titaniumsheet"
