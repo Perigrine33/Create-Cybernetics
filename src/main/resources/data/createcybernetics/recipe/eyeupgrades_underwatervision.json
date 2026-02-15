@@ -20,7 +20,7 @@
       "item": "createcybernetics:component_ssd"
     },
     "N": {
-      "item": "minecraft:gold_nugget"
+      "tag": "c:nuggets/gold"
     },
     "R": {
       "item": "minecraft:redstone"
@@ -29,7 +29,7 @@
       "item": "minecraft:glass"
     },
     "M": {
-      "item": "minecraft:phantom_membrane"
+      "item": "minecraft:prismarine_crystals"
     }
   },
 

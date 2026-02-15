@@ -71,4 +71,15 @@ public class RobosurgeonSlotItemHandler extends SlotItemHandler {
     public boolean isActive() {
         return active;
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
+
+    @Override
+    public int getMaxStackSize(ItemStack stack) {
+        return 1;
+    }
+
 }

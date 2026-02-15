@@ -69,25 +69,25 @@ public class ModBlocks {
 
 //FUNCTIONAL BLOCKS
     public static final DeferredBlock<Block> SURGERY_CHAMBER_BOTTOM = registerBlock("surgery_chamber",
-            () -> new SurgeryChamberBlockBottom(BlockBehaviour.Properties.of()
+            () -> new SurgeryChamberBlockBottom(BlockBehaviour.Properties.of().strength(6, 8)
                     .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> SURGERY_CHAMBER_TOP = registerBlock("surgery_chamber_top",
-            () -> new SurgeryChamberBlockTop(BlockBehaviour.Properties.of()
+            () -> new SurgeryChamberBlockTop(BlockBehaviour.Properties.of().strength(6, 8)
                     .noOcclusion().sound(SoundType.METAL)), false);
     public static final DeferredBlock<Block> ROBOSURGEON = registerBlock("robosurgeon",
-            () -> new RobosurgeonBlock(BlockBehaviour.Properties.of()
+            () -> new RobosurgeonBlock(BlockBehaviour.Properties.of().strength(6, 8)
                     .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> CHARGING_BLOCK = registerBlock("charging_block",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new Block(BlockBehaviour.Properties.of().strength(6, 8)
                     .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> ENGINEERING_TABLE = registerBlock("engineering_table",
-            () -> new EngineeringTableBlock(BlockBehaviour.Properties.of()
+            () -> new EngineeringTableBlock(BlockBehaviour.Properties.of().strength(6, 6)
                     .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> GRAFTING_TABLE = registerBlock("grafting_table",
-            () -> new GraftingTableBlock(BlockBehaviour.Properties.of()
+            () -> new GraftingTableBlock(BlockBehaviour.Properties.of().strength(3, 3)
                     .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> HOLOPROJECTOR = registerBlock("holoprojector",
-            () -> new HoloprojectorBlock(BlockBehaviour.Properties.of()
+            () -> new HoloprojectorBlock(BlockBehaviour.Properties.of().strength(3, 3)
                     .noOcclusion().sound(SoundType.METAL)), true);
 
 //PLANT BLOCKS

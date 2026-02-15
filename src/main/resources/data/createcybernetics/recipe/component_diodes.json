@@ -9,7 +9,7 @@
       "item": "createcybernetics:component_led"
     },
     "G": {
-      "item": "minecraft:gold_nugget"
+      "tag": "c:nuggets/gold"
     },
     "R": {
       "item": "minecraft:redstone"
@@ -21,7 +21,7 @@
     "GRG"
   ],
   "result": {
-    "count": 1,
+    "count": 2,
     "id": "createcybernetics:component_diodes"
   }
 }

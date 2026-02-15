@@ -9,10 +9,10 @@
       "item": "create:electron_tube"
     },
     "Q": {
-      "item": "minecraft:quartz"
+      "tag": "c:gems/quartz"
     },
     "G": {
-      "item": "minecraft:gold_nugget"
+      "tag": "c:nuggets/gold"
     },
     "R": {
       "item": "minecraft:redstone"

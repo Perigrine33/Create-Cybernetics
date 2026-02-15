@@ -11,6 +11,7 @@ import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
 import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.item.generic.XPCapsuleItem;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,7 +60,6 @@ public final class CyberwareDeathReset {
         player.syncData(ModAttachments.CYBERWARE);
     }
 
-
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
@@ -82,7 +82,6 @@ public final class CyberwareDeathReset {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) return;
-
         if (ConfigValues.KEEP_CYBERWARE) return;
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
@@ -123,6 +122,25 @@ public final class CyberwareDeathReset {
                     player.spawnAtLocation(effective.copy());
                 }
             }
+        }
+
+        dropChipwareShards(player, data);
+
+        data.setDirty();
+        player.syncData(ModAttachments.CYBERWARE);
+    }
+
+    private static void dropChipwareShards(ServerPlayer player, PlayerCyberwareData data) {
+        for (int i = 0; i < PlayerCyberwareData.CHIPWARE_SLOT_COUNT; i++) {
+            ItemStack st = data.getChipwareStack(i);
+            if (st == null || st.isEmpty()) continue;
+            if (!st.is(ModTags.Items.DATA_SHARDS)) continue;
+
+            ItemStack drop = st.copy();
+            drop.setCount(1);
+
+            player.spawnAtLocation(drop);
+            data.setChipwareStack(i, ItemStack.EMPTY);
         }
     }
 
@@ -202,5 +220,4 @@ public final class CyberwareDeathReset {
             }
         }
     }
-
 }

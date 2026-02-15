@@ -6,7 +6,7 @@
       "item": "createcybernetics:titaniumsheet"
     },
     "G": {
-      "item": "create:framed_glass"
+      "tag": "c:glass_panes"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     "TTT"
   ],
   "result": {
-    "count": 1,
+    "count": 2,
     "id": "createcybernetics:component_fiberoptics"
   }
 }

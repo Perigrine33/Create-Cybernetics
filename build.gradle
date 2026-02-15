@@ -156,6 +156,10 @@ dependencies {
 
     compileOnly "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1"
+
+    implementation "curse.maven:vics-point-blank-961053:7515178"
+    implementation "curse.maven:geckolib-388172:7415496"
+
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -6,7 +6,7 @@
       "item": "createcybernetics:titaniumsheet"
     },
     "C": {
-      "item": "minecraft:copper_ingot"
+      "tag": "c:ingots/copper"
     }
   },
   "pattern": [
