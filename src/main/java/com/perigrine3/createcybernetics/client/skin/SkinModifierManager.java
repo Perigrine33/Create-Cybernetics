@@ -734,16 +734,18 @@ public class SkinModifierManager {
 
 
 
-// CYBEREYES
-        if (data.hasSpecificItem(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
-            if (data.isDyed(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
-                int tint = data.dyeColor(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES);
-                state.addModifier(new SkinModifier(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
-                        tint, false));
-                state.addHighlight(new SkinHighlight(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
-                        tint, true, true));
+// CYBEREYES (dynamic-mapped to player face config; base-layer only)
+        if (data.hasSpecificItem(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)
+                && data.isDyed(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
+            int tint = data.dyeColor(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES);
+
+            ResourceLocation dyn = CybereyeOverlayHandler.getOrBuildOverlay(player);
+            if (dyn != null) {
+                state.addModifier(new SkinModifier(dyn, dyn, tint, false));
+                state.addHighlight(new SkinHighlight(dyn, dyn, tint, true, true));
             }
         }
+
 // --- SYNTHSKIN / NETHERITE PLATING INTERACTION ---
         boolean hasSynthSkin = data.hasSpecificItem(ModItems.SKINUPGRADES_SYNTHSKIN.get(), CyberwareSlot.SKIN);
         boolean hasNetheritePlating = data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN);

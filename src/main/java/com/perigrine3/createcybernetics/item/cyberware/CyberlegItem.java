@@ -7,6 +7,7 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
@@ -93,14 +94,32 @@ public class CyberlegItem extends Item implements ICyberwareItem {
 
     @Override
     public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "cyberleg_speed");
-        CyberwareAttributeHelper.applyModifier(player, "cyberleg_jump");
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+
+        if (data.hasAnyTagged(ModTags.Items.RIGHT_CYBERLEG, CyberwareSlot.RLEG) && data.hasAnyTagged(ModTags.Items.LEFT_CYBERLEG, CyberwareSlot.LLEG)) {
+            CyberwareAttributeHelper.applyModifier(player, "cyberleg_speed1");
+            CyberwareAttributeHelper.applyModifier(player, "cyberleg_jump1");
+
+            CyberwareAttributeHelper.applyModifier(player, "cyberleg_speed2");
+            CyberwareAttributeHelper.applyModifier(player, "cyberleg_jump2");
+        } else if (data.hasAnyTagged(ModTags.Items.RIGHT_CYBERLEG, CyberwareSlot.RLEG) || data.hasAnyTagged(ModTags.Items.LEFT_CYBERLEG, CyberwareSlot.LLEG)) {
+            CyberwareAttributeHelper.applyModifier(player, "cyberleg_speed1");
+            CyberwareAttributeHelper.applyModifier(player, "cyberleg_jump2");
+
+            CyberwareAttributeHelper.removeModifier(player, "cyberleg_speed2");
+            CyberwareAttributeHelper.removeModifier(player, "cyberleg_jump2");
+        }
     }
 
     @Override
     public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "cyberleg_speed");
-        CyberwareAttributeHelper.removeModifier(player, "cyberleg_jump");
+        CyberwareAttributeHelper.removeModifier(player, "cyberleg_speed1");
+        CyberwareAttributeHelper.removeModifier(player, "cyberleg_jump1");
+
+        CyberwareAttributeHelper.removeModifier(player, "cyberleg_speed2");
+        CyberwareAttributeHelper.removeModifier(player, "cyberleg_jump2");
+
+        onInstalled(player);
     }
 
     @Override

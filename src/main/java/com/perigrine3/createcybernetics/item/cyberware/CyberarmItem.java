@@ -5,6 +5,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -92,14 +93,32 @@ public class CyberarmItem extends Item implements ICyberwareItem {
 
     @Override
     public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength");
-        CyberwareAttributeHelper.applyModifier(player, "cyberarm_blockbreak");
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+
+        if (data.hasAnyTagged(ModTags.Items.RIGHT_CYBERARM, CyberwareSlot.RARM) && data.hasAnyTagged(ModTags.Items.LEFT_CYBERARM, CyberwareSlot.LARM)) {
+            CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength1");
+            CyberwareAttributeHelper.applyModifier(player, "cyberarm_blockbreak1");
+
+            CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength2");
+            CyberwareAttributeHelper.applyModifier(player, "cyberarm_blockbreak2");
+        } else if (data.hasAnyTagged(ModTags.Items.RIGHT_CYBERARM, CyberwareSlot.RARM) || data.hasAnyTagged(ModTags.Items.LEFT_CYBERARM, CyberwareSlot.LARM)) {
+            CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength1");
+            CyberwareAttributeHelper.applyModifier(player, "cyberarm_blockbreak1");
+
+            CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength2");
+            CyberwareAttributeHelper.removeModifier(player, "cyberarm_blockbreak2");
+        }
     }
 
     @Override
     public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength");
-        CyberwareAttributeHelper.removeModifier(player, "cyberarm_blockbreak");
+        CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength1");
+        CyberwareAttributeHelper.removeModifier(player, "cyberarm_blockbreak1");
+
+        CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength2");
+        CyberwareAttributeHelper.removeModifier(player, "cyberarm_blockbreak2");
+
+        onInstalled(player);
     }
 
     @Override

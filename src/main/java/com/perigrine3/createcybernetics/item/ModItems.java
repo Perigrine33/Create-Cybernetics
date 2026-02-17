@@ -1744,6 +1744,7 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_solarskin.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.boneupgrades_bonebattery.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.skinupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));

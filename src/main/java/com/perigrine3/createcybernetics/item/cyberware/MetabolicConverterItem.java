@@ -30,7 +30,7 @@ public class MetabolicConverterItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrades_metabolic.energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrades_metabolic.energy").withStyle(ChatFormatting.DARK_GREEN));
         }
 
     }

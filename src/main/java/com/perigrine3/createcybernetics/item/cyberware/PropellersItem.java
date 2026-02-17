@@ -98,41 +98,18 @@ public class PropellersItem extends Item implements ICyberwareItem {
         if (player.level().isClientSide) return;
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
 
-        if (!player.isSwimming()) {
+        if (player.isSwimming()) {
+            if (data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.RLEG) && data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.LLEG)) {
+                CyberwareAttributeHelper.applyModifier(player, "propeller_swim_1");
+                CyberwareAttributeHelper.applyModifier(player, "propeller_swim_2");
+            } else if (data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.RLEG) || data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.LLEG)) {
+                CyberwareAttributeHelper.applyModifier(player, "propeller_swim_1");
+                CyberwareAttributeHelper.removeModifier(player, "propeller_swim_2");
+            }
+        } else {
             CyberwareAttributeHelper.removeModifier(player, "propeller_swim_1");
             CyberwareAttributeHelper.removeModifier(player, "propeller_swim_2");
-            return;
         }
-
-        InstalledCyberware cw = data.get(slot, index);
-        if (cw == null || !cw.isPowered()) {
-            CyberwareAttributeHelper.removeModifier(player, "propeller_swim_1");
-            CyberwareAttributeHelper.removeModifier(player, "propeller_swim_2");
-            return;
-        }
-
-        int stacks = 0;
-
-        for (int i = 0; i < CyberwareSlot.RLEG.size; i++) {
-            if (data.isInstalled(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.RLEG, i)) {
-                stacks++;
-            }
-        }
-
-        for (int i = 0; i < CyberwareSlot.LLEG.size; i++) {
-            if (data.isInstalled(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.LLEG, i)) {
-                stacks++;
-            }
-        }
-
-        if (stacks > 2) stacks = 2;
-
-        if (stacks >= 1) CyberwareAttributeHelper.applyModifier(player, "propeller_swim_1");
-        else CyberwareAttributeHelper.removeModifier(player, "propeller_swim_1");
-
-        if (stacks >= 2) CyberwareAttributeHelper.applyModifier(player, "propeller_swim_2");
-        else CyberwareAttributeHelper.removeModifier(player, "propeller_swim_2");
     }
 }

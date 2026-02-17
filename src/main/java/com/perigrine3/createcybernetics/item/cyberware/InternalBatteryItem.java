@@ -18,7 +18,7 @@ public class InternalBatteryItem extends Item implements ICyberwareItem {
 
     private final int humanityCost;
 
-    private static final int CAPACITY = 500;
+    private static final int CAPACITY = 120000;
 
     public InternalBatteryItem(Properties props, int humanityCost) {
         super(props);

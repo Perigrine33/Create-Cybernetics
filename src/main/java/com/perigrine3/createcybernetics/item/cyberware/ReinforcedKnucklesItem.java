@@ -62,12 +62,23 @@ public class ReinforcedKnucklesItem extends Item implements ICyberwareItem {
 
     @Override
     public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "reinforced_knuckles_damage");
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+
+        if (data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.RARM) && data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.LARM)) {
+            CyberwareAttributeHelper.applyModifier(player, "reinforced_knuckles_damage1");
+            CyberwareAttributeHelper.applyModifier(player, "reinforced_knuckles_damage2");
+        } else if (data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.RARM) || data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.LARM)) {
+            CyberwareAttributeHelper.applyModifier(player, "reinforced_knuckles_damage1");
+            CyberwareAttributeHelper.removeModifier(player, "reinforced_knuckles_damage2");
+        }
     }
 
     @Override
     public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "reinforced_knuckles_damage");
+        CyberwareAttributeHelper.removeModifier(player, "reinforced_knuckles_damage1");
+        CyberwareAttributeHelper.removeModifier(player, "reinforced_knuckles_damage2");
+
+        onInstalled(player);
     }
 
     @Override

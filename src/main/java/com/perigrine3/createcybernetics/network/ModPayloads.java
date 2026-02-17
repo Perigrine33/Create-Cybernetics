@@ -194,7 +194,11 @@ public final class ModPayloads {
                 })
         );
 
-
+        r.playToClient(
+                EnergyHudSyncPayload.TYPE,
+                EnergyHudSyncPayload.STREAM_CODEC,
+                EnergyHudSyncPayload::handle
+        );
 
 
 

@@ -15,6 +15,9 @@
   "commands.createcybernetics.energy_debug.set": "Energy Debug: %s",
 
 
+  "screen.createcybernetics.hud_layout": "HUD Layout",
+  "screen.createcybernetics.cybereye_skin": "Cybereyes Layout",
+
   "gui.robosurgeon.title": "Robosurgeon Interface",
   "gui.engineeringtable.title": "Engineering Table",
   "gui.createcybernetics.grafting_table.title": "Grafting Table",
@@ -23,6 +26,10 @@
   "gui.heatengine.title": "Heat Engine",
   "gui.chipwarecreative.title": "Creative Chiware Slots",
   "gui.infolog.title": "Infolog",
+
+  "gui.createcybernetics.pause.cybereye_skin": "Cybereye Skin",
+  "gui.createcybernetics.save": "Save",
+  "gui.createcybernetics.pause.hud_layout": "HUD Layout",
 
   "gui.chipware.button": "Chipware",
 
@@ -411,6 +418,7 @@
 
   "block.createcybernetics.robosurgeon": "Robosurgeon",
   "block.createcybernetics.surgery_chamber": "Surgery Chamber",
+  "block.createcybernetics.surgery_chamber_top": "Surgery Chamber",
   "block.createcybernetics.engineering_table": "Engineering Table",
   "block.createcybernetics.grafting_table": "Grafting Table",
   "block.createcybernetics.charging_block": "Charging Block",
@@ -657,7 +665,7 @@
 
       "tooltip.createcybernetics.boneupgrades_bonebattery.tooltip1": "§1Stores energy",
           "tooltip.createcybernetics.boneupgrades_bonebattery.tooltip2": "§3Stacks up to 3x",
-          "tooltip.createcybernetics.boneupgrades_bonebattery.energy": "Stores 250 Energy",
+          "tooltip.createcybernetics.boneupgrades_bonebattery.energy": "Stores 120k Energy",
       "tooltip.createcybernetics.boneupgrades_boneflex.tooltip1": "§1Negates damage taken from falling +3 blocks per stack",
           "tooltip.createcybernetics.boneupgrades_boneflex.tooltip2": "§3Stacks up to 3x",
       "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip1": "§1Adds 2 hearts of health to the user per stack",
@@ -731,7 +739,7 @@
       "tooltip.createcybernetics.organsupgrades_adrenaline.energy": "Costs 10 Energy",
       "tooltip.createcybernetics.organsupgrades_battery.tooltip1": "§1Stores energy",
           "tooltip.createcybernetics.organsupgrades_battery.tooltip2": "§3Stacks up to 4x",
-          "tooltip.createcybernetics.organsupgrades_battery.energy": "Stores 500 Energy",
+          "tooltip.createcybernetics.organsupgrades_battery.energy": "Stores 120k Energy",
       "tooltip.createcybernetics.organsupgrades_diamondwaferstack.tooltip1": "§1Generates a slow trickle of energy",
           "tooltip.createcybernetics.organsupgrades_diamondwaferstack.tooltip2": "§3Stacks up to 3x",
           "tooltip.createcybernetics.organsupgrades_diamondwaferstack.energy": "Adds 5 Energy Really Slowly",
@@ -761,7 +769,8 @@
       "tooltip.createcybernetics.skinupgrades_faceplate.tooltip1": "§1Allows the user to wear different faces to change the displayed username",
       "tooltip.createcybernetics.skinupgrades_netheriteplating.tooltip1": "§1Grants the user immunity to fire and lava",
       "tooltip.createcybernetics.skinupgrades_solarskin.tooltip1": "§1Generates energy when the user is in sunlight",
-      "tooltip.createcybernetics.skinupgrades_solarskin.energy": "Adds 15 Energy In Sunlight",
+      "tooltip.createcybernetics.skinupgrades_solarskin.tooltip2": "§3Stacks up to 3x",
+  "tooltip.createcybernetics.skinupgrades_solarskin.energy": "Adds 15 Energy In Sunlight",
       "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip1": "§1Provides 1 armor levels",
           "tooltip.createcybernetics.skinupgrades_subdermalarmor.tooltip2": "§3Stacks up to 3x",
       "tooltip.createcybernetics.skinupgrades_subdermalspikes.tooltip1": "§1Applies the Thorns effect when attacked",

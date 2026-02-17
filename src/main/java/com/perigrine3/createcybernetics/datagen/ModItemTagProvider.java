@@ -43,6 +43,18 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SYNTHETICSETULES.get())
                 .addOptional(resourceLocation("createcybernetics:boneupgrades_elytra"));
 
+//ENERGY GENERATING CYBERWARE
+        tag(ModTags.Items.ENERGY_GENERATING_CYBERWARE)
+                .add(ModItems.BONEUPGRADES_PIEZO.get())
+                .add(ModItems.ORGANSUPGRADES_DIAMONDWAFERSTACK.get())
+                .add(ModItems.HEARTUPGRADES_COUPLER.get())
+                .add(ModItems.ORGANSUPGRADES_DUALISTICCONVERTER.get())
+                .add(ModItems.ORGANSUPGRADES_MAGICCATALYST.get())
+                .add(ModItems.ORGANSUPGRADES_METABOLIC.get())
+                .add(ModItems.SKINUPGRADES_SOLARSKIN.get())
+                .add(ModItems.SKINUPGRADES_ARTERIALTURBINE.get())
+                .add(ModItems.ORGANSUPGRADES_HEATENGINE.get());
+
 //ARM CANNON AMMO
         tag(ModTags.Items.ARM_CANNON_AMMO)
                 .addTag(Tags.Items.NUGGETS)
@@ -565,11 +577,23 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.WETWARE_WEBSHOOTING_LEFTARM.get())
                 .add(ModItems.BASECYBERWARE_LEFTARM.get());
 
+        tag(ModTags.Items.LEFT_CYBERARM)
+                .add(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM.get());
+
         tag(ModTags.Items.RIGHTARM_REPLACEMENTS)
                 .add(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
                 .add(ModItems.WETWARE_WEBSHOOTING_RIGHTARM.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM.get());
+
+        tag(ModTags.Items.RIGHT_CYBERARM)
+                .add(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM.get());
 
         tag(ModTags.Items.LEFTLEG_REPLACEMENTS)
@@ -578,7 +602,19 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get())
                 .add(ModItems.BASECYBERWARE_LEFTLEG.get());
 
+        tag(ModTags.Items.LEFT_CYBERLEG)
+                .add(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG.get());
+
         tag(ModTags.Items.RIGHTLEG_REPLACEMENTS)
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTLEG.get());
+
+        tag(ModTags.Items.RIGHT_CYBERLEG)
                 .add(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get())
                 .add(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get())

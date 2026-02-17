@@ -20,15 +20,21 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -122,14 +128,49 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
             }
 
             boolean anyEnabled = leftEnabled || rightEnabled;
+            boolean weaponEquipped = isHoldingWeapon(player);
 
-            if (anyEnabled) {
-                CyberwareAttributeHelper.applyModifier(player, "claws_attack");
+            if (anyEnabled && !weaponEquipped) {
+                if (rightEnabled && leftEnabled) {
+                    CyberwareAttributeHelper.applyModifier(player, "claws_attack1");
+                    CyberwareAttributeHelper.applyModifier(player, "claws_attack2");
+                } else {
+                    CyberwareAttributeHelper.applyModifier(player, "claws_attack1");
+                    CyberwareAttributeHelper.removeModifier(player, "claws_attack2");
+                }
             } else {
-                CyberwareAttributeHelper.removeModifier(player, "claws_attack");
+                CyberwareAttributeHelper.removeModifier(player, "claws_attack1");
+                CyberwareAttributeHelper.removeModifier(player, "claws_attack2");
             }
         }
 
+        private static boolean isHoldingWeapon(Player player) {
+            return isWeaponLike(player.getMainHandItem()) || isWeaponLike(player.getOffhandItem());
+        }
+
+        private static boolean isWeaponLike(ItemStack stack) {
+            if (stack == null || stack.isEmpty()) return false;
+
+            Item it = stack.getItem();
+            if (it instanceof BowItem || it instanceof CrossbowItem || it instanceof TridentItem) return true;
+            if (it instanceof SwordItem || it instanceof AxeItem || it instanceof MaceItem || it instanceof DiggerItem) return true;
+
+            ItemAttributeModifiers mods = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
+            if (mods == null) return false;
+
+            for (ItemAttributeModifiers.Entry e : mods.modifiers()) {
+                Holder<Attribute> attr = e.attribute();
+
+                boolean attackDamage = attr != null && attr.value() == Attributes.ATTACK_DAMAGE;
+                boolean mainhand = (e.slot() == EquipmentSlotGroup.MAINHAND) || e.slot().test(EquipmentSlot.MAINHAND);
+
+                if (attackDamage && mainhand && e.modifier().amount() != 0.0) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         private static final java.util.Map<java.util.UUID, Boolean> LAST_LEFT = new java.util.HashMap<>();
         private static final java.util.Map<java.util.UUID, Boolean> LAST_RIGHT = new java.util.HashMap<>();

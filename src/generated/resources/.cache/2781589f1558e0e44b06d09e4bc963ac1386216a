@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-13T03:28:28.7970388	Tags for minecraft:item mod id createcybernetics
+// 1.21.1	2026-02-16T23:56:05.5219792	Tags for minecraft:item mod id createcybernetics
 facebceb0f7eaac59aec077332daccfdb5c937c8 data/createcybernetics/tags/item/arm_cannon_ammo.json
 0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
 c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
@@ -13,6 +13,7 @@ f6c8399848801cefe03e09702a8354e1c24d9f1c data/createcybernetics/tags/item/brain_
 b28fc2c0773a7583cdf45ffea5de31c09be9dbc3 data/createcybernetics/tags/item/cyberware_item.json
 d95ceae1647cc30922f27dbc04237703f132127b data/createcybernetics/tags/item/data_shards.json
 334b677712c730f32620517e83e87c9ee661ffda data/createcybernetics/tags/item/defaults_fail_as_missing_when_unpowered.json
+ba5c986963e36c243fe371e1c3934ab629d37809 data/createcybernetics/tags/item/energy_generating_cyberware.json
 0ccc92202129c4ed77276e329b581b3ba63bf9a9 data/createcybernetics/tags/item/eye_items.json
 44906197e61130bc7375b34f8a3a36efaed67412 data/createcybernetics/tags/item/eye_replacements.json
 39ef76e567bcaf2cbbbc53b3fcbecbf56f6d62c1 data/createcybernetics/tags/item/eye_upgrades.json
@@ -27,6 +28,8 @@ db1674f1beb549ffb35d40fe8be45d478ea35bdb data/createcybernetics/tags/item/leftar
 ab4a12e98ca2e6a5d2de41637453dfdd4b23a3d7 data/createcybernetics/tags/item/leftarm_replacements.json
 53a1fa6f043f765abeb66783badfdf0ffad2cf3c data/createcybernetics/tags/item/leftleg_items.json
 c2ccdf9af4e8ba55185347bf5462b9e1a9ec04f9 data/createcybernetics/tags/item/leftleg_replacements.json
+cd7e37d3105411a9423ae1db69cf0dec92307a20 data/createcybernetics/tags/item/left_cyberarm.json
+c2ccdf9af4e8ba55185347bf5462b9e1a9ec04f9 data/createcybernetics/tags/item/left_cyberleg.json
 da7baffdd7686e61aae4892efa529dd0912da73a data/createcybernetics/tags/item/leg_upgrades.json
 0558cf372a4b52e584cfd87fa0c8f5159045ae4f data/createcybernetics/tags/item/liver_items.json
 0858b679bfe6d72e59f508bf0537dd08291dd404 data/createcybernetics/tags/item/liver_replacements.json
@@ -44,6 +47,8 @@ eaa9409423d86c3dfba78acd1a6e09b4810cfc76 data/createcybernetics/tags/item/righta
 2a7aab7e28d09a4a018eb3ce9a45eb16138fef89 data/createcybernetics/tags/item/rightarm_replacements.json
 56586c0e415bb3df9bb429b37eef26603bc95bb4 data/createcybernetics/tags/item/rightleg_items.json
 92f20ddf482487ef82ff73d766cd6db606499926 data/createcybernetics/tags/item/rightleg_replacements.json
+21915635d5c7a10daba519ee93336ba982a12c4f data/createcybernetics/tags/item/right_cyberarm.json
+92f20ddf482487ef82ff73d766cd6db606499926 data/createcybernetics/tags/item/right_cyberleg.json
 9ee18d835d55f7b48cca74f0402aaa2f34f9f2b5 data/createcybernetics/tags/item/scavenged_cyberware.json
 4cee43f14863cd2db81b63589fd2246ccc087966 data/createcybernetics/tags/item/skin_items.json
 36d680c7dfdb816609668da5b5dfaa4bec523f35 data/createcybernetics/tags/item/skin_replacements.json

@@ -33,6 +33,7 @@ public class ModTags {
                 ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/titanium"));
 
         public static final TagKey<Item> TOGGLEABLE_CYBERWARE = createTag("toggleable_cyberware");
+        public static final TagKey<Item> ENERGY_GENERATING_CYBERWARE = createTag("energy_generating_cyberware");
         public static final TagKey<Item> ARM_CANNON_AMMO = createTag("arm_cannon_ammo");
         public static final TagKey<Item> DATA_SHARDS = createTag("data_shards");
 
@@ -80,9 +81,13 @@ public class ModTags {
         public static final TagKey<Item> HEART_REPLACEMENTS = createTag("heart_replacements");
         public static final TagKey<Item> LIVER_REPLACEMENTS = createTag("liver_replacements");
         public static final TagKey<Item> LEFTARM_REPLACEMENTS = createTag("leftarm_replacements");
+        public static final TagKey<Item> LEFT_CYBERARM = createTag("left_cyberarm");
         public static final TagKey<Item> RIGHTARM_REPLACEMENTS = createTag("rightarm_replacements");
+        public static final TagKey<Item> RIGHT_CYBERARM = createTag("right_cyberarm");
         public static final TagKey<Item> LEFTLEG_REPLACEMENTS = createTag("leftleg_replacements");
+        public static final TagKey<Item> LEFT_CYBERLEG = createTag("left_cyberleg");
         public static final TagKey<Item> RIGHTLEG_REPLACEMENTS = createTag("rightleg_replacements");
+        public static final TagKey<Item> RIGHT_CYBERLEG = createTag("right_cyberleg");
 
         public static final TagKey<Item> MEAT_LIMBS = createTag("meat_limbs");
         public static final TagKey<Item> MEAT_ARMS = createTag("meat_arms");

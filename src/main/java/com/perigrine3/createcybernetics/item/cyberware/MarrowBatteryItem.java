@@ -20,7 +20,7 @@ public class MarrowBatteryItem extends Item implements ICyberwareItem {
 
     private final int humanityCost;
 
-    private static final int CAPACITY = 250;
+    private static final int CAPACITY = 120000;
 
     public MarrowBatteryItem(Properties props, int humanityCost) {
         super(props);

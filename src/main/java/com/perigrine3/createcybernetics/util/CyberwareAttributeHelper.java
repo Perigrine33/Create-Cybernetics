@@ -69,19 +69,31 @@ public class CyberwareAttributeHelper {
 
 
 
-        registerModifier("cyberleg_speed", new AttributeModifierData(speedAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberleg_speed_boost"),
-                0.01, AttributeModifier.Operation.ADD_VALUE));
-        registerModifier("cyberleg_jump", new AttributeModifierData(jumpStrengthAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberleg_jump_boost"),
-                0.05, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("cyberleg_speed1", new AttributeModifierData(speedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberleg_speed_boost1"),
+                0.005, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("cyberleg_jump1", new AttributeModifierData(jumpStrengthAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberleg_jump_boost1"),
+                0.025, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("cyberleg_speed2", new AttributeModifierData(speedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberleg_speed_boost2"),
+                0.005, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("cyberleg_jump2", new AttributeModifierData(jumpStrengthAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberleg_jump_boost2"),
+                0.025, AttributeModifier.Operation.ADD_VALUE));
 
-        registerModifier("cyberarm_strength", new AttributeModifierData(attackDamageAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberarm_strength_boost"),
-                1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-        registerModifier("cyberarm_blockbreak", new AttributeModifierData(blockBreakSpeedAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberarm_blockbreak_speed"),
-                0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        registerModifier("cyberarm_strength1", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberarm_strength_boost1"),
+                0.5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("cyberarm_blockbreak1", new AttributeModifierData(blockBreakSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberarm_blockbreak_speed1"),
+                0.25, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("cyberarm_strength2", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberarm_strength_boost2"),
+                0.5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("cyberarm_blockbreak2", new AttributeModifierData(blockBreakSpeedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberarm_blockbreak_speed2"),
+                0.25, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("linear_frame_health", new AttributeModifierData(maxHealthAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "linear_frame_health_boost"),
@@ -133,15 +145,24 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "fall_bracer_fall_save_2"),
                 11, AttributeModifier.Operation.ADD_VALUE));
 
-        registerModifier("pneumatic_wrist_block", new AttributeModifierData(blockReachAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_block_reach"),
-                2.0, AttributeModifier.Operation.ADD_VALUE));
-        registerModifier("pneumatic_wrist_entity", new AttributeModifierData(entityReachAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_entity_reach"),
-                2.0, AttributeModifier.Operation.ADD_VALUE));
-        registerModifier("pneumatic_wrist_knockback", new AttributeModifierData(attackKnockbackAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_knockback_bonus"),
-                2.0, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("pneumatic_wrist_block1", new AttributeModifierData(blockReachAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_block_reach1"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("pneumatic_wrist_entity1", new AttributeModifierData(entityReachAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_entity_reach1"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("pneumatic_wrist_knockback1", new AttributeModifierData(attackKnockbackAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_knockback_bonus1"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("pneumatic_wrist_block2", new AttributeModifierData(blockReachAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_block_reach2"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("pneumatic_wrist_entity2", new AttributeModifierData(entityReachAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_entity_reach2"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("pneumatic_wrist_knockback2", new AttributeModifierData(attackKnockbackAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "pneumatic_wrist_knockback_bonus2"),
+                1, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("oxygen_tank_oxygen", new AttributeModifierData(oxygenBonusAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "oxygen_tank_oxygen_bonus"),
@@ -200,9 +221,12 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "synthmuscle_jump_boost"),
                 0.1, AttributeModifier.Operation.ADD_VALUE));
 
-        registerModifier("reinforced_knuckles_damage", new AttributeModifierData(attackDamageAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "reinforced_knuckles_damage_boost"),
-                3.0, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("reinforced_knuckles_damage1", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "reinforced_knuckles_damage_boost1"),
+                1.5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("reinforced_knuckles_damage2", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "reinforced_knuckles_damage_boost2"),
+                1.5, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("calves_sprint", new AttributeModifierData(speedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "calves_sprint_boost"),
@@ -212,9 +236,12 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gyrobladder_speed_stifle"),
                 -0.75, AttributeModifier.Operation.ADD_VALUE));
 
-        registerModifier("claws_attack", new AttributeModifierData(attackDamageAttribute,
-                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "claws_attack_boost"),
-                5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("claws_attack1", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "claws_attack_boost1"),
+                2.5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("claws_attack2", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "claws_attack_boost2"),
+                2.5, AttributeModifier.Operation.ADD_VALUE));
 
         registerModifier("sandevistan_speed", new AttributeModifierData(speedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "sandevistan_speed_boost"),

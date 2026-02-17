@@ -100,10 +100,6 @@ public class DrillFistItem extends Item implements ICyberwareItem {
         return hasDrillInstalled(player, CyberwareSlot.RARM) || hasDrillInstalled(player, CyberwareSlot.LARM);
     }
 
-    /**
-     * Maps a cyberware slot (RARM/LARM) to the correct InteractionHand for THIS player,
-     * respecting left-handed players (main arm LEFT).
-     */
     private static InteractionHand handForSlot(Player player, CyberwareSlot slot) {
         HumanoidArm main = player.getMainArm();
         return switch (slot) {
@@ -113,10 +109,6 @@ public class DrillFistItem extends Item implements ICyberwareItem {
         };
     }
 
-    /**
-     * Deterministic: if both are installed, swing the arm that corresponds to the player's MAIN arm.
-     * This keeps client/server perfectly in sync without custom packets.
-     */
     private static InteractionHand pickDrillSwingHandDeterministic(Player player) {
         boolean right = hasDrillInstalled(player, CyberwareSlot.RARM);
         boolean left  = hasDrillInstalled(player, CyberwareSlot.LARM);
@@ -176,9 +168,6 @@ public class DrillFistItem extends Item implements ICyberwareItem {
     public static final class DrillHooks {
         private DrillHooks() {}
 
-        /**
-         * Your existing “no holding items in drilled hands” behavior.
-         */
         @SubscribeEvent
         public static void onPlayerTick(PlayerTickEvent.Post event) {
             Player player = event.getEntity();
@@ -194,10 +183,6 @@ public class DrillFistItem extends Item implements ICyberwareItem {
             if (blocksOff)  dropAndClearHand(dropper, player, InteractionHand.OFF_HAND);
         }
 
-        /**
-         * Broadcast the drill-arm swing to other players.
-         * (Client-side suppression + local swing is handled in DrillClientHooks below.)
-         */
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
             Player player = event.getEntity();
@@ -211,9 +196,6 @@ public class DrillFistItem extends Item implements ICyberwareItem {
             }
         }
 
-        /**
-         * Your existing “sometimes fail right-click UI blocks when hand is blocked” behavior.
-         */
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
             Player player = event.getEntity();
@@ -232,18 +214,12 @@ public class DrillFistItem extends Item implements ICyberwareItem {
             event.setCancellationResult(InteractionResult.FAIL);
         }
 
-        /**
-         * Mining power: either drill arm grants harvest capability.
-         */
         @SubscribeEvent
         public static void onHarvestCheck(PlayerEvent.HarvestCheck event) {
             if (!hasAnyDrillInstalled(event.getEntity())) return;
             event.setCanHarvest(true);
         }
 
-        /**
-         * Mining speed: either drill arm grants at least diamond-pick speed.
-         */
         @SubscribeEvent
         public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
             Player player = event.getEntity();
@@ -262,31 +238,21 @@ public class DrillFistItem extends Item implements ICyberwareItem {
     public static final class DrillClientHooks {
         private DrillClientHooks() {}
 
-        /**
-         * Prevent vanilla from swinging MAIN_HAND on left click, and instead swing the drilled arm locally.
-         *
-         * NeoForge controls swing via InputEvent.InteractionKeyMappingTriggered#setSwingHand(boolean).
-         */
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onInteractionKey(InputEvent.InteractionKeyMappingTriggered event) {
             if (!event.isAttack()) return; // left mouse button attack
-            // For attack input, event.getHand() will always be MAIN_HAND; we override the swing.
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;
             if (player == null) return;
-
             if (!hasAnyDrillInstalled(player)) return;
 
-            // Only do this when actually targeting a block, so we don't mess with entity punching.
             HitResult hit = mc.hitResult;
             if (!(hit instanceof BlockHitResult)) return;
 
             InteractionHand drillHand = pickDrillSwingHandDeterministic(player);
 
-            // Stop vanilla from swinging main hand:
             event.setSwingHand(false);
 
-            // Swing the drill arm locally (server will broadcast to other clients).
             player.swing(drillHand, true);
         }
     }
