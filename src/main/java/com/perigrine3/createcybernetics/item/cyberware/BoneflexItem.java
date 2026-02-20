@@ -89,6 +89,8 @@ public class BoneflexItem extends Item implements ICyberwareItem {
         CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_1");
         CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_2");
         CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_3");
+
+        onInstalled(player);
     }
 
 

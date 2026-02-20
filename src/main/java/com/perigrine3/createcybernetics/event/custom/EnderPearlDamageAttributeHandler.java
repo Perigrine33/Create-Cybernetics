@@ -28,14 +28,16 @@ public final class EnderPearlDamageAttributeHandler {
 
         if (!isEnderPearlTeleportDamage(target, source)) return;
 
-        double mult = target.getAttributeValue(ModAttributes.ENDER_PEARL_DAMAGE);
-        if (!Double.isFinite(mult)) return;
+        var inst = target.getAttribute(ModAttributes.ENDER_PEARL_DAMAGE);
+        if (inst == null) return;
 
+        double mult = inst.getValue();
+        if (!Double.isFinite(mult)) return;
         if (mult < 0.0D) mult = 0.0D;
 
-        float scaled = (float) (event.getNewDamage() * mult);
-        event.setNewDamage(scaled);
+        event.setNewDamage((float)(event.getNewDamage() * mult));
     }
+
 
     private static boolean isEnderPearlTeleportDamage(LivingEntity target, DamageSource source) {
         Entity direct = source.getDirectEntity();

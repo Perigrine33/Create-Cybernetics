@@ -89,6 +89,7 @@ public class BonelacingItem extends Item implements ICyberwareItem {
         CyberwareAttributeHelper.removeModifier(player, "bonelacing_health_2");
         CyberwareAttributeHelper.removeModifier(player, "bonelacing_health_3");
 
+        onInstalled(player);
     }
 
     @Override

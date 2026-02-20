@@ -26,6 +26,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -133,7 +134,6 @@ public final class CyberwareHudLayer {
     private static int BATTERY_OFFSET_Y_PX = 100;
     private static float BATTERY_SCALE_PX = 4f;
 
-    /** Battery value text baseline. ALL other HUD text + icons match this size. */
     private static final float VALUE_SCALE_REL = 0.75f;
 
     private static final int VALUE_PADDING_PX = 2;
@@ -142,7 +142,6 @@ public final class CyberwareHudLayer {
     private static final boolean VALUE_SHADOW = true;
     private static final float LOW_THRESHOLD = 0.25f;
 
-    // Energy stats (above battery)
     private static final int ENERGY_STATS_LINE_GAP_PX = 1;
     private static final int ENERGY_STATS_EXTRA_PADDING_PX = 2;
 
@@ -178,10 +177,7 @@ public final class CyberwareHudLayer {
     private static float SHARDS_SCALE_REL = 1.75f;
 
     // -------------------- Target name --------------------
-    // You requested 3 options:
-    //  - current position ("above hotbar") => your existing Y=250 offset
-    //  - under crosshair => Y=50
-    //  - off
+
     private static Anchor TARGET_ANCHOR = Anchor.CENTER;
     private static int TARGET_OFFSET_X_PX = 0;
     private static final int TARGET_OFFSET_Y_ABOVE_HOTBAR_PX = 250; // your current
@@ -196,6 +192,23 @@ public final class CyberwareHudLayer {
     private static final boolean OXYGEN_TEXT_SHADOW = true;
     private static final float OXYGEN_LOW_THRESHOLD = 0.25f;
 
+    // -------------------- Heat Engine flame + time --------------------
+
+    private static final ResourceLocation HEAT_FLAME_TEX =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/flame_indicator.png");
+
+    private static final int HEAT_FLAME_TEX_W = 16;
+    private static final int HEAT_FLAME_TEX_H = 16;
+
+    private static final int HEAT_FLAME_DRAW_W = 16;
+    private static final int HEAT_FLAME_DRAW_H = 16;
+
+    private static final int HEAT_FLAME_TEXT_GAP_PX = 4;
+    private static int HEAT_TIME_OFFSET_X_PX = 0;
+    private static int HEAT_TIME_OFFSET_Y_PX = 165;
+
+    private static float HEAT_TIME_SCALE_REL = 1f;
+
     // -------------------- Registration --------------------
 
     @SubscribeEvent
@@ -208,7 +221,6 @@ public final class CyberwareHudLayer {
     // Public helpers for the config screen
     // ======================================================================
 
-    /** Rect bundle used by the HUD config screen to position cycle buttons. All values are in SCREEN PIXELS. */
     public record HudWidgetRects(
             int batteryX, int batteryY, int batteryW, int batteryH,
             int coordsX, int coordsY, int coordsW, int coordsH,
@@ -217,39 +229,25 @@ public final class CyberwareHudLayer {
             int targetX, int targetY, int targetW, int targetH
     ) {}
 
-    /**
-     * Computes approximate widget rectangles for UI placement.
-     * Uses the same layout math as the renderer.
-     */
     public static HudWidgetRects computeRectsForConfig(Minecraft mc, HudConfigClient.HudConfig cfg) {
         int screenPxW = mc.getWindow().getScreenWidth();
         int screenPxH = mc.getWindow().getScreenHeight();
 
-        // HUD scale baseline
         float hudTextScale = BATTERY_SCALE_PX * VALUE_SCALE_REL;
         float hudIconScale = hudTextScale;
 
-        // Battery block bounds
         int scaledBatteryW = Math.round(TEX_W * BATTERY_SCALE_PX);
         int scaledBatteryH = Math.round(TEX_H * BATTERY_SCALE_PX);
         int batteryX = anchoredX(screenPxW, scaledBatteryW, BATTERY_ANCHOR, BATTERY_OFFSET_X_PX);
         int batteryY = anchoredY(screenPxH, scaledBatteryH, BATTERY_ANCHOR, BATTERY_OFFSET_Y_PX);
-
-        // If battery is TEXT_ONLY, we treat the "battery block" as the text bounds near the battery anchor.
-        // This keeps the cycle button placement stable and near where the user expects.
         int batteryBlockX = batteryX;
         int batteryBlockY = batteryY;
         int batteryBlockW = scaledBatteryW;
         int batteryBlockH = scaledBatteryH;
-
-        // Coords block bounds (worst-case width assumption based on typical strings)
-        // We compute actual widths when we have a player; here we use conservative approximations.
         int approxCoordsW = Math.round(180 * hudTextScale);
         int approxCoordsH = Math.round((mc.font.lineHeight * hudTextScale) * 2) + COORDS_LINE_GAP_PX;
         int coordsX = anchoredX(screenPxW, approxCoordsW, COORDS_ANCHOR, COORDS_OFFSET_X_PX);
         int coordsY = anchoredY(screenPxH, approxCoordsH, COORDS_ANCHOR, COORDS_OFFSET_Y_PX);
-
-        // Toggle list bounds (max rows and known icon/text sizing)
         int iconPx = Math.round(16f * hudIconScale);
         int lineH = Math.round(mc.font.lineHeight * hudTextScale);
         int rowH = Math.max(iconPx, lineH);
@@ -261,16 +259,12 @@ public final class CyberwareHudLayer {
         int toggleH = rows * rowH + Math.max(0, rows - 1) * TOGGLE_ROW_GAP_PX;
         int toggleX = anchoredX(screenPxW, toggleW, TOGGLE_ANCHOR, TOGGLE_OFFSET_X_PX);
         int toggleY = anchoredY(screenPxH, toggleH, TOGGLE_ANCHOR, TOGGLE_OFFSET_Y_PX);
-
-        // Shards bounds (2 icons worst-case)
         float shardScale = hudIconScale * SHARDS_SCALE_REL;
         int shardIconPx = Math.round(16f * shardScale);
         int shardsW = (2 * shardIconPx) + SHARDS_ICON_GAP_PX;
         int shardsH = shardIconPx;
         int shardsX = anchoredX(screenPxW, shardsW, SHARDS_ANCHOR, SHARDS_OFFSET_X_PX);
         int shardsY = anchoredY(screenPxH, shardsH, SHARDS_ANCHOR, SHARDS_OFFSET_Y_PX);
-
-        // Target bounds (approx, one line)
         int targetOffsetY = switch (cfg.targetMode) {
             case ABOVE_HOTBAR -> TARGET_OFFSET_Y_ABOVE_HOTBAR_PX;
             case UNDER_CROSSHAIR -> TARGET_OFFSET_Y_UNDER_CROSSHAIR_PX;
@@ -282,7 +276,6 @@ public final class CyberwareHudLayer {
         int targetX = anchoredX(screenPxW, approxTargetW, TARGET_ANCHOR, TARGET_OFFSET_X_PX);
         int targetY = anchoredY(screenPxH, approxTargetH, TARGET_ANCHOR, targetOffsetY);
 
-        // Battery block override for TEXT_ONLY: move rect upward a bit so button isn't sitting on nothing.
         if (cfg.batteryMode == HudConfigClient.BatteryMode.TEXT_ONLY) {
             int textW = Math.round(mc.font.width("9999/9999") * hudTextScale);
             int textH = Math.round(mc.font.lineHeight * hudTextScale);
@@ -301,7 +294,6 @@ public final class CyberwareHudLayer {
         );
     }
 
-    /** HUD preview for config screen. Uses the provided config, does NOT consult the saved config. */
     public static void renderHudPreview(GuiGraphics gg, float partialTick, HudConfigClient.HudConfig cfg) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
@@ -365,6 +357,14 @@ public final class CyberwareHudLayer {
                 cfg.batteryMode
         );
 
+        renderHeatEngineRemainingBurnAboveHotbarPixels(
+                gg, mc, player,
+                screenPxW, screenPxH,
+                partialTick,
+                hudTintArgb,
+                hudTextScale * HEAT_TIME_SCALE_REL
+        );
+
         renderCopernicusOxygenIndicatorTintedPixels(gg, mc, player, screenPxW, screenPxH, hudTintArgb, hudTextScale);
 
         if (cfg.coordsEnabled) {
@@ -398,7 +398,6 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    /** Crosshair preview for config screen. */
     public static void renderCrosshairPreview(GuiGraphics gg, float partialTick, HudConfigClient.HudConfig cfg) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
@@ -777,7 +776,7 @@ public final class CyberwareHudLayer {
         int lineH = Math.round(mc.font.lineHeight * hudTextScale);
         int rowH = Math.max(iconPx, lineH);
 
-        int enabledW  = Math.round(mc.font.width(ENABLED_TXT.getString()) * hudTextScale);
+        int enabledW = Math.round(mc.font.width(ENABLED_TXT.getString()) * hudTextScale);
         int disabledW = Math.round(mc.font.width(DISABLED_TXT.getString()) * hudTextScale);
         int statusW = Math.max(enabledW, disabledW);
 
@@ -1096,7 +1095,134 @@ public final class CyberwareHudLayer {
     }
 
     // ======================================================================
-    // Access gate (unchanged)
+    // Heat Engine remaining burn-time (hotbar anchored)
+    // ======================================================================
+
+    private static int computeHeatEngineRemainingBurnTicks(LocalPlayer player, PlayerCyberwareData data) {
+        int burnRemaining = Math.max(0, data.getHeatEngineBurnTime());
+
+        ItemStack fuel = data.getHeatEngineStack(PlayerCyberwareData.HEAT_ENGINE_FUEL);
+        if (fuel.isEmpty()) return burnRemaining;
+
+        Integer perItem = AbstractFurnaceBlockEntity.getFuel().get(fuel.getItem());
+        int perItemTicks = (perItem != null) ? Math.max(0, perItem) : 0;
+
+        if (perItemTicks <= 0) return burnRemaining;
+
+        long extra = (long) fuel.getCount() * (long) perItemTicks;
+        long total = (long) burnRemaining + extra;
+
+        return (total > Integer.MAX_VALUE) ? Integer.MAX_VALUE : (int) total;
+    }
+
+    private static String formatTicksAsTime(int ticks) {
+        int totalSec = Math.max(0, ticks / 20);
+        int s = totalSec % 60;
+        int m = (totalSec / 60) % 60;
+        int h = totalSec / 3600;
+
+        if (h > 0) {
+            return h + ":" + String.format("%02d:%02d", m, s);
+        }
+        return m + ":" + String.format("%02d", s);
+    }
+
+    private static void renderHeatEngineRemainingBurnAboveHotbarPixels(
+            GuiGraphics gg,
+            Minecraft mc,
+            LocalPlayer player,
+            int screenPxW,
+            int screenPxH,
+            float partialTick,
+            int hudTintArgb,
+            float hudTextScale
+    ) {
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
+        if (!data.hasSpecificItem(ModItems.ORGANSUPGRADES_HEATENGINE.get(), CyberwareSlot.ORGANS)) return;
+
+        int remainingTicks = computeHeatEngineRemainingBurnTicks(player, data);
+        if (remainingTicks <= 0) return;
+
+        String timeText = formatTicksAsTime(remainingTicks);
+
+        int hotbarW = 182;
+        int hotbarH = 22;
+
+        int hotbarX = (screenPxW / 2) - (hotbarW / 2);
+        int hotbarY = screenPxH - hotbarH;
+
+        int baseAnchorX = hotbarX + (hotbarW / 2);
+        int baseAnchorY = hotbarY;
+
+        int lineH = Math.round(mc.font.lineHeight * hudTextScale);
+
+        int textW = Math.round(mc.font.width(timeText) * hudTextScale);
+        int textH = lineH;
+
+        int flameW = Math.round(HEAT_FLAME_DRAW_W * hudTextScale);
+        int flameH = Math.round(HEAT_FLAME_DRAW_H * hudTextScale);
+
+        int blockW = flameW + HEAT_FLAME_TEXT_GAP_PX + textW;
+        int blockH = Math.max(flameH, textH);
+
+        int x0 = baseAnchorX - (blockW / 2) + HEAT_TIME_OFFSET_X_PX;
+        int y0 = baseAnchorY - HEAT_TIME_OFFSET_Y_PX - blockH;
+
+        int rgbTint = hudTintArgb & 0x00FFFFFF;
+        int color = (rgbTint != 0) ? rgbTint : 0xFFFFFF;
+
+        float t = (mc.level != null ? (mc.level.getGameTime() + partialTick) : partialTick);
+
+        float pulse = 1.0f + 0.06f * Mth.sin(t * 0.35f);
+        float bob = 0.8f * Mth.sin(t * 0.25f);
+        float alpha = 0.85f + 0.15f * Mth.sin(t * 0.40f);
+
+        int flameX = x0;
+        int flameY = y0 + (blockH - flameH) / 2;
+
+        // ---- Flame ----
+        gg.pose().pushPose();
+
+        gg.pose().translate(flameX, flameY, 0);
+        gg.pose().scale(hudTextScale, hudTextScale, 1.0f);
+
+        float baseX = 0;
+        float baseY = -2;
+
+        float cx = baseX + HEAT_FLAME_DRAW_W / 2.0f;
+        float cy = baseY + HEAT_FLAME_DRAW_H / 2.0f;
+
+        gg.pose().translate(cx, cy + bob, 0.0f);
+        gg.pose().scale(pulse, pulse, 1.0f);
+        gg.pose().translate(-cx, -cy, 0.0f);
+
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
+
+        gg.blit(
+                HEAT_FLAME_TEX,
+                (int) baseX, (int) baseY,
+                HEAT_FLAME_DRAW_W, HEAT_FLAME_DRAW_H,
+                0, 0,
+                HEAT_FLAME_TEX_W, HEAT_FLAME_TEX_H,
+                HEAT_FLAME_TEX_W, HEAT_FLAME_TEX_H
+        );
+
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gg.pose().popPose();
+
+        int textX = x0 + flameW + HEAT_FLAME_TEXT_GAP_PX;
+        int textY = y0 + (blockH - textH) / 2;
+
+        gg.pose().pushPose();
+        gg.pose().translate(textX, textY, 0);
+        gg.pose().scale(hudTextScale, hudTextScale, 1.0f);
+        gg.drawString(mc.font, timeText, 0, 0, color, VALUE_SHADOW);
+        gg.pose().popPose();
+    }
+
+    // ======================================================================
+    // Access gate
     // ======================================================================
 
     public static final class CyberwareInstallQueries {
@@ -1112,7 +1238,7 @@ public final class CyberwareHudLayer {
     }
 
     // ======================================================================
-    // Client-fed state (unchanged)
+    // Client-fed state
     // ======================================================================
 
     public record TickSnapshot(

@@ -27,7 +27,7 @@
   "gui.chipwarecreative.title": "Creative Chiware Slots",
   "gui.infolog.title": "Infolog",
 
-  "gui.createcybernetics.pause.cybereye_skin": "Cybereye Skin",
+  "gui.createcybernetics.pause.cybereye_skin": "Cybereye Layout",
   "gui.createcybernetics.save": "Save",
   "gui.createcybernetics.pause.hud_layout": "HUD Layout",
 
@@ -505,6 +505,8 @@
   "advancement.bodysnatcher.desc": "Installed An Interchangeable Faceplate",
   "advancement.destroyer_of_worlds": "I Am Become Death, Destroyer Of Worlds...",
   "advancement.destroyer_of_worlds.desc": "Self Destructed With A Creeper Heart While A Magic Catalyst Was Installed",
+  "advancement.right_behind_you": "Right Behind You",
+  "advancement.right_behind_you.desc": "Became A Cyberspy",
 
 
   "death.attack.createcybernetics.cyberware_surgery": "%1$s didn’t survive the procedure...",

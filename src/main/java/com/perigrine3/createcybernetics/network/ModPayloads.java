@@ -200,6 +200,27 @@ public final class ModPayloads {
                 EnergyHudSyncPayload::handle
         );
 
+        // ---------------- CYBEREYE IRIS LAYOUT SYNC ----------------
+
+// Client -> Server
+        r.playToServer(
+                CybereyeIrisSyncC2SPayload.TYPE,
+                CybereyeIrisSyncC2SPayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> {
+                    if (ctx.player() instanceof ServerPlayer sp) {
+                        CybereyeIrisSyncC2SPayload.handle(payload, sp);
+                    }
+                })
+        );
+
+// Server -> Client
+        r.playToClient(
+                CybereyeIrisSyncS2CPayload.TYPE,
+                CybereyeIrisSyncS2CPayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> CybereyeIrisSyncS2CPayload.handle(payload))
+        );
+
+
 
 
         /* ---------------- TOGGLE WHEEL PAYLOADS ---------------- */

@@ -21,6 +21,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ServerChatEvent; // ADDED
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
 public final class FaceplateAliasHandler {
@@ -113,6 +114,10 @@ public final class FaceplateAliasHandler {
 
         player.setCustomName(null);
         player.setCustomNameVisible(false);
+
+        // IMPORTANT: mirror apply()
+        player.refreshDisplayName();
+        player.refreshTabListName();
     }
 
     @SubscribeEvent
@@ -205,4 +210,15 @@ public final class FaceplateAliasHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (!(event.getEntity() instanceof ServerPlayer sp)) return;
+        if (sp.level().isClientSide) return;
+
+        if (!hasActive(sp)) return;
+
+        if (!hasInterchangeableFaceplateInstalled(sp)) {
+            clear(sp, true);
+        }
+    }
 }

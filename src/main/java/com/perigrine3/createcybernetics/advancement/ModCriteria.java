@@ -77,6 +77,8 @@ public final class ModCriteria {
             TRIGGER_TYPES.register("bodysnatcher", BodysnatcherTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, DestroyerOfWorldsTrigger> DESTROYER_OF_WORLDS =
             TRIGGER_TYPES.register("destroyer_of_worlds", DestroyerOfWorldsTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, RightBehindYouTrigger> RIGHT_BEHIND_YOU =
+            TRIGGER_TYPES.register("right_behind_you", RightBehindYouTrigger::new);
 
     public static void register(IEventBus modEventBus) {
         TRIGGER_TYPES.register(modEventBus);

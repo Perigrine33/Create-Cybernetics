@@ -5,6 +5,7 @@ import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -56,7 +57,7 @@ public class InterchangeableFaceplateItem extends Item implements ICyberwareItem
     @Override
     public void onRemoved(Player player) {
         if (player.level().isClientSide) return;
-        if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+        if (player instanceof ServerPlayer sp) {
             FaceplateAliasHandler.clear(sp, true);
         }
     }

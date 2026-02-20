@@ -84,6 +84,8 @@ public class SubdermalArmorItem extends Item implements ICyberwareItem {
         CyberwareAttributeHelper.removeModifier(player, "subdermalarmor_armor_1");
         CyberwareAttributeHelper.removeModifier(player, "subdermalarmor_armor_2");
         CyberwareAttributeHelper.removeModifier(player, "subdermalarmor_armor_3");
+
+        onInstalled(player);
     }
 
     @Override

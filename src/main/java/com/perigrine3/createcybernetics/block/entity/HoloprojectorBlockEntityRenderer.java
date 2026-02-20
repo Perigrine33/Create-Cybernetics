@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.perigrine3.createcybernetics.client.skin.CybereyeOverlayHandler;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -21,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -137,6 +139,24 @@ public final class HoloprojectorBlockEntityRenderer implements BlockEntityRender
             pd.remove(PlayerCyberwareData.HOLO_SNAPSHOT_FLAG);
             pd.remove(PlayerCyberwareData.HOLO_SNAPSHOT_CYBERWARE);
         }
+
+        // ------------------------------------------------------------
+        // CYBEREYE IRIS LAYOUT -> HOLOGRAM (client-side copy)
+        // ------------------------------------------------------------
+        Player real = level.getPlayerByUUID(uuid);
+        if (real != null) {
+            CompoundTag eyeRoot = real.getPersistentData().getCompound(CybereyeOverlayHandler.NBT_ROOT);
+
+            if (eyeRoot != null && !eyeRoot.isEmpty()) {
+                pd.put(CybereyeOverlayHandler.NBT_ROOT, eyeRoot.copy());
+                CybereyeOverlayHandler.invalidate(hologram);
+            } else {
+                pd.remove(CybereyeOverlayHandler.NBT_ROOT);
+            }
+        } else {
+            pd.remove(CybereyeOverlayHandler.NBT_ROOT);
+        }
+
 
         long time = level.getGameTime();
         float yaw = (time + partialTick) * 2.5f;

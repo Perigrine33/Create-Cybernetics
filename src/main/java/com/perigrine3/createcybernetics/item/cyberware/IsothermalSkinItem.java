@@ -66,13 +66,13 @@ public class IsothermalSkinItem extends Item implements ICyberwareItem {
 
     @Override
     public void onTick(Player player) {
-        player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 40, 0, false, false, true));
+        player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 40, 0, false, false, false));
     }
 
     @Override
     public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
         if (player.level().isClientSide) return;
-        player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 40, 0, false, false, true));
+        player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 40, 0, false, false, false));
 
         ColdSweatCompat.applyHeatResistance(player, 1.0);
         ColdSweatCompat.applyHeatDampening(player, 0.0);

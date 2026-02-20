@@ -11,7 +11,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -23,10 +22,10 @@ import java.util.function.Consumer;
 public final class ModAdvancementProvider extends AdvancementProvider {
 
     public ModAdvancementProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, existingFileHelper, List.of(new DashAdvancements()));
+        super(output, lookupProvider, existingFileHelper, List.of(new AdvancementsProvider()));
     }
 
-    private static final class DashAdvancements implements AdvancementProvider.AdvancementGenerator {
+    private static final class AdvancementsProvider implements AdvancementProvider.AdvancementGenerator {
 
         private static final ResourceLocation MACHINE_BG =
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/block/blankmachine.png");
@@ -245,6 +244,13 @@ public final class ModAdvancementProvider extends AdvancementProvider {
             AdvancementHolder destroyerOfWorlds = Advancement.Builder.advancement().parent(firstRipperdocVisit).display(ModItems.HEARTUPGRADES_CREEPERHEART.get(),
                             Component.translatable("advancement.destroyer_of_worlds"),
                             Component.translatable("advancement.destroyer_of_worlds.desc"),
+                            TITANIUM_BG, AdvancementType.TASK, true, true, false)
+                        .addCriterion("destroyer_of_worlds", DestroyerOfWorldsTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/destroyer_of_worlds"), existingFileHelper);
+
+            AdvancementHolder rightBehindYou = Advancement.Builder.advancement().parent(firstRipperdocVisit).display(ModItems.SKINUPGRADES_CHROMATOPHORES.get(),
+                            Component.translatable("advancement.right_behind_you"),
+                            Component.translatable("advancement.right_behind_you.desc"),
                             TITANIUM_BG, AdvancementType.TASK, true, true, false)
                         .addCriterion("destroyer_of_worlds", DestroyerOfWorldsTrigger.Instance.any())
                     .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/destroyer_of_worlds"), existingFileHelper);

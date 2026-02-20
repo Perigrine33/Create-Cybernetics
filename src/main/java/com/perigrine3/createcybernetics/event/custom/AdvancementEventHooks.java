@@ -176,6 +176,9 @@ public final class AdvancementEventHooks {
 
             if (data.hasSpecificItem(ModItems.SKINUPGRADES_FACEPLATE.get())) {
                 ModCriteria.BODYSNATCHER.get().trigger(player);
+                if (data.hasSpecificItem(ModItems.SKINUPGRADES_CHROMATOPHORES.get())) {
+                    ModCriteria.RIGHT_BEHIND_YOU.get().trigger(player);
+                }
             }
         }
     }

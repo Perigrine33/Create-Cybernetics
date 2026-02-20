@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.client.skin.CybereyeOverlayHandler;
+import com.perigrine3.createcybernetics.network.payload.CybereyeIrisSyncC2SPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -14,8 +15,8 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -112,7 +113,9 @@ public final class CybereyeSkinConfigScreen extends Screen {
             StoredConfig loaded = ConfigStore.load(this.playerId);
             if (loaded != null) applyLoaded(loaded);
         }
+
         pushConfigToPlayerNbtAndInvalidate();
+        sendConfigToServer();
 
         cc$rebuildWidgets();
         updateButtonStates();
@@ -125,7 +128,6 @@ public final class CybereyeSkinConfigScreen extends Screen {
         updateButtonStates();
     }
 
-    // NOTE: must not be private because Screen has protected rebuildWidgets in some versions.
     protected void cc$rebuildWidgets() {
         clearWidgets();
         computeGridLayout();
@@ -150,7 +152,6 @@ public final class CybereyeSkinConfigScreen extends Screen {
                 .size(BTN_W, BTN_H)
                 .build());
 
-        // Back: returns to game menu (pause screen)
         btnBack = addRenderableWidget(Button.builder(Component.translatable("gui.back"), b -> Minecraft.getInstance().setScreen(parent))
                 .pos(leftColX, topY + (BTN_H + BTN_GAP) * 3 + 10)
                 .size(BTN_W, BTN_H)
@@ -207,7 +208,10 @@ public final class CybereyeSkinConfigScreen extends Screen {
         if (this.playerId != null) {
             ConfigStore.save(this.playerId, toStored());
         }
+
         pushConfigToPlayerNbtAndInvalidate();
+        sendConfigToServer();
+
         updateButtonStates();
     }
 
@@ -223,10 +227,6 @@ public final class CybereyeSkinConfigScreen extends Screen {
         return activeEye == Eye.LEFT ? left : right;
     }
 
-    private EyeConfig other() {
-        return activeEye == Eye.LEFT ? right : left;
-    }
-
     private boolean canEdit() {
         return editing && !active().locked;
     }
@@ -237,7 +237,6 @@ public final class CybereyeSkinConfigScreen extends Screen {
         if (btn11 != null) btn11.active = edit;
         if (btn12 != null) btn12.active = edit;
         if (btn22 != null) btn22.active = edit;
-        // Back always active.
         if (btnBack != null) btnBack.active = true;
     }
 
@@ -250,8 +249,6 @@ public final class CybereyeSkinConfigScreen extends Screen {
     public boolean shouldCloseOnEsc() {
         return true;
     }
-
-    // ---------------- Input / Drag ----------------
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -327,15 +324,12 @@ public final class CybereyeSkinConfigScreen extends Screen {
         if (cfg.y > maxY) cfg.y = maxY;
     }
 
-    // ---------------- Render ----------------
-
     @Override
     public void render(GuiGraphics gg, int mouseX, int mouseY, float partialTick) {
         computeGridLayout();
 
         gg.fill(0, 0, this.width, this.height, DIM_OVERLAY);
 
-        // Draw widgets first (crisp), then our custom content (also crisp, avoids pause blur)
         super.render(gg, mouseX, mouseY, partialTick);
 
         gg.drawCenteredString(this.font, this.title, this.width / 2, 12, 0xFFFFFF);
@@ -350,9 +344,6 @@ public final class CybereyeSkinConfigScreen extends Screen {
         renderPlayerFaceScaledNearest(gg);
         renderGridLines(gg);
 
-        // Always show both highlights:
-        // - saved/locked eyes in green
-        // - active eye overlay in red (even if locked, red shows current eye selection)
         renderSavedHighlights(gg);
         renderActiveHighlight(gg);
     }
@@ -365,12 +356,13 @@ public final class CybereyeSkinConfigScreen extends Screen {
         }
 
         AbstractClientPlayer player = mc.player;
-        ResourceLocation skin = player.getSkin().texture();
+        var skin = player.getSkin().texture();
 
         try {
             AbstractTexture tex = mc.getTextureManager().getTexture(skin);
             if (tex != null) tex.setFilter(false, false);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         RenderSystem.setShaderTexture(0, skin);
 
@@ -405,13 +397,11 @@ public final class CybereyeSkinConfigScreen extends Screen {
     }
 
     private void renderSavedHighlights(GuiGraphics gg) {
-        // Show both saved locks in green
         if (left.locked) renderSelection(gg, left, SAVED_FILL, SAVED_EDGE);
         if (right.locked) renderSelection(gg, right, SAVED_FILL, SAVED_EDGE);
     }
 
     private void renderActiveHighlight(GuiGraphics gg) {
-        // Active eye always visible in red (even if locked; you can see which is selected)
         renderSelection(gg, active(), ACTIVE_FILL, ACTIVE_EDGE);
     }
 
@@ -428,8 +418,6 @@ public final class CybereyeSkinConfigScreen extends Screen {
         gg.vLine(sx, sy, sy + sh, edge);
         gg.vLine(sx + sw, sy, sy + sh, edge);
     }
-
-    // ---------------- Persistence ----------------
 
     private static final class StoredEye {
         String size = "1x1";
@@ -563,17 +551,14 @@ public final class CybereyeSkinConfigScreen extends Screen {
         LocalPlayer p = mc.player;
         if (p == null) return;
 
-        // Root tag
         var root = p.getPersistentData().getCompound(CybereyeOverlayHandler.NBT_ROOT);
 
-        // LEFT
         var l = new net.minecraft.nbt.CompoundTag();
-        l.putInt(CybereyeOverlayHandler.NBT_X, FACE_U + left.x);   // grid 0..7 -> skin 8..15
+        l.putInt(CybereyeOverlayHandler.NBT_X, FACE_U + left.x);
         l.putInt(CybereyeOverlayHandler.NBT_Y, FACE_V + left.y);
         l.putInt(CybereyeOverlayHandler.NBT_VARIANT, encodeVariant(left.size));
         root.put(CybereyeOverlayHandler.NBT_LEFT, l);
 
-        // RIGHT
         var r = new net.minecraft.nbt.CompoundTag();
         r.putInt(CybereyeOverlayHandler.NBT_X, FACE_U + right.x);
         r.putInt(CybereyeOverlayHandler.NBT_Y, FACE_V + right.y);
@@ -582,15 +567,32 @@ public final class CybereyeSkinConfigScreen extends Screen {
 
         p.getPersistentData().put(CybereyeOverlayHandler.NBT_ROOT, root);
 
-        // Force next render to rebuild the dynamic overlay
         CybereyeOverlayHandler.invalidate(p);
+    }
+
+    private void sendConfigToServer() {
+        LocalPlayer p = Minecraft.getInstance().player;
+        if (p == null) return;
+
+        int lx = FACE_U + left.x;
+        int ly = FACE_V + left.y;
+        int lv = encodeVariant(left.size);
+
+        int rx = FACE_U + right.x;
+        int ry = FACE_V + right.y;
+        int rv = encodeVariant(right.size);
+
+        PacketDistributor.sendToServer(new CybereyeIrisSyncC2SPayload(
+                lx, ly, lv,
+                rx, ry, rv
+        ));
     }
 
     private static int encodeVariant(IrisSize size) {
         return switch (size) {
-            case ONE_BY_ONE -> 0; // 1x1
-            case ONE_BY_TWO -> 1; // 1x2
-            case TWO_BY_TWO -> 2; // 2x2
+            case ONE_BY_ONE -> 0;
+            case ONE_BY_TWO -> 1;
+            case TWO_BY_TWO -> 2;
         };
     }
 
@@ -599,17 +601,14 @@ public final class CybereyeSkinConfigScreen extends Screen {
 
         var layout = com.perigrine3.createcybernetics.client.CybereyeIrisConfigClient.get(p.getUUID());
 
-        // Root tag
         var root = p.getPersistentData().getCompound(CybereyeOverlayHandler.NBT_ROOT);
 
-        // LEFT
         var l = new net.minecraft.nbt.CompoundTag();
         l.putInt(CybereyeOverlayHandler.NBT_X, FACE_U + layout.left.x);
         l.putInt(CybereyeOverlayHandler.NBT_Y, FACE_V + layout.left.y);
         l.putInt(CybereyeOverlayHandler.NBT_VARIANT, encodeVariant(convert(layout.left.size)));
         root.put(CybereyeOverlayHandler.NBT_LEFT, l);
 
-        // RIGHT
         var r = new net.minecraft.nbt.CompoundTag();
         r.putInt(CybereyeOverlayHandler.NBT_X, FACE_U + layout.right.x);
         r.putInt(CybereyeOverlayHandler.NBT_Y, FACE_V + layout.right.y);
@@ -621,7 +620,6 @@ public final class CybereyeSkinConfigScreen extends Screen {
         CybereyeOverlayHandler.invalidate(p);
     }
 
-    // maps client-config enum to screen enum for encodeVariant
     private static IrisSize convert(com.perigrine3.createcybernetics.client.CybereyeIrisConfigClient.IrisSize s) {
         return switch (s) {
             case ONE_BY_ONE -> IrisSize.ONE_BY_ONE;
@@ -629,5 +627,4 @@ public final class CybereyeSkinConfigScreen extends Screen {
             case TWO_BY_TWO -> IrisSize.TWO_BY_TWO;
         };
     }
-
 }

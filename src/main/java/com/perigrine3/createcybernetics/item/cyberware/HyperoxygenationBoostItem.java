@@ -88,6 +88,7 @@ public class HyperoxygenationBoostItem extends Item implements ICyberwareItem {
         CyberwareAttributeHelper.removeModifier(player, "hyperoxygenation_speed_3");
 
         player.getPersistentData().remove(NBT_LAST_APPLIED_TICK);
+        onInstalled(player);
     }
 
     @Override

@@ -31,7 +31,7 @@ public final class CyberwareLimbHider {
     public static void onRenderLivingPre(RenderLivingEvent.Pre<?, ?> event) {
         if (!(event.getEntity() instanceof AbstractClientPlayer player)) return;
         if (!(event.getRenderer() instanceof PlayerRenderer renderer)) return;
-        if (!(renderer.getModel() instanceof PlayerModel<?> model)) return;
+        PlayerModel<?> model = (PlayerModel<?>) renderer.getModel();
 
         PlayerCyberwareData data = player.hasData(ModAttachments.CYBERWARE) ? player.getData(ModAttachments.CYBERWARE) : null;
 
