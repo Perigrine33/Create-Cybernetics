@@ -80,9 +80,7 @@ public class CybereyeItem extends Item implements ICyberwareItem {
 
     @Override
     public void onRemoved(Player player) {
-        // Your mappings: MobEffects.* are Holder<MobEffect>
-        player.removeEffect(MobEffects.BLINDNESS);
-        player.removeEffect(MobEffects.DARKNESS);
+
     }
 
     @Override

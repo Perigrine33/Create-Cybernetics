@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-13T03:40:25.5897473	Advancements
+// 1.21.1	2026-02-22T12:33:37.615134	Advancements
 14aa82152b7c3095371acf49f866e720e4e3357f data/createcybernetics/advancement/cyberware/bodysnatcher.json
 e04da642af951742161c867c54567aea48b10a1d data/createcybernetics/advancement/cyberware/boneless.json
 9ebb46919c8bdd33b37526ad70616de35b165949 data/createcybernetics/advancement/cyberware/bones_and_all.json
@@ -21,6 +21,7 @@ fee63f4b9506d92a57d6846673aea9a04c3e487e data/createcybernetics/advancement/cybe
 c93e7c921eab7adf4a25aa4f4601b0a076a5608c data/createcybernetics/advancement/cyberware/missing_muscle.json
 04e941b3870499586e2ba1640ef7c992418ab64a data/createcybernetics/advancement/cyberware/over_the_edge.json
 78894ee70176d478660cdc0fa3012098170431cb data/createcybernetics/advancement/cyberware/pretty_in_pink.json
+2ac60ca0934602a374d33d8afff722bb49890a72 data/createcybernetics/advancement/cyberware/right_behind_you.json
 efa74c956811b21c03633454616f94b408b9e13b data/createcybernetics/advancement/cyberware/root.json
 5b0a31a761f997548d6d6ce47b1d6d61f5e11e3f data/createcybernetics/advancement/cyberware/skin_removed.json
 b8023045ab0fb24cdb7358476cf414cc56762dfe data/createcybernetics/advancement/cyberware/snikt.json

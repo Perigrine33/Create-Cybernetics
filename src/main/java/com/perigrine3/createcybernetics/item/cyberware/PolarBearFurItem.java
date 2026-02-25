@@ -58,6 +58,11 @@ public class PolarBearFurItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.WETWARE_DRAGONSKIN.get());
+    }
+
+    @Override
     public void onInstalled(Player player) {
     }
 

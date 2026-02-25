@@ -260,6 +260,13 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberbrain_insomnia"),
                 3, AttributeModifier.Operation.ADD_VALUE));
 
+        registerModifier("dragonskin_armor", new AttributeModifierData(armorAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragonskin_armor"),
+                5, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("dragonskin_toughness", new AttributeModifierData(armorToughnessAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragonskin_toughness"),
+                5, AttributeModifier.Operation.ADD_VALUE));
+
 
 
 
@@ -295,7 +302,7 @@ public class CyberwareAttributeHelper {
 
         registerModifier("blueshard_swim", new AttributeModifierData(swimSpeedAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_swim_speed"),
-                3, AttributeModifier.Operation.ADD_VALUE));
+                1.5, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("blueshard_mining", new AttributeModifierData(underwaterMiningAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "blueshard_mining_speed"),
                 1.5, AttributeModifier.Operation.ADD_VALUE));

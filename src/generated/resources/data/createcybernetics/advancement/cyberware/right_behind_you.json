@@ -1,0 +1,27 @@
+{
+  "parent": "createcybernetics:cyberware/first_ripperdoc_visit",
+  "criteria": {
+    "destroyer_of_worlds": {
+      "trigger": "createcybernetics:right_behind_you"
+    }
+  },
+  "display": {
+    "background": "createcybernetics:textures/block/titanium_block.png",
+    "description": {
+      "translate": "advancement.right_behind_you.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "createcybernetics:skinupgrades_chromatophores"
+    },
+    "title": {
+      "translate": "advancement.right_behind_you"
+    }
+  },
+  "requirements": [
+    [
+      "destroyer_of_worlds"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -108,12 +108,8 @@ public final class MissingOrganController {
 
         /* -------------------- EYES -------------------- */
         if (!hasEyes) {
-            refreshEffect(player, MobEffects.BLINDNESS, 220, 1);
-            refreshEffect(player, MobEffects.DARKNESS, 220, 0);
-
-        } else {
-            player.removeEffect(MobEffects.BLINDNESS);
-            player.removeEffect(MobEffects.DARKNESS);
+            refreshEffect(player, MobEffects.BLINDNESS, 40, 1);
+            refreshEffect(player, MobEffects.DARKNESS, 40, 0);
         }
 
 

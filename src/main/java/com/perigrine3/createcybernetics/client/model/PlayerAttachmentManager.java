@@ -185,6 +185,36 @@ public final class PlayerAttachmentManager {
     }
 
     // =========================
+    // GUARDIAN EYE
+    // =========================
+    private static final ResourceLocation WARDEN_ANTLERS_ITEM_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "wetware_wardenantlers");
+
+    public static final ResourceLocation WARDEN_ANTLERS_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/warden_antlers.png");
+
+    private static WardenAntlersAttachmentModel WARDEN_ANTLERS_MODEL;
+
+    public static WardenAntlersAttachmentModel wardenAntlersModel() {
+        if (WARDEN_ANTLERS_MODEL == null) {
+            var baked = Minecraft.getInstance().getEntityModels().bakeLayer(WardenAntlersAttachmentModel.LAYER);
+            WARDEN_ANTLERS_MODEL = new WardenAntlersAttachmentModel(baked);
+        }
+        return WARDEN_ANTLERS_MODEL;
+    }
+
+    private static Item wardenAntlersItemOrNull() {
+        if (!BuiltInRegistries.ITEM.containsKey(WARDEN_ANTLERS_ITEM_ID)) return null;
+        Item item = BuiltInRegistries.ITEM.get(WARDEN_ANTLERS_ITEM_ID);
+        return item == null ? null : item;
+    }
+
+
+
+
+
+
+    // =========================
     // STATE BUILD
     // =========================
     public static PlayerAttachmentState getState(AbstractClientPlayer player) {
@@ -202,8 +232,9 @@ public final class PlayerAttachmentManager {
         Item calfPropellerItem = calfPropellerItemOrNull();
         Item spurItem = spurItemOrNull();
         Item guardianEyeItem = guardianEyeItemOrNull();
+        Item wardenAntlersItem = wardenAntlersItemOrNull();
 
-        if (clawsItem == null && drillItem == null && pawsItem == null && calfPropellerItem == null && spurItem == null && guardianEyeItem == null) return state;
+        if (clawsItem == null && drillItem == null && pawsItem == null && calfPropellerItem == null && spurItem == null && guardianEyeItem == null && wardenAntlersItem == null) return state;
 
         for (var entry : data.getAll().entrySet()) {
             CyberwareSlot slot = entry.getKey();
@@ -244,6 +275,10 @@ public final class PlayerAttachmentManager {
                     if (player.isCrouching()) {
                         state.add(new GuardianEyeAttachment(anchor));
                     }
+                }
+
+                if (wardenAntlersItem != null && stack.is(wardenAntlersItem)) {
+                    state.add(new WardenAntlersAttachment(anchor));
                 }
             }
         }
@@ -347,19 +382,18 @@ public final class PlayerAttachmentManager {
         pose.scale(1, 1, 1);
     }
 
-    public static void applyGuardianEyeTransform(PoseStack pose, AttachmentAnchor legAnchor) {
+    public static void applyGuardianEyeTransform(PoseStack pose, AttachmentAnchor headAnchor) {
         pose.translate(0.0F, -0.25F, -0.205F);
         pose.mulPose(Axis.XN.rotationDegrees(0.0F));
         pose.mulPose(Axis.YP.rotationDegrees(0.0F));
 
-        if (legAnchor == AttachmentAnchor.LEFT_LEG) {
-            pose.translate(0.0F, 0.0F, 0.0F);
-            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
-            pose.mulPose(Axis.YP.rotationDegrees(0.0F));
-        } else if (legAnchor == AttachmentAnchor.RIGHT_LEG) {
-            pose.translate(0.0F, 0.0F, 0.0F);
-            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
-        }
+        pose.scale(1, 1, 1);
+    }
+
+    public static void applyWardenAntlersTransform(PoseStack pose, AttachmentAnchor headAnchor) {
+        pose.translate(0.0F, 0.0F, 0.0F);
+        pose.mulPose(Axis.XN.rotationDegrees(0.0F));
+        pose.mulPose(Axis.YP.rotationDegrees(0.0F));
 
         pose.scale(1, 1, 1);
     }
@@ -627,6 +661,44 @@ public final class PlayerAttachmentManager {
         @Override
         public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
             applyGuardianEyeTransform(poseStack, anchor);
+        }
+    }
+
+    private static final class WardenAntlersAttachment implements PlayerAttachment {
+        private final AttachmentAnchor anchor;
+
+        private WardenAntlersAttachment(AttachmentAnchor anchor) {
+            this.anchor = anchor;
+        }
+
+        @Override
+        public AttachmentAnchor anchor() {
+            return anchor;
+        }
+
+        @Override
+        public ResourceLocation texture(PlayerSkin.Model modelType) {
+            return WARDEN_ANTLERS_TEXTURE;
+        }
+
+        @Override
+        public Model model(PlayerSkin.Model modelType) {
+            return wardenAntlersModel();
+        }
+
+        @Override
+        public int color() {
+            return 0xFFFFFFFF;
+        }
+
+        @Override
+        public boolean thirdPersonOnly() {
+            return true;
+        }
+
+        @Override
+        public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
+            applyWardenAntlersTransform(poseStack, anchor);
         }
     }
 }

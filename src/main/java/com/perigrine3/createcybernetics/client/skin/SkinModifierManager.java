@@ -169,6 +169,24 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/furnace_lit_highlight.png");
     private static final ResourceLocation SPIDER_EYES =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/spider_eyes.png");
+    private static final ResourceLocation MAGIC_CATALYST =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/magic_catalyst.png");
+    private static final ResourceLocation SCULKED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculked.png");
+    private static final ResourceLocation SCULK_SKIN =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_skin.png");
+    private static final ResourceLocation SCULK_RIGHTARM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_rightarm.png");
+    private static final ResourceLocation SCULK_LEFTARM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_leftarm.png");
+    private static final ResourceLocation SCULK_RIGHTLEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_rightleg.png");
+    private static final ResourceLocation SCULK_LEFTLEG =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_leftleg.png");
+    private static final ResourceLocation SCULK_HEAD =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_head.png");
+    private static final ResourceLocation SCULK_TORSO =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_torso.png");
 
     private static final ResourceLocation SAMSON_EYES_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_eyes_dyed.png");
@@ -237,6 +255,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/flywheel_rarm_wide.png");
     private static final ResourceLocation MANASKIN_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/manaskin.png");
+    private static final ResourceLocation DRAGONSKIN_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/dragonskin_wide.png");
 
     private static final ResourceLocation SAMSON_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_wide.png");
@@ -318,6 +338,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/flywheel_rarm_slim.png");
     private static final ResourceLocation MANASKIN_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/manaskin_slim.png");
+    private static final ResourceLocation DRAGONSKIN_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/dragonskin_slim.png");
 
     private static final ResourceLocation SAMSON_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_slim.png");
@@ -763,6 +785,9 @@ public class SkinModifierManager {
 
             if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
                 state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE));
+            }
+            if (data.hasSpecificItem(ModItems.WETWARE_DRAGONSKIN.get(), CyberwareSlot.SKIN)) {
+                state.addModifier(new SkinModifier(DRAGONSKIN_WIDE, DRAGONSKIN_SLIM));
             }
 
             state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM,
@@ -1364,6 +1389,50 @@ public class SkinModifierManager {
             }
         }
 
+// SCULKED
+        if (data.hasSpecificItem(ModItems.BODYPART_SCULKRIGHTARM.get(), CyberwareSlot.RARM)) {
+            state.addModifier(new SkinModifier(SCULK_RIGHTARM, SCULK_RIGHTARM,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_SLEEVE)));
+        }
+        if (data.hasSpecificItem(ModItems.BODYPART_SCULKLEFTARM.get(), CyberwareSlot.LARM)) {
+            state.addModifier(new SkinModifier(SCULK_LEFTARM, SCULK_LEFTARM,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_SLEEVE)));
+        }
+        if (data.hasSpecificItem(ModItems.BODYPART_SCULKRIGHTLEG.get(), CyberwareSlot.RLEG)) {
+            state.addModifier(new SkinModifier(SCULK_RIGHTLEG, SCULK_RIGHTLEG,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS)));
+        }
+        if (data.hasSpecificItem(ModItems.BODYPART_SCULKLEFTLEG.get(), CyberwareSlot.LLEG)) {
+            state.addModifier(new SkinModifier(SCULK_LEFTLEG, SCULK_LEFTLEG,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.LEFT_PANTS)));
+        }
+        if (data.hasSpecificItem(ModItems.BODYPART_SCULKBRAIN.get(), CyberwareSlot.BRAIN)) {
+            state.addModifier(new SkinModifier(SCULK_HEAD, SCULK_HEAD,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.HAT)));
+        }
+        if (data.hasSpecificItem(ModItems.BODYPART_SCULKLIVER.get(), CyberwareSlot.ORGANS) &&
+                data.hasSpecificItem(ModItems.BODYPART_SCULKINTESTINES.get(), CyberwareSlot.ORGANS)) {
+            state.addModifier(new SkinModifier(SCULK_TORSO, SCULK_TORSO,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.JACKET)));
+        }
+        if (data.hasSpecificItem(ModItems.BODYPART_SCULKSKIN.get(), CyberwareSlot.SKIN) &&
+                data.hasSpecificItem(ModItems.BODYPART_SCULKMUSCLE.get(), CyberwareSlot.MUSCLE)) {
+            state.addModifier(new SkinModifier(SCULK_SKIN, SCULK_SKIN,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS, SkinModifier.HideVanilla.LEFT_PANTS,
+                    SkinModifier.HideVanilla.RIGHT_SLEEVE, SkinModifier.HideVanilla.LEFT_SLEEVE, SkinModifier.HideVanilla.JACKET)));
+        }
+
+        if (data.hasSpecificItem(ModItems.BODYPART_SCULKRIGHTARM.get(), CyberwareSlot.RARM) && data.hasSpecificItem(ModItems.BODYPART_SCULKLEFTARM.get(), CyberwareSlot.LARM) &&
+                data.hasSpecificItem(ModItems.BODYPART_SCULKRIGHTLEG.get(), CyberwareSlot.RLEG) && data.hasSpecificItem(ModItems.BODYPART_SCULKLEFTLEG.get(), CyberwareSlot.LLEG) &&
+                data.hasSpecificItem(ModItems.BODYPART_SCULKBRAIN.get(), CyberwareSlot.BRAIN) && data.hasSpecificItem(ModItems.BODYPART_SCULKLIVER.get(), CyberwareSlot.ORGANS) &&
+                data.hasSpecificItem(ModItems.BODYPART_SCULKINTESTINES.get(), CyberwareSlot.ORGANS) && data.hasSpecificItem(ModItems.BODYPART_SCULKMUSCLE.get(), CyberwareSlot.MUSCLE) &&
+                data.hasSpecificItem(ModItems.BODYPART_SCULKSKIN.get(), CyberwareSlot.SKIN) && data.hasSpecificItem(ModItems.WETWARE_SCULKLUNGS.get(), CyberwareSlot.LUNGS) &&
+                data.hasSpecificItem(ModItems.WETWARE_SCULKHEART.get(), CyberwareSlot.HEART) && data.hasSpecificItem(ModItems.WETWARE_WARDENANTLERS.get(), CyberwareSlot.EYES)) {
+            state.addModifier(new SkinModifier(SCULKED, SCULKED,
+                    0xFFFFFFFF, false, EnumSet.of(SkinModifier.HideVanilla.RIGHT_PANTS, SkinModifier.HideVanilla.LEFT_PANTS,
+                    SkinModifier.HideVanilla.RIGHT_SLEEVE, SkinModifier.HideVanilla.LEFT_SLEEVE, SkinModifier.HideVanilla.JACKET)));
+        }
+
 
 // METAL PLATING (TRIMMED)
         if (data.hasSpecificItem(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
@@ -1385,6 +1454,11 @@ public class SkinModifierManager {
 // POLAR BEAR FUR
         if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
             state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE,
+                    0xFFFFFFFF, true));
+        }
+// DRAGON SKIN
+        if (data.hasSpecificItem(ModItems.WETWARE_DRAGONSKIN.get(), CyberwareSlot.SKIN)) {
+            state.addModifier(new SkinModifier(DRAGONSKIN_WIDE, DRAGONSKIN_SLIM,
                     0xFFFFFFFF, true));
         }
 // MANA ASSIMILATOR
@@ -1415,6 +1489,13 @@ public class SkinModifierManager {
             state.addModifier(new SkinModifier(SANDEVISTAN_TEXTURE, SANDEVISTAN_TEXTURE,
                     0xFFFFFFFF, false));
             SkinHighlightRender.apply(state, true, SANDEVISTAN_HIGHLIGHT_TEXTURE, SANDEVISTAN_HIGHLIGHT_TEXTURE,
+                    0xFFFFFFFF, true);
+        }
+// MAGIC CATALYST
+        if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_MAGICCATALYST.get(), CyberwareSlot.HEART)) {
+            state.addModifier(new SkinModifier(MAGIC_CATALYST, MAGIC_CATALYST,
+                    0xFFFFFFFF, false));
+            SkinHighlightRender.apply(state, true, MAGIC_CATALYST, MAGIC_CATALYST,
                     0xFFFFFFFF, true);
         }
 // CHIPWARE SLOTS

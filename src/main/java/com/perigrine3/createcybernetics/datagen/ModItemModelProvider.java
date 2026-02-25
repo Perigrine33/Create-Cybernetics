@@ -114,7 +114,19 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BODYPART_SPINNERETTE.get());
         basicItem(ModItems.BODYPART_FIREGLAND.get());
         basicItem(ModItems.BODYPART_GILLS.get());
-    }
+        basicItem(ModItems.BODYPART_AXOLOTLMARROW.get());
+        basicItem(ModItems.BODYPART_DRAGONSCALE.get());
+
+            basicItem(ModItems.BODYPART_SCULKRIGHTLEG.get());
+            basicItem(ModItems.BODYPART_SCULKLEFTLEG.get());
+            basicItem(ModItems.BODYPART_SCULKRIGHTARM.get());
+            basicItem(ModItems.BODYPART_SCULKLEFTARM.get());
+            basicItem(ModItems.BODYPART_SCULKBRAIN.get());
+            basicItem(ModItems.BODYPART_SCULKLIVER.get());
+            basicItem(ModItems.BODYPART_SCULKINTESTINES.get());
+            basicItem(ModItems.BODYPART_SCULKMUSCLE.get());
+            basicItem(ModItems.BODYPART_SCULKSKIN.get());
+        }
 
 //BASE
         {
@@ -289,6 +301,10 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.WETWARE_WEBSHOOTING_RIGHTARM.get());
             basicItem(ModItems.WETWARE_WEBSHOOTING_LEFTARM.get());
             basicItem(ModItems.WETWARE_SPIDEREYES.get());
+            basicItem(ModItems.WETWARE_BLASTEMASKELETON.get());
+            basicItem(ModItems.WETWARE_DRAGONSKIN.get());
+            basicItem(ModItems.WETWARE_WARDENANTLERS.get());
+            basicItem(ModItems.WETWARE_SCULKHEART.get());
         }
 
 

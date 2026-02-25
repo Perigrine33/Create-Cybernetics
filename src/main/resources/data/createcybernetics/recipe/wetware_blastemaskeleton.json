@@ -1,0 +1,10 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:bodypart_skeleton" },
+    { "item": "createcybernetics:bodypart_axolotlmarrow" },
+    { "item": "createcybernetics:bodypart_axolotlmarrow" },
+    { "item": "createcybernetics:bodypart_axolotlmarrow" }
+  ],
+  "result": { "id": "createcybernetics:wetware_blastemaskeleton", "count": 1 }
+}

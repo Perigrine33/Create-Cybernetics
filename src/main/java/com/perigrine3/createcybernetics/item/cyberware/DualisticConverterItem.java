@@ -66,7 +66,7 @@ public class DualisticConverterItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<CyberwareSlot> getSupportedSlots() {
-        return Set.of(CyberwareSlot.ORGANS);
+        return Set.of(CyberwareSlot.ORGANS, CyberwareSlot.HEART);
     }
 
     @Override

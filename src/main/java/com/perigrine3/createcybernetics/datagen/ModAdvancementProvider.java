@@ -252,8 +252,8 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                             Component.translatable("advancement.right_behind_you"),
                             Component.translatable("advancement.right_behind_you.desc"),
                             TITANIUM_BG, AdvancementType.TASK, true, true, false)
-                        .addCriterion("destroyer_of_worlds", DestroyerOfWorldsTrigger.Instance.any())
-                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/destroyer_of_worlds"), existingFileHelper);
+                        .addCriterion("destroyer_of_worlds", RightBehindYouTrigger.Instance.any())
+                    .save(saver, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware/right_behind_you"), existingFileHelper);
 
 
 
