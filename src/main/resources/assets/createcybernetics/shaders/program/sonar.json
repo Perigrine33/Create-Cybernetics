@@ -1,0 +1,122 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "one",
+    "dstrgb": "zero"
+  },
+
+  "vertex": "createcybernetics:sonar",
+  "fragment": "createcybernetics:sonar",
+
+  "attributes": [ "Position" ],
+
+  "samplers": [
+    { "name": "DiffuseSampler" },
+    { "name": "DepthSampler" }
+  ],
+
+  "uniforms": [
+    { "name": "ProjMat", "type": "matrix4x4", "count": 16,
+      "values": [ 1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1 ] },
+
+    { "name": "InSize",  "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
+    { "name": "OutSize", "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
+
+    { "name": "RadiusBlocks", "type": "float", "count": 1, "values": [ 10.0 ] },
+    { "name": "EdgeThreshold", "type": "float", "count": 1, "values": [ 0.10 ] },
+    { "name": "EdgeBoost", "type": "float", "count": 1, "values": [ 1.25 ] },
+    { "name": "Feather", "type": "float", "count": 1, "values": [ 1.5 ] },
+
+    { "name": "Aspect", "type": "float", "count": 1, "values": [ 1.7777778 ] },
+    { "name": "TanHalfFov", "type": "float", "count": 1, "values": [ 0.57735026 ] },
+    { "name": "Near", "type": "float", "count": 1, "values": [ 0.05 ] },
+    { "name": "Far",  "type": "float", "count": 1, "values": [ 1024.0 ] },
+
+    { "name": "SoundCount", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundLifeSeconds", "type": "float", "count": 1, "values": [ 1.0 ] },
+    { "name": "SoundRadius", "type": "float", "count": 1, "values": [ 10.0 ] },
+
+    { "name": "SoundPosX0", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY0", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ0", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge0",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX1", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY1", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ1", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge1",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX2", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY2", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ2", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge2",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX3", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY3", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ3", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge3",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX4", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY4", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ4", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge4",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX5", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY5", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ5", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge5",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX6", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY6", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ6", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge6",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX7", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY7", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ7", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge7",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX8", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY8", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ8", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge8",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX9", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY9", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ9", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge9",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX10", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY10", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ10", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge10",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX11", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY11", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ11", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge11",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX12", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY12", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ12", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge12",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX13", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY13", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ13", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge13",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX14", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY14", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ14", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge14",  "type": "float", "count": 1, "values": [ 999.0 ] },
+
+    { "name": "SoundPosX15", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosY15", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundPosZ15", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "SoundAge15",  "type": "float", "count": 1, "values": [ 999.0 ] }
+  ]
+}

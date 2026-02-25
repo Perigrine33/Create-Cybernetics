@@ -1,0 +1,18 @@
+{
+  "targets": ["swap"],
+  "passes": [
+    {
+      "name": "createcybernetics:sonar",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [
+        { "name": "DepthSampler", "id": "minecraft:main:depth" }
+      ]
+    },
+    {
+      "name": "minecraft:blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

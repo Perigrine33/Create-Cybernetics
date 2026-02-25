@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -26,6 +27,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
@@ -68,7 +70,7 @@ public record HarvesterEnchantmentEffect() implements EnchantmentEntityEffect {
     }
 
     private static boolean isMonsterSpecialDrop(Entity entity) {
-        return entity instanceof Warden || entity instanceof Guardian || entity instanceof ElderGuardian || entity instanceof Ghast || entity instanceof EnderDragon;
+        return entity instanceof Warden || entity instanceof Guardian || entity instanceof ElderGuardian || entity instanceof Ghast || entity instanceof EnderDragon || entity instanceof Axolotl;
     }
 
     private static ItemStack fixedDropFor(Entity entity) {
@@ -82,7 +84,12 @@ public record HarvesterEnchantmentEffect() implements EnchantmentEntityEffect {
             return new ItemStack(ModItems.BODYPART_GYROSCOPICBLADDER.get());
         }
         if (entity instanceof EnderDragon) {
-            return new ItemStack(ModItems.WETWARE_FIREBREATHINGLUNGS.get());
+            return entity.getRandom().nextFloat() < 0.5F
+                    ? new ItemStack(ModItems.BODYPART_DRAGONSCALE.get())
+                    : new ItemStack(ModItems.BODYPART_FIREGLAND.get());
+        }
+        if (entity instanceof Axolotl) {
+            return new ItemStack(ModItems.BODYPART_AXOLOTLMARROW.get());
         }
         return ItemStack.EMPTY;
     }

@@ -237,6 +237,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/flywheel_rarm_wide.png");
     private static final ResourceLocation MANASKIN_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/manaskin.png");
+    private static final ResourceLocation DRAGONSKIN_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/dragonskin_wide.png");
 
     private static final ResourceLocation SAMSON_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_wide.png");
@@ -318,6 +320,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/flywheel_rarm_slim.png");
     private static final ResourceLocation MANASKIN_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/manaskin_slim.png");
+    private static final ResourceLocation DRAGONSKIN_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/dragonskin_slim.png");
 
     private static final ResourceLocation SAMSON_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_slim.png");
@@ -763,6 +767,9 @@ public class SkinModifierManager {
 
             if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
                 state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE));
+            }
+            if (data.hasSpecificItem(ModItems.WETWARE_DRAGONSKIN.get(), CyberwareSlot.SKIN)) {
+                state.addModifier(new SkinModifier(DRAGONSKIN_WIDE, DRAGONSKIN_SLIM));
             }
 
             state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM,
@@ -1385,6 +1392,11 @@ public class SkinModifierManager {
 // POLAR BEAR FUR
         if (data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN)) {
             state.addModifier(new SkinModifier(POLAR_BEAR_FUR_TEXTURE, POLAR_BEAR_FUR_TEXTURE,
+                    0xFFFFFFFF, true));
+        }
+// DRAGON SKIN
+        if (data.hasSpecificItem(ModItems.WETWARE_DRAGONSKIN.get(), CyberwareSlot.SKIN)) {
+            state.addModifier(new SkinModifier(DRAGONSKIN_WIDE, DRAGONSKIN_SLIM,
                     0xFFFFFFFF, true));
         }
 // MANA ASSIMILATOR

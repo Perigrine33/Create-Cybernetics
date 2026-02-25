@@ -5,12 +5,14 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.client.skin.CybereyeOverlayHandler;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
 import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.item.generic.XPCapsuleItem;
+import com.perigrine3.createcybernetics.network.payload.CybereyeIrisSyncS2CPayload;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +26,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
 public final class CyberwareDeathReset {
@@ -34,30 +37,36 @@ public final class CyberwareDeathReset {
     public static void onPlayerClone(PlayerEvent.Clone event) {
         if (!event.isWasDeath()) return;
 
-        Player player = event.getEntity();
-        if (player.level().isClientSide) return;
+        Player newPlayer = event.getEntity();
+        if (newPlayer.level().isClientSide) return;
 
-        PlayerCyberwareData newData = player.getData(ModAttachments.CYBERWARE);
+        Player original = event.getOriginal();
+
+        // ---- (A) Copy cybereye config NBT across death (server-side) ----
+        // This is REQUIRED because a new Player entity instance is created on death.
+        copyCybereyeCfg(original, newPlayer);
+
+        // ---- (B) Existing cyberware attachment logic (unchanged behavior) ----
+        PlayerCyberwareData newData = newPlayer.getData(ModAttachments.CYBERWARE);
         if (newData == null) return;
 
         if (ConfigValues.KEEP_CYBERWARE) {
-            Player original = event.getOriginal();
             PlayerCyberwareData oldData = original.getData(ModAttachments.CYBERWARE);
             if (oldData == null) return;
 
-            HolderLookup.Provider provider = player.registryAccess();
+            HolderLookup.Provider provider = newPlayer.registryAccess();
             CompoundTag copied = oldData.serializeNBT(provider);
             newData.deserializeNBT(copied, provider);
-            reapplyInstalledCyberwareHooks(player instanceof ServerPlayer sp ? sp : null, newData);
+            reapplyInstalledCyberwareHooks(newPlayer instanceof ServerPlayer sp ? sp : null, newData);
 
             newData.setDirty();
-            player.syncData(ModAttachments.CYBERWARE);
+            newPlayer.syncData(ModAttachments.CYBERWARE);
             return;
         }
 
         newData.resetToDefaultOrgans();
         newData.setDirty();
-        player.syncData(ModAttachments.CYBERWARE);
+        newPlayer.syncData(ModAttachments.CYBERWARE);
     }
 
     @SubscribeEvent
@@ -74,6 +83,12 @@ public final class CyberwareDeathReset {
         }
 
         player.syncData(ModAttachments.CYBERWARE);
+
+        // ---- (C) Re-sync cybereye config to the client after entity actually joins the world ----
+        // This solves the real issue: persistentData is NOT automatically synced to the client.
+        if (player instanceof ServerPlayer sp) {
+            syncCybereyeCfgToClients(sp);
+        }
     }
 
     @SubscribeEvent
@@ -128,6 +143,37 @@ public final class CyberwareDeathReset {
 
         data.setDirty();
         player.syncData(ModAttachments.CYBERWARE);
+    }
+
+    private static void copyCybereyeCfg(Player from, Player to) {
+        if (from == null || to == null) return;
+
+        CompoundTag oldRoot = from.getPersistentData().getCompound(CybereyeOverlayHandler.NBT_ROOT);
+        if (oldRoot == null || oldRoot.isEmpty()) return;
+
+        // deep copy to avoid sharing tag instances
+        to.getPersistentData().put(CybereyeOverlayHandler.NBT_ROOT, oldRoot.copy());
+    }
+
+    private static void syncCybereyeCfgToClients(ServerPlayer player) {
+        CompoundTag root = player.getPersistentData().getCompound(CybereyeOverlayHandler.NBT_ROOT);
+        if (root == null || root.isEmpty()) return;
+
+        CompoundTag left = root.getCompound(CybereyeOverlayHandler.NBT_LEFT);
+        CompoundTag right = root.getCompound(CybereyeOverlayHandler.NBT_RIGHT);
+
+        int lx = left.getInt(CybereyeOverlayHandler.NBT_X);
+        int ly = left.getInt(CybereyeOverlayHandler.NBT_Y);
+        int lv = left.getInt(CybereyeOverlayHandler.NBT_VARIANT);
+
+        int rx = right.getInt(CybereyeOverlayHandler.NBT_X);
+        int ry = right.getInt(CybereyeOverlayHandler.NBT_Y);
+        int rv = right.getInt(CybereyeOverlayHandler.NBT_VARIANT);
+
+        CybereyeIrisSyncS2CPayload out = new CybereyeIrisSyncS2CPayload(player.getUUID(), lx, ly, lv, rx, ry, rv);
+
+        PacketDistributor.sendToPlayer(player, out);
+        PacketDistributor.sendToPlayersTrackingEntity(player, out);
     }
 
     private static void dropChipwareShards(ServerPlayer player, PlayerCyberwareData data) {
@@ -214,6 +260,7 @@ public final class CyberwareDeathReset {
                 ItemStack st = inst.getItem();
                 if (st == null || st.isEmpty()) continue;
                 if (!data.isEnabled(slot, i)) continue;
+
                 if (st.getItem() instanceof ICyberwareItem cw) {
                     cw.onInstalled(player);
                 }

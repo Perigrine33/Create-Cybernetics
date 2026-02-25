@@ -91,6 +91,11 @@ public class ModEffects {
                 SandevistanEffect::new);
         public static final Holder<MobEffect> SPIDER_EYES_EFFECT = MOB_EFFECTS.register("spider_eyes_effect",
                 SpiderEyesEffect::new);
+        public static final Holder<MobEffect> AXOLOTL_REGEN_EFFECT = MOB_EFFECTS.register("axolotl_regen_effect",
+                () -> new AxolotlRegenEffect()
+                        .addAttributeModifier(Attributes.MAX_HEALTH,
+                                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "axolotl_regen_effect"), 0,
+                                AttributeModifier.Operation.ADD_VALUE));
 
 
     public static void register(IEventBus eventBus) {

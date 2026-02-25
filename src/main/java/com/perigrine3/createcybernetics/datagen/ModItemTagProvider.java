@@ -234,6 +234,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BODYPART_SPINNERETTE.get())
                 .add(ModItems.BODYPART_FIREGLAND.get())
                 .add(ModItems.BODYPART_GILLS.get())
+                .add(ModItems.BODYPART_AXOLOTLMARROW.get())
+                .add(ModItems.BODYPART_DRAGONSCALE.get())
 
                 .add(ModItems.WETWARE_FIREBREATHINGLUNGS.get())
                 .add(ModItems.WETWARE_WATERBREATHINGLUNGS.get())
@@ -248,6 +250,9 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.WETWARE_WEBSHOOTING_RIGHTARM.get())
                 .add(ModItems.WETWARE_WEBSHOOTINGINTESTINES.get())
                 .add(ModItems.WETWARE_SPIDEREYES.get())
+                .add(ModItems.WETWARE_BLASTEMASKELETON.get())
+                .add(ModItems.WETWARE_DRAGONSKIN.get())
+                .add(ModItems.WETWARE_WARDENANTLERS.get())
                 .addOptional(resourceLocation("createcybernetics:wetware_blubber"));
 //BODY PARTS
         tag(ModTags.Items.BODY_PARTS)
@@ -473,6 +478,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SYNTHSKIN.get())
                 .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
+                .add(ModItems.WETWARE_DRAGONSKIN.get())
                 .add(ModItems.BODYPART_SKIN.get())
                 .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"))
                 .addOptional(resourceLocation("createcybernetics:skinupgrades_manaskin"));
@@ -484,6 +490,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         tag(ModTags.Items.BONE_ITEMS)
                 .add(ModItems.BASECYBERWARE_LINEARFRAME.get())
+                .add(ModItems.WETWARE_BLASTEMASKELETON.get())
                 .add(ModItems.BODYPART_SKELETON.get());
 
         tag(ModTags.Items.HEART_ITEMS)
@@ -554,6 +561,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SKINUPGRADES_SYNTHSKIN.get())
                 .add(ModItems.SKINUPGRADES_CHROMATOPHORES.get())
                 .add(ModItems.WETWARE_POLARBEARFUR.get())
+                .add(ModItems.WETWARE_DRAGONSKIN.get())
                 .addOptional(resourceLocation("createcybernetics:skinupgrades_sweat"))
                 .addOptional(resourceLocation("createcybernetics:skinupgrades_manaskin"));
 
@@ -561,7 +569,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get());
 
         tag(ModTags.Items.BONE_REPLACEMENTS)
-                .add(ModItems.BASECYBERWARE_LINEARFRAME.get());
+                .add(ModItems.BASECYBERWARE_LINEARFRAME.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM.get());
 
         tag(ModTags.Items.HEART_REPLACEMENTS)
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get());

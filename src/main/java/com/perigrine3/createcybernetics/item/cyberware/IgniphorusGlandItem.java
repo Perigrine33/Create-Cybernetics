@@ -172,10 +172,17 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
         final Vec3 end = start.add(look.scale(reach));
 
         final BlockHitResult blockHit = level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
-        if (blockHit.getType() != HitResult.Type.MISS) return;
 
         final EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, start, end, player.getBoundingBox().expandTowards(look.scale(reach)).inflate(1.0D), e -> e.isPickable() && e != player);
-        if (entityHit != null) return;
+
+        if (entityHit != null) {
+            double entityDist2 = entityHit.getLocation().distanceToSqr(start);
+            double blockDist2 = (blockHit.getType() == HitResult.Type.MISS)
+                    ? Double.POSITIVE_INFINITY
+                    : blockHit.getLocation().distanceToSqr(start);
+
+            if (entityDist2 <= blockDist2) return;
+        }
 
         final long now = level.getGameTime();
         final CompoundTag tag = player.getPersistentData();
@@ -183,8 +190,14 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
         if (now - last < COOLDOWN_TICKS) return;
         tag.putLong(NBT_LAST_SHOT_TICK, now);
 
-        final Vec3 power = look.scale(5.0D);
+        final Vec3 target = (blockHit.getType() == HitResult.Type.MISS) ? end : blockHit.getLocation();
+        Vec3 dir = target.subtract(start);
+        if (dir.lengthSqr() < 1.0E-6D) dir = look;
+
+        final Vec3 power = dir.normalize().scale(5.0D);
+
         final DragonFireball fireball = new DragonFireball(level, player, power);
+
         final Vec3 spawnPos = start.add(look.scale(0.6D));
         fireball.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, player.getYRot(), player.getXRot());
 

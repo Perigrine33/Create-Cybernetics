@@ -1,0 +1,10 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:bodypart_skin" },
+    { "item": "createcybernetics:bodypart_dragonscale" },
+    { "item": "createcybernetics:bodypart_dragonscale" },
+    { "item": "createcybernetics:bodypart_dragonscale" }
+  ],
+  "result": { "id": "createcybernetics:wetware_dragonskin", "count": 1 }
+}

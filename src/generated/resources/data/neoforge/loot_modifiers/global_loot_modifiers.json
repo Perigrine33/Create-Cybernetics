@@ -518,9 +518,11 @@
     "createcybernetics:bodypart_muscle_to_zombie_villager",
     "createcybernetics:bodypart_skeleton_to_zombie_villager",
     "createcybernetics:bodypart_spinnerette_to_spider",
-    "createcybernetics:wetware_firebreathinggland_to_ender_dragon",
+    "createcybernetics:firebreathinggland_to_ender_dragon",
+    "createcybernetics:dragonscale_to_ender_dragon",
     "createcybernetics:bodypart_wardenesophagus_to_warden",
-    "createcybernetics:bodypart_gyroscopicbladder_to_ghast"
+    "createcybernetics:bodypart_gyroscopicbladder_to_ghast",
+    "createcybernetics:bodypart_axolotlmarrow_to_axolotl"
   ],
   "replace": false
 }

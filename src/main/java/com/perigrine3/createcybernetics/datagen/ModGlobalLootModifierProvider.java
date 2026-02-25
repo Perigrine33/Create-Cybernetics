@@ -2647,11 +2647,16 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
 
 //ENDER DRAGON LOOT ADDS
             {
-                this.add("wetware_firebreathinggland_to_ender_dragon",
+                this.add("firebreathinggland_to_ender_dragon",
                         new AddItemModifier(new LootItemCondition[]{
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/ender_dragon")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.05f).build()
                         }, ModItems.BODYPART_FIREGLAND.get()));
+                this.add("dragonscale_to_ender_dragon",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/ender_dragon")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.1f).build()
+                        }, ModItems.BODYPART_DRAGONSCALE.get()));
             }
 
 //WARDEN LOOT ADDS
@@ -2670,6 +2675,15 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/ghast")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.05f).build()
                         }, ModItems.BODYPART_GYROSCOPICBLADDER.get()));
+            }
+
+//AXOLOTL LOOT ADDS
+            {
+                this.add("bodypart_axolotlmarrow_to_axolotl",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/axolotl")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.05f).build()
+                        }, ModItems.BODYPART_AXOLOTLMARROW.get()));
             }
 
 

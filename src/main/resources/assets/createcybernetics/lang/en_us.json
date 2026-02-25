@@ -3,7 +3,7 @@
   "createcybernetics.configuration.keepCyberware": "Keep Cyberware on Death",
 
 
-  "commands.createcybernetics.implants.wrong_item": "Only Create Cybernetics cyberware items are allowed.",
+  "commands.createcybernetics.implants.wrong_item": "Only Cybernetics cyberware items are allowed.",
   "commands.createcybernetics.implants.no_cyberware": "Target has no cyberware data.",
   "commands.createcybernetics.implants.install_fail": "Failed to install %s (no slot / no space / not a valid implant).",
   "commands.createcybernetics.implants.install_success": "Installed %s into %s.",
@@ -150,6 +150,7 @@
 
   "item.createcybernetics.data_shard_infolog": "§bInfolog Data Shard",
   "item.createcybernetics.data_shard_infolog.desc": "Stores information",
+  "item.createcybernetics.data_shard_infolog.desc2": "§7Press %s §7to open while slotted",
 
 
   "item.createcybernetics.cyberzombie_spawn_egg": "Cyberzombie Spawn Egg",
@@ -199,6 +200,8 @@
   "item.createcybernetics.bodypart_spinnerette": "Spider's Spinneret",
   "item.createcybernetics.bodypart_firegland": "Igniphorus Gland",
   "item.createcybernetics.bodypart_gills": "Fish Gills",
+  "item.createcybernetics.bodypart_axolotlmarrow": "Axolotl Marrow",
+  "item.createcybernetics.bodypart_dragonscale": "Ender Dragon Scale",
 
 
   "item.createcybernetics.basecyberware_rightleg_copperplated": "Copper Plated Right Cyberleg",
@@ -322,6 +325,9 @@
   "item.createcybernetics.wetware_webshooting_leftarm": "Webshooting Left Arm",
   "item.createcybernetics.wetware_webshooting_rightarm": "Webshooting Right Arm",
   "item.createcybernetics.wetware_spidereyes": "Spider Eyes",
+  "item.createcybernetics.wetware_blastemaskeleton": "Blastema Infused Skeleton",
+  "item.createcybernetics.wetware_dragonskin": "Ender Dragon Skin",
+  "item.createcybernetics.wetware_wardenantlers": "Warden Antlers",
 
 
   "item.createcybernetics.scavenged_rightleg": "Right Cyberleg",
@@ -436,7 +442,7 @@
   "entity.createcybernetics.hogboy": "HogBoy",
 
 
-  "key.categories.createcybernetics": "Create Cybernetics",
+  "key.categories.createcybernetics": "Cybernetics",
   "key.createcybernetics.cyberware_wheel": "Open Radial Toggle Menu",
   "key.createcybernetics.spinal_injector": "Open Spinal Injector",
   "key.createcybernetics.arm_cannon": "Open Arm Cannon",
@@ -629,6 +635,8 @@
           "tooltip.createcybernetics.eyeupgrades_trajectorycalculator.energy": "Costs 2 Energy",
 
       "tooltip.createcybernetics.armupgrades_armcannon.tooltip1": "§1Can launch various items and projectiles",
+      "tooltip.createcybernetics.armupgrades_armcannon.desc": "§7Press %s §7to open loading GUI while installed",
+      "tooltip.createcybernetics.armupgrades_armcannon.desc2": "§7Press %s §7to open ammo wheel while installed",
           "tooltip.createcybernetics.armupgrades_armcannon.tooltip2": "§7Requires §9Cyberarm",
       "tooltip.createcybernetics.armupgrades_flywheel.tooltip1": "§1Rapidly draws bows and crossbows",
           "tooltip.createcybernetics.armupgrades_flywheel.tooltip2": "§7Requires §9Cyberarm",
@@ -679,6 +687,7 @@
           "tooltip.createcybernetics.boneupgrades_piezo.tooltip2": "§3Stacks up to 3x",
           "tooltip.createcybernetics.boneupgrades_piezo.energy": "Adds 2 Energy While Moving",
       "tooltip.createcybernetics.boneupgrades_spinalinjector.tooltip1": "§1Allows the user to store and use up to 4 potions with extra duration",
+      "tooltip.createcybernetics.boneupgrades_spinalinjector.desc": "§7Press %s §7to open while installed",
           "tooltip.createcybernetics.boneupgrades_spinalinjector.tooltip2": "§7Requires §9Linear Frame",
       "tooltip.createcybernetics.boneupgrades_sandevistan.tooltip1": "§1Grants the user immense speed for a short time",
       "tooltip.createcybernetics.boneupgrades_cyberskull.tooltip1": "§1Negates elytra momentum damage",
@@ -756,6 +765,7 @@
       "tooltip.createcybernetics.organsupgrade_densebattery.tooltip1": "§1Stores a large amount of energy from a Charging Block",
       "tooltip.createcybernetics.organsupgrade_densebattery.energy": "Stores 1.2 Million Energy From Charging Block",
       "tooltip.createcybernetics.organsupgrades_heatengine.tooltip1": "§1Generates energy from burning fuels",
+      "tooltip.createcybernetics.organsupgrades_heatengine.desc": "§7Press %s §7to open while installed",
           "tooltip.createcybernetics.organsupgrades_heatengine.energy": "Adds 50 energy from fuel",
       "tooltip.createcybernetics.organsupgrades_manabattery.tooltip1": "§1Stores extra pools of mana",
           "tooltip.createcybernetics.organsupgrades_manabattery.tooltip2": "§3Stacks up to 3x",
@@ -790,17 +800,27 @@
 
       "tooltip.createcybernetics.wetware_blubber.tooltip1": "§cInsulates the user against the cold",
       "tooltip.createcybernetics.wetware_firebreathinglungs.tooltip1": "§cAllows the user to shoot Dragon Fireballs",
+      "tooltip.createcybernetics.wetware_firebreathinglungs.desc": "§7Shift + Right-Click to use",
       "tooltip.createcybernetics.wetware_waterbreathinglungs.tooltip1": "§cAllows the user to breathe underwater",
       "tooltip.createcybernetics.wetware_guardianeye.tooltip1": "§cAllows the user to shoot Guardian Lasers",
+      "tooltip.createcybernetics.wetware_guardianeye.desc": "§7Hold Shift + Right-Click to use",
       "tooltip.createcybernetics.wetware_polarbearfur.tooltip1": "§cNegates the freezing status effect",
       "tooltip.createcybernetics.wetware_ravagertendons.tooltip1": "§cProvides strength and durability to the user",
       "tooltip.createcybernetics.wetware_sculklungs.tooltip1": "§cAllows the user to emit a sonic shriek attack",
+      "tooltip.createcybernetics.wetware_sculklungs.desc": "§7Hold Shift + Right-Click to use",
       "tooltip.createcybernetics.wetware_tacticalinksac.tooltip1": "§cUser inflicts blindness on attackers",
       "tooltip.createcybernetics.wetware_aerostasisgyrobladder.tooltip1": "§cUser gains some flight abilities",
+      "tooltip.createcybernetics.wetware_aerostasisgyrobladder.desc": "§7Hold Spacebar to use",
       "tooltip.createcybernetics.wetware_grassfedstomach.tooltip1": "§cUser gains the ability to eat grass and wheat",
       "tooltip.createcybernetics.wetware_webshootingintestines.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey",
+      "tooltip.createcybernetics.wetware_webshootingintestines.desc": "§7Shift + Right-Click to use",
       "tooltip.createcybernetics.wetware_webshooting_leftarm.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey",
+      "tooltip.createcybernetics.wetware_webshooting_leftarm.desc": "§7Shift + Right-Click to use",
       "tooltip.createcybernetics.wetware_webshooting_rightarm.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey",
-      "tooltip.createcybernetics.wetware_spidereyes.tooltip1": "§cUser gains The visual abilities of a spider"
-
+      "tooltip.createcybernetics.wetware_webshooting_rightarm.desc": "§7Shift + Right-Click to use",
+      "tooltip.createcybernetics.wetware_spidereyes.tooltip1": "§cUser gains The visual abilities of a spider",
+      "tooltip.createcybernetics.wetware_blastemaskeleton.tooltip1": "§cGrants regeneration to users, working better with fewer cybernetics",
+      "tooltip.createcybernetics.wetware_blastemaskeleton.desc": "§7Any more than 8 implants prevents regeneration",
+      "tooltip.createcybernetics.wetware_dragonskin.tooltip1": "§cGrants immunity to dragon fire and increases armor",
+      "tooltip.createcybernetics.wetware_wardenantlers.tooltip1": "§cAllows the user to see sounds"
 }

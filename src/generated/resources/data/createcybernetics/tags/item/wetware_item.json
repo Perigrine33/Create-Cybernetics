@@ -19,6 +19,8 @@
     "createcybernetics:bodypart_spinnerette",
     "createcybernetics:bodypart_firegland",
     "createcybernetics:bodypart_gills",
+    "createcybernetics:bodypart_axolotlmarrow",
+    "createcybernetics:bodypart_dragonscale",
     "createcybernetics:wetware_firebreathinglungs",
     "createcybernetics:wetware_waterbreathinglungs",
     "createcybernetics:wetware_guardianeye",
@@ -32,6 +34,9 @@
     "createcybernetics:wetware_webshooting_rightarm",
     "createcybernetics:wetware_webshootingintestines",
     "createcybernetics:wetware_spidereyes",
+    "createcybernetics:wetware_blastemaskeleton",
+    "createcybernetics:wetware_dragonskin",
+    "createcybernetics:wetware_wardenantlers",
     {
       "id": "createcybernetics:wetware_blubber",
       "required": false

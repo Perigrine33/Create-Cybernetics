@@ -8,6 +8,7 @@
     "createcybernetics:skinupgrades_synthskin",
     "createcybernetics:skinupgrades_chromatophores",
     "createcybernetics:wetware_polarbearfur",
+    "createcybernetics:wetware_dragonskin",
     {
       "id": "createcybernetics:skinupgrades_sweat",
       "required": false

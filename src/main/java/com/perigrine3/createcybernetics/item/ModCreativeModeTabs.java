@@ -96,6 +96,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BODYPART_SPINNERETTE);
                         output.accept(ModItems.BODYPART_FIREGLAND);
                         output.accept(ModItems.BODYPART_GILLS);
+                        output.accept(ModItems.BODYPART_AXOLOTLMARROW);
+                        output.accept(ModItems.BODYPART_DRAGONSCALE);
 
                         //SCAVENGED PARTS
                         output.accept(ModItems.SCAVENGED_RIGHTLEG);
@@ -335,11 +337,13 @@ public class ModCreativeModeTabs {
                         }
 
                         output.accept(ModItems.WETWARE_FIREBREATHINGLUNGS);
+                        output.accept(ModItems.WETWARE_DRAGONSKIN);
                         output.accept(ModItems.WETWARE_WATERBREATHINGLUNGS);
                         output.accept(ModItems.WETWARE_GUARDIANEYE);
                         output.accept(ModItems.WETWARE_POLARBEARFUR);
                         output.accept(ModItems.WETWARE_RAVAGERTENDONS);
                         output.accept(ModItems.WETWARE_SCULKLUNGS);
+                        output.accept(ModItems.WETWARE_WARDENANTLERS);
                         output.accept(ModItems.WETWARE_TACTICALINKSAC);
                         output.accept(ModItems.WETWARE_AEROSTASISGYROBLADDER);
                         output.accept(ModItems.WETWARE_GRASSFEDSTOMACH);
@@ -347,6 +351,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WETWARE_WEBSHOOTING_LEFTARM);
                         output.accept(ModItems.WETWARE_WEBSHOOTINGINTESTINES);
                         output.accept(ModItems.WETWARE_SPIDEREYES);
+                        output.accept(ModItems.WETWARE_BLASTEMASKELETON);
 
                         output.accept(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED);
                         output.accept(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED);
