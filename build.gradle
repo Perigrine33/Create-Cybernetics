@@ -160,6 +160,8 @@ dependencies {
     implementation "curse.maven:vics-point-blank-961053:7515178"
     implementation "curse.maven:geckolib-388172:7415496"
 
+    implementation "curse.maven:ranged-weapon-api-962162:7291834"
+
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

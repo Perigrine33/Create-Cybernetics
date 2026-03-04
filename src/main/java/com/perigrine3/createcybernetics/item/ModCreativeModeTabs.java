@@ -27,7 +27,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.GRAFTING_TABLE);
                         output.accept(ModBlocks.CHARGING_BLOCK);
                         output.accept(ModBlocks.HOLOPROJECTOR);
+
                         output.accept(ModItems.NEUROPOZYNE_AUTOINJECTOR);
+
                         output.accept(ModItems.EMPTY_AUTOINJECTOR);
 
                         output.accept(ModItems.RAWTITANIUM);

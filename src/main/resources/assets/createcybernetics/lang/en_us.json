@@ -69,10 +69,6 @@
   "item.createcybernetics.eyeupgradebase": "Cybereye Module Base",
   "item.createcybernetics.titanium_hand": "Titanium Hand",
   "item.createcybernetics.holoimprint_chip": "Entity Imprint Chip",
-  "item.createcybernetics.neuropozyne_autoinjector": "Neuropozyne Autoinjector",
-  "item.createcybernetics.neuropozyne_autoinjector.duration": "Neuropozyne (20:00)",
-  "item.createcybernetics.neuropozyne_autoinjector.desc": "Injection Extends Duration to a Full Day",
-  "item.createcybernetics.empty_autoinjector": "Empty Autoinjector",
   "item.createcybernetics.expcapsule": "Cortical Stack Capsule",
   "item.createcybernetics.expcapsule.playername": "%s's Cortical Stack",
   "item.createcybernetics.expcapsule.stored": "XP: %s",
@@ -550,11 +546,18 @@
 
   "enchantment.createcybernetics.harvester": "Harvester",
 
+  "item.createcybernetics.neuropozyne_autoinjector": "Neuropozyne Autoinjector",
+  "item.createcybernetics.neuropozyne_autoinjector.duration": "Neuropozyne (20:00)",
+  "item.createcybernetics.neuropozyne_autoinjector.desc": "Injection Extends Duration to a Full Day",
+
+  "item.createcybernetics.empty_autoinjector": "Empty Autoinjector",
+
   "item.minecraft.potion.effect.neuropozyne_potion": "Potion of Neuropozyne",
   "item.minecraft.splash_potion.effect.neuropozyne_potion": "Splash Potion of Neuropozyne",
   "item.minecraft.lingering_potion.effect.neuropozyne_potion": "Lingering Potion of Neuropozyne",
 
   "effect.createcybernetics.neuropozyne": "Neuropozyne",
+
   "effect.createcybernetics.emp_effect": "EMP",
   "effect.createcybernetics.cyberware_rejection": "Cyberware Rejection",
   "effect.createcybernetics.synthetic_setules_effect": "Synthetic Setules",

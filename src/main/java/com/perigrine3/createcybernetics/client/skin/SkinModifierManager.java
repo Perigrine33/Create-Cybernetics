@@ -241,8 +241,6 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/knuckles_larm_wide.png");
     private static final ResourceLocation KNUCKLES_RARM_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/knuckles_rarm_wide.png");
-    private static final ResourceLocation SYNTHSKIN_TEXTURE_WIDE =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/synthskin_wide.png");
     private static final ResourceLocation NETHERPLATED_SKIN_TEXTURE_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/isothermal_skin_wide.png");
     private static final ResourceLocation FIRESTARTER_LARM_WIDE =
@@ -324,8 +322,6 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/knuckles_larm_slim.png");
     private static final ResourceLocation KNUCKLES_RARM_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/knuckles_rarm_slim.png");
-    private static final ResourceLocation SYNTHSKIN_TEXTURE_SLIM =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/synthskin_slim.png");
     private static final ResourceLocation NETHERPLATED_SKIN_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/isothermal_skin_slim.png");
     private static final ResourceLocation FIRESTARTER_LARM_SLIM =
@@ -775,9 +771,6 @@ public class SkinModifierManager {
         if (hasSynthSkin && hasNetheritePlating) {
 
         } else if (hasSynthSkin) {
-            int alpha = 100;
-            int tint = FastColor.ARGB32.color(alpha, 255, 255, 255);
-
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
@@ -789,12 +782,99 @@ public class SkinModifierManager {
             if (data.hasSpecificItem(ModItems.WETWARE_DRAGONSKIN.get(), CyberwareSlot.SKIN)) {
                 state.addModifier(new SkinModifier(DRAGONSKIN_WIDE, DRAGONSKIN_SLIM));
             }
+            if (data.hasSpecificItem(ModItems.BONEUPGRADES_SPINALINJECTOR.get(), CyberwareSlot.BONE)) {
+                state.addModifier(new SkinModifier(SPINAL_INJECTOR_TEXTURE, SPINAL_INJECTOR_TEXTURE,
+                        0xFFFFFFFF, false));
+                SkinHighlightRender.apply(state, true, SPINAL_INJECTOR_HIGHLIGHT_TEXTURE, SPINAL_INJECTOR_HIGHLIGHT_TEXTURE,
+                        0xFFFFFFFF, true);
+            }
+            if (ModItems.BONEUPGRADES_ELYTRA != null) {
+                if (data.hasSpecificItem(ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE)) {
+                    state.addModifier(new SkinModifier(DEPLOYABLE_ELYTRA_TEXTURE, DEPLOYABLE_ELYTRA_TEXTURE,
+                            0xFFFFFFFF, false));
+                    SkinHighlightRender.apply(state, true, DEPLOYABLE_ELYTRA_HIGHLIGHT_TEXTURE, DEPLOYABLE_ELYTRA_HIGHLIGHT_TEXTURE,
+                            0xFFFFFFFF, true);
+                }
+            }
+            if (data.hasSpecificItem(ModItems.BONEUPGRADES_SANDEVISTAN.get(), CyberwareSlot.BONE)) {
+                state.addModifier(new SkinModifier(SANDEVISTAN_TEXTURE, SANDEVISTAN_TEXTURE,
+                        0xFFFFFFFF, false));
+                SkinHighlightRender.apply(state, true, SANDEVISTAN_HIGHLIGHT_TEXTURE, SANDEVISTAN_HIGHLIGHT_TEXTURE,
+                        0xFFFFFFFF, true);
+            }
+            if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_MAGICCATALYST.get(), CyberwareSlot.HEART)) {
+                state.addModifier(new SkinModifier(MAGIC_CATALYST, MAGIC_CATALYST,
+                        0xFFFFFFFF, false));
+                SkinHighlightRender.apply(state, true, MAGIC_CATALYST, MAGIC_CATALYST,
+                        0xFFFFFFFF, true);
+            }
+            if (data.hasSpecificItem(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get(), CyberwareSlot.BRAIN)) {
+                if (data.hasChipwareShard(ModTags.Items.DATA_SHARDS)) {
+                    state.addModifier(new SkinModifier(CHIPWARE_ACTIVE, CHIPWARE_ACTIVE,
+                            0xFFFFFFFF, false));
+                    state.addHighlight(new SkinHighlight(CHIPWARE_ACTIVE, CHIPWARE_ACTIVE,
+                            0xFFFFFFFF, true));
+                } else {
+                    state.addModifier(new SkinModifier(CHIPWARE_INACTIVE, CHIPWARE_INACTIVE,
+                            0xFFFFFFFF, false));
+                    state.addHighlight(new SkinHighlight(CHIPWARE_INACTIVE, CHIPWARE_INACTIVE,
+                            0xFFFFFFFF, true));
+                }
+            }
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.LARM)) {
+                state.addModifier(new SkinModifier(KNUCKLES_LARM_WIDE, KNUCKLES_LARM_SLIM,
+                        0xFFFFFFFF, false));
+            }
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.RARM)) {
+                state.addModifier(new SkinModifier(KNUCKLES_RARM_WIDE, KNUCKLES_RARM_SLIM,
+                        0xFFFFFFFF, false));
+            }
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_FIRESTARTER.get(), CyberwareSlot.LARM)) {
+                state.addModifier(new SkinModifier(FIRESTARTER_LARM_WIDE, FIRESTARTER_LARM_SLIM,
+                        0xFFFFFFFF, false));
+            }
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_FIRESTARTER.get(), CyberwareSlot.RARM)) {
+                state.addModifier(new SkinModifier(FIRESTARTER_RARM_WIDE, FIRESTARTER_RARM_SLIM,
+                        0xFFFFFFFF, false));
+            }
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_FLYWHEEL.get(), CyberwareSlot.LARM)) {
+                state.addModifier(new SkinModifier(FLYWHEEL_LARM_WIDE, FLYWHEEL_LARM_SLIM,
+                        0xFFFFFFFF, false));
+            }
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_FLYWHEEL.get(), CyberwareSlot.RARM)) {
+                state.addModifier(new SkinModifier(FLYWHEEL_RARM_WIDE, FLYWHEEL_RARM_SLIM,
+                        0xFFFFFFFF, false));
+            }
+            if (data.hasSpecificItem(ModItems.BRAINUPGRADES_CYBERDECK.get(), CyberwareSlot.BRAIN)) {
+                state.addModifier(new SkinModifier(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
+                        0xFFFFFFFF, true));
+                state.addHighlight(new SkinHighlight(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
+                        0xFFFFFFFF, true));
+            }
+            if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_HEATENGINE.get(), CyberwareSlot.ORGANS)) {
+                state.addModifier(new SkinModifier(FURNACE, FURNACE,
+                        0xFFFFFFFF, false));
 
-            state.addModifier(new SkinModifier(SYNTHSKIN_TEXTURE_WIDE, SYNTHSKIN_TEXTURE_SLIM,
-                    tint, false, false,
-                    EnumSet.noneOf(SkinModifier.HideVanilla.class), EnumSet.noneOf(HumanoidArm.class), true));
+                if (data.isHeatEngineActive()) {
+                    state.addModifier(new SkinModifier(FURNACE_ACTIVE, FURNACE_ACTIVE,
+                            0xFFFFFFFF, false));
+                    state.addHighlight(new SkinHighlight(FURNACE_HIGHLIGHT, FURNACE_HIGHLIGHT,
+                            0xFFFFFFFF, true));
+                }
+            }
+            if (data.hasSpecificItem(ModItems.WETWARE_SPIDEREYES.get(), CyberwareSlot.EYES)) {
+                state.addModifier(new SkinModifier(SPIDER_EYES, SPIDER_EYES,
+                        0xFFFFFFFF, false));
+                state.addHighlight(new SkinHighlight(SPIDER_EYES, SPIDER_EYES,
+                        0xFFFFFFFF, true));
+            }
+            if (data.hasSpecificItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get(), CyberwareSlot.LUNGS)) {
+                state.addModifier(new SkinModifier(GILLS_TEXTURE, GILLS_TEXTURE,
+                        0xFFFFFFFF, false));
+            }
 
             return state;
+
         } else if (hasNetheritePlating) {
             state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
             state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));

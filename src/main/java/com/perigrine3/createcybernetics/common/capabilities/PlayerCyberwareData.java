@@ -33,6 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerCyberwareData implements ICyberwareData {
@@ -43,6 +44,10 @@ public class PlayerCyberwareData implements ICyberwareData {
     private static final String NBT_CYBERWARE = "Cyberware";
     private static final String NBT_HUMANITY = "Humanity";
     private static final String NBT_ENERGY = "Energy";
+
+    // --- NEW: keyed humanity penalties (e.g., drugs) ---
+    private static final String NBT_HUMANITY_PENALTIES = "HumanityPenalties";
+    private final Map<String, Integer> humanityPenalties = new HashMap<>();
 
     private boolean forcedChamberCrouch = false;
 
@@ -175,9 +180,36 @@ public class PlayerCyberwareData implements ICyberwareData {
         return slots;
     }
 
+    public void setHumanityPenalty(String key, int penalty) {
+        if (key == null || key.isBlank()) return;
+
+        int clamped = Mth.clamp(penalty, 0, 1000);
+        Integer cur = humanityPenalties.get(key);
+        if (cur != null && cur == clamped) return;
+
+        humanityPenalties.put(key, clamped);
+        dirty = true;
+    }
+
+    public void clearHumanityPenalty(String key) {
+        if (key == null || key.isBlank()) return;
+        if (humanityPenalties.remove(key) != null) {
+            dirty = true;
+        }
+    }
+
+    public int getHumanityPenaltySum() {
+        if (humanityPenalties.isEmpty()) return 0;
+        int sum = 0;
+        for (int v : humanityPenalties.values()) {
+            sum += Math.max(0, v);
+        }
+        return sum;
+    }
+
     @Override
     public int getHumanity() {
-        return humanity + humanityBonus;
+        return humanity + humanityBonus - getHumanityPenaltySum();
     }
 
     @Override
@@ -195,7 +227,7 @@ public class PlayerCyberwareData implements ICyberwareData {
     }
 
     public void setHumanityBonus(int bonus) {
-        int clamped = Mth.clamp(bonus, 0, 1000);
+        int clamped = Mth.clamp(bonus, -1000, 1000);
         if (clamped != humanityBonus) {
             humanityBonus = clamped;
             dirty = true;
@@ -742,6 +774,8 @@ public class PlayerCyberwareData implements ICyberwareData {
         copernicusOxygen = 0;
         copernicusOxygenSecondTicker = 0;
 
+        humanityPenalties.clear();
+
         dirty = true;
     }
 
@@ -1142,7 +1176,14 @@ public class PlayerCyberwareData implements ICyberwareData {
         tag.putInt(NBT_HUMANITY, humanity);
         tag.putInt(NBT_ENERGY, energyStored);
 
-        // persist selected arm cannon ammo slot
+        CompoundTag penalties = new CompoundTag();
+        for (var e : humanityPenalties.entrySet()) {
+            String k = e.getKey();
+            if (k == null || k.isBlank()) continue;
+            penalties.putInt(k, Math.max(0, e.getValue() == null ? 0 : e.getValue()));
+        }
+        tag.put(NBT_HUMANITY_PENALTIES, penalties);
+
         tag.putInt(NBT_ARM_CANNON_SELECTED, getArmCannonSelected());
 
         ListTag inj = new ListTag();
@@ -1243,6 +1284,17 @@ public class PlayerCyberwareData implements ICyberwareData {
 
         humanityBonus = 0;
         energyStored = tag.contains(NBT_ENERGY, Tag.TAG_INT) ? tag.getInt(NBT_ENERGY) : 0;
+
+        humanityPenalties.clear();
+        if (tag.contains(NBT_HUMANITY_PENALTIES, Tag.TAG_COMPOUND)) {
+            CompoundTag penalties = tag.getCompound(NBT_HUMANITY_PENALTIES);
+            for (String k : penalties.getAllKeys()) {
+                int v = penalties.getInt(k);
+                if (k != null && !k.isBlank() && v > 0) {
+                    humanityPenalties.put(k, Mth.clamp(v, 0, 1000));
+                }
+            }
+        }
 
         armCannonSelected = tag.contains(NBT_ARM_CANNON_SELECTED, Tag.TAG_INT)
                 ? Mth.clamp(tag.getInt(NBT_ARM_CANNON_SELECTED), 0, ArmCannonItem.SLOT_COUNT - 1)

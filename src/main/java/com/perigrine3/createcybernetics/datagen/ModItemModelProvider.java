@@ -27,13 +27,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.TEMPORAL_LOBE.get());
         basicItem(ModItems.OCCIPITAL_LOBE.get());
         basicItem(ModItems.CEREBELLUM.get());
-        basicItem(ModItems.NEUROPOZYNE_AUTOINJECTOR.get());
-        basicItem(ModItems.EMPTY_AUTOINJECTOR.get());
         basicItem(ModItems.XP_CAPSULE.get());
         basicItem(ModItems.FACEPLATE.get());
         basicItem(ModItems.NETHERITE_QPU.get());
         basicItem(ModItems.DATURA_FLOWER.get());
         basicItem(ModItems.DATURA_SEED_POD.get());
+
+        basicItem(ModItems.NEUROPOZYNE_AUTOINJECTOR.get());
+
+        basicItem(ModItems.EMPTY_AUTOINJECTOR.get());
 
         basicItem(ModItems.COPPER_UPGRADE_TEMPLATE.get());
         basicItem(ModItems.IRON_UPGRADE_TEMPLATE.get());

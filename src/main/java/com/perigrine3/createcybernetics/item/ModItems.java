@@ -98,6 +98,7 @@ public class ModItems {
 
     public static final DeferredItem<Item> NEUROPOZYNE_AUTOINJECTOR = ITEMS.register("neuropozyne_autoinjector",
             () -> new NeuropozyneAutoinjector(new Item.Properties().stacksTo(16)));
+
     public static final DeferredItem<Item> EMPTY_AUTOINJECTOR = ITEMS.register("empty_autoinjector",
             () -> new Item(new Item.Properties().stacksTo(64)));
 

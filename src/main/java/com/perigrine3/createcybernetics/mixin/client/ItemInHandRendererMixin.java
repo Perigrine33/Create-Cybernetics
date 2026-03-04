@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -44,7 +45,6 @@ public abstract class ItemInHandRendererMixin {
         if (playerEntity == null) return;
         if (!playerEntity.hasData(ModAttachments.CYBERWARE)) return;
         PlayerCyberwareData data = playerEntity.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
 
         HumanoidArm main = playerEntity.getMainArm();
         CyberwareSlot offSlot = (main == HumanoidArm.RIGHT) ? CyberwareSlot.LARM : CyberwareSlot.RARM;
@@ -63,7 +63,8 @@ public abstract class ItemInHandRendererMixin {
         poseStack.popPose();
     }
 
-    private static boolean vanillaWouldRenderOffhand(LocalPlayer player) {
+    @Unique
+    private static boolean cc$vanillaWouldRenderOffhand(LocalPlayer player) {
         ItemStack main = player.getMainHandItem();
         ItemStack off  = player.getOffhandItem();
 
@@ -75,13 +76,14 @@ public abstract class ItemInHandRendererMixin {
         }
 
         if (player.isUsingItem()) {
-            return usingItemWhileHoldingBowLikeRendersOffhand(player);
+            return cc$usingItemWhileHoldingBowLikeRendersOffhand(player);
         }
 
-        return !isChargedCrossbow(main);
+        return !cc$isChargedCrossbow(main);
     }
 
-    private static boolean usingItemWhileHoldingBowLikeRendersOffhand(LocalPlayer player) {
+    @Unique
+    private static boolean cc$usingItemWhileHoldingBowLikeRendersOffhand(LocalPlayer player) {
         ItemStack using = player.getUseItem();
         InteractionHand usedHand = player.getUsedItemHand();
 
@@ -89,14 +91,15 @@ public abstract class ItemInHandRendererMixin {
             return usedHand == InteractionHand.OFF_HAND;
         }
 
-        if (usedHand == InteractionHand.MAIN_HAND && isChargedCrossbow(player.getOffhandItem())) {
+        if (usedHand == InteractionHand.MAIN_HAND && cc$isChargedCrossbow(player.getOffhandItem())) {
             return false;
         }
 
         return true;
     }
 
-    private static boolean isChargedCrossbow(ItemStack stack) {
+    @Unique
+    private static boolean cc$isChargedCrossbow(ItemStack stack) {
         return stack.is(Items.CROSSBOW) && CrossbowItem.isCharged(stack);
     }
 }
