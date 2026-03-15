@@ -10,7 +10,7 @@ Credits:
 Modeling Artists: Artistic VoidK
 
 Translators: 
-    Roll54 - Ukranian
+    Roll54, Tenwoc - Ukranian
 
 Sound Design: 
     Tar - Robosurgeon Surgery Sound
