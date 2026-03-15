@@ -41,7 +41,6 @@ public final class CyberneticsCommand {
     private static final String PKEY_ENERGY_DEBUG = "cc_energy_debug_enabled";
     private static final String KEY_ENERGY_DEBUG_SET = "commands.createcybernetics.energy_debug.set";
 
-
     private static final SuggestionProvider<CommandSourceStack> CYBERWARE_ITEM_SUGGESTIONS =
             (context, builder) -> SharedSuggestionProvider.suggestResource(
                     BuiltInRegistries.ITEM.entrySet().stream()
@@ -139,11 +138,6 @@ public final class CyberneticsCommand {
         );
     }
 
-
-
-
-
-
     private static int install(CommandSourceStack src, ServerPlayer target, Item item) {
         if (!isCreateCyberneticsCyberwareItem(item)) {
             src.sendFailure(Component.translatable(KEY_WRONG_ITEM));
@@ -160,16 +154,18 @@ public final class CyberneticsCommand {
         boolean ok = data.commandInstall(target, stack);
 
         if (!ok) {
-            src.sendFailure(Component.translatable(KEY_INSTALL_FAIL, stack.getHoverName()));
+            src.sendFailure(Component.translatable(KEY_INSTALL_FAIL));
             return 0;
         }
 
+        data.recomputeHumanityBaseFromInstalled();
+        data.setDirty();
+        ModAttachments.syncCyberware(target);
         target.syncData(ModAttachments.CYBERWARE);
+
         src.sendSuccess(() -> Component.translatable(KEY_INSTALL_OK, stack.getHoverName(), target.getDisplayName()), false);
         return 1;
     }
-
-
 
     private static int remove(CommandSourceStack src, ServerPlayer target, Item item) {
         if (!isCreateCyberneticsCyberwareItem(item)) {
@@ -190,14 +186,15 @@ public final class CyberneticsCommand {
             return 0;
         }
 
+        data.recomputeHumanityBaseFromInstalled();
+        data.setDirty();
+        ModAttachments.syncCyberware(target);
         target.syncData(ModAttachments.CYBERWARE);
 
         Component itemName = item.getDescription();
         src.sendSuccess(() -> Component.translatable(KEY_REMOVE_OK, itemName, target.getDisplayName()), false);
         return 1;
     }
-
-
 
     private static int list(CommandSourceStack src, ServerPlayer target) {
         PlayerCyberwareData data = target.getData(ModAttachments.CYBERWARE);
@@ -211,8 +208,6 @@ public final class CyberneticsCommand {
         return 1;
     }
 
-
-
     private static int clear(CommandSourceStack src, ServerPlayer target) {
         PlayerCyberwareData data = target.getData(ModAttachments.CYBERWARE);
         if (data == null) {
@@ -222,6 +217,10 @@ public final class CyberneticsCommand {
 
         data.clear();
         data.resetToDefaultOrgans();
+
+        data.recomputeHumanityBaseFromInstalled();
+        data.setDirty();
+        ModAttachments.syncCyberware(target);
         target.syncData(ModAttachments.CYBERWARE);
 
         src.sendSuccess(() -> Component.translatable(KEY_CLEAR_OK, target.getDisplayName()), false);
@@ -231,5 +230,4 @@ public final class CyberneticsCommand {
     private static void setEnergyDebug(ServerPlayer player, boolean value) {
         player.getPersistentData().putBoolean(PKEY_ENERGY_DEBUG, value);
     }
-
 }

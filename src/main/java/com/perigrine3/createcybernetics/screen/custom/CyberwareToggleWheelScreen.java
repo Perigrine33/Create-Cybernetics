@@ -43,29 +43,13 @@ public class CyberwareToggleWheelScreen extends Screen {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_toggle_wheel");
 
     private static boolean OPEN = false;
-
-    // Track currently selected segment so LMB can toggle it.
     private static int SELECTED_INDEX = 0;
-
-    // Sticky selection: when cursor recenters, keep last chosen segment instead of snapping.
     private static int STICKY_INDEX = 0;
-
     private record SlotIndex(CyberwareSlot slot, int index) {}
-
-    /**
-     * A wheel entry can represent:
-     * - a single installed instance (targets size = 1), OR
-     * - a grouped toggle (targets size > 1), e.g. Pneumatic Calves across both legs.
-     */
     private record Entry(ItemStack icon, List<SlotIndex> targets) {}
-
     private static final List<Entry> ENTRIES = new ArrayList<>();
-
-    // Cached for toggleSelected() so we can compute grouped enabled state without rebuilding.
     private static PlayerCyberwareData LAST_DATA = null;
 
-    // ---- Virtual "radial cursor" driven by head movement deltas ----
-    // Cursor space is like screen space: +X right, +Y down.
     private static double CURSOR_X = 0.0;
     private static double CURSOR_Y = 0.0;
 
@@ -73,18 +57,12 @@ public class CyberwareToggleWheelScreen extends Screen {
     private static float LAST_YAW = 0.0f;
     private static float LAST_PITCH = 0.0f;
 
-    // Tuning knobs:
-    // Smaller => more subtle movement per degree.
-    private static final double YAW_TO_CURSOR = 0.020;   // degrees -> cursor units
-    private static final double PITCH_TO_CURSOR = 0.020; // degrees -> cursor units
+    private static final double YAW_TO_CURSOR = 0.010;
+    private static final double PITCH_TO_CURSOR = 0.010;
 
-    // Damping each tick (closer to 1.0 = slower recenter; smaller = faster recenter)
     private static final double DAMPING = 0.85;
-
-    // Clamp so spinning doesn’t blow it out; also helps responsiveness after large turns.
     private static final double CURSOR_MAX = 1.25;
 
-    // If the cursor is near center, keep last selection.
     private static final double SELECT_DEADZONE = 0.08;
 
     public CyberwareToggleWheelScreen() {
@@ -95,13 +73,11 @@ public class CyberwareToggleWheelScreen extends Screen {
     protected void init() {
         OPEN = true;
 
-        // Reset selection + cursor each time you open.
         STICKY_INDEX = 0;
         SELECTED_INDEX = 0;
         CURSOR_X = 0.0;
         CURSOR_Y = 0.0;
 
-        // Ask server for current enabled states so UI text is accurate.
         PacketDistributor.sendToServer(new CyberwareTogglePayloads.RequestToggleStatesPayload());
 
         Minecraft mc = Minecraft.getInstance();
@@ -114,7 +90,6 @@ public class CyberwareToggleWheelScreen extends Screen {
             HAS_LAST_ROT = false;
         }
 
-        // Immediately return focus to gameplay (so player can keep moving/looking).
         if (this.minecraft != null && this.minecraft.screen == this) {
             this.minecraft.setScreen(null);
         }
@@ -134,16 +109,6 @@ public class CyberwareToggleWheelScreen extends Screen {
         HAS_LAST_ROT = false;
     }
 
-    /**
-     * Called by LMB while wheel is open.
-     * Toggles the currently selected entry.
-     *
-     * For grouped entries (e.g. Pneumatic Calves across both legs):
-     * - Determine current enabled state as "ANY enabled"
-     * - Desired state is the inverse
-     * - Send toggle packets only for targets that don't match the desired state
-     *   (since payload is toggle-only, not set-enabled).
-     */
     public static void toggleSelected() {
         if (!OPEN) return;
         if (ENTRIES.isEmpty()) return;
@@ -154,13 +119,12 @@ public class CyberwareToggleWheelScreen extends Screen {
 
         PlayerCyberwareData data = LAST_DATA;
         if (data == null) {
-            // Fallback: toggle first target only
             SlotIndex t = e.targets().get(0);
             PacketDistributor.sendToServer(new CyberwareTogglePayloads.ToggleCyberwarePayload(t.slot().name(), t.index()));
             return;
         }
 
-        boolean currentlyEnabled = isEntryEnabled(data, e); // ANY enabled
+        boolean currentlyEnabled = isEntryEnabled(data, e);
         boolean desiredEnabled = !currentlyEnabled;
 
         for (SlotIndex t : e.targets()) {
@@ -173,7 +137,7 @@ public class CyberwareToggleWheelScreen extends Screen {
 
     @Override
     public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        // no-op
+
     }
 
     public boolean shouldBlurBackground() {
@@ -186,10 +150,6 @@ public class CyberwareToggleWheelScreen extends Screen {
         HAS_LAST_ROT = false;
         super.onClose();
     }
-
-    /* -----------------------------
-     * HUD layer registration/render
-     * ----------------------------- */
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static final class ClientModBus {
@@ -208,13 +168,11 @@ public class CyberwareToggleWheelScreen extends Screen {
 
             Minecraft mc = Minecraft.getInstance();
 
-            // Requirement: opening any other GUI closes it.
             if (mc.screen != null) {
                 closeWheel();
                 return;
             }
 
-            // While the wheel is open, do not allow holding LMB to keep mining.
             KeyMapping attack = mc.options.keyAttack;
             if (attack != null && attack.isDown()) {
                 attack.setDown(false);
@@ -233,22 +191,18 @@ public class CyberwareToggleWheelScreen extends Screen {
                 return;
             }
 
-            // dyaw in [-180,180] handles full spins smoothly.
             float dyaw = Mth.wrapDegrees(yaw - LAST_YAW);
             float dpitch = pitch - LAST_PITCH;
 
             LAST_YAW = yaw;
             LAST_PITCH = pitch;
 
-            // Update cursor: turning right pushes +X, looking down pushes +Y.
             CURSOR_X += dyaw * YAW_TO_CURSOR;
             CURSOR_Y += dpitch * PITCH_TO_CURSOR;
 
-            // Clamp so big turns don’t lock selection far away.
             CURSOR_X = Mth.clamp(CURSOR_X, -CURSOR_MAX, CURSOR_MAX);
             CURSOR_Y = Mth.clamp(CURSOR_Y, -CURSOR_MAX, CURSOR_MAX);
 
-            // Damping pulls cursor back toward center over time.
             CURSOR_X *= DAMPING;
             CURSOR_Y *= DAMPING;
         }
@@ -322,6 +276,30 @@ public class CyberwareToggleWheelScreen extends Screen {
             drawDonutSegment(graphics, cx, cy, innerR, outerR, n, i, 24, argb);
         }
 
+        final String line1 = "LMB = Select";
+        final String line2 = "RMB = Close";
+
+        int textX = (int) (cx + outerR + 12);
+        int textY = cy - mc.font.lineHeight;
+
+        int maxX = w - 4;
+        int maxY = h - 4;
+
+        int w1 = mc.font.width(line1);
+        int w2 = mc.font.width(line2);
+        int maxLineW = Math.max(w1, w2);
+
+        if (textX + maxLineW > maxX) {
+            textX = maxX - maxLineW;
+        }
+        if (textY < 4) textY = 4;
+        if (textY + (mc.font.lineHeight * 2) + 2 > maxY) {
+            textY = maxY - (mc.font.lineHeight * 2) - 2;
+        }
+
+        graphics.drawString(mc.font, line1, textX, textY, 0xFFFFFFFF, true);
+        graphics.drawString(mc.font, line2, textX, textY + mc.font.lineHeight + 2, 0xFFFFFFFF, true);
+
         final int nameColor = 0xFFFFFFFF;
         final int enabledColor = 0xFF55FF55;
         final int disabledColor = 0xFFFF5555;
@@ -372,7 +350,7 @@ public class CyberwareToggleWheelScreen extends Screen {
     private static boolean isEntryEnabled(PlayerCyberwareData data, Entry e) {
         if (data == null) return false;
         for (SlotIndex t : e.targets()) {
-            if (data.isEnabled(t.slot(), t.index())) return true; // ANY enabled
+            if (data.isEnabled(t.slot(), t.index())) return true;
         }
         return false;
     }
@@ -397,10 +375,6 @@ public class CyberwareToggleWheelScreen extends Screen {
         return idx;
     }
 
-    /* -----------------------------
-     * Build entries
-     * ----------------------------- */
-
     private static PlayerCyberwareData rebuildEntries(Minecraft mc) {
         ENTRIES.clear();
 
@@ -410,7 +384,6 @@ public class CyberwareToggleWheelScreen extends Screen {
         PlayerCyberwareData data = mc.player.getData(ModAttachments.CYBERWARE);
         if (data == null) return null;
 
-        // Accumulate Pneumatic Calves targets, but ONLY add entry if BOTH legs are installed.
         List<SlotIndex> pneumaticCalvesTargets = new ArrayList<>();
         ItemStack pneumaticCalvesIcon = ItemStack.EMPTY;
 
@@ -437,7 +410,6 @@ public class CyberwareToggleWheelScreen extends Screen {
             }
         }
 
-        // ONLY show Pneumatic Calves option if BOTH are installed (>= 2 targets)
         if (pneumaticCalvesTargets.size() >= 2) {
             ENTRIES.add(new Entry(
                     pneumaticCalvesIcon.isEmpty() ? ItemStack.EMPTY : pneumaticCalvesIcon,

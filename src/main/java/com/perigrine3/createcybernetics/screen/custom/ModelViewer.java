@@ -26,6 +26,19 @@ public class ModelViewer {
     private final ItemStack renderMuscle = new ItemStack(ModItems.BODYPART_MUSCLE.get());
     private final ItemStack renderBone   = new ItemStack(Items.BONE);
 
+    private boolean autoRotateEnabled = true;
+
+    public boolean isAutoRotateEnabled() {
+        return autoRotateEnabled;
+    }
+
+    public void setAutoRotateEnabled(boolean enabled) {
+        this.autoRotateEnabled = enabled;
+        if (!enabled) {
+            this.spinVelocity = 0f;
+        }
+    }
+
     public void beginDrag(double mouseX) {
         dragging = true;
         lastMouseX = (int) mouseX;
@@ -41,12 +54,19 @@ public class ModelViewer {
             spinVelocity = dx * 1.2f;
             rotation += spinVelocity;
             lastMouseX = mouseX;
-        } else {
+            return;
+        }
+
+        if (!autoRotateEnabled) {
             spinVelocity *= FRICTION;
-            rotation += spinVelocity;
-            if (Math.abs(spinVelocity) < 0.1f) {
-                rotation += 0.3f;
-            }
+            if (Math.abs(spinVelocity) < 0.1f) spinVelocity = 0f;
+            return;
+        }
+
+        spinVelocity *= FRICTION;
+        rotation += spinVelocity;
+        if (Math.abs(spinVelocity) < 0.1f) {
+            rotation += 0.3f;
         }
     }
 
@@ -58,7 +78,8 @@ public class ModelViewer {
 
     public void triggerZoomReset() {
         introScale = 0.4f;
-        spinVelocity = 2f;
+
+        spinVelocity = autoRotateEnabled ? 2f : 0f;
     }
 
     public float getRotationPhase() {

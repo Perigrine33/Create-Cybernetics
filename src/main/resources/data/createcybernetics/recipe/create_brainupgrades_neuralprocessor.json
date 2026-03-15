@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "Q": {
+      "item": "createcybernetics:netherite_qpu"
+    },
+    "M": {
+      "item": "createcybernetics:component_mesh"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+
+  "pattern": [
+    "M M M",
+    " GSG ",
+    "MSQSM",
+    " GSG ",
+    "M M M"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_neuralprocessor"
+  },
+  "show_notification": false
+}

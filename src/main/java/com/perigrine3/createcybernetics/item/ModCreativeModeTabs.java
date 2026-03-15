@@ -47,6 +47,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.CEREBELLUM);
                         output.accept(ModItems.FACEPLATE);
                         output.accept(ModItems.EMP_GRENADE);
+                        output.accept(ModItems.EXOSUIT1);
 
                         output.accept(ModItems.COPPER_UPGRADE_TEMPLATE);
                         output.accept(ModItems.IRON_UPGRADE_TEMPLATE);
@@ -71,6 +72,15 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.DATA_SHARD_BLACK);
                         output.accept(ModItems.DATA_SHARD_BIOCHIP);
                         output.accept(ModItems.DATA_SHARD_INFOLOG);
+
+                        //QUICKHACKS
+                        output.accept(ModItems.QUICKHACK_OVERHEAT);
+                        output.accept(ModItems.QUICKHACK_REBOOT);
+                        output.accept(ModItems.QUICKHACK_SCRAMBLE);
+                        output.accept(ModItems.QUICKHACK_OPTICMALFUNCTION);
+                        output.accept(ModItems.QUICKHACK_CYBERPSYCHOSIS);
+                        output.accept(ModItems.QUICKHACK_BEHINDYOU);
+                        output.accept(ModItems.QUICKHACK_DRAIN);
 
                         //COMPONENTS
                         output.accept(ModItems.COMPONENT_ACTUATOR);
@@ -282,6 +292,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BRAINUPGRADES_CYBERDECK);
                         output.accept(ModItems.BRAINUPGRADES_IDEM);
                         output.accept(ModItems.BRAINUPGRADES_CHIPWARESLOTS);
+                        output.accept(ModItems.BRAINUPGRADES_NEURALPROCESSOR);
+                        output.accept(ModItems.BRAINUPGRADES_ICEPROTOCOL);
 
                         if (ModItems.BRAINUPGRADES_SPELLJAMMER != null) {
                             output.accept(ModItems.BRAINUPGRADES_SPELLJAMMER);

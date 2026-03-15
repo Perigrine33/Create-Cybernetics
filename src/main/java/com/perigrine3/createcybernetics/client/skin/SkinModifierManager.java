@@ -187,6 +187,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_head.png");
     private static final ResourceLocation SCULK_TORSO =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/sculk_torso.png");
+    private static final ResourceLocation NEURAL_PROCESSOR =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/neural_processor.png");
 
     private static final ResourceLocation SAMSON_EYES_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_eyes_dyed.png");
@@ -293,6 +295,9 @@ public class SkinModifierManager {
     private static final ResourceLocation GENOS_WIDE_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_wide_dyed.png");
 
+    private static final ResourceLocation EXOSUIT1_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/exosuit1.png");
+
     //SLIM VARIANTS
     private static final ResourceLocation LEFT_CYBERARM_TEXTURE_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/left_cyberarm_slim.png");
@@ -373,6 +378,9 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_slim.png");
     private static final ResourceLocation GENOS_SLIM_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_slim_dyed.png");
+
+    private static final ResourceLocation EXOSUIT1_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/exosuit1_slim.png");
 
 
 
@@ -1625,9 +1633,14 @@ public class SkinModifierManager {
 // CYBERDECK
         if (data.hasSpecificItem(ModItems.BRAINUPGRADES_CYBERDECK.get(), CyberwareSlot.BRAIN)) {
             state.addModifier(new SkinModifier(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
-                    0xFFFFFFFF, true));
+                    0xFFFFFFFF, false));
             state.addHighlight(new SkinHighlight(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
                     0xFFFFFFFF, true));
+        }
+// NEURAL PROCESSOR PORT
+        if (data.hasSpecificItem(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get(), CyberwareSlot.BRAIN)) {
+            state.addModifier(new SkinModifier(NEURAL_PROCESSOR, NEURAL_PROCESSOR,
+                    0xFFFFFFFF, false));
         }
 // HEAT ENGINE
         if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_HEATENGINE.get(), CyberwareSlot.ORGANS)) {
@@ -1649,7 +1662,11 @@ public class SkinModifierManager {
                     0xFFFFFFFF, true));
         }
 
-
+        ItemStack chestSlot = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (chestSlot.is(ModItems.EXOSUIT1)) {
+            state.addModifier(new SkinModifier(EXOSUIT1_WIDE, EXOSUIT1_SLIM,
+                    0xFFFFFFFF, false));
+        }
 
         return state;
     }

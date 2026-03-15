@@ -8,6 +8,8 @@
     "createcybernetics:brainupgrades_cyberdeck",
     "createcybernetics:brainupgrades_idem",
     "createcybernetics:brainupgrades_chipwareslots",
+    "createcybernetics:brainupgrades_neuralprocessor",
+    "createcybernetics:brainupgrades_iceprotocol",
     {
       "id": "createcybernetics:brainupgrades_consciousnesstransmitter",
       "required": false

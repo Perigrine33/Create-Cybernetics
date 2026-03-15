@@ -98,7 +98,7 @@ public class SpellJammerItem extends Item implements ICyberwareItem {
         if (player.level().isClientSide) return;
         if ((player.tickCount % 10) != 0) return;
 
-        double radius = 25.0;
+        double radius = 16;
         var aabb = player.getBoundingBox().inflate(radius);
         var targets = player.level().getEntitiesOfClass(LivingEntity.class, aabb, LivingEntity::isAlive);
         long expireAt = player.level().getGameTime() + 20L;

@@ -56,12 +56,9 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private static final int WARNING_X = -15;
     private static final int WARNING_Y = 8;
 
-
-
     private final ItemStack renderSkin = new ItemStack(ModItems.BODYPART_SKIN.get());
     private final ItemStack renderMuscle = new ItemStack(ModItems.BODYPART_MUSCLE.get());
     private final ItemStack renderBone = new ItemStack(Items.BONE);
-
 
     // -----------------------
     // Resources
@@ -94,13 +91,34 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
                     "textures/gui/robosurgeon/robosurgeon_interface_warning.png");
 
+    // -----------------------
+    // toggle buttons
+    // -----------------------
+    private static final int ROT_TOGGLE_W = 12;
+    private static final int ROT_TOGGLE_H = 12;
+    private static final int ROT_TOGGLE_PAD_X = 8;
+    private static final int ROT_TOGGLE_PAD_Y = 2;
+
+    private static final int MARKER_TOGGLE_W = ROT_TOGGLE_W;
+    private static final int MARKER_TOGGLE_H = ROT_TOGGLE_H;
+    private static final int MARKER_TOGGLE_SPACING_Y = -4;
+
+    private static final float TOGGLE_LABEL_SCALE = 0.5f;
+    private static final int TOGGLE_LABEL_GAP_PX = 3;
+    private static final int TOGGLE_LABEL_COLOR = 0xFFE7E7E7;
+
+    private static final ResourceLocation ROT_TOGGLE_ON_ICON =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
+                    "textures/gui/on_toggle.png");
+    private static final ResourceLocation ROT_TOGGLE_OFF_ICON =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
+                    "textures/gui/off_toggle.png");
 
     public RobosurgeonScreen(RobosurgeonMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.imageWidth = 176;
         this.imageHeight = 222;
     }
-
 
     // -----------------------
     // Init & Marker Setup
@@ -111,6 +129,8 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         this.topPos -= 10;
         modelViewer.triggerZoomReset();
+        modelViewer.setAutoRotateEnabled(true);
+        markerManager.setEnabled(true);
 
         registerMarkers();
         registerSlotBackgrounds();
@@ -119,7 +139,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
     private void registerMarkers() {
         markerManager.clear();
-// Full body selection
+        // Full body selection
         markerManager.add(new MarkerManager.Marker(-8, -78, ViewMode.FULL_BODY, ViewMode.HEAD, Component.translatable("gui.marker.head"), false));
         markerManager.add(new MarkerManager.Marker(-8, -52, ViewMode.FULL_BODY, ViewMode.TORSO, Component.translatable("gui.marker.torso"), false));
         markerManager.add(new MarkerManager.Marker(50, -52, ViewMode.FULL_BODY, ViewMode.SKIN, Component.translatable("gui.marker.skin"), false));
@@ -127,16 +147,15 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         markerManager.add(new MarkerManager.Marker(-25, -55, ViewMode.FULL_BODY, ViewMode.RARM, Component.translatable("gui.marker.rarm"), true));
         markerManager.add(new MarkerManager.Marker(-2, -28, ViewMode.FULL_BODY, ViewMode.LLEG, Component.translatable("gui.marker.lleg"), true));
         markerManager.add(new MarkerManager.Marker(-14, -28, ViewMode.FULL_BODY, ViewMode.RLEG, Component.translatable("gui.marker.rleg"), true));
-// Expanded head details
+        // Expanded head details
         markerManager.add(new MarkerManager.Marker(-35, -210, ViewMode.HEAD, ViewMode.BRAIN, Component.translatable("gui.marker.brain"), false));
         markerManager.add(new MarkerManager.Marker(-10, -197, ViewMode.HEAD, ViewMode.EYES, Component.translatable("gui.marker.eyes"), false));
         markerManager.add(new MarkerManager.Marker(15, -197, ViewMode.HEAD, ViewMode.EYES, Component.translatable("gui.marker.eyes"), false));
-// Expanded torso details
+        // Expanded torso details
         markerManager.add(new MarkerManager.Marker(0, -185, ViewMode.TORSO, ViewMode.HEART, Component.translatable("gui.marker.heart"), false));
         markerManager.add(new MarkerManager.Marker(-15, -170, ViewMode.TORSO, ViewMode.LUNGS, Component.translatable("gui.marker.lungs"), false));
         markerManager.add(new MarkerManager.Marker(-5, -135, ViewMode.TORSO, ViewMode.ORGANS, Component.translatable("gui.marker.organs"), false));
     }
-
 
     // -----------------------
     // Enum representing zoom categories
@@ -148,9 +167,9 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         TORSO(FULL_BODY,135,    false,  false,  110,    0),
         SKIN(FULL_BODY, 75,     false,  true,   0,      0),
         LARM(FULL_BODY, 130,    true,   true,   110,    -40),
-        RARM(FULL_BODY, 130,     true,   true,   110,    40),
-        LLEG(FULL_BODY, 130,     true,   true,   20,    0),
-        RLEG(FULL_BODY, 130,     true,   true,   20,    0),
+        RARM(FULL_BODY, 130,    true,   true,   110,    40),
+        LLEG(FULL_BODY, 130,    true,   true,   20,     0),
+        RLEG(FULL_BODY, 130,    true,   true,   20,     0),
         BRAIN(HEAD,     110,    false,  false,  150,    0),
         EYES(HEAD,      110,    false,  false,  150,    0),
         HEART(TORSO,    135,    false,  false,  110,    0),
@@ -184,7 +203,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         }
     }
 
-
     // -----------------------
     // Title Typing Animation
     // -----------------------
@@ -200,7 +218,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             }
         }
     }
-
 
     // -----------------------
     // Label Rendering
@@ -224,7 +241,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         guiGraphics.drawString(this.font, playerInventoryTitle, (int) (8 / invScale), (int) (labelY / invScale), 4210752, false);
         guiGraphics.pose().popPose();
     }
-
 
     // -----------------------
     // Background Rendering
@@ -309,7 +325,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         gui.pose().popPose();
     }
-
 
     private int getConfiguredBaseHumanity() {
         return com.perigrine3.createcybernetics.Config.HUMANITY.get();
@@ -520,7 +535,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     }
 
     private void updateTeSlotActivity() {
-
         for (Slot slot : menu.slots) {
             if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
 
@@ -653,7 +667,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         return SLOT_ICON;
     }
 
-
     // -----------------------
     // Apply STATIC scissor box
     // -----------------------
@@ -667,6 +680,120 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         gui.enableScissor(x1, y1, x2, y2);
     }
 
+    // -----------------------
+    // Auto-rotate toggle rendering
+    // -----------------------
+    private void renderRotationToggle(GuiGraphics gui, int mouseX, int mouseY) {
+        int x = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
+        int y = topPos + ROT_TOGGLE_PAD_Y;
+
+        boolean hovering = isMouseOverRect(x, y, ROT_TOGGLE_W, ROT_TOGGLE_H, mouseX, mouseY);
+
+        gui.pose().pushPose();
+        gui.pose().translate(0, 0, 350);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        float alpha = hovering ? 1f : 0.75f;
+        gui.setColor(1f, 1f, 1f, alpha);
+
+        ResourceLocation icon = modelViewer.isAutoRotateEnabled() ? ROT_TOGGLE_ON_ICON : ROT_TOGGLE_OFF_ICON;
+        gui.blit(icon, x, y, 0, 0, ROT_TOGGLE_W, ROT_TOGGLE_H, ROT_TOGGLE_W, ROT_TOGGLE_H);
+
+        gui.setColor(1f, 1f, 1f, 1f);
+
+        RenderSystem.disableBlend();
+        gui.pose().popPose();
+    }
+
+    private boolean clickRotationToggle(double mouseX, double mouseY) {
+        int x = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
+        int y = topPos + ROT_TOGGLE_PAD_Y;
+
+        if (mouseX >= x && mouseX < x + ROT_TOGGLE_W && mouseY >= y && mouseY < y + ROT_TOGGLE_H) {
+            boolean next = !modelViewer.isAutoRotateEnabled();
+            modelViewer.setAutoRotateEnabled(next);
+
+            if (minecraft.player != null) {
+                minecraft.player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, 1f, 1f);
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    // -----------------------
+    // Render Marker toggle
+    // -----------------------
+    private void renderMarkerToggle(GuiGraphics gui, int mouseX, int mouseY) {
+        int x = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
+        int y = topPos + ROT_TOGGLE_PAD_Y + ROT_TOGGLE_H + MARKER_TOGGLE_SPACING_Y;
+
+        boolean hovering = isMouseOverRect(x, y, MARKER_TOGGLE_W, MARKER_TOGGLE_H, mouseX, mouseY);
+
+        gui.pose().pushPose();
+        gui.pose().translate(0, 0, 350);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        float alpha = hovering ? 1f : 0.75f;
+        gui.setColor(1f, 1f, 1f, alpha);
+
+        ResourceLocation icon = markerManager.isEnabled() ? ROT_TOGGLE_ON_ICON : ROT_TOGGLE_OFF_ICON;
+        gui.blit(icon, x, y, 0, 0, MARKER_TOGGLE_W, MARKER_TOGGLE_H, MARKER_TOGGLE_W, MARKER_TOGGLE_H);
+
+        gui.setColor(1f, 1f, 1f, 1f);
+
+        RenderSystem.disableBlend();
+        gui.pose().popPose();
+    }
+
+    private boolean clickMarkerToggle(double mouseX, double mouseY) {
+        int x = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
+        int y = topPos + ROT_TOGGLE_PAD_Y + ROT_TOGGLE_H + MARKER_TOGGLE_SPACING_Y;
+
+        if (mouseX >= x && mouseX < x + MARKER_TOGGLE_W && mouseY >= y && mouseY < y + MARKER_TOGGLE_H) {
+            markerManager.setEnabled(!markerManager.isEnabled());
+
+            if (minecraft.player != null) {
+                minecraft.player.playNotifySound(net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK.value(),
+                        net.minecraft.sounds.SoundSource.MASTER, 1f, 1f);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void renderRotationToggleLabel(GuiGraphics gui) {
+        int toggleX = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
+        int toggleY = topPos + ROT_TOGGLE_PAD_Y;
+
+        renderToggleLabel(gui, "ROTATION:", toggleX, toggleY, ROT_TOGGLE_H);
+    }
+
+    private void renderMarkerToggleLabel(GuiGraphics gui) {
+        int toggleX = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
+        int toggleY = topPos + ROT_TOGGLE_PAD_Y + ROT_TOGGLE_H + MARKER_TOGGLE_SPACING_Y;
+
+        renderToggleLabel(gui, "MARKERS:", toggleX, toggleY, MARKER_TOGGLE_H);
+    }
+
+    private void renderToggleLabel(GuiGraphics gui, String text, int toggleX, int toggleY, int toggleH) {
+        int textW = this.font.width(text);
+
+        // Position: left of toggle, vertically centered to toggle
+        int x = toggleX - TOGGLE_LABEL_GAP_PX - Math.round(textW * TOGGLE_LABEL_SCALE);
+        int y = toggleY + (toggleH / 2) - Math.round((this.font.lineHeight * TOGGLE_LABEL_SCALE) / 2f);
+
+        gui.pose().pushPose();
+        gui.pose().translate(0, 0, 350); // match toggle layer
+        gui.pose().scale(TOGGLE_LABEL_SCALE, TOGGLE_LABEL_SCALE, 1f);
+        gui.drawString(this.font, text, (int) (x / TOGGLE_LABEL_SCALE), (int) (y / TOGGLE_LABEL_SCALE), TOGGLE_LABEL_COLOR, false);
+        gui.pose().popPose();
+    }
 
     // -----------------------
     // Renderer Methods
@@ -712,54 +839,37 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         boolean isSkin =
                 viewMode == ViewMode.SKIN;
 
-
         if (isHeadGroup) {
-
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderHeadModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-
         }
         else if (isTorsoGroup) {
-
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderTorsoModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-
         }
         else if (isRightArm) {
-
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderRightArmModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-
         }
         else if (isLeftArm) {
-
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderLeftArmModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-
         }
         else if (isLeftLeg) {
-
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderLeftLegModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-
         }
         else if (isRightLeg) {
-
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderRightLegModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-
         }
         else if (isSkin) {
-
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderSkinModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-
         }
         else {
-
             modelFade = Math.max(modelFade - 0.06f, 0f);
             modelViewer.render(gui, modelX, modelY, viewMode.baseScale, minecraft.player, viewMode);
-
         }
 
         if (cropping) {
@@ -794,10 +904,14 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         markerManager.render(gui, modelX, modelY, mouseX, mouseY,
                 viewMode, modelViewer.getRotationPhase(), this.font);
 
+        renderRotationToggleLabel(gui);
+        renderRotationToggle(gui, mouseX, mouseY);
+
+        renderMarkerToggleLabel(gui);
+        renderMarkerToggle(gui, mouseX, mouseY);
+
         renderRemovalWarning(gui, mouseX, mouseY);
         this.renderTooltip(gui, mouseX, mouseY);
-
-
     }
 
     private void renderHeadModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
@@ -810,8 +924,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, skeletonPreview);
         RenderSystem.disableBlend();
     }
-
-
 
     private void renderTorsoModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
         Quaternionf spin = new Quaternionf()
@@ -892,9 +1004,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         RenderSystem.disableBlend();
     }
 
-
-
-
     // -----------------------
     // Warning Icon Helper
     // -----------------------
@@ -965,14 +1074,14 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         gui.pose().popPose();
     }
 
-
-
-
     // -----------------------
     // Mouse Interaction
     // -----------------------
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+
+        if (button == 0 && clickRotationToggle(mouseX, mouseY)) return true;
+        if (button == 0 && clickMarkerToggle(mouseX, mouseY)) return true;
 
         if (button == 0 && viewMode != ViewMode.FULL_BODY) {
             int bx = leftPos + backX;
@@ -1014,7 +1123,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         if (hovered != null && !isSlotVisible(hovered)) {
             return false;
         }
-
 
         return super.mouseClicked(mouseX, mouseY, button);
     }

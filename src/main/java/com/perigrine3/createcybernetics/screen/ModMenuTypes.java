@@ -34,6 +34,8 @@ public class ModMenuTypes {
             registerMenuType("arm_cannon_menu", ArmCannonMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<HeatEngineMenu>> HEAT_ENGINE_MENU =
             registerMenuType("heat_engine_menu", HeatEngineMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<CyberdeckMenu>> CYBERDECK_MENU =
+            registerMenuType("cyberdeck_menu", CyberdeckMenu::new);
 
 
     private static <T extends AbstractContainerMenu>DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {

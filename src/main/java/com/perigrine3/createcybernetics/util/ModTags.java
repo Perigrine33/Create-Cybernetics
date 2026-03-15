@@ -36,6 +36,7 @@ public class ModTags {
         public static final TagKey<Item> ENERGY_GENERATING_CYBERWARE = createTag("energy_generating_cyberware");
         public static final TagKey<Item> ARM_CANNON_AMMO = createTag("arm_cannon_ammo");
         public static final TagKey<Item> DATA_SHARDS = createTag("data_shards");
+        public static final TagKey<Item> QUICKHACK_SHARDS = createTag("quickhack_shards");
 
         public static final TagKey<Item> CYBERWARE_ITEM = createTag("cyberware_item");
         public static final TagKey<Item> WETWARE_ITEM = createTag("wetware_item");

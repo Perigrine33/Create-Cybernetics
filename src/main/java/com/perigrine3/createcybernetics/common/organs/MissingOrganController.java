@@ -108,8 +108,7 @@ public final class MissingOrganController {
 
         /* -------------------- EYES -------------------- */
         if (!hasEyes) {
-            refreshEffect(player, MobEffects.BLINDNESS, 40, 1);
-            refreshEffect(player, MobEffects.DARKNESS, 40, 0);
+
         }
 
 
@@ -235,14 +234,6 @@ public final class MissingOrganController {
         try {
             player.setPose(Pose.SWIMMING);
         } catch (Throwable ignored) {}
-    }
-
-    private static void refreshEffect(Player player, Holder<MobEffect> effect, int durationTicks, int amplifier) {
-        MobEffectInstance cur = player.getEffect(effect);
-
-        if (cur == null || cur.getDuration() < 40 || cur.getAmplifier() != amplifier) {
-            player.addEffect(new MobEffectInstance(effect, durationTicks, amplifier, true, false, false));
-        }
     }
 
     private static void clearProneLike(Player player) {

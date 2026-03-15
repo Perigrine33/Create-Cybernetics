@@ -1,11 +1,11 @@
 package com.perigrine3.createcybernetics.effect;
 
+import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.common.damage.ModDamageSources;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -23,6 +23,7 @@ public class CyberwareRejectionEffect extends MobEffect {
     private static final int DEBUFF_EXTRA = 240;
 
     private static final float DAMAGE_CHANCE_PER_TICK = 0.003f;
+    private static final int NEUROPOZYNE_HUMANITY_PER_LEVEL = 25;
 
     public CyberwareRejectionEffect(MobEffectCategory category, int color) {
         super(category, color);
@@ -41,10 +42,12 @@ public class CyberwareRejectionEffect extends MobEffect {
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return true;
 
-        int currentHumanity = data.getHumanity();
-        int maxHumanity = Math.max(100, currentHumanity);
-        float percent = maxHumanity <= 0 ? 0f : (currentHumanity / (float) maxHumanity);
+        int neuroBonus = getNeuropozyneBonus(player);
 
+        int currentHumanity = data.getHumanity() + neuroBonus;
+        int maxHumanity = Math.max(1, ConfigValues.BASE_HUMANITY + data.getHumanityBonus() + neuroBonus);
+
+        float percent = currentHumanity / (float) maxHumanity;
         if (percent > DANGER_THRESHOLD) return true;
 
         float progress = (DANGER_THRESHOLD - percent) / DANGER_THRESHOLD;
@@ -54,9 +57,9 @@ public class CyberwareRejectionEffect extends MobEffect {
         int durationTicks = DEBUFF_BASE + Mth.floor(progress * DEBUFF_EXTRA);
         int debuffAmp = (progress >= 0.66f) ? 2 : (progress >= 0.33f) ? 1 : 0;
 
-        maybeApply(player, MobEffects.WEAKNESS,      chance * 1.00f, durationTicks, debuffAmp);
-        maybeApply(player, MobEffects.DIG_SLOWDOWN,  chance * 0.90f, durationTicks, debuffAmp);
-        maybeApply(player, MobEffects.CONFUSION,     chance * 0.80f, durationTicks, 0);
+        maybeApply(player, MobEffects.WEAKNESS, chance * 1.00f, durationTicks, debuffAmp);
+        maybeApply(player, MobEffects.DIG_SLOWDOWN, chance * 0.90f, durationTicks, debuffAmp);
+        maybeApply(player, MobEffects.CONFUSION, chance * 0.80f, durationTicks, 0);
 
         if (player.getRandom().nextFloat() < DAMAGE_CHANCE_PER_TICK) {
             float base = (float) (1 << Math.min(30, amplifier));
@@ -67,11 +70,19 @@ public class CyberwareRejectionEffect extends MobEffect {
         return true;
     }
 
+    private static int getNeuropozyneBonus(Player player) {
+        MobEffectInstance inst = player.getEffect(ModEffects.NEUROPOZYNE);
+        if (inst == null) return 0;
+        return (inst.getAmplifier() + 1) * NEUROPOZYNE_HUMANITY_PER_LEVEL;
+    }
+
     private static void maybeApply(Player player, Holder<MobEffect> effect, float chance, int duration, int amplifier) {
         if (chance <= 0f) return;
         if (player.getRandom().nextFloat() >= chance) return;
+
         MobEffectInstance existing = player.getEffect(effect);
         if (existing != null && existing.getDuration() > duration / 2) return;
+
         player.addEffect(new MobEffectInstance(effect, duration, amplifier, false, false, true));
     }
 }

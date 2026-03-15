@@ -61,13 +61,6 @@ public class BrainUpgradeItem extends Item implements ICyberwareItem {
 
     @Override
     public void onTick(Player player) {
-        if (!player.level().isClientSide) return;
-        if (ModItems.BRAINUPGRADES_CONSCIOUSNESSTRANSMITTER != null && ModItems.BRAINUPGRADES_CORTICALSTACK != null) {
-            if (net.neoforged.fml.ModList.get().isLoaded("createenchantmentindustry")) {
-                // functionality
-            }
-        }
 
-        ICyberwareItem.super.onTick(player);
     }
 }

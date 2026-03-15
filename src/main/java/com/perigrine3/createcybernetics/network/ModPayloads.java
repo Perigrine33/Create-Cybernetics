@@ -166,6 +166,12 @@ public final class ModPayloads {
                 })
         );
 
+        r.playToServer(
+                OpenCyberdeckPayload.TYPE,
+                OpenCyberdeckPayload.STREAM_CODEC,
+                OpenCyberdeckPayloadHandler::handle
+        );
+
         r.playToClient(
                 SandevistanSnapshotPayload.TYPE,
                 SandevistanSnapshotPayload.STREAM_CODEC,
@@ -198,6 +204,18 @@ public final class ModPayloads {
                 EnergyHudSyncPayload.TYPE,
                 EnergyHudSyncPayload.STREAM_CODEC,
                 EnergyHudSyncPayload::handle
+        );
+
+        r.playToServer(
+                CastCyberdeckQuickhackPayload.TYPE,
+                CastCyberdeckQuickhackPayload.STREAM_CODEC,
+                CastCyberdeckQuickhackHandler::handle
+        );
+
+        r.playToClient(
+                BehindYouSoundPayload.TYPE,
+                BehindYouSoundPayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> BehindYouSoundPayload.handle(payload))
         );
 
         // ---------------- CYBEREYE IRIS LAYOUT SYNC ----------------

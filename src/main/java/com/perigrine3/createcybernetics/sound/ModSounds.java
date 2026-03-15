@@ -23,6 +23,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> SANDY_STARTUP = registerSoundEvent("sandy_startup");
 //UI SOUNDS
     public static final Supplier<SoundEvent> METAL_CRUSHING = registerSoundEvent("metal_crushing");
+    public static final Supplier<SoundEvent> SURGERY = registerSoundEvent("surgery");
 //EFFECT SOUNDS
     public static final Supplier<SoundEvent> GLITCHY = registerSoundEvent("glitchy");
 

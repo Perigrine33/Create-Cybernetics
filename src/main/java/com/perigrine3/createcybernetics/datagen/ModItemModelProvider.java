@@ -30,6 +30,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.XP_CAPSULE.get());
         basicItem(ModItems.FACEPLATE.get());
         basicItem(ModItems.NETHERITE_QPU.get());
+        basicItem(ModItems.EXOSUIT1.get());
         basicItem(ModItems.DATURA_FLOWER.get());
         basicItem(ModItems.DATURA_SEED_POD.get());
 
@@ -41,9 +42,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.IRON_UPGRADE_TEMPLATE.get());
         basicItem(ModItems.GOLD_UPGRADE_TEMPLATE.get());
 
-        //basicItem(ModItems.QUICKHACK_BURNING.get());
-        //basicItem(ModItems.QUICKHACK_REBOOT.get());
-        //basicItem(ModItems.QUICKHACK_ITEM.get());
+        basicItem(ModItems.QUICKHACK_OVERHEAT.get());
+        basicItem(ModItems.QUICKHACK_REBOOT.get());
+        basicItem(ModItems.QUICKHACK_SCRAMBLE.get());
+        basicItem(ModItems.QUICKHACK_OPTICMALFUNCTION.get());
+        basicItem(ModItems.QUICKHACK_CYBERPSYCHOSIS.get());
+        basicItem(ModItems.QUICKHACK_BEHINDYOU.get());
+        basicItem(ModItems.QUICKHACK_DRAIN.get());
 
         basicItem(ModItems.MUSIC_DISC_CYBERPSYCHO.get());
         basicItem(ModItems.MUSIC_DISC_NEON_OVERLORDS.get());
@@ -219,6 +224,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BRAINUPGRADES_CYBERDECK.get());
         basicItem(ModItems.BRAINUPGRADES_IDEM.get());
         basicItem(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get());
+        basicItem(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get());
+        basicItem(ModItems.BRAINUPGRADES_ICEPROTOCOL.get());
 
             if (ModItems.BRAINUPGRADES_SPELLJAMMER != null) {
                 basicItem(ModItems.BRAINUPGRADES_SPELLJAMMER.get());

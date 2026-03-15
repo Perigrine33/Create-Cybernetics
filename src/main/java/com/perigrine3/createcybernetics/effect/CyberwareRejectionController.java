@@ -1,8 +1,10 @@
 package com.perigrine3.createcybernetics.effect;
 
+import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -12,8 +14,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
 public final class CyberwareRejectionController {
 
-    private static final int THRESHOLD_HUMANITY = 25;
-    private static final int REFRESH_EVERY_TICKS = 60;
+    private static final float THRESHOLD_PERCENT = 0.25f;
+    private static final int REFRESH_EVERY_TICKS = 20;
     private static final int DURATION = 200;
     private static final int NEUROPOZYNE_HUMANITY_PER_LEVEL = 25;
 
@@ -26,14 +28,25 @@ public final class CyberwareRejectionController {
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
-        int baseHumanity = data.getHumanityBase();
         int neuroBonus = getNeuropozyneBonus(player);
-        int effectiveHumanity = baseHumanity + neuroBonus;
 
-        if (effectiveHumanity <= THRESHOLD_HUMANITY) {
+        int currentHumanity = data.getHumanity() + neuroBonus;
+        int maxHumanity = Math.max(1, ConfigValues.BASE_HUMANITY + data.getHumanityBonus() + neuroBonus);
+        int thresholdHumanity = Mth.ceil(maxHumanity * THRESHOLD_PERCENT);
+
+        if (currentHumanity <= thresholdHumanity) {
             MobEffectInstance existing = player.getEffect(ModEffects.CYBERWARE_REJECTION);
             int amp = existing != null ? existing.getAmplifier() : 0;
-            player.addEffect(new MobEffectInstance(ModEffects.CYBERWARE_REJECTION, DURATION, amp, false, true, true));
+            player.addEffect(new MobEffectInstance(
+                    ModEffects.CYBERWARE_REJECTION,
+                    DURATION,
+                    amp,
+                    false,
+                    true,
+                    true
+            ));
+        } else {
+            player.removeEffect(ModEffects.CYBERWARE_REJECTION);
         }
     }
 

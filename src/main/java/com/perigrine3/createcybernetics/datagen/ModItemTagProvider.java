@@ -87,6 +87,15 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.DATA_SHARD_BIOCHIP.get())
                 .add(ModItems.DATA_SHARD_INFOLOG.get());
 
+//QUICKHACK SHARDS
+        tag(ModTags.Items.QUICKHACK_SHARDS)
+                .add(ModItems.QUICKHACK_DRAIN.get())
+                .add(ModItems.QUICKHACK_BEHINDYOU.get())
+                .add(ModItems.QUICKHACK_CYBERPSYCHOSIS.get())
+                .add(ModItems.QUICKHACK_OPTICMALFUNCTION.get())
+                .add(ModItems.QUICKHACK_SCRAMBLE.get())
+                .add(ModItems.QUICKHACK_REBOOT.get())
+                .add(ModItems.QUICKHACK_OVERHEAT.get());
 
 //CYBERWARE
         tag(ModTags.Items.CYBERWARE_ITEM)
@@ -130,6 +139,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_CYBERDECK.get())
                 .add(ModItems.BRAINUPGRADES_IDEM.get())
                 .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
+                .add(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get())
+                .add(ModItems.BRAINUPGRADES_ICEPROTOCOL.get())
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get())
                 .add(ModItems.HEARTUPGRADES_COUPLER.get())
                 .add(ModItems.HEARTUPGRADES_CREEPERHEART.get())
@@ -377,6 +388,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_CYBERDECK.get())
                 .add(ModItems.BRAINUPGRADES_IDEM.get())
                 .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
+                .add(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get())
+                .add(ModItems.BRAINUPGRADES_ICEPROTOCOL.get())
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_consciousnesstransmitter"))
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"))
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_spelljammer"));
