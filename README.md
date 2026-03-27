@@ -7,11 +7,15 @@ This mod adds Cybernetic technology to Minecraft! Based on the 1.10.2 mod, Cyber
 Credits: 
 ==========
 
-Modeling Artists: Artistic VoidK
+Modeling Artists: 
+    
+    Artistic VoidK - HexCore, Arc Thrower (not yet added)
 
 Translators: 
-    > Ukranian - Roll54, Tenwoc 
-    > Japanese - hamu6251ren0725-hue
+
+    Ukranian - Roll54, Tenwoc 
+    Japanese - hamu6251ren0725-hue
 
 Sound Design: 
-    > Tar - Robosurgeon Surgery Sound
+
+    Tar - Robosurgeon Surgery Sound
