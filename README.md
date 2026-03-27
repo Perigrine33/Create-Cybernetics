@@ -14,7 +14,7 @@ Modeling Artists:
 Translators: 
 
     Ukranian - Roll54, Tenwoc 
-    Japanese - hamu6251ren0725-hue
+    Japanese - hamutaromaru
 
 Sound Design: 
 
