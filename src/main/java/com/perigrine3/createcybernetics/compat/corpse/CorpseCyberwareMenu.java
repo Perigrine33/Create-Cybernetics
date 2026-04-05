@@ -1,7 +1,5 @@
 package com.perigrine3.createcybernetics.compat.corpse;
 
-import com.perigrine3.createcybernetics.CreateCybernetics;
-import de.maxhenkel.corpse.entities.CorpseEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -18,6 +16,7 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
 
     public static final int COLUMNS = 10;
     public static final int ROWS = 8;
+    private static final String CORPSE_ENTITY_CLASS = "de.maxhenkel.corpse.entities.CorpseEntity";
 
     private final Container cyberwareInventory;
     private final int corpseEntityId;
@@ -30,42 +29,20 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
                 buf.readInt(),
                 buf.readBoolean()
         );
-
-        CreateCybernetics.LOGGER.info(
-                "[corpse compat] client ctor hit; id={}, corpseEntityId={}",
-                id,
-                this.corpseEntityId
-        );
     }
 
-    public CorpseCyberwareMenu(MenuType<?> type, int id, Inventory playerInventory, CorpseEntity corpse, boolean editable) {
+    public CorpseCyberwareMenu(MenuType<?> type, int id, Inventory playerInventory, Entity corpse, boolean editable) {
         this(type, id, playerInventory, corpse != null ? corpse.getId() : -1, editable);
-
-        CreateCybernetics.LOGGER.info(
-                "[corpse compat] server ctor hit; id={}, corpse={}, editable={}",
-                id,
-                corpse,
-                editable
-        );
     }
 
     private CorpseCyberwareMenu(MenuType<?> type, int id, Inventory playerInventory, int corpseEntityId, boolean editable) {
         super(type, id);
         this.corpseEntityId = corpseEntityId;
 
-        CorpseEntity corpse = resolveCorpse(playerInventory.player, corpseEntityId);
+        Entity corpse = resolveCorpse(playerInventory.player, corpseEntityId);
         this.cyberwareInventory = corpse != null
                 ? new CorpseCyberwareInventory(corpse)
                 : new SimpleContainer(CorpseCompat.CYBERWARE_SLOT_COUNT);
-
-        CreateCybernetics.LOGGER.info(
-                "[corpse compat] common ctor hit; id={}, corpseEntityId={}, resolvedCorpse={}, editable={}, inventoryType={}",
-                id,
-                corpseEntityId,
-                corpse,
-                editable,
-                this.cyberwareInventory.getClass().getName()
-        );
 
         int startX = 7;
         int startY = 18;
@@ -94,36 +71,15 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
         for (int col = 0; col < 9; col++) {
             addSlot(new Slot(playerInventory, col, 15 + col * 18, hotbarY));
         }
-
-        CreateCybernetics.LOGGER.info(
-                "[corpse compat] menu slot setup finished; totalSlots={}, corpseSlots={}",
-                this.slots.size(),
-                CorpseCompat.CYBERWARE_SLOT_COUNT
-        );
     }
 
-    private static CorpseEntity resolveCorpse(Player player, int entityId) {
+    private static Entity resolveCorpse(Player player, int entityId) {
         if (player == null || player.level() == null || entityId < 0) {
-            CreateCybernetics.LOGGER.info(
-                    "[corpse compat] resolveCorpse failed; player={}, levelPresent={}, entityId={}",
-                    player,
-                    player != null && player.level() != null,
-                    entityId
-            );
             return null;
         }
 
         Entity entity = player.level().getEntity(entityId);
-        if (entity instanceof CorpseEntity corpse) {
-            CreateCybernetics.LOGGER.info("[corpse compat] resolveCorpse matched corpse={}", corpse);
-            return corpse;
-        }
-
-        CreateCybernetics.LOGGER.info(
-                "[corpse compat] resolveCorpse failed; entity was {}",
-                entity == null ? "null" : entity.getClass().getName()
-        );
-        return null;
+        return isCorpseEntity(entity) ? entity : null;
     }
 
     @Override
@@ -133,7 +89,6 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        ItemStack copy = ItemStack.EMPTY;
         Slot slot = slots.get(index);
 
         if (slot == null || !slot.hasItem()) {
@@ -141,7 +96,7 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
         }
 
         ItemStack stack = slot.getItem();
-        copy = stack.copy();
+        ItemStack copy = stack.copy();
 
         int corpseSlots = CorpseCompat.CYBERWARE_SLOT_COUNT;
         if (index < corpseSlots) {
@@ -161,20 +116,26 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
         return copy;
     }
 
+    private static boolean isCorpseEntity(Entity entity) {
+        if (entity == null || !CorpseCompat.isLoaded()) {
+            return false;
+        }
+
+        try {
+            Class<?> corpseClass = Class.forName(CORPSE_ENTITY_CLASS);
+            return corpseClass.isInstance(entity);
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
     private static class CorpseCyberwareInventory implements Container {
-        private final CorpseEntity corpse;
+        private final Entity corpse;
         private final NonNullList<ItemStack> items;
 
-        private CorpseCyberwareInventory(CorpseEntity corpse) {
+        private CorpseCyberwareInventory(Entity corpse) {
             this.corpse = corpse;
             this.items = CorpseCompat.getCorpseCyberwareItems(corpse);
-
-            CreateCybernetics.LOGGER.info(
-                    "[corpse compat] CorpseCyberwareInventory init; corpse={}, itemCount={}, hasAnyCyberware={}",
-                    corpse,
-                    this.items.size(),
-                    !this.isEmpty()
-            );
         }
 
         @Override

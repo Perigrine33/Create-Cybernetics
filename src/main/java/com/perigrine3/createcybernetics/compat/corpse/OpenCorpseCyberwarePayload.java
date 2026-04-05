@@ -1,8 +1,5 @@
 package com.perigrine3.createcybernetics.compat.corpse;
 
-import com.perigrine3.createcybernetics.CreateCybernetics;
-import de.maxhenkel.corpse.entities.CorpseEntity;
-import de.maxhenkel.corpse.gui.CorpseInventoryContainer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -12,12 +9,28 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacketPayload {
 
+    private static final String CORPSE_INVENTORY_CONTAINER_CLASS = "de.maxhenkel.corpse.gui.CorpseInventoryContainer";
+    private static final String CORPSE_ENTITY_CLASS = "de.maxhenkel.corpse.entities.CorpseEntity";
+
+    private static volatile Class<?> corpseInventoryContainerClass;
+    private static volatile boolean triedResolveCorpseInventoryContainerClass = false;
+
+    private static volatile Class<?> corpseEntityClass;
+    private static volatile boolean triedResolveCorpseEntityClass = false;
+
+    private static volatile Method getCorpseMethod;
+    private static volatile boolean triedResolveGetCorpseMethod = false;
+
+    private static volatile Method isEditableMethod;
+    private static volatile boolean triedResolveIsEditableMethod = false;
+
     public static final Type<OpenCorpseCyberwarePayload> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "open_corpse_cyberware"));
+            new Type<>(ResourceLocation.fromNamespaceAndPath(com.perigrine3.createcybernetics.CreateCybernetics.MODID, "open_corpse_cyberware"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, OpenCorpseCyberwarePayload> STREAM_CODEC =
             StreamCodec.of(
@@ -31,26 +44,22 @@ public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacke
     }
 
     public static void handle(OpenCorpseCyberwarePayload payload, IPayloadContext ctx) {
-        CreateCybernetics.LOGGER.info("[corpse compat] payload received, corpseUUID={}", payload.corpseUUID());
-
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer player)) return;
-            if (!(player.containerMenu instanceof CorpseInventoryContainer corpseMenu)) return;
 
-            CorpseEntity corpse = corpseMenu.getCorpse();
-            if (corpse == null) return;
+            Object corpseMenu = player.containerMenu;
+            if (!isCorpseInventoryContainer(corpseMenu)) return;
+
+            Object corpse = getCorpseFromMenu(corpseMenu);
+            if (!(corpse instanceof net.minecraft.world.entity.Entity corpseEntity)) return;
+            if (!isCorpseEntity(corpseEntity)) return;
+
             if (payload.corpseUUID() == null) return;
-            if (!payload.corpseUUID().equals(corpse.getUUID())) return;
+            if (!payload.corpseUUID().equals(corpseEntity.getUUID())) return;
 
-            CorpseCompat.ensureCorpseCyberwareLoaded(corpse);
+            CorpseCompat.ensureCorpseCyberwareLoaded(corpseEntity);
 
-            CreateCybernetics.LOGGER.info(
-                    "[corpse compat] opening corpse cyberware menu; corpseUUID={}, corpseEntityId={}, editable={}, hasCyberware={}",
-                    corpse.getUUID(),
-                    corpse.getId(),
-                    corpseMenu.isEditable(),
-                    CorpseCompat.hasCyberware(corpse)
-            );
+            boolean editable = isEditable(corpseMenu);
 
             player.openMenu(
                     new SimpleMenuProvider(
@@ -58,16 +67,127 @@ public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacke
                                     ModCorpseCompatMenus.CORPSE_CYBERWARE.get(),
                                     id,
                                     inv,
-                                    corpse,
-                                    corpseMenu.isEditable()
+                                    corpseEntity,
+                                    editable
                             ),
                             Component.translatable("gui.createcybernetics.corpse_cyberware")
                     ),
                     buf -> {
-                        buf.writeInt(corpse.getId());
-                        buf.writeBoolean(corpseMenu.isEditable());
+                        buf.writeInt(corpseEntity.getId());
+                        buf.writeBoolean(editable);
                     }
             );
         });
+    }
+
+    private static boolean isCorpseInventoryContainer(Object menu) {
+        if (menu == null) return false;
+
+        Class<?> clazz = getCorpseInventoryContainerClass();
+        return clazz != null && clazz.isInstance(menu);
+    }
+
+    private static boolean isCorpseEntity(Object entity) {
+        if (entity == null) return false;
+
+        Class<?> clazz = getCorpseEntityClass();
+        return clazz != null && clazz.isInstance(entity);
+    }
+
+    private static Object getCorpseFromMenu(Object menu) {
+        if (menu == null) return null;
+
+        Method method = getGetCorpseMethod();
+        if (method == null) return null;
+
+        try {
+            return method.invoke(menu);
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    private static boolean isEditable(Object menu) {
+        if (menu == null) return false;
+
+        Method method = getIsEditableMethod();
+        if (method == null) return false;
+
+        try {
+            Object result = method.invoke(menu);
+            return result instanceof Boolean b && b;
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
+    private static Class<?> getCorpseInventoryContainerClass() {
+        if (triedResolveCorpseInventoryContainerClass) {
+            return corpseInventoryContainerClass;
+        }
+
+        triedResolveCorpseInventoryContainerClass = true;
+
+        try {
+            corpseInventoryContainerClass = Class.forName(CORPSE_INVENTORY_CONTAINER_CLASS);
+        } catch (Throwable ignored) {
+            corpseInventoryContainerClass = null;
+        }
+
+        return corpseInventoryContainerClass;
+    }
+
+    private static Class<?> getCorpseEntityClass() {
+        if (triedResolveCorpseEntityClass) {
+            return corpseEntityClass;
+        }
+
+        triedResolveCorpseEntityClass = true;
+
+        try {
+            corpseEntityClass = Class.forName(CORPSE_ENTITY_CLASS);
+        } catch (Throwable ignored) {
+            corpseEntityClass = null;
+        }
+
+        return corpseEntityClass;
+    }
+
+    private static Method getGetCorpseMethod() {
+        if (triedResolveGetCorpseMethod) {
+            return getCorpseMethod;
+        }
+
+        triedResolveGetCorpseMethod = true;
+
+        try {
+            Class<?> menuClass = getCorpseInventoryContainerClass();
+            if (menuClass != null) {
+                getCorpseMethod = menuClass.getMethod("getCorpse");
+            }
+        } catch (Throwable ignored) {
+            getCorpseMethod = null;
+        }
+
+        return getCorpseMethod;
+    }
+
+    private static Method getIsEditableMethod() {
+        if (triedResolveIsEditableMethod) {
+            return isEditableMethod;
+        }
+
+        triedResolveIsEditableMethod = true;
+
+        try {
+            Class<?> menuClass = getCorpseInventoryContainerClass();
+            if (menuClass != null) {
+                isEditableMethod = menuClass.getMethod("isEditable");
+            }
+        } catch (Throwable ignored) {
+            isEditableMethod = null;
+        }
+
+        return isEditableMethod;
     }
 }

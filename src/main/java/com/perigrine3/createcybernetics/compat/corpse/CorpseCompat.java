@@ -12,7 +12,6 @@ import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.item.generic.XPCapsuleItem;
 import com.perigrine3.createcybernetics.util.ModTags;
-import de.maxhenkel.corpse.entities.CorpseEntity;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -30,6 +29,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class CorpseCompat {
 
     public static final String CORPSE_MODID = "corpse";
+    private static final String CORPSE_ENTITY_CLASS = "de.maxhenkel.corpse.entities.CorpseEntity";
 
     private static final String ROOT_TAG = CreateCybernetics.MODID + "_corpse_cyberware";
     private static final String ITEMS_TAG = "Items";
@@ -46,6 +47,11 @@ public final class CorpseCompat {
     public static final int CYBERWARE_SLOT_COUNT = 80;
 
     private static final Map<UUID, PendingCorpseData> PENDING = new ConcurrentHashMap<>();
+
+    private static volatile Class<?> corpseEntityClass;
+    private static volatile boolean triedResolveCorpseClass = false;
+    private static volatile Method corpseGetCorpseUuidMethod;
+    private static volatile boolean triedResolveGetCorpseUuidMethod = false;
 
     private CorpseCompat() {
     }
@@ -94,19 +100,16 @@ public final class CorpseCompat {
 
         PacketDistributor.sendToPlayer(player, payload);
         PacketDistributor.sendToPlayersTrackingEntity(player, payload);
-
-        CreateCybernetics.LOGGER.info(
-                "[corpse compat] synced pending corpse visual snapshot on death; corpseOwnerUuid={}",
-                player.getUUID()
-        );
     }
 
     @SubscribeEvent
     public void onCorpseJoin(EntityJoinLevelEvent event) {
         if (event.getLevel().isClientSide()) return;
-        if (!(event.getEntity() instanceof CorpseEntity corpse)) return;
 
-        tryApplyPendingToCorpse(corpse);
+        Entity entity = event.getEntity();
+        if (!isCorpseEntity(entity)) return;
+
+        tryApplyPendingToCorpse(entity);
     }
 
     @SubscribeEvent
@@ -114,51 +117,48 @@ public final class CorpseCompat {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         Entity target = event.getTarget();
-        if (!(target instanceof CorpseEntity corpse)) return;
+        if (!isCorpseEntity(target)) return;
 
-        ensureCorpseCyberwareLoaded(corpse);
-        syncCorpseVisualSnapshotTo(player, corpse);
+        ensureCorpseCyberwareLoaded(target);
+        syncCorpseVisualSnapshotTo(player, target);
     }
 
-    public static void ensureCorpseCyberwareLoaded(CorpseEntity corpse) {
-        if (corpse == null) return;
+    public static void ensureCorpseCyberwareLoaded(Entity corpseEntity) {
+        if (corpseEntity == null) return;
+        if (!isCorpseEntity(corpseEntity)) return;
 
-        if (!hasStoredCorpseCyberwareData(corpse)) {
-            tryApplyPendingToCorpse(corpse);
+        if (!hasStoredCorpseCyberwareData(corpseEntity)) {
+            tryApplyPendingToCorpse(corpseEntity);
         }
     }
 
-    private static void tryApplyPendingToCorpse(CorpseEntity corpse) {
-        if (corpse == null) return;
+    private static void tryApplyPendingToCorpse(Entity corpseEntity) {
+        if (corpseEntity == null) return;
+        if (!isCorpseEntity(corpseEntity)) return;
 
-        Optional<UUID> corpseOwnerUuid = corpse.getCorpseUUID();
+        Optional<UUID> corpseOwnerUuid = getCorpseOwnerUuid(corpseEntity);
         if (corpseOwnerUuid.isEmpty()) return;
 
         UUID ownerUuid = corpseOwnerUuid.get();
         PendingCorpseData pending = PENDING.get(ownerUuid);
         if (pending == null) return;
 
-        writeCorpseCyberwareItems(corpse, pending.items());
-        setStoredCorpseCyberwareData(corpse, pending.data());
+        writeCorpseCyberwareItems(corpseEntity, pending.items());
+        setStoredCorpseCyberwareData(corpseEntity, pending.data());
 
-        if (hasStoredCorpseCyberwareData(corpse)) {
+        if (hasStoredCorpseCyberwareData(corpseEntity)) {
             PENDING.remove(ownerUuid);
-
-            CreateCybernetics.LOGGER.info(
-                    "[corpse compat] applied pending corpse cyberware to corpse; corpseOwnerUuid={}, corpseEntityUuid={}",
-                    ownerUuid,
-                    corpse.getUUID()
-            );
         }
     }
 
-    private static void syncCorpseVisualSnapshotTo(ServerPlayer player, CorpseEntity corpse) {
-        if (player == null || corpse == null) return;
+    private static void syncCorpseVisualSnapshotTo(ServerPlayer player, Entity corpseEntity) {
+        if (player == null || corpseEntity == null) return;
+        if (!isCorpseEntity(corpseEntity)) return;
 
-        Optional<UUID> corpseOwnerUuid = corpse.getCorpseUUID();
+        Optional<UUID> corpseOwnerUuid = getCorpseOwnerUuid(corpseEntity);
         if (corpseOwnerUuid.isEmpty()) return;
 
-        CorpseCyberwareData data = getStoredCorpseCyberwareData(corpse);
+        CorpseCyberwareData data = getStoredCorpseCyberwareData(corpseEntity);
         if (data.isEmpty()) return;
 
         PacketDistributor.sendToPlayer(
@@ -167,17 +167,21 @@ public final class CorpseCompat {
         );
     }
 
-    public static boolean hasCyberware(CorpseEntity corpse) {
-        for (ItemStack stack : getCorpseCyberwareItems(corpse)) {
+    public static boolean hasCyberware(Entity corpseEntity) {
+        for (ItemStack stack : getCorpseCyberwareItems(corpseEntity)) {
             if (!stack.isEmpty()) return true;
         }
         return false;
     }
 
-    public static NonNullList<ItemStack> getCorpseCyberwareItems(CorpseEntity corpse) {
+    public static NonNullList<ItemStack> getCorpseCyberwareItems(Entity corpseEntity) {
         NonNullList<ItemStack> items = NonNullList.withSize(CYBERWARE_SLOT_COUNT, ItemStack.EMPTY);
 
-        CompoundTag persistent = corpse.getPersistentData();
+        if (corpseEntity == null) {
+            return items;
+        }
+
+        CompoundTag persistent = corpseEntity.getPersistentData();
         if (!persistent.contains(ROOT_TAG, Tag.TAG_COMPOUND)) {
             return items;
         }
@@ -187,25 +191,29 @@ public final class CorpseCompat {
             return items;
         }
 
-        ContainerHelper.loadAllItems(root.getCompound(ITEMS_TAG), items, corpse.registryAccess());
+        ContainerHelper.loadAllItems(root.getCompound(ITEMS_TAG), items, corpseEntity.registryAccess());
         return items;
     }
 
-    public static void writeCorpseCyberwareItems(CorpseEntity corpse, NonNullList<ItemStack> items) {
-        CompoundTag persistent = corpse.getPersistentData();
+    public static void writeCorpseCyberwareItems(Entity corpseEntity, NonNullList<ItemStack> items) {
+        if (corpseEntity == null) return;
+
+        CompoundTag persistent = corpseEntity.getPersistentData();
         CompoundTag root = persistent.contains(ROOT_TAG, Tag.TAG_COMPOUND)
                 ? persistent.getCompound(ROOT_TAG)
                 : new CompoundTag();
 
         CompoundTag itemsTag = new CompoundTag();
-        ContainerHelper.saveAllItems(itemsTag, items, corpse.registryAccess());
+        ContainerHelper.saveAllItems(itemsTag, items, corpseEntity.registryAccess());
 
         root.put(ITEMS_TAG, itemsTag);
         persistent.put(ROOT_TAG, root);
     }
 
-    public static boolean hasStoredCorpseCyberwareData(CorpseEntity corpse) {
-        CompoundTag persistent = corpse.getPersistentData();
+    public static boolean hasStoredCorpseCyberwareData(Entity corpseEntity) {
+        if (corpseEntity == null) return false;
+
+        CompoundTag persistent = corpseEntity.getPersistentData();
         if (!persistent.contains(ROOT_TAG, Tag.TAG_COMPOUND)) return false;
 
         CompoundTag root = persistent.getCompound(ROOT_TAG);
@@ -213,14 +221,14 @@ public final class CorpseCompat {
                 && !root.getCompound(DATA_TAG).isEmpty();
     }
 
-    public static CorpseCyberwareData getStoredCorpseCyberwareData(CorpseEntity corpse) {
+    public static CorpseCyberwareData getStoredCorpseCyberwareData(Entity corpseEntity) {
         CorpseCyberwareData out = new CorpseCyberwareData();
 
-        if (corpse == null) {
+        if (corpseEntity == null) {
             return out;
         }
 
-        CompoundTag persistent = corpse.getPersistentData();
+        CompoundTag persistent = corpseEntity.getPersistentData();
         if (!persistent.contains(ROOT_TAG, Tag.TAG_COMPOUND)) {
             return out;
         }
@@ -234,10 +242,10 @@ public final class CorpseCompat {
         return out;
     }
 
-    public static void setStoredCorpseCyberwareData(CorpseEntity corpse, CorpseCyberwareData data) {
-        if (corpse == null || data == null) return;
+    public static void setStoredCorpseCyberwareData(Entity corpseEntity, CorpseCyberwareData data) {
+        if (corpseEntity == null || data == null) return;
 
-        CompoundTag persistent = corpse.getPersistentData();
+        CompoundTag persistent = corpseEntity.getPersistentData();
         CompoundTag root = persistent.contains(ROOT_TAG, Tag.TAG_COMPOUND)
                 ? persistent.getCompound(ROOT_TAG)
                 : new CompoundTag();
@@ -359,6 +367,72 @@ public final class CorpseCompat {
         int toNext = player.getXpNeededForNextLevel();
         int within = Math.round(player.experienceProgress * (float) toNext);
         return Math.max(0, base + within);
+    }
+
+    private static boolean isCorpseEntity(Entity entity) {
+        if (entity == null || !isLoaded()) return false;
+
+        Class<?> corpseClass = getCorpseEntityClass();
+        return corpseClass != null && corpseClass.isInstance(entity);
+    }
+
+    private static Optional<UUID> getCorpseOwnerUuid(Entity entity) {
+        if (entity == null || !isCorpseEntity(entity)) {
+            return Optional.empty();
+        }
+
+        try {
+            Method method = getCorpseGetCorpseUuidMethod();
+            if (method == null) {
+                return Optional.empty();
+            }
+
+            Object result = method.invoke(entity);
+            if (result instanceof Optional<?> optional) {
+                Object value = optional.orElse(null);
+                if (value instanceof UUID uuid) {
+                    return Optional.of(uuid);
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+
+        return Optional.empty();
+    }
+
+    private static Class<?> getCorpseEntityClass() {
+        if (triedResolveCorpseClass) {
+            return corpseEntityClass;
+        }
+
+        triedResolveCorpseClass = true;
+
+        try {
+            corpseEntityClass = Class.forName(CORPSE_ENTITY_CLASS);
+        } catch (Throwable ignored) {
+            corpseEntityClass = null;
+        }
+
+        return corpseEntityClass;
+    }
+
+    private static Method getCorpseGetCorpseUuidMethod() {
+        if (triedResolveGetCorpseUuidMethod) {
+            return corpseGetCorpseUuidMethod;
+        }
+
+        triedResolveGetCorpseUuidMethod = true;
+
+        try {
+            Class<?> corpseClass = getCorpseEntityClass();
+            if (corpseClass != null) {
+                corpseGetCorpseUuidMethod = corpseClass.getMethod("getCorpseUUID");
+            }
+        } catch (Throwable ignored) {
+            corpseGetCorpseUuidMethod = null;
+        }
+
+        return corpseGetCorpseUuidMethod;
     }
 
     private record PendingCorpseData(CorpseCyberwareData data, NonNullList<ItemStack> items) {

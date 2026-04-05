@@ -15,6 +15,7 @@ Translators:
 
     Ukranian - Roll54, Tenwoc 
     Japanese - hamutaromaru
+    Russian - InventedReality
 
 Sound Design: 
 
