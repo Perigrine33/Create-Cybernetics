@@ -3,10 +3,14 @@ package com.perigrine3.createcybernetics.mixin.client;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.perigrine3.createcybernetics.compat.corpse.CorpseVisualSnapshotClientCache;
+import com.perigrine3.createcybernetics.compat.corpse.CorpseVisualSnapshotRequestClientCache;
+import com.perigrine3.createcybernetics.compat.corpse.RequestCorpseVisualSnapshotPayload;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -34,45 +38,22 @@ public abstract class CorpseRendererMixin {
     @Unique
     private static final String DUMMY_PLAYER_CLASS = "de.maxhenkel.corpse.entities.DummyPlayer";
 
-    @Unique
-    private static Field createcybernetics$playersField;
-    @Unique
-    private static boolean createcybernetics$playersFieldResolved = false;
-
-    @Unique
-    private static Method createcybernetics$cachedMapGetMethod;
-    @Unique
-    private static boolean createcybernetics$cachedMapGetMethodResolved = false;
-
-    @Unique
-    private static Method createcybernetics$isSkeletonMethod;
-    @Unique
-    private static boolean createcybernetics$isSkeletonMethodResolved = false;
-
-    @Unique
-    private static Method createcybernetics$getCorpseUuidMethod;
-    @Unique
-    private static boolean createcybernetics$getCorpseUuidMethodResolved = false;
-
-    @Unique
-    private static Method createcybernetics$getCorpseNameMethod;
-    @Unique
-    private static boolean createcybernetics$getCorpseNameMethodResolved = false;
-
-    @Unique
-    private static Method createcybernetics$getEquipmentMethod;
-    @Unique
-    private static boolean createcybernetics$getEquipmentMethodResolved = false;
-
-    @Unique
-    private static Method createcybernetics$getCorpseModelMethod;
-    @Unique
-    private static boolean createcybernetics$getCorpseModelMethodResolved = false;
-
-    @Unique
-    private static Constructor<?> createcybernetics$dummyPlayerConstructor;
-    @Unique
-    private static boolean createcybernetics$dummyPlayerConstructorResolved = false;
+    @Unique private static Field createcybernetics$playersField;
+    @Unique private static boolean createcybernetics$playersFieldResolved = false;
+    @Unique private static Method createcybernetics$cachedMapGetMethod;
+    @Unique private static boolean createcybernetics$cachedMapGetMethodResolved = false;
+    @Unique private static Method createcybernetics$isSkeletonMethod;
+    @Unique private static boolean createcybernetics$isSkeletonMethodResolved = false;
+    @Unique private static Method createcybernetics$getCorpseUuidMethod;
+    @Unique private static boolean createcybernetics$getCorpseUuidMethodResolved = false;
+    @Unique private static Method createcybernetics$getCorpseNameMethod;
+    @Unique private static boolean createcybernetics$getCorpseNameMethodResolved = false;
+    @Unique private static Method createcybernetics$getEquipmentMethod;
+    @Unique private static boolean createcybernetics$getEquipmentMethodResolved = false;
+    @Unique private static Method createcybernetics$getCorpseModelMethod;
+    @Unique private static boolean createcybernetics$getCorpseModelMethodResolved = false;
+    @Unique private static Constructor<?> createcybernetics$dummyPlayerConstructor;
+    @Unique private static boolean createcybernetics$dummyPlayerConstructorResolved = false;
 
     @Dynamic
     @Inject(method = "render", at = @At("HEAD"))
@@ -93,15 +74,19 @@ public abstract class CorpseRendererMixin {
             return;
         }
 
+        CompoundTag cached = CorpseVisualSnapshotClientCache.get(mcEntity.getUUID());
+        if (cached.isEmpty()) {
+            if (CorpseVisualSnapshotRequestClientCache.markRequested(mcEntity.getUUID())) {
+                PacketDistributor.sendToServer(new RequestCorpseVisualSnapshotPayload(mcEntity.getUUID()));
+            }
+        }
+
         AbstractClientPlayer visualPlayer = createcybernetics$getOrCreateDummyPlayer(entity, mcEntity);
         if (visualPlayer == null) {
             return;
         }
 
-        CorpseVisualSnapshotClientCache.applyToPlayer(
-                visualPlayer,
-                createcybernetics$getCorpseOwnerUuid(entity).orElse(null)
-        );
+        CorpseVisualSnapshotClientCache.applyToPlayer(visualPlayer, mcEntity.getUUID());
     }
 
     @Unique

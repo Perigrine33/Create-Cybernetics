@@ -15,10 +15,14 @@ import java.util.UUID;
 public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacketPayload {
 
     private static final String CORPSE_INVENTORY_CONTAINER_CLASS = "de.maxhenkel.corpse.gui.CorpseInventoryContainer";
+    private static final String CORPSE_ADDITIONAL_CONTAINER_CLASS = "de.maxhenkel.corpse.gui.CorpseAdditionalContainer";
     private static final String CORPSE_ENTITY_CLASS = "de.maxhenkel.corpse.entities.CorpseEntity";
 
     private static volatile Class<?> corpseInventoryContainerClass;
     private static volatile boolean triedResolveCorpseInventoryContainerClass = false;
+
+    private static volatile Class<?> corpseAdditionalContainerClass;
+    private static volatile boolean triedResolveCorpseAdditionalContainerClass = false;
 
     private static volatile Class<?> corpseEntityClass;
     private static volatile boolean triedResolveCorpseEntityClass = false;
@@ -48,7 +52,7 @@ public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacke
             if (!(ctx.player() instanceof ServerPlayer player)) return;
 
             Object corpseMenu = player.containerMenu;
-            if (!isCorpseInventoryContainer(corpseMenu)) return;
+            if (!isSupportedCorpseContainer(corpseMenu)) return;
 
             Object corpse = getCorpseFromMenu(corpseMenu);
             if (!(corpse instanceof net.minecraft.world.entity.Entity corpseEntity)) return;
@@ -80,11 +84,16 @@ public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacke
         });
     }
 
-    private static boolean isCorpseInventoryContainer(Object menu) {
+    private static boolean isSupportedCorpseContainer(Object menu) {
         if (menu == null) return false;
 
-        Class<?> clazz = getCorpseInventoryContainerClass();
-        return clazz != null && clazz.isInstance(menu);
+        Class<?> invClass = getCorpseInventoryContainerClass();
+        if (invClass != null && invClass.isInstance(menu)) {
+            return true;
+        }
+
+        Class<?> additionalClass = getCorpseAdditionalContainerClass();
+        return additionalClass != null && additionalClass.isInstance(menu);
     }
 
     private static boolean isCorpseEntity(Object entity) {
@@ -97,7 +106,7 @@ public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacke
     private static Object getCorpseFromMenu(Object menu) {
         if (menu == null) return null;
 
-        Method method = getGetCorpseMethod();
+        Method method = getGetCorpseMethod(menu.getClass());
         if (method == null) return null;
 
         try {
@@ -110,7 +119,7 @@ public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacke
     private static boolean isEditable(Object menu) {
         if (menu == null) return false;
 
-        Method method = getIsEditableMethod();
+        Method method = getIsEditableMethod(menu.getClass());
         if (method == null) return false;
 
         try {
@@ -137,6 +146,22 @@ public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacke
         return corpseInventoryContainerClass;
     }
 
+    private static Class<?> getCorpseAdditionalContainerClass() {
+        if (triedResolveCorpseAdditionalContainerClass) {
+            return corpseAdditionalContainerClass;
+        }
+
+        triedResolveCorpseAdditionalContainerClass = true;
+
+        try {
+            corpseAdditionalContainerClass = Class.forName(CORPSE_ADDITIONAL_CONTAINER_CLASS);
+        } catch (Throwable ignored) {
+            corpseAdditionalContainerClass = null;
+        }
+
+        return corpseAdditionalContainerClass;
+    }
+
     private static Class<?> getCorpseEntityClass() {
         if (triedResolveCorpseEntityClass) {
             return corpseEntityClass;
@@ -153,41 +178,33 @@ public record OpenCorpseCyberwarePayload(UUID corpseUUID) implements CustomPacke
         return corpseEntityClass;
     }
 
-    private static Method getGetCorpseMethod() {
-        if (triedResolveGetCorpseMethod) {
+    private static Method getGetCorpseMethod(Class<?> menuClass) {
+        if (triedResolveGetCorpseMethod && getCorpseMethod != null && getCorpseMethod.getDeclaringClass().isAssignableFrom(menuClass)) {
             return getCorpseMethod;
         }
 
-        triedResolveGetCorpseMethod = true;
-
         try {
-            Class<?> menuClass = getCorpseInventoryContainerClass();
-            if (menuClass != null) {
-                getCorpseMethod = menuClass.getMethod("getCorpse");
-            }
+            Method method = menuClass.getMethod("getCorpse");
+            getCorpseMethod = method;
+            triedResolveGetCorpseMethod = true;
+            return method;
         } catch (Throwable ignored) {
-            getCorpseMethod = null;
+            return null;
         }
-
-        return getCorpseMethod;
     }
 
-    private static Method getIsEditableMethod() {
-        if (triedResolveIsEditableMethod) {
+    private static Method getIsEditableMethod(Class<?> menuClass) {
+        if (triedResolveIsEditableMethod && isEditableMethod != null && isEditableMethod.getDeclaringClass().isAssignableFrom(menuClass)) {
             return isEditableMethod;
         }
 
-        triedResolveIsEditableMethod = true;
-
         try {
-            Class<?> menuClass = getCorpseInventoryContainerClass();
-            if (menuClass != null) {
-                isEditableMethod = menuClass.getMethod("isEditable");
-            }
+            Method method = menuClass.getMethod("isEditable");
+            isEditableMethod = method;
+            triedResolveIsEditableMethod = true;
+            return method;
         } catch (Throwable ignored) {
-            isEditableMethod = null;
+            return null;
         }
-
-        return isEditableMethod;
     }
 }

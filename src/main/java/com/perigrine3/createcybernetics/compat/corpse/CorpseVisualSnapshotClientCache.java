@@ -15,39 +15,43 @@ public final class CorpseVisualSnapshotClientCache {
     private CorpseVisualSnapshotClientCache() {
     }
 
-    public static void put(UUID corpseOwnerUuid, CompoundTag snapshot) {
-        if (corpseOwnerUuid == null) return;
+    public static void put(UUID corpseEntityUuid, CompoundTag snapshot) {
+        if (corpseEntityUuid == null) return;
 
         if (snapshot == null || snapshot.isEmpty()) {
-            SNAPSHOTS.remove(corpseOwnerUuid);
+            SNAPSHOTS.remove(corpseEntityUuid);
             return;
         }
 
-        SNAPSHOTS.put(corpseOwnerUuid, snapshot.copy());
+        SNAPSHOTS.put(corpseEntityUuid, snapshot.copy());
     }
 
-    public static CompoundTag get(UUID corpseOwnerUuid) {
-        if (corpseOwnerUuid == null) return new CompoundTag();
+    public static CompoundTag get(UUID corpseEntityUuid) {
+        if (corpseEntityUuid == null) return new CompoundTag();
 
-        CompoundTag tag = SNAPSHOTS.get(corpseOwnerUuid);
+        CompoundTag tag = SNAPSHOTS.get(corpseEntityUuid);
         return tag == null ? new CompoundTag() : tag.copy();
     }
 
-    public static void remove(UUID corpseOwnerUuid) {
-        if (corpseOwnerUuid == null) return;
-        SNAPSHOTS.remove(corpseOwnerUuid);
+    public static void remove(UUID corpseEntityUuid) {
+        if (corpseEntityUuid == null) return;
+        SNAPSHOTS.remove(corpseEntityUuid);
     }
 
-    public static void applyToPlayer(Player visualPlayer, UUID corpseOwnerUuid) {
+    public static void clearAll() {
+        SNAPSHOTS.clear();
+    }
+
+    public static void applyToPlayer(Player visualPlayer, UUID corpseEntityUuid) {
         if (visualPlayer == null) return;
 
         CompoundTag pd = visualPlayer.getPersistentData();
         pd.remove(PlayerCyberwareData.HOLO_SNAPSHOT_FLAG);
         pd.remove(PlayerCyberwareData.HOLO_SNAPSHOT_CYBERWARE);
 
-        if (corpseOwnerUuid == null) return;
+        if (corpseEntityUuid == null) return;
 
-        CompoundTag snapshot = get(corpseOwnerUuid);
+        CompoundTag snapshot = get(corpseEntityUuid);
         if (snapshot.isEmpty()) return;
 
         pd.putBoolean(PlayerCyberwareData.HOLO_SNAPSHOT_FLAG, true);

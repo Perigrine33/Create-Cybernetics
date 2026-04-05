@@ -222,6 +222,12 @@ public final class ModPayloads {
                 com.perigrine3.createcybernetics.compat.corpse.CorpseVisualSnapshotPayload::handle
         );
 
+        r.playToServer(
+                com.perigrine3.createcybernetics.compat.corpse.RequestCorpseVisualSnapshotPayload.TYPE,
+                com.perigrine3.createcybernetics.compat.corpse.RequestCorpseVisualSnapshotPayload.STREAM_CODEC,
+                com.perigrine3.createcybernetics.compat.corpse.RequestCorpseVisualSnapshotPayload::handle
+        );
+
         // ---------------- CYBEREYE IRIS LAYOUT SYNC ----------------
 
 // Client -> Server

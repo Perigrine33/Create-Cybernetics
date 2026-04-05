@@ -10,7 +10,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.UUID;
 
-public record CorpseVisualSnapshotPayload(UUID corpseOwnerUuid, CompoundTag snapshot) implements CustomPacketPayload {
+public record CorpseVisualSnapshotPayload(UUID corpseEntityUuid, CompoundTag snapshot) implements CustomPacketPayload {
 
     public static final Type<CorpseVisualSnapshotPayload> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "corpse_visual_snapshot"));
@@ -18,7 +18,7 @@ public record CorpseVisualSnapshotPayload(UUID corpseOwnerUuid, CompoundTag snap
     public static final StreamCodec<RegistryFriendlyByteBuf, CorpseVisualSnapshotPayload> STREAM_CODEC =
             StreamCodec.of(
                     (buf, payload) -> {
-                        buf.writeUUID(payload.corpseOwnerUuid());
+                        buf.writeUUID(payload.corpseEntityUuid());
                         buf.writeNbt(payload.snapshot() == null ? new CompoundTag() : payload.snapshot());
                     },
                     buf -> new CorpseVisualSnapshotPayload(
@@ -34,8 +34,9 @@ public record CorpseVisualSnapshotPayload(UUID corpseOwnerUuid, CompoundTag snap
 
     public static void handle(CorpseVisualSnapshotPayload payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-            if (payload == null || payload.corpseOwnerUuid() == null) return;
-            CorpseVisualSnapshotClientCache.put(payload.corpseOwnerUuid(), payload.snapshot());
+            if (payload == null || payload.corpseEntityUuid() == null) return;
+            CorpseVisualSnapshotClientCache.put(payload.corpseEntityUuid(), payload.snapshot());
+            CorpseVisualSnapshotRequestClientCache.clear(payload.corpseEntityUuid());
         });
     }
 }

@@ -110,6 +110,19 @@ public final class CorpseCompat {
         if (!isCorpseEntity(entity)) return;
 
         tryApplyPendingToCorpse(entity);
+        syncCorpseVisualSnapshot(entity);
+    }
+
+    @SubscribeEvent
+    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (player.level().isClientSide()) return;
+
+        for (Entity entity : player.serverLevel().getAllEntities()) {
+            if (!isCorpseEntity(entity)) continue;
+            ensureCorpseCyberwareLoaded(entity);
+            syncCorpseVisualSnapshotTo(player, entity);
+        }
     }
 
     @SubscribeEvent
@@ -151,19 +164,30 @@ public final class CorpseCompat {
         }
     }
 
+    private static void syncCorpseVisualSnapshot(Entity corpseEntity) {
+        if (corpseEntity == null) return;
+        if (corpseEntity.level().isClientSide()) return;
+        if (!isCorpseEntity(corpseEntity)) return;
+
+        CorpseCyberwareData data = getStoredCorpseCyberwareData(corpseEntity);
+        if (data.isEmpty()) return;
+
+        PacketDistributor.sendToPlayersTrackingEntity(
+                corpseEntity,
+                new CorpseVisualSnapshotPayload(corpseEntity.getUUID(), data.getSnapshot())
+        );
+    }
+
     private static void syncCorpseVisualSnapshotTo(ServerPlayer player, Entity corpseEntity) {
         if (player == null || corpseEntity == null) return;
         if (!isCorpseEntity(corpseEntity)) return;
-
-        Optional<UUID> corpseOwnerUuid = getCorpseOwnerUuid(corpseEntity);
-        if (corpseOwnerUuid.isEmpty()) return;
 
         CorpseCyberwareData data = getStoredCorpseCyberwareData(corpseEntity);
         if (data.isEmpty()) return;
 
         PacketDistributor.sendToPlayer(
                 player,
-                new CorpseVisualSnapshotPayload(corpseOwnerUuid.get(), data.getSnapshot())
+                new CorpseVisualSnapshotPayload(corpseEntity.getUUID(), data.getSnapshot())
         );
     }
 
@@ -374,6 +398,14 @@ public final class CorpseCompat {
 
         Class<?> corpseClass = getCorpseEntityClass();
         return corpseClass != null && corpseClass.isInstance(entity);
+    }
+
+    public static boolean isCorpseEntityForCompat(Entity entity) {
+        return isCorpseEntity(entity);
+    }
+
+    public static Optional<UUID> getCorpseOwnerUuidForCompat(Entity entity) {
+        return getCorpseOwnerUuid(entity);
     }
 
     private static Optional<UUID> getCorpseOwnerUuid(Entity entity) {

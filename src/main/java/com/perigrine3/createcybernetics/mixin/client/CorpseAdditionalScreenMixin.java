@@ -17,11 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.lang.reflect.Field;
 
 @Pseudo
-@Mixin(targets = "de.maxhenkel.corpse.gui.CorpseInventoryScreen")
-public abstract class CorpseInventoryScreenMixin {
+@Mixin(targets = "de.maxhenkel.corpse.gui.CorpseAdditionalScreen")
+public abstract class CorpseAdditionalScreenMixin {
 
     @Unique
-    private static final String CORPSE_SCREEN_CLASS = "de.maxhenkel.corpse.gui.CorpseInventoryScreen";
+    private static final String CORPSE_ADDITIONAL_SCREEN_CLASS = "de.maxhenkel.corpse.gui.CorpseAdditionalScreen";
 
     @Unique
     private static Field createcybernetics$corpseField;
@@ -33,7 +33,7 @@ public abstract class CorpseInventoryScreenMixin {
             Component.translatable("gui.createcybernetics.corpse_cyberware_button");
 
     @Dynamic
-    @Inject(method = "updateButtons", at = @At("TAIL"))
+    @Inject(method = "init", at = @At("TAIL"))
     private void createcybernetics$addCyberwareButton(CallbackInfo ci) {
         if (!CorpseCompat.isLoaded()) return;
 
@@ -81,7 +81,7 @@ public abstract class CorpseInventoryScreenMixin {
         createcybernetics$corpseFieldResolved = true;
 
         try {
-            Class<?> screenClass = Class.forName(CORPSE_SCREEN_CLASS);
+            Class<?> screenClass = Class.forName(CORPSE_ADDITIONAL_SCREEN_CLASS);
             createcybernetics$corpseField = screenClass.getDeclaredField("corpse");
             createcybernetics$corpseField.setAccessible(true);
         } catch (Throwable ignored) {
