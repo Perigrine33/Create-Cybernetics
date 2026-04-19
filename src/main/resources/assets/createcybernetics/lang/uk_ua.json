@@ -2,17 +2,17 @@
   "translation_authors": "discord: roll_54, tenwoc",
 
   "createcybernetics.configuration.humanity": "Базове значення людяності",
-  "createcybernetics.configuration.keepCyberware": "Зберігати кіберпрограми після смерті",
+  "createcybernetics.configuration.keepCyberware": "Зберігати імпланти після смерті",
 
-  "commands.createcybernetics.implants.wrong_item": "Дозволені лише предмети кіберпрограм Cybernetics.",
-  "commands.createcybernetics.implants.no_cyberware": "У цілі відсутні дані про кіберпрограми.",
+  "commands.createcybernetics.implants.wrong_item": "Дозволені лише предмети імплантів Cybernetics.",
+  "commands.createcybernetics.implants.no_cyberware": "У цілі відсутні дані про імпланти.",
   "commands.createcybernetics.implants.install_fail": "Не вдалося встановити %s (немає слота / немає місця / недійсний імплант).",
   "commands.createcybernetics.implants.install_success": "Встановлено %s у %s.",
   "commands.createcybernetics.implants.remove_fail": "У %s не встановлено цей імплант.",
   "commands.createcybernetics.implants.remove_success": "Вилучено %s з %s.",
-  "commands.createcybernetics.implants.clear_success": "Очищено всі кіберпрограми та відновлено стандартні органи для %s.",
-  "command.createcybernetics.keep_cyberware.query": "Збереження кіберпрограм встановлено на %s (тільки під час виконання).",
-  "command.createcybernetics.keep_cyberware.set": "Збереження кіберпрограм наразі %s (тільки під час виконання, щоб зробити постійним, змініть у конфігурації).",
+  "commands.createcybernetics.implants.clear_success": "Очищено всі імпланти та відновлено стандартні органи для %s.",
+  "command.createcybernetics.keep_cyberware.query": "Збереження імплантів встановлено на %s (тільки під час виконання).",
+  "command.createcybernetics.keep_cyberware.set": "Збереження імплантів наразі %s (тільки під час виконання, щоб зробити постійним, змініть у конфігурації).",
   "commands.createcybernetics.energy_debug.set": "Відлагодження енергії: %s",
 
   "screen.createcybernetics.hud_layout": "Макет HUD",
