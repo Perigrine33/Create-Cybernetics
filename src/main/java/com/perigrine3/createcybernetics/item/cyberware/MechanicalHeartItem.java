@@ -3,13 +3,16 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -33,7 +36,6 @@ public class MechanicalHeartItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-
             tooltip.add(Component.translatable("tooltip.createcybernetics.heartupgrades_cyberheart.energy").withStyle(ChatFormatting.RED));
         }
     }
@@ -59,48 +61,59 @@ public class MechanicalHeartItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return ENERGY_PER_TICK;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
     @Override
-    public void onInstalled(Player player) { }
+    public void onInstalled(LivingEntity entity) { }
 
     @Override
-    public void onRemoved(Player player) { }
+    public void onRemoved(LivingEntity entity) { }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
-        if (player.level().isClientSide) return;
-        if (!player.isAlive()) return;
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (entity.level().isClientSide) return;
+        if (!entity.isAlive()) return;
 
-        if (!player.hasData(ModAttachments.CYBERWARE)) return;
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
+        InstalledCyberware cw;
 
-        InstalledCyberware cw = data.get(slot, index);
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return;
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return;
+
+            cw = data.get(slot, index);
+        } else {
+            if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            if (data == null) return;
+
+            cw = data.get(slot, index);
+        }
+
         if (cw == null) return;
 
         if (cw.isPowered()) {
-            if (player.hasEffect(MobEffects.WEAKNESS)) {
-                player.removeEffect(MobEffects.WEAKNESS);
+            if (entity.hasEffect(MobEffects.WEAKNESS)) {
+                entity.removeEffect(MobEffects.WEAKNESS);
             }
             return;
         }
 
-        if ((player.level().getGameTime() % 20L) == 0L) {
-            DamageSource src = player.damageSources().generic();
-            player.hurt(src, DAMAGE_PER_SECOND);
+        if ((entity.level().getGameTime() % 20L) == 0L) {
+            DamageSource src = entity.damageSources().generic();
+            entity.hurt(src, DAMAGE_PER_SECOND);
         }
     }
 
     @Override
-    public void onTick(Player player) {
-        if (player.level().isClientSide) return;
+    public void onTick(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
     }
 }

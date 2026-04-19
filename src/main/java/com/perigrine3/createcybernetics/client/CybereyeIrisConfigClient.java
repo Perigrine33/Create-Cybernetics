@@ -81,8 +81,6 @@ public final class CybereyeIrisConfigClient {
     private static final Map<UUID, Layout> CACHE = new ConcurrentHashMap<>();
 
     // ---- Defaults ----
-    // You requested default mapped 2 pixels down. Your previous default was (3,3).
-    // So new default = (3,5).
     private static Layout defaultLayout() {
         return new Layout(
                 new EyeLayout(IrisSize.ONE_BY_ONE, 3, 5),

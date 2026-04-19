@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "P": {
+      "item": "createcybernetics:component_plating"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+
+  "pattern": [
+    "P   P",
+    " PDP ",
+    " SES ",
+    " PDP ",
+    "P   P"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:brainupgrades_iceprotocol"
+  },
+  "show_notification": false
+}

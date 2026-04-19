@@ -5,6 +5,7 @@ import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -59,7 +60,7 @@ public class IntestineReplacementItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onTick(LivingEntity entity) {
+
     }
 }

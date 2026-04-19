@@ -2,13 +2,16 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -58,40 +61,40 @@ public class PiezoelectricEnergyGeneratorItem extends Item implements ICyberware
     }
 
     @Override
-    public int getEnergyGeneratedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        int pulseTicks = computePulseTicks(player);
-        return pulseTicks > 0 && (player.tickCount % pulseTicks) == 0 ? ENERGY_PER_PULSE : 0;
+    public int getEnergyGeneratedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        int pulseTicks = computePulseTicks(entity);
+        return pulseTicks > 0 && (entity.tickCount % pulseTicks) == 0 ? ENERGY_PER_PULSE : 0;
     }
 
-    private static int computePulseTicks(Player player) {
-        if (player.isSprinting()) return PULSE_TICKS_SPRINT;
-        if (player.isSwimming()) return PULSE_TICKS_SWIM;
+    private static int computePulseTicks(LivingEntity entity) {
+        if (entity.isSprinting()) return PULSE_TICKS_SPRINT;
+        if (entity.isSwimming()) return PULSE_TICKS_SWIM;
 
-        if (!player.onGround()) return 0;
+        if (!entity.onGround()) return 0;
 
-        double horizontalSpeedSqr = player.getDeltaMovement().horizontalDistanceSqr();
+        double horizontalSpeedSqr = entity.getDeltaMovement().horizontalDistanceSqr();
         if (horizontalSpeedSqr > WALKING_SPEED_SQR_EPS) return PULSE_TICKS_WALK;
 
         return 0;
     }
 
     @Override
-    public int getEnergyCapacity(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyCapacity(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 0;
     }
 
     @Override
-    public boolean acceptsGeneratedEnergy(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean acceptsGeneratedEnergy(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return false;
     }
 
     @Override
-    public boolean acceptsChargerEnergy(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean acceptsChargerEnergy(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return false;
     }
 
     @Override
-    public int getChargerEnergyReceivePerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getChargerEnergyReceivePerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 0;
     }
 
@@ -126,59 +129,72 @@ public class PiezoelectricEnergyGeneratorItem extends Item implements ICyberware
     }
 
     @Override
-    public void onInstalled(Player player) {}
+    public void onInstalled(LivingEntity entity) {}
 
     @Override
-    public void onRemoved(Player player) {}
+    public void onRemoved(LivingEntity entity) {}
 
     @Override
-    public void onTick(Player player) {
-        if (player.level().isClientSide) return;
-        if (!player.hasData(ModAttachments.CYBERWARE)) return;
+    public void onTick(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
-        if (!data.hasSpecificItem(this, CyberwareSlot.BONE)) return;
+        boolean hasInstalled;
 
-        boolean movingNow = player.isSwimming()
-                || (player.onGround() && player.getDeltaMovement().horizontalDistanceSqr() > WALKING_SPEED_SQR_EPS);
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return;
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return;
+            hasInstalled = data.hasSpecificItem(this, CyberwareSlot.BONE);
+        } else {
+            if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            if (data == null) return;
+            hasInstalled = data.hasSpecificItem(this, CyberwareSlot.BONE);
+        }
 
-        if (movingNow && (player.tickCount % MOVE_DAMAGE_CHECK_TICKS) == 0) {
-            if (player.getRandom().nextFloat() < MOVE_DAMAGE_CHANCE) {
-                player.hurt(player.damageSources().generic(), MOVE_DAMAGE);
+        if (!hasInstalled) return;
+
+        boolean movingNow = entity.isSwimming()
+                || (entity.onGround() && entity.getDeltaMovement().horizontalDistanceSqr() > WALKING_SPEED_SQR_EPS);
+
+        if (movingNow && (entity.tickCount % MOVE_DAMAGE_CHECK_TICKS) == 0) {
+            if (entity.getRandom().nextFloat() < MOVE_DAMAGE_CHANCE) {
+                entity.hurt(entity.damageSources().generic(), MOVE_DAMAGE);
             }
         }
 
-        boolean swimming = player.isSwimming();
-        if (swimming || player.getAbilities().flying || player.isFallFlying()) {
-            player.getPersistentData().remove(NBT_IN_AIR);
-            player.getPersistentData().remove(NBT_PEAK_Y);
+        boolean swimming = entity.isSwimming();
+        boolean playerFlying = entity instanceof Player player && (player.getAbilities().flying || player.isFallFlying());
+
+        if (swimming || playerFlying) {
+            entity.getPersistentData().remove(NBT_IN_AIR);
+            entity.getPersistentData().remove(NBT_PEAK_Y);
             return;
         }
 
-        boolean onGround = player.onGround();
-        boolean inAir = player.getPersistentData().getBoolean(NBT_IN_AIR);
+        boolean onGround = entity.onGround();
+        boolean inAir = entity.getPersistentData().getBoolean(NBT_IN_AIR);
 
         if (!onGround) {
             if (!inAir) {
-                player.getPersistentData().putBoolean(NBT_IN_AIR, true);
-                player.getPersistentData().putDouble(NBT_PEAK_Y, player.getY());
+                entity.getPersistentData().putBoolean(NBT_IN_AIR, true);
+                entity.getPersistentData().putDouble(NBT_PEAK_Y, entity.getY());
             } else {
-                double peak = player.getPersistentData().getDouble(NBT_PEAK_Y);
-                double y = player.getY();
-                if (y > peak) player.getPersistentData().putDouble(NBT_PEAK_Y, y);
+                double peak = entity.getPersistentData().getDouble(NBT_PEAK_Y);
+                double y = entity.getY();
+                if (y > peak) entity.getPersistentData().putDouble(NBT_PEAK_Y, y);
             }
         } else {
             if (inAir) {
-                double peak = player.getPersistentData().getDouble(NBT_PEAK_Y);
-                double drop = peak - player.getY();
+                double peak = entity.getPersistentData().getDouble(NBT_PEAK_Y);
+                double drop = peak - entity.getY();
 
-                if (drop >= MIN_FALL_BLOCKS_FOR_LAND_DAMAGE && player.getRandom().nextFloat() < LAND_DAMAGE_CHANCE) {
-                    player.hurt(player.damageSources().generic(), LAND_DAMAGE);
+                if (drop >= MIN_FALL_BLOCKS_FOR_LAND_DAMAGE && entity.getRandom().nextFloat() < LAND_DAMAGE_CHANCE) {
+                    entity.hurt(entity.damageSources().generic(), LAND_DAMAGE);
                 }
 
-                player.getPersistentData().remove(NBT_IN_AIR);
-                player.getPersistentData().remove(NBT_PEAK_Y);
+                entity.getPersistentData().remove(NBT_IN_AIR);
+                entity.getPersistentData().remove(NBT_PEAK_Y);
             }
         }
     }

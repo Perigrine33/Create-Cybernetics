@@ -2,17 +2,14 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
-import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.effect.AerostasisGyrobladderEffect;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -62,18 +59,23 @@ public class AerostasisItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
 
+        entity.removeEffect(ModEffects.AEROSTASIS_GYROBLADDER_EFFECT);
+
+        if (entity instanceof Player player) {
+            AerostasisGyrobladderEffect.disableFlight(player);
+        }
     }
 
     @Override
-    public void onTick(Player player) {
-        if (player.level().isClientSide) return;
-        player.addEffect(new MobEffectInstance(ModEffects.AEROSTASIS_GYROBLADDER_EFFECT, 20, 0, false, false, false));
+    public void onTick(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
+        entity.addEffect(new MobEffectInstance(ModEffects.AEROSTASIS_GYROBLADDER_EFFECT, 20, 0, false, false, false));
     }
 }

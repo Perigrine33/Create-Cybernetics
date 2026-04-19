@@ -3,7 +3,9 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -12,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -88,54 +91,101 @@ public class SyntheticChromatophoresItem extends Item implements ICyberwareItem 
         return -1;
     }
 
+    private int findEnabledIndex(EntityCyberwareData data, CyberwareSlot slot) {
+        InstalledCyberware[] arr = data.getAll().get(slot);
+        if (arr == null) return -1;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware inst = arr[i];
+            if (inst == null) continue;
+
+            ItemStack st = inst.getItem();
+            if (st == null || st.isEmpty()) continue;
+
+            if (st.getItem() != this) continue;
+
+            return data.isEnabled(slot, i) ? i : -1;
+        }
+
+        return -1;
+    }
+
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        if (player == null) return 0;
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (entity == null) return 0;
         if (slot != CyberwareSlot.SKIN) return 0;
 
-        if (!player.hasData(ModAttachments.CYBERWARE)) return 0;
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return 0;
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return 0;
+
+            return findEnabledIndex(data, slot) >= 0 ? ENERGY_PER_TICK_ACTIVE : 0;
+        }
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return 0;
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) return 0;
 
         return findEnabledIndex(data, slot) >= 0 ? ENERGY_PER_TICK_ACTIVE : 0;
     }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
-        if (player.level().isClientSide) return;
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (entity.level().isClientSide) return;
 
         if (slot != CyberwareSlot.SKIN) {
-            player.removeEffect(MobEffects.INVISIBILITY);
+            entity.removeEffect(MobEffects.INVISIBILITY);
             return;
         }
 
-        if (!player.hasData(ModAttachments.CYBERWARE)) {
-            player.removeEffect(MobEffects.INVISIBILITY);
-            return;
+        boolean enabled;
+        InstalledCyberware cw;
+
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) {
+                entity.removeEffect(MobEffects.INVISIBILITY);
+                return;
+            }
+
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) {
+                entity.removeEffect(MobEffects.INVISIBILITY);
+                return;
+            }
+
+            enabled = data.isEnabled(slot, index);
+            cw = data.get(slot, index);
+        } else {
+            if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) {
+                entity.removeEffect(MobEffects.INVISIBILITY);
+                return;
+            }
+
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            if (data == null) {
+                entity.removeEffect(MobEffects.INVISIBILITY);
+                return;
+            }
+
+            enabled = data.isEnabled(slot, index);
+            cw = data.get(slot, index);
         }
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) {
-            player.removeEffect(MobEffects.INVISIBILITY);
-            return;
-        }
-
-        boolean enabled = data.isEnabled(slot, index);
-        InstalledCyberware cw = data.get(slot, index);
         boolean powered = cw != null && cw.isPowered();
 
         if (!enabled || !powered) {
-            player.removeEffect(MobEffects.INVISIBILITY);
+            entity.removeEffect(MobEffects.INVISIBILITY);
             return;
         }
 
-        player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 220, 0, false, false, false));
+        entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 220, 0, false, false, false));
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (!player.level().isClientSide) {
-            player.removeEffect(MobEffects.INVISIBILITY);
+    public void onRemoved(LivingEntity entity) {
+        if (!entity.level().isClientSide) {
+            entity.removeEffect(MobEffects.INVISIBILITY);
         }
     }
 }

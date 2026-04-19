@@ -38,10 +38,11 @@ public class MarkerManager {
         }
     }
 
-
     private final List<Marker> markers = new ArrayList<>();
     private Marker hovered = null;
     private final ResourceLocation icon;
+
+    private boolean enabled = true;
 
     public MarkerManager(ResourceLocation iconTexture) {
         this.icon = iconTexture;
@@ -59,10 +60,24 @@ public class MarkerManager {
         return hovered;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (!enabled) hovered = null;
+    }
+
     public void render(GuiGraphics gui, int modelX, int modelY,
                        double mouseX, double mouseY,
                        RobosurgeonScreen.ViewMode viewMode, float markerPhase,
                        Font font) {
+
+        if (!enabled) {
+            hovered = null;
+            return;
+        }
 
         RenderSystem.setShaderTexture(0, icon);
         hovered = null;
@@ -122,6 +137,8 @@ public class MarkerManager {
     public RobosurgeonScreen.ViewMode tryClick(double mouseX, double mouseY,
                                                int modelX, int modelY, float markerPhase,
                                                RobosurgeonScreen.ViewMode viewMode) {
+
+        if (!enabled) return null;
 
         for (Marker marker : markers) {
 

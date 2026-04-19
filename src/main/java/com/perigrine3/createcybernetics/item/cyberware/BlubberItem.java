@@ -2,13 +2,16 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.compat.coldsweat.ColdSweatCompat;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -53,22 +56,36 @@ public class BlubberItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onUnpoweredTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public void onUnpoweredTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
+
         ColdSweatCompat.clearCold(player);
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
+
         ColdSweatCompat.clearCold(player);
     }
 
     @Override
-    public void onTick(Player player) {
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    public void onTick(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
-        if (!data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.MUSCLE)) {
+
+        boolean hasPolarBearFur;
+
+        if (player.hasData(ModAttachments.CYBERWARE)) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            hasPolarBearFur = data != null && data.hasSpecificItem(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.MUSCLE);
+        } else {
+            hasPolarBearFur = false;
+        }
+
+        if (!hasPolarBearFur) {
             ColdSweatCompat.applyColdResistance(player, 0.50);
             ColdSweatCompat.applyColdDampening(player, 0.3);
         } else {

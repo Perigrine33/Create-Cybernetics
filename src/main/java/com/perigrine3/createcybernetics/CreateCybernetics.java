@@ -5,7 +5,11 @@ import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.block.entity.ModBlockEntities;
 import com.perigrine3.createcybernetics.common.attributes.ModAttributes;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.compat.CompatBootstrap;
+import com.perigrine3.createcybernetics.compat.corpse.CorpseCompat;
+import com.perigrine3.createcybernetics.compat.corpse.CorpseCyberwareScreen;
+import com.perigrine3.createcybernetics.compat.corpse.ModCorpseCompatMenus;
 import com.perigrine3.createcybernetics.compat.ironsspells.IronsSpellbooksCastSuppressCompat;
 import com.perigrine3.createcybernetics.compat.ironsspells.IronsSpellbooksCyberwareAttributes;
 import com.perigrine3.createcybernetics.component.ModDataComponents;
@@ -90,7 +94,12 @@ public class CreateCybernetics {
         CompatBootstrap.bootstrap();
 
         ModAttachments.register(eventBus);
+        ModMobAttachments.register(eventBus);
         ModAttributes.register(eventBus);
+
+        if (CorpseCompat.isLoaded()) {
+            ModCorpseCompatMenus.register(eventBus);
+        }
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -206,6 +215,12 @@ public class CreateCybernetics {
             event.register(ModMenuTypes.SPINAL_INJECTOR_MENU.get(), SpinalInjectorScreen::new);
             event.register(ModMenuTypes.ARM_CANNON_MENU.get(), ArmCannonScreen::new);
             event.register(ModMenuTypes.HEAT_ENGINE_MENU.get(), HeatEngineScreen::new);
+            event.register(ModMenuTypes.CYBERDECK_MENU.get(), CyberdeckScreen::new);
+
+            if (CorpseCompat.isLoaded()) {
+                event.register(ModCorpseCompatMenus.CORPSE_CYBERWARE.get(), CorpseCyberwareScreen::new);
+            }
+
         }
     }
 

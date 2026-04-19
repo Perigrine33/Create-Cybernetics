@@ -6,8 +6,12 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.entity.custom.CyberskeletonEntity;
+import com.perigrine3.createcybernetics.entity.custom.CyberzombieEntity;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -18,6 +22,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -29,6 +34,7 @@ public final class CyberneticsCommand {
     private static final String KEY_KEEP_SET   = "command.createcybernetics.keep_cyberware.set";
 
     // ---- Translation keys for Implants ----
+    private static final String KEY_INVALID_ENTITY = "commands.createcybernetics.implants.invalid_entity_target";
     private static final String KEY_WRONG_ITEM   = "commands.createcybernetics.implants.wrong_item";
     private static final String KEY_NO_CYBERWARE = "commands.createcybernetics.implants.no_cyberware";
     private static final String KEY_INSTALL_FAIL = "commands.createcybernetics.implants.install_fail";
@@ -40,7 +46,6 @@ public final class CyberneticsCommand {
     // ---- Persistent key + translation key for Energy Debug ----
     private static final String PKEY_ENERGY_DEBUG = "cc_energy_debug_enabled";
     private static final String KEY_ENERGY_DEBUG_SET = "commands.createcybernetics.energy_debug.set";
-
 
     private static final SuggestionProvider<CommandSourceStack> CYBERWARE_ITEM_SUGGESTIONS =
             (context, builder) -> SharedSuggestionProvider.suggestResource(
@@ -59,98 +64,122 @@ public final class CyberneticsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext ctx) {
         dispatcher.register(Commands.literal("cybernetics").requires(src -> src.hasPermission(2))
 
-                                .then(Commands.literal("implants")
+                .then(Commands.literal("implants")
 
-                                        .then(Commands.literal("install")
-                                                .then(Commands.argument("player", EntityArgument.player())
-                                                        .then(Commands.argument("item", ItemArgument.item(ctx))
-                                                                .suggests(CYBERWARE_ITEM_SUGGESTIONS)
-                                                                .executes(c -> {
-                                                                    ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                                                                    Item item = ItemArgument.getItem(c, "item").getItem();
-                                                                    return install(c.getSource(), target, item);
-                                                                })
-                                                        )
-                                                )
-                                        )
-
-                                        .then(Commands.literal("remove")
-                                                .then(Commands.argument("player", EntityArgument.player())
-                                                        .then(Commands.argument("item", ItemArgument.item(ctx))
-                                                                .suggests(CYBERWARE_ITEM_SUGGESTIONS)
-                                                                .executes(c -> {
-                                                                    ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                                                                    Item item = ItemArgument.getItem(c, "item").getItem();
-                                                                    return remove(c.getSource(), target, item);
-                                                                })
-                                                        )
-                                                )
-                                        )
-
-                                        .then(Commands.literal("list")
-                                                .then(Commands.argument("player", EntityArgument.player())
-                                                        .executes(c -> {
-                                                            ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                                                            return list(c.getSource(), target);
-                                                        })
-                                                )
-                                        )
-
-                                        .then(Commands.literal("clear")
-                                                .then(Commands.argument("player", EntityArgument.player())
-                                                        .executes(c -> {
-                                                            ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                                                            return clear(c.getSource(), target);
-                                                        })
-                                                )
-                                        )
-                                )
-
-                                .then(Commands.literal("keepCyberware")
-                                        .then(Commands.argument("value", BoolArgumentType.bool())
-                                            .executes(c -> {
-                                                boolean value = BoolArgumentType.getBool(c, "value");
-                                                ConfigValues.KEEP_CYBERWARE = value;
-
-                                                Component state = Component.translatable(value ? "options.on" : "options.off");
-                                                c.getSource().sendSuccess(
-                                                        () -> Component.translatable(KEY_KEEP_SET, state),
-                                                        true);
-                                                return 1;
-                                            })
-                                        )
-                                )
-
-                                .then(Commands.literal("energyDebug")
-                                        .then(Commands.argument("value", BoolArgumentType.bool())
+                        .then(Commands.literal("install")
+                                .then(Commands.argument("target", EntityArgument.entity())
+                                        .then(Commands.argument("item", ItemArgument.item(ctx))
+                                                .suggests(CYBERWARE_ITEM_SUGGESTIONS)
                                                 .executes(c -> {
-                                                    ServerPlayer target = c.getSource().getPlayerOrException();
-                                                    boolean value = BoolArgumentType.getBool(c, "value");
-                                                    setEnergyDebug(target, value);
+                                                    Entity target = EntityArgument.getEntity(c, "target");
+                                                    Item item = ItemArgument.getItem(c, "item").getItem();
+                                                    return install(c.getSource(), target, item);
+                                                })
+                                        )
+                                )
+                        )
 
-                                                    Component state = Component.translatable(value ? "options.on" : "options.off");
-                                                    c.getSource().sendSuccess(
-                                                            () -> Component.translatable(KEY_ENERGY_DEBUG_SET, state),
-                                                            false);
-                                                    return 1;
+                        .then(Commands.literal("remove")
+                                .then(Commands.argument("target", EntityArgument.entity())
+                                        .then(Commands.argument("item", ItemArgument.item(ctx))
+                                                .suggests(CYBERWARE_ITEM_SUGGESTIONS)
+                                                .executes(c -> {
+                                                    Entity target = EntityArgument.getEntity(c, "target");
+                                                    Item item = ItemArgument.getItem(c, "item").getItem();
+                                                    return remove(c.getSource(), target, item);
+                                                })
+                                        )
+                                )
+                        )
+
+                        .then(Commands.literal("list")
+                                .then(Commands.argument("target", EntityArgument.entity())
+                                        .executes(c -> {
+                                            Entity target = EntityArgument.getEntity(c, "target");
+                                            return list(c.getSource(), target);
+                                        })
+                                )
+                        )
+
+                        .then(Commands.literal("clear")
+                                .then(Commands.argument("target", EntityArgument.entity())
+                                        .executes(c -> {
+                                            Entity target = EntityArgument.getEntity(c, "target");
+                                            return clear(c.getSource(), target);
+                                        })
+                                )
+                        )
+                )
+
+                .then(Commands.literal("keepCyberware")
+                        .then(Commands.argument("value", BoolArgumentType.bool())
+                                .executes(c -> {
+                                    boolean value = BoolArgumentType.getBool(c, "value");
+                                    ConfigValues.KEEP_CYBERWARE = value;
+
+                                    Component state = Component.translatable(value ? "options.on" : "options.off");
+                                    c.getSource().sendSuccess(
+                                            () -> Component.translatable(KEY_KEEP_SET, state),
+                                            true);
+                                    return 1;
+                                })
+                        )
+                )
+
+                .then(Commands.literal("energyDebug")
+                        .then(Commands.argument("value", BoolArgumentType.bool())
+                                .executes(c -> {
+                                    ServerPlayer target = c.getSource().getPlayerOrException();
+                                    boolean value = BoolArgumentType.getBool(c, "value");
+                                    setEnergyDebug(target, value);
+
+                                    Component state = Component.translatable(value ? "options.on" : "options.off");
+                                    c.getSource().sendSuccess(
+                                            () -> Component.translatable(KEY_ENERGY_DEBUG_SET, state),
+                                            false);
+                                    return 1;
                                 })
                         )
                 )
         );
     }
 
-
-
-
-
-
-    private static int install(CommandSourceStack src, ServerPlayer target, Item item) {
+    private static int install(CommandSourceStack src, Entity target, Item item) {
         if (!isCreateCyberneticsCyberwareItem(item)) {
             src.sendFailure(Component.translatable(KEY_WRONG_ITEM));
             return 0;
         }
 
-        PlayerCyberwareData data = target.getData(ModAttachments.CYBERWARE);
+        if (target instanceof ServerPlayer player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) {
+                src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
+                return 0;
+            }
+
+            ItemStack stack = new ItemStack(item);
+            boolean ok = data.commandInstall(player, stack);
+
+            if (!ok) {
+                src.sendFailure(Component.translatable(KEY_INSTALL_FAIL));
+                return 0;
+            }
+
+            data.recomputeHumanityBaseFromInstalled();
+            data.setDirty();
+            ModAttachments.syncCyberware(player);
+            player.syncData(ModAttachments.CYBERWARE);
+
+            src.sendSuccess(() -> Component.translatable(KEY_INSTALL_OK, stack.getHoverName(), player.getDisplayName()), false);
+            return 1;
+        }
+
+        if (!isValidCyberwareEntityTarget(target)) {
+            src.sendFailure(Component.translatable(KEY_INVALID_ENTITY, target.getDisplayName()));
+            return 0;
+        }
+
+        EntityCyberwareData data = target.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) {
             src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
             return 0;
@@ -160,24 +189,53 @@ public final class CyberneticsCommand {
         boolean ok = data.commandInstall(target, stack);
 
         if (!ok) {
-            src.sendFailure(Component.translatable(KEY_INSTALL_FAIL, stack.getHoverName()));
+            src.sendFailure(Component.translatable(KEY_INSTALL_FAIL));
             return 0;
         }
 
-        target.syncData(ModAttachments.CYBERWARE);
+        data.setDirty();
+        target.syncData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+
         src.sendSuccess(() -> Component.translatable(KEY_INSTALL_OK, stack.getHoverName(), target.getDisplayName()), false);
         return 1;
     }
 
-
-
-    private static int remove(CommandSourceStack src, ServerPlayer target, Item item) {
+    private static int remove(CommandSourceStack src, Entity target, Item item) {
         if (!isCreateCyberneticsCyberwareItem(item)) {
             src.sendFailure(Component.translatable(KEY_WRONG_ITEM));
             return 0;
         }
 
-        PlayerCyberwareData data = target.getData(ModAttachments.CYBERWARE);
+        if (target instanceof ServerPlayer player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) {
+                src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
+                return 0;
+            }
+
+            boolean ok = data.commandRemove(player, item);
+
+            if (!ok) {
+                src.sendFailure(Component.translatable(KEY_REMOVE_FAIL, player.getDisplayName()));
+                return 0;
+            }
+
+            data.recomputeHumanityBaseFromInstalled();
+            data.setDirty();
+            ModAttachments.syncCyberware(player);
+            player.syncData(ModAttachments.CYBERWARE);
+
+            Component itemName = item.getDescription();
+            src.sendSuccess(() -> Component.translatable(KEY_REMOVE_OK, itemName, player.getDisplayName()), false);
+            return 1;
+        }
+
+        if (!isValidCyberwareEntityTarget(target)) {
+            src.sendFailure(Component.translatable(KEY_INVALID_ENTITY, target.getDisplayName()));
+            return 0;
+        }
+
+        EntityCyberwareData data = target.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) {
             src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
             return 0;
@@ -190,17 +248,33 @@ public final class CyberneticsCommand {
             return 0;
         }
 
-        target.syncData(ModAttachments.CYBERWARE);
+        data.setDirty();
+        target.syncData(ModMobAttachments.CYBERENTITY_CYBERWARE);
 
         Component itemName = item.getDescription();
         src.sendSuccess(() -> Component.translatable(KEY_REMOVE_OK, itemName, target.getDisplayName()), false);
         return 1;
     }
 
+    private static int list(CommandSourceStack src, Entity target) {
+        if (target instanceof ServerPlayer player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) {
+                src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
+                return 0;
+            }
 
+            Component out = data.commandListComponent();
+            src.sendSuccess(() -> out, false);
+            return 1;
+        }
 
-    private static int list(CommandSourceStack src, ServerPlayer target) {
-        PlayerCyberwareData data = target.getData(ModAttachments.CYBERWARE);
+        if (!isValidCyberwareEntityTarget(target)) {
+            src.sendFailure(Component.translatable(KEY_INVALID_ENTITY, target.getDisplayName()));
+            return 0;
+        }
+
+        EntityCyberwareData data = target.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) {
             src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
             return 0;
@@ -211,10 +285,32 @@ public final class CyberneticsCommand {
         return 1;
     }
 
+    private static int clear(CommandSourceStack src, Entity target) {
+        if (target instanceof ServerPlayer player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) {
+                src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
+                return 0;
+            }
 
+            data.clear();
+            data.resetToDefaultOrgans();
 
-    private static int clear(CommandSourceStack src, ServerPlayer target) {
-        PlayerCyberwareData data = target.getData(ModAttachments.CYBERWARE);
+            data.recomputeHumanityBaseFromInstalled();
+            data.setDirty();
+            ModAttachments.syncCyberware(player);
+            player.syncData(ModAttachments.CYBERWARE);
+
+            src.sendSuccess(() -> Component.translatable(KEY_CLEAR_OK, player.getDisplayName()), false);
+            return 1;
+        }
+
+        if (!isValidCyberwareEntityTarget(target)) {
+            src.sendFailure(Component.translatable(KEY_INVALID_ENTITY, target.getDisplayName()));
+            return 0;
+        }
+
+        EntityCyberwareData data = target.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) {
             src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
             return 0;
@@ -222,7 +318,8 @@ public final class CyberneticsCommand {
 
         data.clear();
         data.resetToDefaultOrgans();
-        target.syncData(ModAttachments.CYBERWARE);
+        data.setDirty();
+        target.syncData(ModMobAttachments.CYBERENTITY_CYBERWARE);
 
         src.sendSuccess(() -> Component.translatable(KEY_CLEAR_OK, target.getDisplayName()), false);
         return 1;
@@ -232,4 +329,7 @@ public final class CyberneticsCommand {
         player.getPersistentData().putBoolean(PKEY_ENERGY_DEBUG, value);
     }
 
+    private static boolean isValidCyberwareEntityTarget(Entity entity) {
+        return true;
+    }
 }

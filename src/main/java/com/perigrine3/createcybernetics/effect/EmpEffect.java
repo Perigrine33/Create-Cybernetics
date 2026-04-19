@@ -1,11 +1,8 @@
 package com.perigrine3.createcybernetics.effect;
 
-import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
-import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.common.capabilities.*;
+import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,13 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public class EmpEffect extends MobEffect {
-
-    private static final ResourceLocation CYBERZOMBIE_ID =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberzombie");
-    private static final ResourceLocation CYBERSKELETON_ID =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberskeleton");
-    private static final ResourceLocation SMASHER_ID =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "smasher");
 
     public EmpEffect() {
         super(MobEffectCategory.HARMFUL, 0xFF4AB3FF);
@@ -33,26 +23,76 @@ public class EmpEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        if (!entity.level().isClientSide) {
-            if (entity instanceof Player player) {
-                if (player.hasData(ModAttachments.CYBERWARE)) {
-                    PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-                    if (data != null) {
-                        data.setEnergyStored(player, 0);
-                    }
-                }
-            } else if (entity instanceof Mob mob && isEmpImmobilizedMob(mob)) {
-                freezeMob(mob);
-            }
+        if (entity.level().isClientSide) {
+            return true;
         }
+
+        if (entity instanceof Player player) {
+            applyToPlayer(player);
+            return true;
+        }
+
+        applyToCyberentity(entity);
         return true;
     }
 
-    private static boolean isEmpImmobilizedMob(Mob mob) {
-        ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType());
-        if (key == null) return false;
+    private static void applyToPlayer(Player player) {
+        if (!player.hasData(ModAttachments.CYBERWARE)) return;
 
-        return key.equals(CYBERZOMBIE_ID) || key.equals(CYBERSKELETON_ID) || key.equals(SMASHER_ID);
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
+        if (!hasAnyInstalledCyberware(data)) return;
+
+        if (!data.hasSpecificItem(ModItems.BONEUPGRADES_CAPACITORFRAME.get(), CyberwareSlot.BONE)) {
+            data.setEnergyStored(player, 0);
+        }
+    }
+
+    private static void applyToCyberentity(LivingEntity entity) {
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
+
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+        if (data == null) return;
+        if (!hasAnyInstalledCyberware(data)) return;
+
+        if (!data.hasSpecificItem(ModItems.BONEUPGRADES_CAPACITORFRAME.get(), CyberwareSlot.BONE)) {
+            data.setEnergyStored(entity, 0);
+            if (entity instanceof Mob mob) {
+                freezeMob(mob);
+            }
+        }
+    }
+
+    private static boolean hasAnyInstalledCyberware(PlayerCyberwareData data) {
+        if (data == null) return false;
+
+        for (var entry : data.getAll().values()) {
+            if (entry == null) continue;
+
+            for (var installed : entry) {
+                if (installed == null) continue;
+                if (installed.getItem() == null || installed.getItem().isEmpty()) continue;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean hasAnyInstalledCyberware(EntityCyberwareData data) {
+        if (data == null) return false;
+
+        for (var entry : data.getAll().values()) {
+            if (entry == null) continue;
+
+            for (var installed : entry) {
+                if (installed == null) continue;
+                if (installed.getItem() == null || installed.getItem().isEmpty()) continue;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static void freezeMob(Mob mob) {

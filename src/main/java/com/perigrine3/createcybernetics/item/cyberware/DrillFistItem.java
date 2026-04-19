@@ -25,6 +25,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -64,7 +65,10 @@ public class DrillFistItem extends Item implements ICyberwareItem {
         }
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
 
     @Override
     public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
@@ -80,12 +84,27 @@ public class DrillFistItem extends Item implements ICyberwareItem {
         return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
     }
 
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
+    @Override
+    public boolean replacesOrgan() {
+        return false;
+    }
 
-    // ----------------------------
-    // Drill install checks / mapping
-    // ----------------------------
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
+
+    @Override
+    public void onInstalled(LivingEntity entity) {
+    }
+
+    @Override
+    public void onRemoved(LivingEntity entity) {
+    }
+
+    @Override
+    public void onTick(LivingEntity entity) {
+    }
 
     private static boolean hasDrillInstalled(Player player, CyberwareSlot slot) {
         if (!player.hasData(ModAttachments.CYBERWARE)) return false;
@@ -111,25 +130,20 @@ public class DrillFistItem extends Item implements ICyberwareItem {
 
     private static InteractionHand pickDrillSwingHandDeterministic(Player player) {
         boolean right = hasDrillInstalled(player, CyberwareSlot.RARM);
-        boolean left  = hasDrillInstalled(player, CyberwareSlot.LARM);
+        boolean left = hasDrillInstalled(player, CyberwareSlot.LARM);
 
         if (right && !left) return handForSlot(player, CyberwareSlot.RARM);
         if (left && !right) return handForSlot(player, CyberwareSlot.LARM);
 
-        // both: prefer the slot matching the player's main arm
         return (player.getMainArm() == HumanoidArm.RIGHT)
                 ? handForSlot(player, CyberwareSlot.RARM)
                 : handForSlot(player, CyberwareSlot.LARM);
     }
 
-    // ----------------------------
-    // Hand blocking helpers (your existing behavior)
-    // ----------------------------
-
     private static boolean drillBlocksMainHand(Player player) {
         HumanoidArm mainArm = player.getMainArm();
         boolean rightInstalled = hasDrillInstalled(player, CyberwareSlot.RARM);
-        boolean leftInstalled  = hasDrillInstalled(player, CyberwareSlot.LARM);
+        boolean leftInstalled = hasDrillInstalled(player, CyberwareSlot.LARM);
 
         return (mainArm == HumanoidArm.RIGHT) ? rightInstalled : leftInstalled;
     }
@@ -137,7 +151,7 @@ public class DrillFistItem extends Item implements ICyberwareItem {
     private static boolean drillBlocksOffhand(Player player) {
         HumanoidArm mainArm = player.getMainArm();
         boolean rightInstalled = hasDrillInstalled(player, CyberwareSlot.RARM);
-        boolean leftInstalled  = hasDrillInstalled(player, CyberwareSlot.LARM);
+        boolean leftInstalled = hasDrillInstalled(player, CyberwareSlot.LARM);
 
         return (mainArm == HumanoidArm.RIGHT) ? leftInstalled : rightInstalled;
     }
@@ -160,10 +174,6 @@ public class DrillFistItem extends Item implements ICyberwareItem {
         void drop(Player player, ItemStack stack);
     }
 
-    // ----------------------------
-    // Server-side hooks
-    // ----------------------------
-
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class DrillHooks {
         private DrillHooks() {}
@@ -174,13 +184,13 @@ public class DrillFistItem extends Item implements ICyberwareItem {
             if (player.level().isClientSide()) return;
 
             boolean blocksMain = drillBlocksMainHand(player);
-            boolean blocksOff  = drillBlocksOffhand(player);
+            boolean blocksOff = drillBlocksOffhand(player);
             if (!blocksMain && !blocksOff) return;
 
             ServerSideDropper dropper = (p, stack) -> p.drop(stack, true);
 
             if (blocksMain) dropAndClearHand(dropper, player, InteractionHand.MAIN_HAND);
-            if (blocksOff)  dropAndClearHand(dropper, player, InteractionHand.OFF_HAND);
+            if (blocksOff) dropAndClearHand(dropper, player, InteractionHand.OFF_HAND);
         }
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -230,17 +240,13 @@ public class DrillFistItem extends Item implements ICyberwareItem {
         }
     }
 
-    // ----------------------------
-    // Client-side swing control
-    // ----------------------------
-
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
     public static final class DrillClientHooks {
         private DrillClientHooks() {}
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onInteractionKey(InputEvent.InteractionKeyMappingTriggered event) {
-            if (!event.isAttack()) return; // left mouse button attack
+            if (!event.isAttack()) return;
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;
             if (player == null) return;
@@ -252,7 +258,6 @@ public class DrillFistItem extends Item implements ICyberwareItem {
             InteractionHand drillHand = pickDrillSwingHandDeterministic(player);
 
             event.setSwingHand(false);
-
             player.swing(drillHand, true);
         }
     }
@@ -310,16 +315,16 @@ public class DrillFistItem extends Item implements ICyberwareItem {
                     pose.translate(armPart.x / 20.0F, armPart.y / 32.0F, armPart.z / 16.0F);
                     pose.scale(1.15F, 1.15F, 1.15F);
 
-                    pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(/* pitch */ 0.0F));
-                    pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(/* yaw   */ 0.0F));
-                    pose.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(/* roll  */ 5F));
+                    pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0.0F));
+                    pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(0.0F));
+                    pose.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(5F));
                 } else {
                     pose.translate(armPart.x / 20.0F, armPart.y / 32.0F, armPart.z / 16.0F);
                     pose.scale(1.15F, 1.15F, 1.15F);
 
-                    pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(/* pitch */ 0.0F));
-                    pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(/* yaw   */ 0.0F));
-                    pose.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(/* roll  */ -5F));
+                    pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0.0F));
+                    pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(0.0F));
+                    pose.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-5F));
                 }
 
                 AttachmentAnchor anchor = (arm == HumanoidArm.LEFT)
@@ -352,5 +357,4 @@ public class DrillFistItem extends Item implements ICyberwareItem {
             return false;
         }
     }
-
 }

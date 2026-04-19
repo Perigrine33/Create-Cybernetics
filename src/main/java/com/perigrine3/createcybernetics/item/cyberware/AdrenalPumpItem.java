@@ -3,17 +3,20 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;      // ADDED
-import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData; // ADDED
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -33,11 +36,11 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
     private static final String NBT_NEXT_TRIGGER = "cc_adrenal_next_trigger";
     private static final String NBT_WAS_ACTIVE = "cc_adrenal_was_active";
 
-    private static final int BUFF_TICKS = 4 * 60 * 20;          // 4 minutes
-    private static final int COOLDOWN_TICKS = 5 * 60 * 20;      // 5 minutes
-    private static final int WEAKNESS_TICKS = 2 * 60 * 20;      // 2 minutes
-    private static final int SPEED_AMP = 0;                     // Speed I
-    private static final int STRENGTH_AMP = 0;                  // Strength I
+    private static final int BUFF_TICKS = 4 * 60 * 20;
+    private static final int COOLDOWN_TICKS = 5 * 60 * 20;
+    private static final int WEAKNESS_TICKS = 2 * 60 * 20;
+    private static final int SPEED_AMP = 0;
+    private static final int STRENGTH_AMP = 0;
 
     private static final int ENERGY_ACTIVATION_COST = 10;
 
@@ -50,18 +53,17 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-
             tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrades_adrenaline.energy").withStyle(ChatFormatting.RED));
         }
     }
 
     @Override
-    public int getEnergyActivationCost(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyActivationCost(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return ENERGY_ACTIVATION_COST;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
@@ -86,13 +88,13 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        player.getPersistentData().putBoolean(NBT_INSTALLED, true);
+    public void onInstalled(LivingEntity entity) {
+        entity.getPersistentData().putBoolean(NBT_INSTALLED, true);
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CompoundTag tag = player.getPersistentData();
+    public void onRemoved(LivingEntity entity) {
+        CompoundTag tag = entity.getPersistentData();
         tag.remove(NBT_INSTALLED);
         tag.remove(NBT_ACTIVE_UNTIL);
         tag.remove(NBT_NEXT_TRIGGER);
@@ -100,15 +102,18 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onTick(Player player) {
-        if (player.level().isClientSide) return;
-        if (!player.isAlive()) return;
-        if (player.isCreative() || player.isSpectator()) return;
+    public void onTick(LivingEntity entity) {
+        if (!(entity.level() instanceof ServerLevel)) return;
+        if (!entity.isAlive()) return;
 
-        CompoundTag tag = player.getPersistentData();
+        if (entity instanceof Player player) {
+            if (player.isCreative() || player.isSpectator()) return;
+        }
+
+        CompoundTag tag = entity.getPersistentData();
         if (!tag.getBoolean(NBT_INSTALLED)) return;
 
-        long now = player.level().getGameTime();
+        long now = entity.level().getGameTime();
         long activeUntil = tag.getLong(NBT_ACTIVE_UNTIL);
 
         boolean active = activeUntil > 0L && now < activeUntil;
@@ -118,8 +123,8 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
             tag.putBoolean(NBT_WAS_ACTIVE, true);
 
             if ((now % 20L) == 0L) {
-                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, SPEED_AMP, false, false, false));
-                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 40, STRENGTH_AMP, false, false, false));
+                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, SPEED_AMP, false, false, false));
+                entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 40, STRENGTH_AMP, false, false, false));
             }
 
             return;
@@ -129,11 +134,29 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
             tag.putBoolean(NBT_WAS_ACTIVE, false);
             tag.remove(NBT_ACTIVE_UNTIL);
 
-            player.removeEffect(MobEffects.MOVEMENT_SPEED);
-            player.removeEffect(MobEffects.DAMAGE_BOOST);
+            entity.removeEffect(MobEffects.MOVEMENT_SPEED);
+            entity.removeEffect(MobEffects.DAMAGE_BOOST);
 
-            player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, WEAKNESS_TICKS, 0, false, false, true));
+            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, WEAKNESS_TICKS, 0, false, false, true));
         }
+    }
+
+    private static boolean tryConsumeActivationEnergy(LivingEntity entity, int amount) {
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return false;
+
+            return data.tryConsumeEnergy(amount);
+        }
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return false;
+
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+        if (data == null) return false;
+
+        return data.tryConsumeEnergy(amount);
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -141,12 +164,15 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent
         public static void onLivingDamagePost(LivingDamageEvent.Post event) {
-            if (!(event.getEntity() instanceof ServerPlayer player)) return;
-            if (player.level().isClientSide) return;
-            if (!player.isAlive()) return;
-            if (player.isCreative() || player.isSpectator()) return;
+            LivingEntity entity = event.getEntity();
+            if (!(entity.level() instanceof ServerLevel)) return;
+            if (!entity.isAlive()) return;
 
-            CompoundTag tag = player.getPersistentData();
+            if (entity instanceof Player player) {
+                if (player.isCreative() || player.isSpectator()) return;
+            }
+
+            CompoundTag tag = entity.getPersistentData();
             if (!tag.getBoolean(NBT_INSTALLED)) return;
 
             DamageSource source = event.getSource();
@@ -155,22 +181,19 @@ public class AdrenalPumpItem extends Item implements ICyberwareItem {
 
             if (event.getNewDamage() <= 0.0F) return;
 
-            long now = player.level().getGameTime();
+            long now = entity.level().getGameTime();
             long next = tag.getLong(NBT_NEXT_TRIGGER);
             if (next != 0L && now < next) return;
 
-            if (!player.hasData(ModAttachments.CYBERWARE)) return;
-            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-            if (data == null) return;
-            if (!data.tryConsumeEnergy(ENERGY_ACTIVATION_COST)) return;
+            if (!tryConsumeActivationEnergy(entity, ENERGY_ACTIVATION_COST)) return;
 
             tag.putLong(NBT_ACTIVE_UNTIL, now + BUFF_TICKS);
             tag.putLong(NBT_NEXT_TRIGGER, now + COOLDOWN_TICKS);
             tag.putBoolean(NBT_WAS_ACTIVE, true);
 
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, SPEED_AMP, false, true, false));
-            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 40, STRENGTH_AMP, false, true, false));
-            player.removeEffect(MobEffects.WEAKNESS);
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, SPEED_AMP, false, true, false));
+            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 40, STRENGTH_AMP, false, true, false));
+            entity.removeEffect(MobEffects.WEAKNESS);
         }
 
         private Events() {}

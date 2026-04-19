@@ -108,8 +108,7 @@ public final class MissingOrganController {
 
         /* -------------------- EYES -------------------- */
         if (!hasEyes) {
-            refreshEffect(player, MobEffects.BLINDNESS, 40, 1);
-            refreshEffect(player, MobEffects.DARKNESS, 40, 0);
+
         }
 
 
@@ -120,33 +119,42 @@ public final class MissingOrganController {
 
         /* -------------------- LUNGS -------------------- */
         boolean hasGills = data.hasSpecificItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get(), CyberwareSlot.LUNGS);
+        boolean underWater = player.isUnderWater();
         boolean inWater = player.isUnderWater() || player.isInWaterOrRain();
 
-        if (!hasLungs) {
-            boolean canBreatheHere = hasGills && inWater;
+// Cases:
+// 1) Normal lungs present -> let vanilla handle air entirely.
+//    This preserves Respiration, Water Breathing, and your oxygen tank refund logic.
+// 2) No lungs, but gills in water -> breathe in water.
+// 3) No lungs, but gills out of water -> suffocate.
+// 4) No lungs and no gills -> suffocate.
+// 5) Both lungs and gills -> breathe anywhere; do not touch vanilla air tracking.
 
-            if (canBreatheHere) {
-                player.getPersistentData().remove(NO_LUNGS_AIR);
+        boolean breatheFreely = hasLungs || (hasGills && inWater);
+        boolean needsCustomSuffocation = !hasLungs && !(hasGills && inWater);
+
+        if (breatheFreely && !needsCustomSuffocation) {
+            player.getPersistentData().remove(NO_LUNGS_AIR);
+
+            if (!hasLungs && hasGills) {
                 player.setAirSupply(player.getMaxAirSupply());
-            } else {
-                CompoundTag pd = player.getPersistentData();
-
-                int air = pd.contains(NO_LUNGS_AIR, Tag.TAG_INT)
-                        ? pd.getInt(NO_LUNGS_AIR)
-                        : player.getAirSupply();
-
-                air -= 1;
-
-                if (air <= -20) {
-                    player.hurt(ModDamageSources.missingLungs(player.level(), player, null), 2);
-                    air = 0;
-                }
-
-                pd.putInt(NO_LUNGS_AIR, air);
-                player.setAirSupply(air);
             }
         } else {
-            player.getPersistentData().remove(NO_LUNGS_AIR);
+            CompoundTag pd = player.getPersistentData();
+
+            int air = pd.contains(NO_LUNGS_AIR, Tag.TAG_INT)
+                    ? pd.getInt(NO_LUNGS_AIR)
+                    : player.getAirSupply();
+
+            air -= 1;
+
+            if (air <= -20) {
+                player.hurt(ModDamageSources.missingLungs(player.level(), player, null), 2);
+                air = 0;
+            }
+
+            pd.putInt(NO_LUNGS_AIR, air);
+            player.setAirSupply(air);
         }
 
         /* -------------------- LIVER -------------------- */
@@ -235,14 +243,6 @@ public final class MissingOrganController {
         try {
             player.setPose(Pose.SWIMMING);
         } catch (Throwable ignored) {}
-    }
-
-    private static void refreshEffect(Player player, Holder<MobEffect> effect, int durationTicks, int amplifier) {
-        MobEffectInstance cur = player.getEffect(effect);
-
-        if (cur == null || cur.getDuration() < 40 || cur.getAmplifier() != amplifier) {
-            player.addEffect(new MobEffectInstance(effect, durationTicks, amplifier, true, false, false));
-        }
     }
 
     private static void clearProneLike(Player player) {

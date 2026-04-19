@@ -14,6 +14,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +47,6 @@ public class PneumaticWristItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-
             tooltip.add(Component.translatable("tooltip.createcybernetics.armupgrades_pneumaticwrist.energy").withStyle(ChatFormatting.RED));
         }
     }
@@ -81,13 +81,13 @@ public class PneumaticWristItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        if (player == null) return 0;
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (!(entity instanceof Player player)) return 0;
         if (player.level().isClientSide) return 0;
 
         long now = player.level().getGameTime();
@@ -99,29 +99,30 @@ public class PneumaticWristItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "pneumatic_wrist_block");
-        CyberwareAttributeHelper.applyModifier(player, "pneumatic_wrist_entity");
-        CyberwareAttributeHelper.applyModifier(player, "pneumatic_wrist_knockback");
+    public void onInstalled(LivingEntity entity) {
+        CyberwareAttributeHelper.applyModifier(entity, "pneumatic_wrist_block");
+        CyberwareAttributeHelper.applyModifier(entity, "pneumatic_wrist_entity");
+        CyberwareAttributeHelper.applyModifier(entity, "pneumatic_wrist_knockback");
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "pneumatic_wrist_block");
-        CyberwareAttributeHelper.removeModifier(player, "pneumatic_wrist_entity");
-        CyberwareAttributeHelper.removeModifier(player, "pneumatic_wrist_knockback");
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "pneumatic_wrist_block");
+        CyberwareAttributeHelper.removeModifier(entity, "pneumatic_wrist_entity");
+        CyberwareAttributeHelper.removeModifier(entity, "pneumatic_wrist_knockback");
 
-        if (!player.level().isClientSide) {
-            player.getPersistentData().remove(NBT_ACTIVE_UNTIL);
-            player.getPersistentData().remove(NBT_LAST_APPLY_TICK);
+        if (!entity.level().isClientSide) {
+            entity.getPersistentData().remove(NBT_ACTIVE_UNTIL);
+            entity.getPersistentData().remove(NBT_LAST_APPLY_TICK);
         }
     }
 
     @Override
-    public void onTick(Player player) { }
+    public void onTick(LivingEntity entity) { }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
         if (!player.isAlive()) return;
 
@@ -179,7 +180,6 @@ public class PneumaticWristItem extends Item implements ICyberwareItem {
         }
 
         if (hasRight) return slot == CyberwareSlot.RARM;
-
         return slot == CyberwareSlot.LARM;
     }
 

@@ -2,7 +2,9 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
@@ -11,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -59,43 +62,55 @@ public class BoneflexItem extends Item implements ICyberwareItem {
         return Set.of();
     }
 
+    @Override
     public int maxStacksPerSlotType(ItemStack stack, CyberwareSlot slotType) {
         return 3;
     }
 
     @Override
-    public void onInstalled(Player player) {
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-
+    public void onInstalled(LivingEntity entity) {
         int stacks = 0;
-        for (int i = 0; i < CyberwareSlot.BONE.size; i++) {
-            if (data.isInstalled(ModItems.BONEUPGRADES_BONEFLEX.get(), CyberwareSlot.BONE, i)) {
-                stacks++;
+
+        if (entity instanceof Player player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+
+            for (int i = 0; i < CyberwareSlot.BONE.size; i++) {
+                if (data.isInstalled(ModItems.BONEUPGRADES_BONEFLEX.get(), CyberwareSlot.BONE, i)) {
+                    stacks++;
+                }
+            }
+        } else {
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+
+            for (int i = 0; i < CyberwareSlot.BONE.size; i++) {
+                if (data.isInstalled(ModItems.BONEUPGRADES_BONEFLEX.get(), CyberwareSlot.BONE)) {
+                    stacks++;
+                }
             }
         }
+
         if (stacks > 3) stacks = 3;
-        CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_1");
-        CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_2");
-        CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_3");
 
-        if (stacks >= 1) CyberwareAttributeHelper.applyModifier(player, "boneflex_fall_1");
-        if (stacks >= 2) CyberwareAttributeHelper.applyModifier(player, "boneflex_fall_2");
-        if (stacks >= 3) CyberwareAttributeHelper.applyModifier(player, "boneflex_fall_3");
+        CyberwareAttributeHelper.removeModifier(entity, "boneflex_fall_1");
+        CyberwareAttributeHelper.removeModifier(entity, "boneflex_fall_2");
+        CyberwareAttributeHelper.removeModifier(entity, "boneflex_fall_3");
+
+        if (stacks >= 1) CyberwareAttributeHelper.applyModifier(entity, "boneflex_fall_1");
+        if (stacks >= 2) CyberwareAttributeHelper.applyModifier(entity, "boneflex_fall_2");
+        if (stacks >= 3) CyberwareAttributeHelper.applyModifier(entity, "boneflex_fall_3");
     }
 
-
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_1");
-        CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_2");
-        CyberwareAttributeHelper.removeModifier(player, "boneflex_fall_3");
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "boneflex_fall_1");
+        CyberwareAttributeHelper.removeModifier(entity, "boneflex_fall_2");
+        CyberwareAttributeHelper.removeModifier(entity, "boneflex_fall_3");
 
-        onInstalled(player);
+        onInstalled(entity);
     }
 
-
     @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onTick(LivingEntity entity) {
+        ICyberwareItem.super.onTick(entity);
     }
 }

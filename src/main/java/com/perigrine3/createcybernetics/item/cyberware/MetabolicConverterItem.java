@@ -7,8 +7,8 @@ import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -20,6 +20,9 @@ public class MetabolicConverterItem extends Item implements ICyberwareItem {
 
     private final int humanityCost;
 
+    private static final int ENERGY_PER_TICK = 25;
+    private static final float EXTRA_EXHAUSTION_PACKET = 0.25F;
+
     public MetabolicConverterItem(Properties props, int humanityCost) {
         super(props);
         this.humanityCost = humanityCost;
@@ -29,17 +32,16 @@ public class MetabolicConverterItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-
             tooltip.add(Component.translatable("tooltip.createcybernetics.organsupgrades_metabolic.energy").withStyle(ChatFormatting.DARK_GREEN));
         }
-
     }
 
-    private static final int ENERGY_PER_TICK = 25;
-
     @Override
-    public int getEnergyGeneratedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return player.getFoodData().getFoodLevel() > 0 ? ENERGY_PER_TICK : 0;
+    public int getEnergyGeneratedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (entity instanceof Player player) {
+            return player.getFoodData().getFoodLevel() > 0 ? ENERGY_PER_TICK : 0;
+        }
+        return 0;
     }
 
     @Override
@@ -63,15 +65,14 @@ public class MetabolicConverterItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {}
+    public void onInstalled(LivingEntity entity) {}
 
     @Override
-    public void onRemoved(Player player) {}
-
-    private static final float EXTRA_EXHAUSTION_PACKET = 0.25F;
+    public void onRemoved(LivingEntity entity) {}
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
         if (!player.hasData(ModAttachments.CYBERWARE)) return;
 
@@ -84,5 +85,4 @@ public class MetabolicConverterItem extends Item implements ICyberwareItem {
             player.causeFoodExhaustion(EXTRA_EXHAUSTION_PACKET);
         }
     }
-
 }

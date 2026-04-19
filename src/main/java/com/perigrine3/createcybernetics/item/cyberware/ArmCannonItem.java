@@ -2,8 +2,11 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.entity.ModEntities;
 import com.perigrine3.createcybernetics.entity.projectile.NuggetProjectile;
@@ -65,11 +68,11 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
     private static final String PD_COOLDOWNS_ROOT = "cc_arm_cannon_cooldowns";
 
     private static final int TICKS_PER_SECOND = 20;
-    private static final int CD_NUGGETS = 10;                       // 0.5s
-    private static final int CD_ARROWS = 2 * TICKS_PER_SECOND;      // 2s
-    private static final int CD_CHARGES = 3 * TICKS_PER_SECOND;     // 3s (wind + fire)
-    private static final int CD_FIREWORKS = 5 * TICKS_PER_SECOND;   // 5s
-    private static final int CD_TNT = 5 * TICKS_PER_SECOND;         // 5s
+    private static final int CD_NUGGETS = 10;
+    private static final int CD_ARROWS = 2 * TICKS_PER_SECOND;
+    private static final int CD_CHARGES = 3 * TICKS_PER_SECOND;
+    private static final int CD_FIREWORKS = 5 * TICKS_PER_SECOND;
+    private static final int CD_TNT = 5 * TICKS_PER_SECOND;
 
     private final int humanityCost;
 
@@ -78,7 +81,10 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         this.humanityCost = humanityCost;
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
 
     @Override
     public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
@@ -89,9 +95,20 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         };
     }
 
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.LARM, CyberwareSlot.RARM); }
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
+    @Override
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.LARM, CyberwareSlot.RARM);
+    }
+
+    @Override
+    public boolean replacesOrgan() {
+        return false;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
 
     public static boolean isValidStoredItem(ItemStack stack) {
         return stack != null && !stack.isEmpty() && stack.is(ModTags.Items.ARM_CANNON_AMMO);
@@ -223,12 +240,69 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         cannonStack.set(DataComponents.CUSTOM_DATA, CustomData.of(all));
     }
 
-    @Override
-    public void onRemoved(Player player) {
-        if (!(player instanceof ServerPlayer sp)) return;
-        if (!sp.hasData(ModAttachments.CYBERWARE)) return;
+    private static void dropAndClearInstalledStack(LivingEntity entity, HolderLookup.Provider provider, ItemStack cannonStack) {
+        if (entity == null || cannonStack == null || cannonStack.isEmpty()) return;
+        if (!(entity.level() instanceof ServerLevel)) return;
 
-        PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
+        if (entity instanceof ServerPlayer sp) {
+            dropAndClearInstalledStack(sp, provider, cannonStack);
+            return;
+        }
+
+        SimpleContainer tmp = new SimpleContainer(SLOT_COUNT);
+        loadFromInstalledStack(cannonStack, provider, tmp);
+
+        for (int i = 0; i < SLOT_COUNT; i++) {
+            ItemStack st = tmp.getItem(i);
+            if (!st.isEmpty()) {
+                entity.spawnAtLocation(st);
+            }
+        }
+
+        CustomData cd = cannonStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        CompoundTag all = cd.copyTag();
+        all.remove(STACK_ROOT);
+        cannonStack.set(DataComponents.CUSTOM_DATA, CustomData.of(all));
+    }
+
+    @Override
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity.level() instanceof ServerLevel)) return;
+
+        if (entity instanceof ServerPlayer sp) {
+            if (!sp.hasData(ModAttachments.CYBERWARE)) return;
+
+            PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
+            if (data == null) return;
+
+            for (var entry : data.getAll().entrySet()) {
+                InstalledLoop:
+                {
+                    var arr = entry.getValue();
+                    if (arr == null) break InstalledLoop;
+
+                    for (int i = 0; i < arr.length; i++) {
+                        var inst = arr[i];
+                        if (inst == null) continue;
+
+                        ItemStack st = inst.getItem();
+                        if (st == null || st.isEmpty()) continue;
+
+                        if (st.getItem() == this) {
+                            dropAndClearInstalledStack(sp, sp.level().registryAccess(), st);
+                        }
+                    }
+                }
+            }
+
+            data.setDirty();
+            sp.syncData(ModAttachments.CYBERWARE);
+            return;
+        }
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
+
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) return;
 
         for (var entry : data.getAll().entrySet()) {
@@ -243,13 +317,12 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
                 if (st == null || st.isEmpty()) continue;
 
                 if (st.getItem() == this) {
-                    dropAndClearInstalledStack(sp, sp.level().registryAccess(), st);
+                    dropAndClearInstalledStack(entity, entity.level().registryAccess(), st);
                 }
             }
         }
 
         data.setDirty();
-        sp.syncData(ModAttachments.CYBERWARE);
     }
 
     /* ---------------- FIRING ---------------- */
@@ -314,7 +387,7 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         return true;
     }
 
-    private static CannonRef findInstalledArmCannon(PlayerCyberwareData data) {
+    private static CannonRef findInstalledArmCannon(ICyberwareData data) {
         for (var entry : data.getAll().entrySet()) {
             CyberwareSlot slot = entry.getKey();
             var arr = entry.getValue();
@@ -335,9 +408,7 @@ public class ArmCannonItem extends Item implements ICyberwareItem {
         return null;
     }
 
-    // =========================
-    // COOLDOWN HELPERS (NEW)
-    // =========================
+    /* ---------------- COOLDOWN HELPERS ---------------- */
 
     private static int getCooldownTicks(ItemStack ammo) {
         if (ammo == null || ammo.isEmpty()) return 0;

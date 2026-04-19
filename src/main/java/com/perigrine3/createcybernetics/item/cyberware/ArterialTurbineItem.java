@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +19,6 @@ import java.util.Set;
 public class ArterialTurbineItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
-    // Tuning constants
     private static final int ENERGY_STILL = 3;
     private static final int ENERGY_WALK = 10;
     private static final int ENERGY_EXERTION = 25;
@@ -37,32 +37,43 @@ public class ArterialTurbineItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.translatable("tooltip.createcybernetics.skinupgrades_arterialturbine.energy").withStyle(ChatFormatting.DARK_GREEN));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.skinupgrades_arterialturbine.energy")
+                    .withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 
     @Override
-    public boolean shouldGenerateEnergyThisTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean shouldGenerateEnergyThisTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
     @Override
-    public int getEnergyGeneratedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return computeEnergy(player);
+    public int getEnergyGeneratedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return computeEnergy(entity);
     }
 
-    private static int computeEnergy(Player player) {
-        boolean attacked = player.hurtTime > 0;
+    private static int computeEnergy(LivingEntity entity) {
+        boolean attacked = entity.hurtTime > 0;
+
+        boolean playerFlying = entity instanceof Player player && player.getAbilities().flying;
+
         boolean meaningfulFalling =
-                !player.onGround() && !player.isSwimming() && !player.isFallFlying() && !player.getAbilities().flying
-                        && player.getDeltaMovement().y < 0.0D && player.fallDistance >= FEAR_FALL_DISTANCE_THRESHOLD;
+                !entity.onGround()
+                        && !entity.isSwimming()
+                        && !entity.isFallFlying()
+                        && !playerFlying
+                        && entity.getDeltaMovement().y < 0.0D
+                        && entity.fallDistance >= FEAR_FALL_DISTANCE_THRESHOLD;
+
         if (attacked || meaningfulFalling) {
             return ENERGY_FEAR;
         }
-        if (player.isSprinting() || player.isSwimming()) {
+
+        if (entity.isSprinting() || entity.isSwimming()) {
             return ENERGY_EXERTION;
         }
-        double horizontalSpeedSqr = player.getDeltaMovement().horizontalDistanceSqr();
+
+        double horizontalSpeedSqr = entity.getDeltaMovement().horizontalDistanceSqr();
         if (horizontalSpeedSqr > WALKING_SPEED_SQR_EPS) {
             return ENERGY_WALK;
         }
@@ -101,14 +112,14 @@ public class ArterialTurbineItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 }

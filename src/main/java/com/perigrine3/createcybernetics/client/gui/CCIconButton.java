@@ -64,7 +64,6 @@ public final class CCIconButton extends AbstractButton {
             gg.setColor(1f, 1f, 1f, 0.35f);
         }
 
-        // Draw the full icon texture scaled to DRAW_ICON_W/H
         gg.blit(icon.texture, ix, iy, 0, 0,
                 DRAW_ICON_W, DRAW_ICON_H,
                 ICON_TEX_W, ICON_TEX_H

@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.client.model.CyberentityAttachmentLayer;
 import com.perigrine3.createcybernetics.entity.custom.CyberskeletonEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -16,6 +17,7 @@ public class CyberskeletonRenderer extends MobRenderer<CyberskeletonEntity, Cybe
         super(context, new CyberskeletonModel<>(context.bakeLayer(CyberskeletonModel.LAYER_LOCATION)), 0.5f);
         this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
         this.addLayer(new CyberskeletonHighlightLayer(this));
+        this.addLayer(new CyberentityAttachmentLayer<>(this, context));
     }
 
     @Override

@@ -37,7 +37,26 @@ public class XPCapsuleItem extends Item {
         });
 
         stack.set(DataComponents.CUSTOM_NAME,
-                Component.translatable("item.createcybernetics.expcapsule.playername", ownerName).withStyle(ChatFormatting.GREEN));
+                Component.translatable("item.createcybernetics.expcapsule.playername", ownerName)
+                        .withStyle(ChatFormatting.GREEN));
+
+        return stack;
+    }
+
+    public static ItemStack makeCorruptedCapsule(int xpPoints) {
+        ItemStack stack = new ItemStack(ModItems.XP_CAPSULE.get());
+
+        int clamped = Math.max(0, xpPoints);
+        String corruptedOwner = "§kREDACTED";
+
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> {
+            tag.putInt(NBT_XP_POINTS, clamped);
+            tag.putString(NBT_OWNER, corruptedOwner);
+        });
+
+        stack.set(DataComponents.CUSTOM_NAME,
+                Component.translatable("item.createcybernetics.expcapsule.playername", corruptedOwner)
+                        .withStyle(ChatFormatting.DARK_RED));
 
         return stack;
     }

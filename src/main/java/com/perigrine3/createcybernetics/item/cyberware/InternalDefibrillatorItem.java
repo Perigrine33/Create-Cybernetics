@@ -5,7 +5,9 @@ import com.perigrine3.createcybernetics.advancement.ModCriteria;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
 import com.perigrine3.createcybernetics.item.ModItems;
@@ -25,11 +27,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.GameRules;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -55,7 +56,6 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-
             tooltip.add(Component.translatable("tooltip.createcybernetics.heartupgrades_defibrillator.energy").withStyle(ChatFormatting.RED));
         }
     }
@@ -86,15 +86,15 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
     @Override
@@ -121,10 +121,12 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
         public static void onRegisterPayloadHandlers(RegisterPayloadHandlersEvent event) {
             PayloadRegistrar registrar = event.registrar("1");
 
-            registrar.playToClient(DefibPopPayload.TYPE, DefibPopPayload.STREAM_CODEC, (payload, context) -> context.enqueueWork(() -> {
+            registrar.playToClient(DefibPopPayload.TYPE, DefibPopPayload.STREAM_CODEC, (payload, context) ->
+                    context.enqueueWork(() -> {
                         Minecraft mc = Minecraft.getInstance();
                         mc.gameRenderer.displayItemActivation(payload.stack());
-            }));
+                    })
+            );
         }
 
         private NetworkRegistration() {}
@@ -135,10 +137,19 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onLivingDeath(LivingDeathEvent event) {
-            if (!(event.getEntity() instanceof ServerPlayer player)) return;
-            if (player.level().isClientSide) return;
+            LivingEntity living = event.getEntity();
+            if (living.level().isClientSide) return;
             if (event.isCanceled()) return;
 
+            if (living instanceof ServerPlayer player) {
+                handlePlayerDeath(event, player);
+                return;
+            }
+
+            handleCyberentityDeath(event, living);
+        }
+
+        private static void handlePlayerDeath(LivingDeathEvent event, ServerPlayer player) {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
@@ -155,7 +166,7 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
                 return;
             }
 
-            if (!tryTotemRevive(player)) {
+            if (!tryTotemRevivePlayer(player)) {
                 data.receiveEnergy(player, DEFIB_ENERGY_COST);
                 data.setDirty();
                 player.syncData(ModAttachments.CYBERWARE);
@@ -171,9 +182,28 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
             event.setCanceled(true);
         }
 
+        private static void handleCyberentityDeath(LivingDeathEvent event, LivingEntity entity) {
+            if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
 
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            if (data == null) return;
 
-        private static boolean tryTotemRevive(ServerPlayer player) {
+            int[] idx = findInstalledDefibIndex(data);
+            if (idx == null) return;
+
+            if (!tryTotemReviveEntity(entity)) {
+                return;
+            }
+
+            removeInstalledDefib(data, idx[0], idx[1]);
+
+            data.setDirty();
+            entity.syncData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+
+            event.setCanceled(true);
+        }
+
+        private static boolean tryTotemRevivePlayer(ServerPlayer player) {
             if (player.getHealth() > 0.0F) return false;
 
             player.setHealth(1.0F);
@@ -183,12 +213,37 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
             player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 1));
             player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
 
-            ((ServerLevel) player.level()).sendParticles(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY() + 1.0D, player.getZ(),
-                    60, 0.6D, 0.8D, 0.6D, 0.15D);
+            ((ServerLevel) player.level()).sendParticles(
+                    ParticleTypes.TOTEM_OF_UNDYING,
+                    player.getX(), player.getY() + 1.0D, player.getZ(),
+                    60, 0.6D, 0.8D, 0.6D, 0.15D
+            );
 
             player.level().playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 
             ModCriteria.DEUS_EX_MACHINA.get().trigger(player);
+
+            return true;
+        }
+
+        private static boolean tryTotemReviveEntity(LivingEntity entity) {
+            if (entity.getHealth() > 0.0F) return false;
+            if (!(entity.level() instanceof ServerLevel level)) return false;
+
+            entity.setHealth(1.0F);
+            entity.removeAllEffects();
+
+            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
+
+            level.sendParticles(
+                    ParticleTypes.TOTEM_OF_UNDYING,
+                    entity.getX(), entity.getY() + 1.0D, entity.getZ(),
+                    60, 0.6D, 0.8D, 0.6D, 0.15D
+            );
+
+            entity.level().playSound(null, entity.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.HOSTILE, 1.0F, 1.0F);
 
             return true;
         }
@@ -199,8 +254,28 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
                 for (int i = 0; i < size; i++) {
                     InstalledCyberware inst = data.get(slot, i);
                     if (inst == null) continue;
+
                     ItemStack st = inst.getItem();
                     if (st == null || st.isEmpty()) continue;
+
+                    if (st.is(ModItems.HEARTUPGRADES_DEFIBRILLATOR.get())) {
+                        return new int[]{slot.ordinal(), i};
+                    }
+                }
+            }
+            return null;
+        }
+
+        private static int[] findInstalledDefibIndex(EntityCyberwareData data) {
+            for (CyberwareSlot slot : CyberwareSlot.values()) {
+                int size = slot.size;
+                for (int i = 0; i < size; i++) {
+                    InstalledCyberware inst = data.get(slot, i);
+                    if (inst == null) continue;
+
+                    ItemStack st = inst.getItem();
+                    if (st == null || st.isEmpty()) continue;
+
                     if (st.is(ModItems.HEARTUPGRADES_DEFIBRILLATOR.get())) {
                         return new int[]{slot.ordinal(), i};
                     }
@@ -215,6 +290,20 @@ public class InternalDefibrillatorItem extends Item implements ICyberwareItem {
 
             ItemStack def = DefaultOrgans.get(slot, index);
             if (def == null) def = ItemStack.EMPTY;
+
+            if (!def.isEmpty()) {
+                int humanity = 0;
+                data.set(slot, index, new InstalledCyberware(def.copy(), slot, index, humanity));
+            }
+        }
+
+        private static void removeInstalledDefib(EntityCyberwareData data, int slotOrdinal, int index) {
+            CyberwareSlot slot = CyberwareSlot.values()[slotOrdinal];
+            data.remove(slot, index);
+
+            ItemStack def = DefaultOrgans.get(slot, index);
+            if (def == null) def = ItemStack.EMPTY;
+
             if (!def.isEmpty()) {
                 int humanity = 0;
                 data.set(slot, index, new InstalledCyberware(def.copy(), slot, index, humanity));

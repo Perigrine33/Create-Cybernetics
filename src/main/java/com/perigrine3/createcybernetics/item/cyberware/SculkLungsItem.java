@@ -8,6 +8,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -57,18 +58,20 @@ public class SculkLungsItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         player.removeEffect(ModEffects.SCULK_LUNGS_EFFECT);
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
+
         player.addEffect(new MobEffectInstance(ModEffects.SCULK_LUNGS_EFFECT, 500, 0, false, false, false));
     }
 }

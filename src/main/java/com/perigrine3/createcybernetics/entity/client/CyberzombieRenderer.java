@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.client.model.CyberentityAttachmentLayer;
 import com.perigrine3.createcybernetics.entity.custom.CyberzombieEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -12,6 +13,7 @@ public class CyberzombieRenderer extends MobRenderer<CyberzombieEntity, Cyberzom
     public CyberzombieRenderer(EntityRendererProvider.Context context) {
         super(context, new CyberzombieModel<>(context.bakeLayer(CyberzombieModel.LAYER_LOCATION)), 0.5f);
         this.addLayer(new CyberzombieHighlightLayer(this));
+        this.addLayer(new CyberentityAttachmentLayer<>(this, context));
     }
 
     @Override

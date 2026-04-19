@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.client.model.CyberentityAttachmentLayer;
 import com.perigrine3.createcybernetics.entity.custom.SmasherEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -12,7 +13,7 @@ public class SmasherRenderer extends MobRenderer<SmasherEntity, SmasherModel<Sma
     public SmasherRenderer(EntityRendererProvider.Context context) {
         super(context, new SmasherModel<>(context.bakeLayer(SmasherModel.LAYER_LOCATION)), 0.5f);
         this.addLayer(new SmasherHighlightLayer(this));
-
+        this.addLayer(new CyberentityAttachmentLayer<>(this, context));
     }
 
     @Override

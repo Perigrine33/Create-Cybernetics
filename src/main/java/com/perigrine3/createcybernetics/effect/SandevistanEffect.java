@@ -5,11 +5,10 @@ import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class SandevistanEffect extends MobEffect {
@@ -25,23 +24,22 @@ public class SandevistanEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        if (!(entity instanceof Player player)) return true;
-        if (player.level().isClientSide()) return true;
+        if (entity.level().isClientSide()) return true;
 
-        applyAll(player);
+        applyAll(entity);
         return true;
     }
 
-    private static void applyAll(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "sandevistan_speed");
-        CyberwareAttributeHelper.applyModifier(player, "sandevistan_stepheight");
-        CyberwareAttributeHelper.applyModifier(player, "sandevistan_jump");
+    private static void applyAll(LivingEntity entity) {
+        CyberwareAttributeHelper.applyModifier(entity, "sandevistan_speed");
+        CyberwareAttributeHelper.applyModifier(entity, "sandevistan_stepheight");
+        CyberwareAttributeHelper.applyModifier(entity, "sandevistan_jump");
     }
 
-    private static void removeAll(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "sandevistan_speed");
-        CyberwareAttributeHelper.removeModifier(player, "sandevistan_stepheight");
-        CyberwareAttributeHelper.removeModifier(player, "sandevistan_jump");
+    private static void removeAll(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "sandevistan_speed");
+        CyberwareAttributeHelper.removeModifier(entity, "sandevistan_stepheight");
+        CyberwareAttributeHelper.removeModifier(entity, "sandevistan_jump");
     }
 
     private static boolean isSandevistan(MobEffect effect) {
@@ -50,37 +48,37 @@ public class SandevistanEffect extends MobEffect {
 
     @SubscribeEvent
     public static void onEffectRemoved(MobEffectEvent.Remove event) {
-        if (!(event.getEntity() instanceof Player player)) return;
-        if (player.level().isClientSide()) return;
+        LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide()) return;
 
         var inst = event.getEffectInstance();
         if (inst == null) return;
 
         if (isSandevistan(inst.getEffect().value())) {
-            removeAll(player);
+            removeAll(entity);
         }
     }
 
     @SubscribeEvent
     public static void onEffectExpired(MobEffectEvent.Expired event) {
-        if (!(event.getEntity() instanceof Player player)) return;
-        if (player.level().isClientSide()) return;
+        LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide()) return;
 
         var inst = event.getEffectInstance();
         if (inst == null) return;
 
         if (isSandevistan(inst.getEffect().value())) {
-            removeAll(player);
+            removeAll(entity);
         }
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if (!(event.getEntity() instanceof Player player)) return;
-        if (player.level().isClientSide()) return;
+    public static void onEntityTick(EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof LivingEntity entity)) return;
+        if (entity.level().isClientSide()) return;
 
-        if (!player.hasEffect(ModEffects.SANDEVISTAN_EFFECT)) {
-            removeAll(player);
+        if (!entity.hasEffect(ModEffects.SANDEVISTAN_EFFECT)) {
+            removeAll(entity);
         }
     }
 }

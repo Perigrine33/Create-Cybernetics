@@ -8,6 +8,7 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.item.generic.InfologTextData;
 import com.perigrine3.createcybernetics.network.payload.*;
 import com.perigrine3.createcybernetics.screen.custom.ArmCannonWheelScreen;
+import com.perigrine3.createcybernetics.screen.custom.CyberdeckQuickhackWheelScreen;
 import com.perigrine3.createcybernetics.screen.custom.CyberwareToggleWheelScreen;
 import com.perigrine3.createcybernetics.screen.custom.InfologEditScreen;
 import net.minecraft.client.KeyMapping;
@@ -71,6 +72,20 @@ public final class KeybindClientHandler {
             if (mc.screen != null) continue;
             OpenHeatEnginePayload payload = new OpenHeatEnginePayload();
             PacketDistributor.sendToServer(payload);
+        }
+
+        while (ModKeyMappings.CYBERDECK.get().consumeClick()) {
+            if (mc.screen != null) continue;
+            PacketDistributor.sendToServer(new OpenCyberdeckPayload());
+        }
+
+        while (ModKeyMappings.CYBERDECK_WHEEL.get().consumeClick()) {
+            if (CyberdeckQuickhackWheelScreen.isOpen()) {
+                CyberdeckQuickhackWheelScreen.close();
+                if (mc.screen != null) mc.setScreen(null);
+            } else {
+                mc.setScreen(new CyberdeckQuickhackWheelScreen());
+            }
         }
 
         while (ModKeyMappings.INFOLOG.get().consumeClick()) {

@@ -4,13 +4,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.advancement.ModCriteria;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.network.payload.CerebralShutdownStatePayload;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
-import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,8 +21,8 @@ import net.minecraft.client.player.Input;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +50,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
 
     private static final int ENERGY_PER_TICK = 5;
 
-    // ===== Client-synced shutdown flag (set by CerebralShutdownStatePayload.handle) =====
     private static volatile boolean CLIENT_SHUTDOWN_ACTIVE = false;
 
     public static void setClientShutdownActive(boolean active) {
@@ -59,7 +60,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         return CLIENT_SHUTDOWN_ACTIVE;
     }
 
-    // ===== PersistentData keys (server) =====
     private static final String NBT_SHUTDOWN_ACTIVE = "cc_cpu_shutdown_active";
 
     private static final String NBT_ANCHOR_SET = "cc_cpu_shutdown_anchor";
@@ -104,36 +104,33 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return ENERGY_PER_TICK;
     }
 
     @Override
-    public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "cyberbrain_learn");
-        CyberwareAttributeHelper.applyModifier(player, "cyberbrain_insomnia");
+    public void onInstalled(LivingEntity entity) {
+        CyberwareAttributeHelper.applyModifier(entity, "cyberbrain_learn");
+        CyberwareAttributeHelper.applyModifier(entity, "cyberbrain_insomnia");
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "cyberbrain_learn");
-        CyberwareAttributeHelper.removeModifier(player, "cyberbrain_insomnia");
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "cyberbrain_learn");
+        CyberwareAttributeHelper.removeModifier(entity, "cyberbrain_insomnia");
     }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
-        // Shutdown is enforced via event hooks below; no per-item ticking required here.
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
     }
 
     @Override
-    public void onTick(Player player) {
-        // unused
+    public void onTick(LivingEntity entity) {
     }
 
-    /* ============================================================
-       Shutdown conditions
-       ============================================================ */
-    private static boolean cpuInstalledEnabledAndUnpowered(PlayerCyberwareData data) {
+    private static boolean cpuInstalledEnabledAndUnpowered(ICyberwareData data) {
+        if (data == null) return false;
+
         InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.BRAIN);
         if (arr == null) return false;
 
@@ -145,10 +142,19 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
             if (st == null || st.isEmpty()) continue;
 
             if (!(st.getItem() instanceof CerebralProcessingUnitItem)) continue;
-            if (!data.isEnabled(CyberwareSlot.BRAIN, idx)) continue;
+
+            boolean enabled = true;
+            if (data instanceof PlayerCyberwareData pData) {
+                enabled = pData.isEnabled(CyberwareSlot.BRAIN, idx);
+            } else if (data instanceof EntityCyberwareData eData) {
+                enabled = eData.isEnabled(CyberwareSlot.BRAIN, idx);
+            }
+
+            if (!enabled) continue;
 
             return !installed.isPowered();
         }
+
         return false;
     }
 
@@ -165,8 +171,9 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         return player.hasEffect(MobEffects.BLINDNESS) || player.hasEffect(MobEffects.DARKNESS);
     }
 
+    private static boolean hasCybereyesInstalledAndEnabled(ICyberwareData data) {
+        if (data == null) return false;
 
-    private static boolean hasCybereyesInstalledAndEnabled(PlayerCyberwareData data) {
         InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.EYES);
         if (arr == null) return false;
 
@@ -178,16 +185,21 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
             if (st == null || st.isEmpty()) continue;
 
             if (!(st.getItem() instanceof CybereyeItem)) continue;
-            if (!data.isEnabled(CyberwareSlot.EYES, idx)) continue;
+
+            boolean enabled = true;
+            if (data instanceof PlayerCyberwareData pData) {
+                enabled = pData.isEnabled(CyberwareSlot.EYES, idx);
+            } else if (data instanceof EntityCyberwareData eData) {
+                enabled = eData.isEnabled(CyberwareSlot.EYES, idx);
+            }
+
+            if (!enabled) continue;
 
             return true;
         }
+
         return false;
     }
-
-    /* ============================================================
-       SERVER: decide + sync shutdown after EnergyController (Post, LOWEST)
-       ============================================================ */
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class ShutdownServerDecision {
@@ -225,10 +237,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
             }
         }
     }
-
-    /* ============================================================
-       SERVER: enforce hard lock BEFORE movement (Pre, HIGHEST)
-       ============================================================ */
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class ShutdownServerEnforce {
@@ -323,10 +331,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         }
     }
 
-    /* ============================================================
-       CLIENT: movement + click suppression + camera lock + overlay
-       ============================================================ */
-
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
     public static final class ShutdownClientHooks {
         private ShutdownClientHooks() {}
@@ -337,7 +341,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent
         public static void onMove(MovementInputUpdateEvent event) {
-            // Full-body lock should ONLY happen during CPU shutdown (not merely cybereyes enabled).
             if (!CLIENT_SHUTDOWN_ACTIVE) return;
 
             Input in = event.getInput();
@@ -356,8 +359,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         @SubscribeEvent
         public static void onInteract(InputEvent.InteractionKeyMappingTriggered event) {
             if (!CLIENT_SHUTDOWN_ACTIVE) return;
-
-            // Cancels attack/use/pick pipelines clientside.
             event.setCanceled(true);
         }
 
@@ -377,7 +378,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
                 anchorPitch = mc.player.getXRot();
             }
 
-            // Snap view back every tick
             mc.player.setYRot(anchorYaw);
             mc.player.setXRot(anchorPitch);
 
@@ -396,7 +396,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
             if (mc.player == null) return;
             if (mc.screen != null) return;
 
-            // You requested: overlay active if cybereyes enabled OR shutdown.
             if (!clientOverlayActive(mc.player)) return;
 
             GuiGraphics gg = event.getGuiGraphics();
@@ -429,7 +428,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         public static void onRespawn(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerRespawnEvent event) {
             if (!(event.getEntity() instanceof ServerPlayer sp)) return;
 
-            // Defensive: some setups can still carry data in odd ways; clearing twice is harmless.
             clearShutdownState(sp);
             PacketDistributor.sendToPlayer(sp, new CerebralShutdownStatePayload(false));
         }
@@ -438,7 +436,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
             CompoundTag pt = sp.getPersistentData();
             pt.putBoolean(NBT_SHUTDOWN_ACTIVE, false);
 
-            // Remove anchor so the next shutdown starts clean
             pt.remove(NBT_ANCHOR_SET);
             pt.remove(NBT_AX);
             pt.remove(NBT_AY);

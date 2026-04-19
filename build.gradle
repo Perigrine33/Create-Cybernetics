@@ -151,8 +151,8 @@ dependencies {
     implementation "curse.maven:northstar-redux-1318310:7476517"
     implementation "curse.maven:geckolib-388172:7415496"
 
-    compileOnly "io.redspace:irons_spellbooks:1.21.1-3.15.2:api"
-    localRuntime "io.redspace:irons_spellbooks:1.21.1-3.15.2"
+    //compileOnly "io.redspace:irons_spellbooks:1.21.1-3.15.2:api"
+    //localRuntime "io.redspace:irons_spellbooks:1.21.1-3.15.2"
 
     compileOnly "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1"
@@ -160,8 +160,16 @@ dependencies {
     implementation "curse.maven:vics-point-blank-961053:7515178"
     implementation "curse.maven:geckolib-388172:7415496"
 
-    implementation "curse.maven:ranged-weapon-api-962162:7291834"
+    implementation "curse.maven:health-bars-1367734:7122333"
+    implementation "curse.maven:puzzles-lib-495476:7140307"
 
+    implementation "curse.maven:corpse-316582:7018307"
+
+    implementation "curse.maven:happiness-is-a-warm-gun-448106:7124032"
+    implementation "curse.maven:common-network-806044:7087488"
+    implementation "curse.maven:azurelib-817423:7797694"
+
+    implementation "curse.maven:reforgedplay-mod-1018692:6942967"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

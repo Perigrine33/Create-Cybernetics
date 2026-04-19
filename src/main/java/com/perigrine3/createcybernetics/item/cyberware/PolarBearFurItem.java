@@ -7,10 +7,10 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.compat.coldsweat.ColdSweatCompat;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -63,19 +63,19 @@ public class PolarBearFurItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID)
-    public final class PolarBearFurFreezingImmunity {
+    public static final class PolarBearFurFreezingImmunity {
 
         private PolarBearFurFreezingImmunity() {}
 
@@ -103,5 +103,4 @@ public class PolarBearFurItem extends Item implements ICyberwareItem {
             return data != null && data.isInstalled(ModItems.WETWARE_POLARBEARFUR.get(), CyberwareSlot.SKIN);
         }
     }
-
 }

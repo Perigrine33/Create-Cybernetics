@@ -4,7 +4,9 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
@@ -15,7 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -58,12 +60,12 @@ public class EnderJammerItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return ENERGY_PER_TICK;
     }
 
@@ -105,12 +107,35 @@ public class EnderJammerItem extends Item implements ICyberwareItem {
             if (st == null || st.isEmpty()) continue;
 
             if (!st.is(ModItems.BRAINUPGRADES_ENDERJAMMER.get())) continue;
+            if (!data.isEnabled(CyberwareSlot.BRAIN, idx)) continue;
 
-            // Respect wheel toggle / enabled state.
-            if (!data.isEnabled(CyberwareSlot.BRAIN, idx)) return false;
-
-            // This is the critical change: EnergyController updates this, not your item callbacks.
             return installed.isPowered();
+        }
+
+        return false;
+    }
+
+    private static boolean hasEnderJammerInstalledEntity(LivingEntity entity) {
+        if (entity == null) return false;
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return false;
+
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+        if (data == null) return false;
+
+        InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.BRAIN);
+        if (arr == null) return false;
+
+        for (int idx = 0; idx < arr.length; idx++) {
+            InstalledCyberware installed = arr[idx];
+            if (installed == null) continue;
+
+            ItemStack st = installed.getItem();
+            if (st == null || st.isEmpty()) continue;
+
+            if (!st.is(ModItems.BRAINUPGRADES_ENDERJAMMER.get())) continue;
+            if (!data.isEnabled(CyberwareSlot.BRAIN, idx)) continue;
+
+            return true;
         }
 
         return false;
@@ -127,10 +152,17 @@ public class EnderJammerItem extends Item implements ICyberwareItem {
         List<ServerPlayer> players =
                 level.getEntitiesOfClass(ServerPlayer.class, box, EnderJammerItem::hasEnderJammerInstalledAndPowered);
 
-        if (players.isEmpty()) return false;
-
         for (ServerPlayer p : players) {
             if (p.position().distanceToSqr(point) <= JAM_RADIUS_SQ) {
+                return true;
+            }
+        }
+
+        List<LivingEntity> entities =
+                level.getEntitiesOfClass(LivingEntity.class, box, e -> !(e instanceof ServerPlayer) && hasEnderJammerInstalledEntity(e));
+
+        for (LivingEntity e : entities) {
+            if (e.position().distanceToSqr(point) <= JAM_RADIUS_SQ) {
                 return true;
             }
         }

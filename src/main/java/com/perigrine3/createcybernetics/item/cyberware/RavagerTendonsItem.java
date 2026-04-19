@@ -7,9 +7,7 @@ import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -58,23 +56,23 @@ public class RavagerTendonsItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "ravager_tendons_size");
-        CyberwareAttributeHelper.applyModifier(player, "ravager_tendons_strength");
-        CyberwareAttributeHelper.applyModifier(player, "ravager_tendons_knockback_resist");
-        CyberwareAttributeHelper.applyModifier(player, "ravager_tendons_knockback");
+    public void onInstalled(LivingEntity entity) {
+        CyberwareAttributeHelper.applyModifier(entity, "ravager_tendons_size");
+        CyberwareAttributeHelper.applyModifier(entity, "ravager_tendons_strength");
+        CyberwareAttributeHelper.applyModifier(entity, "ravager_tendons_knockback_resist");
+        CyberwareAttributeHelper.applyModifier(entity, "ravager_tendons_knockback");
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "ravager_tendons_size");
-        CyberwareAttributeHelper.removeModifier(player, "ravager_tendons_strength");
-        CyberwareAttributeHelper.removeModifier(player, "ravager_tendons_knockback_resist");
-        CyberwareAttributeHelper.removeModifier(player, "ravager_tendons_knockback");
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "ravager_tendons_size");
+        CyberwareAttributeHelper.removeModifier(entity, "ravager_tendons_strength");
+        CyberwareAttributeHelper.removeModifier(entity, "ravager_tendons_knockback_resist");
+        CyberwareAttributeHelper.removeModifier(entity, "ravager_tendons_knockback");
     }
 
     @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onTick(LivingEntity entity) {
+        ICyberwareItem.super.onTick(entity);
     }
 }

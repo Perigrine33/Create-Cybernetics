@@ -47,6 +47,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.CEREBELLUM);
                         output.accept(ModItems.FACEPLATE);
                         output.accept(ModItems.EMP_GRENADE);
+                        output.accept(ModItems.EXOSUIT1);
 
                         output.accept(ModItems.COPPER_UPGRADE_TEMPLATE);
                         output.accept(ModItems.IRON_UPGRADE_TEMPLATE);
@@ -71,6 +72,15 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.DATA_SHARD_BLACK);
                         output.accept(ModItems.DATA_SHARD_BIOCHIP);
                         output.accept(ModItems.DATA_SHARD_INFOLOG);
+
+                        //QUICKHACKS
+                        output.accept(ModItems.QUICKHACK_OVERHEAT);
+                        output.accept(ModItems.QUICKHACK_REBOOT);
+                        output.accept(ModItems.QUICKHACK_SCRAMBLE);
+                        output.accept(ModItems.QUICKHACK_OPTICMALFUNCTION);
+                        output.accept(ModItems.QUICKHACK_CYBERPSYCHOSIS);
+                        output.accept(ModItems.QUICKHACK_BEHINDYOU);
+                        output.accept(ModItems.QUICKHACK_DRAIN);
 
                         //COMPONENTS
                         output.accept(ModItems.COMPONENT_ACTUATOR);
@@ -137,6 +147,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_BONEBATTERY);
                         output.accept(ModItems.SCAVENGED_BONEFLEX);
                         output.accept(ModItems.SCAVENGED_BONELACING);
+                        output.accept(ModItems.SCAVENGED_CAPACITORFRAME);
                         output.accept(ModItems.SCAVENGED_PIEZO);
                         output.accept(ModItems.SCAVENGED_SPINALINJECTOR);
                         output.accept(ModItems.SCAVENGED_SANDEVISTAN);
@@ -156,6 +167,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCAVENGED_MATRIX);
                         output.accept(ModItems.SCAVENGED_NEURALCONTEXTUALIZER);
                         output.accept(ModItems.SCAVENGED_CYBERDECK);
+                        output.accept(ModItems.SCAVENGED_NEURALPROCESSOR);
+                        output.accept(ModItems.SCAVENGED_ICEPROTOCOL);
                         output.accept(ModItems.SCAVENGED_IDEM);
                         output.accept(ModItems.SCAVENGED_CHIPWARESLOTS);
                         output.accept(ModItems.SCAVENGED_CYBERHEART);
@@ -188,6 +201,11 @@ public class ModCreativeModeTabs {
 
                         if (ModItems.SCAVENGED_SWEAT != null) {
                             output.accept(ModItems.SCAVENGED_SWEAT);
+                        }
+                        if (ModItems.SCAVENGED_MANABATTERY != null && ModItems.SCAVENGED_MANASKIN != null && ModItems.SCAVENGED_SPELLJAMMER != null) {
+                            output.accept(ModItems.SCAVENGED_MANABATTERY);
+                            output.accept(ModItems.SCAVENGED_MANASKIN);
+                            output.accept(ModItems.SCAVENGED_SPELLJAMMER);
                         }
 
                         output.accept(ModItems.SCAVENGED_SYNTHMUSCLE);
@@ -259,6 +277,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BONEUPGRADES_BONEBATTERY);
                         output.accept(ModItems.BONEUPGRADES_BONEFLEX);
                         output.accept(ModItems.BONEUPGRADES_BONELACING);
+                        output.accept(ModItems.BONEUPGRADES_CAPACITORFRAME);
                         output.accept(ModItems.BONEUPGRADES_PIEZO);
                         output.accept(ModItems.BONEUPGRADES_SPINALINJECTOR);
                         output.accept(ModItems.BONEUPGRADES_SANDEVISTAN);
@@ -282,6 +301,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.BRAINUPGRADES_CYBERDECK);
                         output.accept(ModItems.BRAINUPGRADES_IDEM);
                         output.accept(ModItems.BRAINUPGRADES_CHIPWARESLOTS);
+                        output.accept(ModItems.BRAINUPGRADES_NEURALPROCESSOR);
+                        output.accept(ModItems.BRAINUPGRADES_ICEPROTOCOL);
 
                         if (ModItems.BRAINUPGRADES_SPELLJAMMER != null) {
                             output.accept(ModItems.BRAINUPGRADES_SPELLJAMMER);

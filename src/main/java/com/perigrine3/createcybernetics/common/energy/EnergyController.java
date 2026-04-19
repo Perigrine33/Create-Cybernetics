@@ -8,6 +8,7 @@ import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
+import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -38,9 +39,10 @@ public final class EnergyController {
         if (data == null) return;
 
         // ================================================================
-        // EMP: wipe stored energy, clear activation-paid flags, and mark all unpowered.
+        // EMP / REBOOT: wipe stored energy, clear activation-paid flags,
+        // and mark all cyberware unpowered.
         // ================================================================
-        if (hasEmpEffect(player)) {
+        if (hasEmpLikeShutdownEffect(player) && !hasEmpProtection(data)) {
             data.setEnergyStored(player, 0);
 
             for (var entry : data.getAll().entrySet()) {
@@ -70,6 +72,7 @@ public final class EnergyController {
                 }
             }
 
+            data.setDirty();
             return;
         }
 
@@ -167,6 +170,9 @@ public final class EnergyController {
                 boolean powered = true;
 
                 int use = item.getEnergyUsedPerTick(player, stack, slot);
+                if (hasDrainHack(player) && use > 0) {
+                    use *= 2;
+                }
                 if (use > 0) {
                     powered = tryPayEnergy(data, mainsPool, genPool, use);
                 }
@@ -296,12 +302,20 @@ public final class EnergyController {
         return level.getBlockState(below).is(ModBlocks.CHARGING_BLOCK.get());
     }
 
+    private static boolean hasEmpProtection(PlayerCyberwareData data) {
+        return data.hasSpecificItem(ModItems.BONEUPGRADES_CAPACITORFRAME.get(), CyberwareSlot.BONE);
+    }
+
     private static final class MutableInt {
         int value;
         MutableInt(int value) { this.value = value; }
     }
 
-    private static boolean hasEmpEffect(Player player) {
-        return player.hasEffect(ModEffects.EMP);
+    private static boolean hasEmpLikeShutdownEffect(Player player) {
+        return player.hasEffect(ModEffects.EMP) || player.hasEffect(ModEffects.REBOOT_HACK);
+    }
+
+    private static boolean hasDrainHack(Player player) {
+        return player.hasEffect(ModEffects.DRAIN_HACK);
     }
 }

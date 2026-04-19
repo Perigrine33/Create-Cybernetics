@@ -1,7 +1,6 @@
 package com.perigrine3.createcybernetics.effect;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.effect.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -11,6 +10,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,77 +49,82 @@ public class ProjectileDodgeEffect extends MobEffect {
             if (hit.getType() != HitResult.Type.ENTITY) return;
 
             EntityHitResult ehr = (EntityHitResult) hit;
-            if (!(ehr.getEntity() instanceof ServerPlayer player)) return;
+            if (!(ehr.getEntity() instanceof LivingEntity living)) return;
+            if (!(living.level() instanceof ServerLevel level)) return;
 
-            if (!player.hasEffect(ModEffects.PROJECTILE_DODGE_EFFECT)) return;
-            if (player.isPassenger()) return;
+            if (!living.hasEffect(ModEffects.PROJECTILE_DODGE_EFFECT)) return;
+            if (living.isPassenger()) return;
 
             Projectile projectile = event.getProjectile();
             if (projectile == null) return;
 
-            long gameTime = player.serverLevel().getGameTime();
-            var tag = player.getPersistentData();
+            long gameTime = level.getGameTime();
+            var tag = living.getPersistentData();
             if (tag.getLong(NBT_NEXT_DODGE_TICK) > gameTime) return;
 
-            if (tryEndermanStyleTeleport(player, TELEPORT_ATTEMPTS, TELEPORT_RANGE)) {
+            if (tryEndermanStyleTeleport(living, TELEPORT_ATTEMPTS, TELEPORT_RANGE)) {
                 event.setCanceled(true);
                 projectile.discard();
-
                 tag.putLong(NBT_NEXT_DODGE_TICK, gameTime + DODGE_COOLDOWN_TICKS);
             }
         }
 
         @SubscribeEvent
         public static void onIncomingDamage(LivingIncomingDamageEvent event) {
-            if (!(event.getEntity() instanceof ServerPlayer player)) return;
-            if (!player.hasEffect(ModEffects.PROJECTILE_DODGE_EFFECT)) return;
-            if (player.isPassenger()) return;
+            LivingEntity living = event.getEntity();
+            if (!(living.level() instanceof ServerLevel level)) return;
+
+            if (!living.hasEffect(ModEffects.PROJECTILE_DODGE_EFFECT)) return;
+            if (living.isPassenger()) return;
             if (!(event.getSource().getDirectEntity() instanceof Projectile proj)) return;
 
-            long gameTime = player.serverLevel().getGameTime();
-            var tag = player.getPersistentData();
+            long gameTime = level.getGameTime();
+            var tag = living.getPersistentData();
             if (tag.getLong(NBT_NEXT_DODGE_TICK) > gameTime) return;
 
-            if (tryEndermanStyleTeleport(player, TELEPORT_ATTEMPTS, TELEPORT_RANGE)) {
+            if (tryEndermanStyleTeleport(living, TELEPORT_ATTEMPTS, TELEPORT_RANGE)) {
                 event.setCanceled(true);
-                // Optional: also discard here, for consistency
                 proj.discard();
-
                 tag.putLong(NBT_NEXT_DODGE_TICK, gameTime + DODGE_COOLDOWN_TICKS);
             }
         }
+
+        private Events() {}
     }
 
-    private static boolean tryEndermanStyleTeleport(ServerPlayer player, int attempts, double cubeSize) {
-        ServerLevel level = player.serverLevel();
-        RandomSource random = player.getRandom();
+    private static boolean tryEndermanStyleTeleport(LivingEntity entity, int attempts, double cubeSize) {
+        if (!(entity.level() instanceof ServerLevel level)) return false;
 
-        final double startX = player.getX();
-        final double startY = player.getY();
-        final double startZ = player.getZ();
+        RandomSource random = entity.getRandom();
+
+        final double startX = entity.getX();
+        final double startY = entity.getY();
+        final double startZ = entity.getZ();
 
         for (int i = 0; i < attempts; i++) {
-            final double fromX = player.getX();
-            final double fromY = player.getY();
-            final double fromZ = player.getZ();
+            final double fromX = entity.getX();
+            final double fromY = entity.getY();
+            final double fromZ = entity.getZ();
 
             double x = startX + (random.nextDouble() - 0.5) * cubeSize;
-            double y = startY + (double) (random.nextInt((int) cubeSize) - ((int) cubeSize / 2));
+            double y = startY + (double)(random.nextInt((int) cubeSize) - ((int) cubeSize / 2));
             double z = startZ + (random.nextDouble() - 0.5) * cubeSize;
 
-            if (tryTeleportToCandidate(player, level, x, y, z)) {
+            if (tryTeleportToCandidate(entity, level, x, y, z)) {
                 spawnEndermanTeleportParticles(level, fromX, fromY, fromZ);
-                spawnEndermanTeleportParticles(level, player.getX(), player.getY(), player.getZ());
+                spawnEndermanTeleportParticles(level, entity.getX(), entity.getY(), entity.getZ());
 
-                level.playSound(null, fromX, fromY, fromZ, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.0f);
-                level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.0f);
+                SoundSource source = entity instanceof ServerPlayer ? SoundSource.PLAYERS : SoundSource.HOSTILE;
+                level.playSound(null, fromX, fromY, fromZ, SoundEvents.ENDERMAN_TELEPORT, source, 1.0f, 1.0f);
+                level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDERMAN_TELEPORT, source, 1.0f, 1.0f);
                 return true;
             }
         }
+
         return false;
     }
 
-    private static boolean tryTeleportToCandidate(ServerPlayer player, ServerLevel level, double x, double y, double z) {
+    private static boolean tryTeleportToCandidate(LivingEntity entity, ServerLevel level, double x, double y, double z) {
         BlockPos pos = BlockPos.containing(x, y, z);
 
         if (!level.hasChunkAt(pos)) return false;
@@ -129,6 +134,7 @@ public class ProjectileDodgeEffect extends MobEffect {
         while (pos.getY() > minY && blocksMotion(level.getBlockState(pos))) {
             pos = pos.below();
         }
+
         if (pos.getY() <= minY) return false;
         if (blocksMotion(level.getBlockState(pos))) return false;
 
@@ -140,11 +146,16 @@ public class ProjectileDodgeEffect extends MobEffect {
         double ty = pos.getY();
         double tz = pos.getZ() + 0.5;
 
-        AABB moved = player.getBoundingBox().move(tx - player.getX(), ty - player.getY(), tz - player.getZ());
-        if (!level.noCollision(player, moved)) return false;
+        AABB moved = entity.getBoundingBox().move(tx - entity.getX(), ty - entity.getY(), tz - entity.getZ());
+        if (!level.noCollision(entity, moved)) return false;
         if (level.containsAnyLiquid(moved)) return false;
 
-        return player.teleportTo(level, tx, ty, tz, Set.<RelativeMovement>of(), player.getYRot(), player.getXRot());
+        if (entity instanceof ServerPlayer player) {
+            return player.teleportTo(level, tx, ty, tz, Set.<RelativeMovement>of(), player.getYRot(), player.getXRot());
+        }
+
+        entity.teleportTo(tx, ty, tz);
+        return true;
     }
 
     public static void spawnEndermanTeleportParticles(ServerLevel level, double x, double y, double z) {

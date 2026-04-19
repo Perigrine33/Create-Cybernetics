@@ -14,8 +14,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -54,23 +54,40 @@ public class SandevistanItem extends Item implements ICyberwareItem {
         }
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.BONE); }
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
-
     @Override
-    public void onInstalled(Player player) {
+    public int getHumanityCost() {
+        return humanityCost;
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.BONE);
+    }
+
+    @Override
+    public boolean replacesOrgan() {
+        return false;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
+
+    @Override
+    public void onInstalled(LivingEntity entity) {
+    }
+
+    @Override
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         forceStopAndStartCooldown(player);
         removeAll(player);
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide()) return;
 
         CompoundTag pd = player.getPersistentData();
@@ -136,7 +153,16 @@ public class SandevistanItem extends Item implements ICyberwareItem {
             setInt(pd, TAG_COOLDOWN_TICKS, COOLDOWN_TICKS_TOTAL);
         }
 
-        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), activateSound, SoundSource.PLAYERS, 5.0F, 1.0F);
+        player.level().playSound(
+                null,
+                player.getX(),
+                player.getY(),
+                player.getZ(),
+                activateSound,
+                SoundSource.PLAYERS,
+                5.0F,
+                1.0F
+        );
 
         setInt(pd, TAG_ACTIVE_TICKS, ACTIVE_TICKS_TOTAL);
         applyAll(player, ACTIVE_TICKS_TOTAL);
@@ -144,7 +170,6 @@ public class SandevistanItem extends Item implements ICyberwareItem {
 
     private void tryOverclockBacklash(Player player, int cooldownTicksRemaining) {
         float progress = Mth.clamp(cooldownTicksRemaining / (float) COOLDOWN_TICKS_TOTAL, 0.0f, 1.0f);
-
         progress = progress * progress;
 
         float chance = OVERCLOCK_MIN_CHANCE + (OVERCLOCK_MAX_CHANCE - OVERCLOCK_MIN_CHANCE) * progress;
@@ -155,8 +180,7 @@ public class SandevistanItem extends Item implements ICyberwareItem {
     }
 
     private void applyAll(Player player, int remainingTicks) {
-        player.addEffect(new MobEffectInstance(ModEffects.SANDEVISTAN_EFFECT, Math.max(1, remainingTicks),
-                0, false, false, false));
+        player.addEffect(new MobEffectInstance(ModEffects.SANDEVISTAN_EFFECT, Math.max(1, remainingTicks), 0, false, false, false));
     }
 
     private void removeAll(Player player) {

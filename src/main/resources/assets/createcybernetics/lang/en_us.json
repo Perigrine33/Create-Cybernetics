@@ -1,8 +1,17 @@
 {
   "createcybernetics.configuration.humanity": "Base Humanity Value",
   "createcybernetics.configuration.keepCyberware": "Keep Cyberware on Death",
+  "createcybernetics.configuration.scaleSurgeryDamage": "Scale Surgery Damage",
+  "createcybernetics.configuration.epilepsyMode": "Epilepsy Mode",
+
+  "createcybernetics.configuration.engineeringDeconstructRolls": "Engineering Table Deconstruction Rolls",
+  "createcybernetics.configuration.engineeringScavengedDeconstructRolls": "Engineering Table Scavenged Deconstruction Rolls",
+
+  "createcybernetics.configuration.entitySlotRolls": "Entity Slot Rolls",
+  "createcybernetics.configuration.entityCyberwareRolls": "Entity Cyberware Rolls",
 
 
+  "commands.createcybernetics.implants.invalid_entity_target": "This entity is not cybernetic.",
   "commands.createcybernetics.implants.wrong_item": "Only Cybernetics cyberware items are allowed.",
   "commands.createcybernetics.implants.no_cyberware": "Target has no cyberware data.",
   "commands.createcybernetics.implants.install_fail": "Failed to install %s (no slot / no space / not a valid implant).",
@@ -26,6 +35,9 @@
   "gui.heatengine.title": "Heat Engine",
   "gui.chipwarecreative.title": "Creative Chiware Slots",
   "gui.infolog.title": "Infolog",
+
+  "gui.createcybernetics.corpse_cyberware_button": "Implants",
+  "gui.createcybernetics.corpse_cyberware": "Cyberware", 
 
   "gui.createcybernetics.pause.cybereye_skin": "Cybereye Layout",
   "gui.createcybernetics.save": "Save",
@@ -76,8 +88,13 @@
   "item.createcybernetics.faceplate": "Faceplate",
   "item.createcybernetics.emp_grenade": "EMP Grenade",
   "item.createcybernetics.netherite_qpu": "Netherite Quantum Processor",
+  "item.createcybernetics.qpu_loc": "Found in Nether Fortresses and Bastions",
   "item.createcybernetics.datura_flower": "Datura Flower",
   "item.createcybernetics.datura_seed_pod": "Datura Seed Pod",
+
+  "item.createcybernetics.exosuit1": "Exosuit MK-1",
+  "tootltip1.createcybernetics.exosuit1": "Enhances the users physical prowess and combat ability",
+  "tootltip2.createcybernetics.exosuit1": "§7Requires §9Neural Processor",
 
   "item.createcybernetics.frontal_lobe": "Frontal Lobe",
   "item.createcybernetics.parietal_lobe": "Parietal Lobe",
@@ -149,6 +166,42 @@
   "item.createcybernetics.data_shard_infolog.desc2": "§7Press %s §7to open while slotted",
 
 
+  "item.createcybernetics.quickhack_overheat": "§bQuickhack Program",
+  "item.createcybernetics.quickhack_overheat.desc": "§7Overheat.exe",
+  "item.createcybernetics.quickhack_overheat.desc2": "Success Rate: 75%",
+  "item.createcybernetics.quickhack_overheat.desc3": "Overheats processors to start burning the target from the inside out.",
+
+  "item.createcybernetics.quickhack_reboot": "§bQuickhack Program",
+  "item.createcybernetics.quickhack_reboot.desc": "§7Reboot.exe",
+  "item.createcybernetics.quickhack_reboot.desc2": "Success Rate: 65%",
+  "item.createcybernetics.quickhack_reboot.desc3": "Reboots all systems.",
+
+  "item.createcybernetics.quickhack_scramble": "§bQuickhack Program",
+  "item.createcybernetics.quickhack_scramble.desc": "§7Scramble.exe",
+  "item.createcybernetics.quickhack_scramble.desc2": "Success Rate: 80%",
+  "item.createcybernetics.quickhack_scramble.desc3": "Scrambles motor control and directional capabilities.",
+
+  "item.createcybernetics.quickhack_opticmalfunction": "§bQuickhack Program",
+  "item.createcybernetics.quickhack_opticmalfunction.desc": "§7Optic_Malfunction.exe",
+  "item.createcybernetics.quickhack_opticmalfunction.desc2": "Success Rate: 80%",
+  "item.createcybernetics.quickhack_opticmalfunction.desc3": "Short-circuits cyberoptics, causing temporary malfunction.",
+
+  "item.createcybernetics.quickhack_cyberpsychosis": "§bQuickhack Program",
+  "item.createcybernetics.quickhack_cyberpsychosis.desc": "§7Cyberpsychosis.exe",
+  "item.createcybernetics.quickhack_cyberpsychosis.desc2": "Success Rate: 15%",
+  "item.createcybernetics.quickhack_cyberpsychosis.desc3": "A cyberpsychosis emulator.",
+
+  "item.createcybernetics.quickhack_behindyou": "§bQuickhack Program",
+  "item.createcybernetics.quickhack_behindyou.desc": "§7Behind_You.exe",
+  "item.createcybernetics.quickhack_behindyou.desc2": "Success Rate: 95%",
+  "item.createcybernetics.quickhack_behindyou.desc3": "An auditory processing bug that plays hostile audio behind the target.",
+
+  "item.createcybernetics.quickhack_drain": "§bQuickhack Program",
+  "item.createcybernetics.quickhack_drain.desc": "§7Drain.exe",
+  "item.createcybernetics.quickhack_drain.desc2": "Success Rate: 75%",
+  "item.createcybernetics.quickhack_drain.desc3": "Makes cyberware energy consumption as inefficient as possible.",
+
+
   "item.createcybernetics.cyberzombie_spawn_egg": "Cyberzombie Spawn Egg",
   "item.createcybernetics.cyberskeleton_spawn_egg": "Cyberskeleton Spawn Egg",
 
@@ -192,7 +245,7 @@
 
   "item.createcybernetics.bodypart_guardianretina": "Guardian Retina",
   "item.createcybernetics.bodypart_wardenesophagus": "Warden Esophagus",
-  "item.createcybernetics.bodypart_gyroscopicbladder": "Gryoscopic Bladder",
+  "item.createcybernetics.bodypart_gyroscopicbladder": "Gyroscopic Bladder",
   "item.createcybernetics.bodypart_spinnerette": "Spider's Spinneret",
   "item.createcybernetics.bodypart_firegland": "Igniphorus Gland",
   "item.createcybernetics.bodypart_gills": "Fish Gills",
@@ -261,6 +314,7 @@
   "item.createcybernetics.boneupgrades_bonebattery": "Marrow Battery",
   "item.createcybernetics.boneupgrades_boneflex": "Citrate Enhancement",
   "item.createcybernetics.boneupgrades_bonelacing": "Bonelacing",
+  "item.createcybernetics.boneupgrades_capacitorframe": "High Voltaic Capacitor Frame",
   "item.createcybernetics.boneupgrades_elytra": "Deployable Elytra",
   "item.createcybernetics.boneupgrades_piezo": "Piezoelectric Energy Generator",
   "item.createcybernetics.boneupgrades_spinalinjector": "Spinal Injector",
@@ -277,7 +331,9 @@
   "item.createcybernetics.brainupgrades_cyberdeck": "Cyberdeck",
   "item.createcybernetics.brainupgrades_idem": "I.D.E.M.",
   "item.createcybernetics.brainupgrades_chipwareslots": "Chipware Slots",
-  "item.createcybernetics.brainupgrades_spelljammer": "Spelljammer",
+  "item.createcybernetics.brainupgrades_neuralprocessor": "Neural Processor",
+  "item.createcybernetics.brainupgrades_iceprotocol": "ICE Defense Protocol",
+  "item.createcybernetics.brainupgrades_spelljammer": "SpellJammer",
 
   "item.createcybernetics.heartupgrades_cyberheart": "Mechanical Heart",
   "item.createcybernetics.heartupgrades_coupler": "Cardiovascular Coupler",
@@ -325,7 +381,7 @@
   "item.createcybernetics.wetware_ravagertendons": "Ravager Tendons",
   "item.createcybernetics.wetware_sculklungs": "Sculk Lungs",
   "item.createcybernetics.wetware_tacticalinksac": "Tactical Ink Sac",
-  "item.createcybernetics.wetware_aerostasisgyrobladder": "Aerostatic Gryobladder",
+  "item.createcybernetics.wetware_aerostasisgyrobladder": "Aerostatic Gyrobladder",
   "item.createcybernetics.wetware_grassfedstomach": "Grassfed Stomach",
   "item.createcybernetics.wetware_webshootingintestines": "Webshooting Intestines",
   "item.createcybernetics.wetware_webshooting_leftarm": "Webshooting Left Arm",
@@ -368,6 +424,7 @@
   "item.createcybernetics.scavenged_bonebattery": "Marrow Battery",
   "item.createcybernetics.scavenged_boneflex": "Citrate Enhancement",
   "item.createcybernetics.scavenged_bonelacing": "Bonelacing",
+  "item.createcybernetics.scavenged_capacitorfram": "High Voltaic Capacitor Frame",
   "item.createcybernetics.scavenged_elytra": "Deployable Elytra",
   "item.createcybernetics.scavenged_piezo": "Piezoelectric Energy Generator",
   "item.createcybernetics.scavenged_spinalinjector": "Spinal Injector",
@@ -381,6 +438,9 @@
   "item.createcybernetics.scavenged_cyberdeck": "Cyberdeck",
   "item.createcybernetics.scavenged_idem": "I.D.E.M.",
   "item.createcybernetics.scavenged_chipwareslots": "Chipware Slots",
+  "item.createcybernetics.scavenged_neuralprocessor": "Neural Processor",
+  "item.createcybernetics.scavenged_iceprotocol": "ICE Defense Protocol",
+  "item.createcybernetics.scavenged_spelljammer": "SpellJammer",
   "item.createcybernetics.scavenged_cyberheart": "Mechanical Heart",
   "item.createcybernetics.scavenged_coupler": "Cardiovascular Coupler",
   "item.createcybernetics.scavenged_creeperheart": "Creeperheart",
@@ -391,11 +451,13 @@
   "item.createcybernetics.scavenged_oxygen": "Internal Oxygen Tank",
   "item.createcybernetics.scavenged_adrenaline": "Adrenal Pump",
   "item.createcybernetics.scavenged_battery": "Internal Battery",
+  "item.createcybernetics.scavenged_manabattery": "Mana Capacitor",
   "item.createcybernetics.scavenged_diamondwaferstack": "Diamond Waferstack",
   "item.createcybernetics.scavenged_dualisticconverter": "Dualistic Converter",
   "item.createcybernetics.scavenged_liverfilter": "Liver Filter",
   "item.createcybernetics.scavenged_metabolic": "Metabolic Converter",
   "item.createcybernetics.scavenged_densebattery": "Dense Battery",
+  "item.createcybernetics.scavenged_heatengine": "Heat Engine",
   "item.createcybernetics.scavenged_arterialturbine": "Arterial Turbine",
   "item.createcybernetics.scavenged_chromatophores": "Synthetic Chromatophores",
   "item.createcybernetics.scavenged_synthskin": "SynthSkin",
@@ -408,6 +470,7 @@
   "item.createcybernetics.scavenged_syntheticsetules": "Synthetic Setules",
   "item.createcybernetics.scavenged_sweat": "Enhanced Sweat Glands",
   "item.createcybernetics.scavenged_metalplating": "Metal Plating",
+  "item.createcybernetics.scavenged_manaskin": "Mana Assimilator",
   "item.createcybernetics.scavenged_synthmuscle": "Synthetic Muscle",
   "item.createcybernetics.scavenged_wiredreflexes": "Wired Reflexes",
 
@@ -455,6 +518,8 @@
   "key.createcybernetics.arm_cannon": "Open Arm Cannon",
   "key.createcybernetics.arm_cannon_wheel": "Open Arm Cannon Wheel",
   "key.createcybernetics.heat_engine": "Open Heat Engine",
+  "key.createcybernetics.cyberdeck": "Open Cyberdeck",
+  "key.createcybernetics.cyberdeck_wheel": "Open Cyberdeck Wheel",
   "key.createcybernetics.infolog_gui": "Open A Slotted Infolog",
 
 
@@ -695,6 +760,7 @@
           "tooltip.createcybernetics.boneupgrades_boneflex.tooltip2": "§3Stacks up to 3x",
       "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip1": "§1Adds 2 hearts of health to the user per stack",
           "tooltip.createcybernetics.boneupgrades_bonelacing.tooltip2": "§3Stacks up to 3x",
+      "tooltip.createcybernetics.boneupgrades_capacitorframe.tooltip1": "§1Negates EMP effects, and instead turns it into extra energy",
       "tooltip.createcybernetics.boneupgrades_elytra.tooltip1": "§1An elytra fused to the user's spine",
           "tooltip.createcybernetics.boneupgrades_elytra.tooltip2": "§7Requires §9Linear Frame",
           "tooltip.createcybernetics.boneupgrades_elytra.energy": "Costs 1-2 Energy",
@@ -729,6 +795,8 @@
           "tooltip.createcybernetics.brainupgrades_neuralcontextualizer.energy": "Costs 2 Energy",
       "tooltip.createcybernetics.brainupgrades_cyberdeck.tooltip1": "§1Allows the user to remotely hack cybernetics",
           "tooltip.createcybernetics.brainupgrades_cyberdeck.tooltip2": "§7Requires §cBrain §7or §9Cerebral Processing Unit",
+              "tooltip.createcybernetics.brainupgrades_cyberdeck.desc1": "§7Press %s §7to open cyberdeck slots",
+              "tooltip.createcybernetics.brainupgrades_cyberdeck.desc2": "§7Press %s §7to open cyberdeck wheel",
       "tooltip.createcybernetics.brainupgrades_idem.tooltip1": "§1(InterDimensional Escape Module) Allows the user to escape to another dimension for 15 seconds",
           "tooltip.createcybernetics.brainupgrades_idem.tooltip2": "§7Requires §cBrain §7or §9Cerebral Processing Unit",
           "tooltip.createcybernetics.brainupgrades_idem.tooltip3": "15 Second Cooldown",
@@ -737,8 +805,11 @@
           "tooltip.createcybernetics.brainupgrades_chipwareslots.tooltip2": "§7Requires §cBrain §7or §9Cerebral Processing Unit",
       "tooltip.createcybernetics.brainupgrades_spelljammer.tooltip1": "§1Prevents the casting of most spells in a 25 block radius",
           "tooltip.createcybernetics.brainupgrades_spelljammer.tooltip2": "§7Requires §cBrain §7or §9Cerebral Processing Unit",
+      "tooltip.createcybernetics.brainupgrades_neuralprocessor.tooltip1": "§1Doubles XP intake, and attack speed, and allows interfacing with exosuits",
+          "tooltip.createcybernetics.brainupgrades_neuralprocessor.tooltip2": "§7Requires §cBrain",
+      "tooltip.createcybernetics.brainupgrades_iceprotocol.tooltip1": "§1Provides a 75% chance to negate quickhacks",
 
-      "tooltip.createcybernetics.heartupgrades_cyberheart.tooltip1": "§1Negates weakness status effects",
+    "tooltip.createcybernetics.heartupgrades_cyberheart.tooltip1": "§1Negates weakness status effects",
       "tooltip.createcybernetics.heartupgrades_cyberheart.energy": "Costs 6 Energy",
       "tooltip.createcybernetics.heartupgrades_coupler.tooltip1": "§1Generates energy from the beating of an organic heart",
           "tooltip.createcybernetics.heartupgrades_coupler.tooltip2": "§7Requires §cHeart",
@@ -758,7 +829,8 @@
               "tooltip.createcybernetics.lungsupgrades_hyperoxygenation.tooltip3": "§7Requires §cLungs",
               "tooltip.createcybernetics.lungsupgrades_hyperoxygenation.energy": "Costs 3/6/9 Energy",
   "tooltip.createcybernetics.lungsupgrades_oxygen.tooltip1": "§1Stores 1 extra minute of oxygen when the user is in breathable air",
-          "tooltip.createcybernetics.lungsupgrades_oxygen.tooltip2": "§7Requires §cLungs",
+      "tooltip.createcybernetics.lungsupgrades_oxygen.tooltip2": "§3Stacks up to 3x",
+          "tooltip.createcybernetics.lungsupgrades_oxygen.tooltip3": "§7Requires §cLungs",
           "tooltip.createcybernetics.lungsupgrades_oxygen.energy": "Costs 3 Energy",
 
       "tooltip.createcybernetics.organsupgrades_adrenaline.tooltip1": "§1Grants the user Speed and Strength when attacked",
@@ -825,7 +897,7 @@
       "tooltip.createcybernetics.wetware_sculklungs.desc": "§7Hold Shift + Right-Click to use",
       "tooltip.createcybernetics.wetware_tacticalinksac.tooltip1": "§cUser inflicts blindness on attackers",
       "tooltip.createcybernetics.wetware_aerostasisgyrobladder.tooltip1": "§cUser gains some flight abilities",
-      "tooltip.createcybernetics.wetware_aerostasisgyrobladder.desc": "§7Hold Spacebar to use",
+      "tooltip.createcybernetics.wetware_aerostasisgyrobladder.desc": "§7Double tap Spacebar to use",
       "tooltip.createcybernetics.wetware_grassfedstomach.tooltip1": "§cUser gains the ability to eat grass and wheat",
       "tooltip.createcybernetics.wetware_webshootingintestines.tooltip1": "§cUser gains the ability to shoot webbing to ensnare prey",
       "tooltip.createcybernetics.wetware_webshootingintestines.desc": "§7Shift + Right-Click to use",
@@ -838,5 +910,10 @@
       "tooltip.createcybernetics.wetware_blastemaskeleton.desc": "§7Any more than 8 implants prevents regeneration",
       "tooltip.createcybernetics.wetware_dragonskin.tooltip1": "§cGrants immunity to dragon fire and increases armor",
       "tooltip.createcybernetics.wetware_wardenantlers.tooltip1": "§cAllows the user to see sounds",
-      "tooltip.createcybernetics.wetware_sculkheart.tooltip1": "§cCreates a steady heartbeat rhythm, and gives nearby players the darkness effect"
+      "tooltip.createcybernetics.wetware_sculkheart.tooltip1": "§cCreates a steady heartbeat rhythm, and gives nearby players the darkness effect",
+
+
+
+
+      "tooltip.createcybernetics.charging_block": "Exclusively charges Dense Battery, and can temporarily power cyberware"
 }

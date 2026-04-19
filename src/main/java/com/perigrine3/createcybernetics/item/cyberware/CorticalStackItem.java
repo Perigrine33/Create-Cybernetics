@@ -2,22 +2,16 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.api.InstalledCyberware;
-import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
-import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.item.generic.XPCapsuleItem;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -75,18 +69,16 @@ public class CorticalStackItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
-
+    public void onRemoved(LivingEntity entity) {
     }
 
     @Override
-    public void onTick(Player player) {
-        if (player.level().isClientSide) return;
+    public void onTick(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
     }
 
     @Override
@@ -95,9 +87,9 @@ public class CorticalStackItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player, ItemStack installedStack) {
-        if (player.level().isClientSide) return;
-        if (!(player instanceof ServerPlayer sp)) return;
+    public void onInstalled(LivingEntity entity, ItemStack installedStack) {
+        if (entity.level().isClientSide) return;
+        if (!(entity instanceof ServerPlayer sp)) return;
         if (installedStack == null || installedStack.isEmpty()) return;
 
         int xp = XPCapsuleItem.getStoredXp(installedStack);

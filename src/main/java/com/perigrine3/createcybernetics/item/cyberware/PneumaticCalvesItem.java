@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -79,36 +80,34 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
         // no-op
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (player.level().isClientSide) return;
-        cleanup(player);
+    public void onRemoved(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
+        if (entity instanceof Player player) {
+            cleanup(player);
+        }
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
 
         if (!player.hasData(ModAttachments.CYBERWARE)) return;
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
-        // Enforce the "pair" rule continuously:
-        // - if exactly one installed, force-disable it and cleanup.
-        // - if none or both, proceed.
         PairState pair = enforcePairRuleAndGetState(player, data);
 
-        // Only apply functionality when BOTH installed AND enabled.
         if (!pair.bothInstalled || !pair.bothEnabled) {
             cleanup(player);
             return;
         }
 
-        // Active behavior (unchanged, but now gated)
         player.addEffect(new MobEffectInstance(ModEffects.PNEUMATIC_CALVES_EFFECT, 100, 0, false, false, false));
 
         if (player.isSprinting()) {
@@ -127,16 +126,10 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
     private record Found(CyberwareSlot slot, int index) {}
     private record PairState(boolean bothInstalled, boolean bothEnabled) {}
 
-    /**
-     * Scans RLEG+LLEG for PneumaticCalvesItem, then:
-     * - if exactly one is installed: force it disabled (server-side) and cleanup.
-     * - returns pair state for gating.
-     */
     private static PairState enforcePairRuleAndGetState(Player player, PlayerCyberwareData data) {
         Found first = null;
         Found second = null;
 
-        // Find up to two installed calves (across both legs).
         for (CyberwareSlot slot : new CyberwareSlot[]{CyberwareSlot.RLEG, CyberwareSlot.LLEG}) {
             for (int i = 0; i < slot.size; i++) {
                 InstalledCyberware cw = data.get(slot, i);
@@ -149,39 +142,29 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
 
                 if (first == null) first = new Found(slot, i);
                 else if (second == null) second = new Found(slot, i);
-                else break; // more than two installed; ignore extras
+                else break;
             }
         }
 
-        // None installed
         if (first == null) {
             return new PairState(false, false);
         }
 
-        // Exactly one installed -> FORCE DISABLED
         if (second == null) {
             forceDisabled(player, data, first.slot(), first.index());
             cleanup(player);
             return new PairState(false, false);
         }
 
-        // Both installed: enabled if BOTH are enabled (since your wheel toggles them together).
         boolean e1 = data.isEnabled(first.slot(), first.index());
         boolean e2 = data.isEnabled(second.slot(), second.index());
         return new PairState(true, e1 && e2);
     }
 
-    /**
-     * Force a particular installed instance disabled.
-     * Adjust the setter call if your API uses a different method name.
-     */
     private static void forceDisabled(Player player, PlayerCyberwareData data, CyberwareSlot slot, int index) {
         if (!data.isEnabled(slot, index)) return;
 
-        // ---- CHANGE THIS LINE IF YOUR METHOD NAME DIFFERS ----
         data.setEnabled(slot, index, false);
-        // -----------------------------------------------------
-
         data.setDirty();
         player.syncData(ModAttachments.CYBERWARE);
     }
@@ -190,10 +173,6 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
     public static final class Events {
         private Events() {}
 
-        /**
-         * Extra safety: enforce rule on tick too (covers cases where onTick isn't called for disabled items,
-         * or if your cyberware ticking order changes).
-         */
         @SubscribeEvent
         public static void onPlayerTick(PlayerTickEvent.Post event) {
             Player player = event.getEntity();
@@ -205,7 +184,6 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            // If exactly one installed, this will force-disable and cleanup.
             enforcePairRuleAndGetState(player, data);
         }
 
@@ -220,7 +198,6 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            // Enforce pair rule; only allow jump energy drain when BOTH installed AND enabled.
             PairState pair = enforcePairRuleAndGetState(player, data);
             if (!pair.bothInstalled || !pair.bothEnabled) return;
 

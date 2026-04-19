@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,24 +32,41 @@ public class SpiderEyesItem extends Item implements ICyberwareItem {
         }
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.EYES); }
-    @Override public boolean replacesOrgan() { return true; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(CyberwareSlot.EYES); }
-
     @Override
-    public void onInstalled(Player player) {
-
+    public int getHumanityCost() {
+        return humanityCost;
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.EYES);
+    }
+
+    @Override
+    public boolean replacesOrgan() {
+        return true;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of(CyberwareSlot.EYES);
+    }
+
+    @Override
+    public void onInstalled(LivingEntity entity) {
+    }
+
+    @Override
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
+
         player.removeEffect(ModEffects.SPIDER_EYES_EFFECT);
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
 
         player.addEffect(new MobEffectInstance(ModEffects.SPIDER_EYES_EFFECT, 40, 0, false, false, false));

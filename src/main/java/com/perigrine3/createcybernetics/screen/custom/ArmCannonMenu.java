@@ -35,9 +35,7 @@ public class ArmCannonMenu extends AbstractContainerMenu {
     private final int installedIndex;
 
     public ArmCannonMenu(int id, Inventory playerInv, RegistryFriendlyByteBuf buf) {
-        this(id, playerInv,
-                CyberwareSlot.valueOf(buf.readUtf()),
-                buf.readVarInt());
+        this(id, playerInv, CyberwareSlot.valueOf(buf.readUtf()), buf.readVarInt());
     }
 
     public ArmCannonMenu(int id, Inventory playerInv, CyberwareSlot installedSlot, int installedIndex) {
@@ -47,8 +45,12 @@ public class ArmCannonMenu extends AbstractContainerMenu {
         this.installedSlot = installedSlot;
         this.installedIndex = installedIndex;
         this.provider = owner.level().registryAccess();
+
         this.armInv = new SimpleContainer(ArmCannonItem.SLOT_COUNT) {
-            @Override public boolean stillValid(Player p) { return true; }
+            @Override
+            public boolean stillValid(Player p) {
+                return true;
+            }
         };
 
         if (owner instanceof ServerPlayer sp) {
@@ -98,6 +100,17 @@ public class ArmCannonMenu extends AbstractContainerMenu {
         return real == null ? ItemStack.EMPTY : real;
     }
 
+    private void mirrorIntoPlayerData(PlayerCyberwareData data) {
+        for (int i = 0; i < ArmCannonItem.SLOT_COUNT; i++) {
+            ItemStack st = armInv.getItem(i);
+            if (st == null || st.isEmpty()) {
+                data.setArmCannonStack(i, ItemStack.EMPTY);
+            } else {
+                data.setArmCannonStack(i, st.copy());
+            }
+        }
+    }
+
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         if (player.level().isClientSide) return ItemStack.EMPTY;
@@ -132,6 +145,7 @@ public class ArmCannonMenu extends AbstractContainerMenu {
         super.removed(player);
         if (!(player instanceof ServerPlayer sp)) return;
         if (!sp.hasData(ModAttachments.CYBERWARE)) return;
+
         PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -140,6 +154,7 @@ public class ArmCannonMenu extends AbstractContainerMenu {
 
         if (stillInstalled) {
             ArmCannonItem.saveIntoInstalledStack(real, provider, armInv);
+            mirrorIntoPlayerData(data);
             data.setDirty();
             sp.syncData(ModAttachments.CYBERWARE);
             return;
@@ -153,6 +168,10 @@ public class ArmCannonMenu extends AbstractContainerMenu {
                 ItemStack st = armInv.getItem(i);
                 if (!st.isEmpty()) sp.drop(st, false);
             }
+        }
+
+        for (int i = 0; i < ArmCannonItem.SLOT_COUNT; i++) {
+            data.setArmCannonStack(i, ItemStack.EMPTY);
         }
 
         data.setDirty();

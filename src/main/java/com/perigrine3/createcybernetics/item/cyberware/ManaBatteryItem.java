@@ -2,7 +2,10 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
@@ -10,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -71,53 +75,71 @@ public class ManaBatteryItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (player.level().isClientSide) return;
+    public void onRemoved(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
 
-        CyberwareAttributeHelper.removeModifier(player, "irons_addmana_manabattery1");
-        CyberwareAttributeHelper.removeModifier(player, "irons_addmana_manabattery2");
-        CyberwareAttributeHelper.removeModifier(player, "irons_addmana_manabattery3");
-        player.getPersistentData().remove(NBT_LAST_APPLIED_TICK);
+        CyberwareAttributeHelper.removeModifier(entity, "irons_addmana_manabattery1");
+        CyberwareAttributeHelper.removeModifier(entity, "irons_addmana_manabattery2");
+        CyberwareAttributeHelper.removeModifier(entity, "irons_addmana_manabattery3");
+        entity.getPersistentData().remove(NBT_LAST_APPLIED_TICK);
     }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
-        if (player.level().isClientSide) return;
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (entity.level().isClientSide) return;
 
-        long now = player.level().getGameTime();
-        CompoundTag ptag = player.getPersistentData();
+        long now = entity.level().getGameTime();
+        CompoundTag ptag = entity.getPersistentData();
         if (ptag.getLong(NBT_LAST_APPLIED_TICK) == now) return;
         ptag.putLong(NBT_LAST_APPLIED_TICK, now);
 
-        CyberwareAttributeHelper.removeModifier(player, "irons_addmana_manabattery1");
-        CyberwareAttributeHelper.removeModifier(player, "irons_addmana_manabattery2");
-        CyberwareAttributeHelper.removeModifier(player, "irons_addmana_manabattery3");
-
-        if (!player.hasData(ModAttachments.CYBERWARE)) return;
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
+        CyberwareAttributeHelper.removeModifier(entity, "irons_addmana_manabattery1");
+        CyberwareAttributeHelper.removeModifier(entity, "irons_addmana_manabattery2");
+        CyberwareAttributeHelper.removeModifier(entity, "irons_addmana_manabattery3");
 
         int stacks = 0;
-        for (int i = 0; i < CyberwareSlot.ORGANS.size; i++) {
-            if (data.isInstalled(ModItems.ORGANSUPGRADES_MANABATTERY.get(), CyberwareSlot.ORGANS, i)) {
-                stacks++;
+
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return;
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return;
+
+            for (int i = 0; i < CyberwareSlot.ORGANS.size; i++) {
+                if (data.isInstalled(ModItems.ORGANSUPGRADES_MANABATTERY.get(), CyberwareSlot.ORGANS, i)) {
+                    stacks++;
+                }
+            }
+        } else {
+            if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            if (data == null) return;
+
+            for (int i = 0; i < CyberwareSlot.ORGANS.size; i++) {
+                InstalledCyberware installed = data.get(CyberwareSlot.ORGANS, i);
+                if (installed == null) continue;
+
+                ItemStack st = installed.getItem();
+                if (st == null || st.isEmpty()) continue;
+
+                if (st.is(ModItems.ORGANSUPGRADES_MANABATTERY.get())) {
+                    stacks++;
+                }
             }
         }
 
         if (stacks <= 0) return;
         if (stacks > 3) stacks = 3;
-        if (stacks >= 1) CyberwareAttributeHelper.applyModifier(player, "irons_addmana_manabattery1");
-        if (stacks >= 2) CyberwareAttributeHelper.applyModifier(player, "irons_addmana_manabattery2");
-        if (stacks >= 3) CyberwareAttributeHelper.applyModifier(player, "irons_addmana_manabattery3");
+
+        if (stacks >= 1) CyberwareAttributeHelper.applyModifier(entity, "irons_addmana_manabattery1");
+        if (stacks >= 2) CyberwareAttributeHelper.applyModifier(entity, "irons_addmana_manabattery2");
+        if (stacks >= 3) CyberwareAttributeHelper.applyModifier(entity, "irons_addmana_manabattery3");
     }
 
     @Override
-    public void onTick(Player player) {
-
+    public void onTick(LivingEntity entity) {
     }
 }

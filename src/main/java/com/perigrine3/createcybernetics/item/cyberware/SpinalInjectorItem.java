@@ -21,6 +21,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -65,10 +66,30 @@ public class SpinalInjectorItem extends Item implements ICyberwareItem {
         }
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.BONE); }
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.BONE);
+    }
+
+    @Override
+    public boolean replacesOrgan() {
+        return false;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
+
+    @Override
+    public Set<Item> requiresCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.BASECYBERWARE_LINEARFRAME.get());
+    }
 
     public static boolean isInjectable(ItemStack stack) {
         return !stack.isEmpty() && stack.is(Tags.Items.POTIONS);
@@ -183,7 +204,6 @@ public class SpinalInjectorItem extends Item implements ICyberwareItem {
         writeBack(injectorStack, all);
     }
 
-
     public static void dropAndClearInstalledStack(ServerPlayer sp, HolderLookup.Provider provider, ItemStack injectorStack) {
         if (injectorStack == null || injectorStack.isEmpty()) return;
 
@@ -206,7 +226,6 @@ public class SpinalInjectorItem extends Item implements ICyberwareItem {
             }
         }
 
-        // Clear stored data
         CustomData cd = injectorStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         CompoundTag all = cd.copyTag();
         all.remove(STACK_ROOT);
@@ -216,8 +235,8 @@ public class SpinalInjectorItem extends Item implements ICyberwareItem {
     /* ---------------- uninstall behavior ---------------- */
 
     @Override
-    public void onRemoved(Player player) {
-        if (!(player instanceof ServerPlayer sp)) return;
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof ServerPlayer sp)) return;
         if (!sp.hasData(ModAttachments.CYBERWARE)) return;
 
         PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
@@ -247,7 +266,6 @@ public class SpinalInjectorItem extends Item implements ICyberwareItem {
     /* ---------------- AUTO-INJECT FUNCTIONALITY ---------------- */
 
     private static final String INJECT_COOLDOWN_TAG = "cc_spinal_injector_cd";
-
     private static final int INJECT_COOLDOWN_TICKS = 20;
 
     private static int getCooldown(ServerPlayer sp) {
@@ -346,7 +364,6 @@ public class SpinalInjectorItem extends Item implements ICyberwareItem {
                 dropEmptyAutoInjectorBehind(sp);
                 return true;
             }
-
 
             PotionContents pc = base.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
             if (pc == null || !pc.hasEffects()) continue;
@@ -476,5 +493,4 @@ public class SpinalInjectorItem extends Item implements ICyberwareItem {
             }
         }
     }
-
 }

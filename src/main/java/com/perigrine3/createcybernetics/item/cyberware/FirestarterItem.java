@@ -16,7 +16,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -85,13 +85,13 @@ public class FirestarterItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {}
+    public void onInstalled(LivingEntity entity) {}
 
     @Override
-    public void onRemoved(Player player) {}
+    public void onRemoved(LivingEntity entity) {}
 
     @Override
-    public void onTick(Player player) {}
+    public void onTick(LivingEntity entity) {}
 
     private record InstalledRef(CyberwareSlot slot, int index) {}
 

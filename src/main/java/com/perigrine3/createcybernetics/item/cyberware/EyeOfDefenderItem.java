@@ -4,7 +4,9 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.util.ModTags;
@@ -13,12 +15,14 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.List;
@@ -28,8 +32,6 @@ public class EyeOfDefenderItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
     private static final int ENERGY_PER_TICK = 5;
-
-    // keep slightly > 20 so missing 1 tick doesn’t drop the effect
     private static final int EFFECT_DURATION_TICKS = 40;
 
     public EyeOfDefenderItem(Properties props, int humanityCost) {
@@ -74,32 +76,27 @@ public class EyeOfDefenderItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return ENERGY_PER_TICK;
     }
 
     @Override
-    public void onInstalled(Player player) { }
+    public void onInstalled(LivingEntity entity) { }
 
     @Override
-    public void onRemoved(Player player) {
-        if (!player.level().isClientSide) {
-            player.removeEffect(ModEffects.PROJECTILE_DODGE_EFFECT);
-        }
+    public void onRemoved(LivingEntity entity) {
+        if (entity == null || entity.level().isClientSide) return;
+        entity.removeEffect(ModEffects.PROJECTILE_DODGE_EFFECT);
     }
 
-    /**
-     * New truth-source: rely on the installed entry's powered state (EnergyController sets this).
-     * Also respects wheel toggle via data.isEnabled(slot, idx).
-     */
     private static boolean isActive(Player player) {
-        if (!(player instanceof Player p)) return false;
-        if (p.level().isClientSide) return false;
-        if (!p.isAlive()) return false;
-        if (p.isCreative() || p.isSpectator()) return false;
+        if (player == null) return false;
+        if (player.level().isClientSide) return false;
+        if (!player.isAlive()) return false;
+        if (player.isCreative() || player.isSpectator()) return false;
 
-        if (!p.hasData(ModAttachments.CYBERWARE)) return false;
-        PlayerCyberwareData data = p.getData(ModAttachments.CYBERWARE);
+        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return false;
 
         InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.BRAIN);
@@ -113,11 +110,37 @@ public class EyeOfDefenderItem extends Item implements ICyberwareItem {
             if (st == null || st.isEmpty()) continue;
 
             if (!(st.getItem() instanceof EyeOfDefenderItem)) continue;
-
-            // respect wheel toggle
             if (!data.isEnabled(CyberwareSlot.BRAIN, idx)) return false;
 
             return cw.isPowered();
+        }
+
+        return false;
+    }
+
+    private static boolean isActiveEntity(LivingEntity entity) {
+        if (entity == null) return false;
+        if (entity.level().isClientSide) return false;
+        if (!entity.isAlive()) return false;
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return false;
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+        if (data == null) return false;
+
+        InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.BRAIN);
+        if (arr == null) return false;
+
+        for (int idx = 0; idx < arr.length; idx++) {
+            InstalledCyberware cw = arr[idx];
+            if (cw == null) continue;
+
+            ItemStack st = cw.getItem();
+            if (st == null || st.isEmpty()) continue;
+
+            if (!(st.getItem() instanceof EyeOfDefenderItem)) continue;
+            if (!data.isEnabled(CyberwareSlot.BRAIN, idx)) return false;
+
+            return true;
         }
 
         return false;
@@ -133,7 +156,6 @@ public class EyeOfDefenderItem extends Item implements ICyberwareItem {
             if (player.level().isClientSide) return;
 
             if (isActive(player)) {
-                // refresh effect while active
                 player.addEffect(new MobEffectInstance(
                         ModEffects.PROJECTILE_DODGE_EFFECT,
                         EFFECT_DURATION_TICKS,
@@ -142,19 +164,32 @@ public class EyeOfDefenderItem extends Item implements ICyberwareItem {
                         false,
                         false
                 ));
-            } else {
-                // hard remove if not active
-                if (player.hasEffect(ModEffects.PROJECTILE_DODGE_EFFECT)) {
-                    player.removeEffect(ModEffects.PROJECTILE_DODGE_EFFECT);
-                }
+            } else if (player.hasEffect(ModEffects.PROJECTILE_DODGE_EFFECT)) {
+                player.removeEffect(ModEffects.PROJECTILE_DODGE_EFFECT);
+            }
+        }
+
+        @SubscribeEvent
+        public static void onEntityTick(EntityTickEvent.Post event) {
+            if (!(event.getEntity() instanceof LivingEntity entity)) return;
+            if (entity instanceof Player) return;
+            if (entity.level().isClientSide) return;
+
+            if (isActiveEntity(entity)) {
+                entity.addEffect(new MobEffectInstance(
+                        ModEffects.PROJECTILE_DODGE_EFFECT,
+                        EFFECT_DURATION_TICKS,
+                        0,
+                        false,
+                        false,
+                        false
+                ));
+            } else if (entity.hasEffect(ModEffects.PROJECTILE_DODGE_EFFECT)) {
+                entity.removeEffect(ModEffects.PROJECTILE_DODGE_EFFECT);
             }
         }
     }
 
-    /**
-     * Keep this empty; your current architecture may or may not call it.
-     * The reliable behavior is handled by the PlayerTickEvent above.
-     */
     @Override
-    public void onTick(Player player) { }
+    public void onTick(LivingEntity entity) { }
 }

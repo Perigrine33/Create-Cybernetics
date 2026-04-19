@@ -6,14 +6,12 @@ import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -54,19 +52,34 @@ public class CybereyeItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 5;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.EYES); }
-    @Override public boolean replacesOrgan() { return true; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(CyberwareSlot.EYES); }
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.EYES);
+    }
+
+    @Override
+    public boolean replacesOrgan() {
+        return true;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of(CyberwareSlot.EYES);
+    }
 
     @Override
     public int maxStacksPerSlotType(ItemStack stack, CyberwareSlot slotType) {
@@ -74,18 +87,16 @@ public class CybereyeItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
-
+    public void onRemoved(LivingEntity entity) {
     }
 
     @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onTick(LivingEntity entity) {
+        ICyberwareItem.super.onTick(entity);
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -96,10 +107,6 @@ public class CybereyeItem extends Item implements ICyberwareItem {
         private static final int BLINDNESS_AMPLIFIER = 1;
         private static final int DARKNESS_AMPLIFIER = 0;
 
-        /**
-         * LOWEST is intentional: EnergyController also runs on PlayerTickEvent.Post and is what sets cw.setPowered(...).
-         * We want to run after it has decided power for the tick.
-         */
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public static void onPlayerTick(PlayerTickEvent.Post event) {
             Player player = event.getEntity();

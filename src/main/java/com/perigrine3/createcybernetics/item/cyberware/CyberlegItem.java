@@ -3,9 +3,10 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -13,7 +14,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -63,12 +64,12 @@ public class CyberlegItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 10;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
@@ -93,38 +94,49 @@ public class CyberlegItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    public void onInstalled(LivingEntity entity) {
+        boolean hasRight;
+        boolean hasLeft;
 
-        if (data.hasAnyTagged(ModTags.Items.RIGHT_CYBERLEG, CyberwareSlot.RLEG) && data.hasAnyTagged(ModTags.Items.LEFT_CYBERLEG, CyberwareSlot.LLEG)) {
-            CyberwareAttributeHelper.applyModifier(player, "cyberleg_speed1");
-            CyberwareAttributeHelper.applyModifier(player, "cyberleg_jump1");
+        if (entity instanceof Player player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            hasRight = data.hasAnyTagged(ModTags.Items.RIGHT_CYBERLEG, CyberwareSlot.RLEG);
+            hasLeft = data.hasAnyTagged(ModTags.Items.LEFT_CYBERLEG, CyberwareSlot.LLEG);
+        } else {
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            hasRight = data.hasAnyTagged(ModTags.Items.RIGHT_CYBERLEG, CyberwareSlot.RLEG);
+            hasLeft = data.hasAnyTagged(ModTags.Items.LEFT_CYBERLEG, CyberwareSlot.LLEG);
+        }
 
-            CyberwareAttributeHelper.applyModifier(player, "cyberleg_speed2");
-            CyberwareAttributeHelper.applyModifier(player, "cyberleg_jump2");
-        } else if (data.hasAnyTagged(ModTags.Items.RIGHT_CYBERLEG, CyberwareSlot.RLEG) || data.hasAnyTagged(ModTags.Items.LEFT_CYBERLEG, CyberwareSlot.LLEG)) {
-            CyberwareAttributeHelper.applyModifier(player, "cyberleg_speed1");
-            CyberwareAttributeHelper.applyModifier(player, "cyberleg_jump2");
+        if (hasRight && hasLeft) {
+            CyberwareAttributeHelper.applyModifier(entity, "cyberleg_speed1");
+            CyberwareAttributeHelper.applyModifier(entity, "cyberleg_jump1");
 
-            CyberwareAttributeHelper.removeModifier(player, "cyberleg_speed2");
-            CyberwareAttributeHelper.removeModifier(player, "cyberleg_jump2");
+            CyberwareAttributeHelper.applyModifier(entity, "cyberleg_speed2");
+            CyberwareAttributeHelper.applyModifier(entity, "cyberleg_jump2");
+        } else if (hasRight || hasLeft) {
+            CyberwareAttributeHelper.applyModifier(entity, "cyberleg_speed1");
+            CyberwareAttributeHelper.applyModifier(entity, "cyberleg_jump2");
+
+            CyberwareAttributeHelper.removeModifier(entity, "cyberleg_speed2");
+            CyberwareAttributeHelper.removeModifier(entity, "cyberleg_jump2");
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "cyberleg_speed1");
-        CyberwareAttributeHelper.removeModifier(player, "cyberleg_jump1");
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "cyberleg_speed1");
+        CyberwareAttributeHelper.removeModifier(entity, "cyberleg_jump1");
 
-        CyberwareAttributeHelper.removeModifier(player, "cyberleg_speed2");
-        CyberwareAttributeHelper.removeModifier(player, "cyberleg_jump2");
+        CyberwareAttributeHelper.removeModifier(entity, "cyberleg_speed2");
+        CyberwareAttributeHelper.removeModifier(entity, "cyberleg_jump2");
 
-        onInstalled(player);
+        onInstalled(entity);
     }
 
     @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onTick(LivingEntity entity) {
+        ICyberwareItem.super.onTick(entity);
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)

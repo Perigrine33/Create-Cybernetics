@@ -1,0 +1,82 @@
+package com.perigrine3.createcybernetics.effect.quickhacks;
+
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.cyberware.ICEProtocolItem;
+import com.perigrine3.createcybernetics.network.payload.BehindYouSoundPayload;
+import com.perigrine3.createcybernetics.util.ModTags;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+public class BehindYouQuickhackEffect extends MobEffect {
+    private static final int DEFAULT_DURATION = 20;
+    private static final int DEFAULT_AMPLIFIER = 0;
+    private static final float SUCCESS_CHANCE = 0.95f;
+    private static final int SOUND_COUNT = 3;
+
+    public BehindYouQuickhackEffect() {
+        super(MobEffectCategory.HARMFUL, 0xFF4AB3FF);
+    }
+
+    public static boolean applyQuickhack(LivingEntity target) {
+        if (!(target instanceof ServerPlayer player)) return false;
+        if (ICEProtocolItem.negatesQuickhack(player)) return false;
+        if (!hasValidCyberwareTarget(target)) {
+            return false;
+        }
+        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+
+        RandomSource random = player.getRandom();
+        if (random.nextFloat() > SUCCESS_CHANCE) return false;
+
+        return player.addEffect(new MobEffectInstance(
+                com.perigrine3.createcybernetics.effect.ModEffects.BEHINDYOU_HACK,
+                DEFAULT_DURATION,
+                DEFAULT_AMPLIFIER,
+                false,
+                false,
+                true
+        ));
+    }
+
+    @Override
+    public void onEffectStarted(LivingEntity entity, int amplifier) {
+        if (!(entity instanceof ServerPlayer player)) return;
+
+        int soundIndex = player.getRandom().nextInt(SOUND_COUNT);
+
+        PacketDistributor.sendToPlayer(player, new BehindYouSoundPayload(soundIndex, 3.0f, 1.0f, 2.5f));
+    }
+
+    private static boolean hasValidCyberwareTarget(LivingEntity target) {
+        if (!(target instanceof ServerPlayer player)) {
+            return false;
+        }
+
+        if (!player.hasData(ModAttachments.CYBERWARE)) {
+            return false;
+        }
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) {
+            return false;
+        }
+
+        return data.hasAnyTagged(
+                ModTags.Items.CYBERWARE_ITEM,
+                CyberwareSlot.BRAIN
+        );
+    }
+
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
+        return false;
+    }
+}

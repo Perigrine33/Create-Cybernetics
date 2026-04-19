@@ -28,9 +28,12 @@ public final class ModKeyMappings {
             new KeyMapping("key.createcybernetics.arm_cannon", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY));
     public static final Lazy<KeyMapping> ARM_CANNON_WHEEL = Lazy.of(() ->
             new KeyMapping("key.createcybernetics.arm_cannon_wheel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY));
-
     public static final Lazy<KeyMapping> HEAT_ENGINE = Lazy.of(() ->
             new KeyMapping("key.createcybernetics.heat_engine", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY));
+    public static final Lazy<KeyMapping> CYBERDECK = Lazy.of(() ->
+            new KeyMapping("key.createcybernetics.cyberdeck", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY));
+    public static final Lazy<KeyMapping> CYBERDECK_WHEEL = Lazy.of(() ->
+            new KeyMapping("key.createcybernetics.cyberdeck_wheel", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY));
 
     public static final Lazy<KeyMapping> INFOLOG = Lazy.of(() ->
             new KeyMapping("key.createcybernetics.infolog_gui", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY));
@@ -43,6 +46,8 @@ public final class ModKeyMappings {
         event.register(ARM_CANNON.get());
         event.register(ARM_CANNON_WHEEL.get());
         event.register(HEAT_ENGINE.get());
+        event.register(CYBERDECK.get());
+        event.register(CYBERDECK_WHEEL.get());
         event.register(INFOLOG.get());
     }
 }

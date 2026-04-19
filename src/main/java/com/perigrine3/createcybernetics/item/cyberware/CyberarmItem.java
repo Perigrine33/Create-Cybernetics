@@ -3,9 +3,10 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -15,6 +16,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -66,19 +68,34 @@ public class CyberarmItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 10;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(side); }
-    @Override public boolean replacesOrgan() { return true; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(side); }
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(side);
+    }
+
+    @Override
+    public boolean replacesOrgan() {
+        return true;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of(side);
+    }
 
     @Override
     public Set<TagKey<Item>> incompatibleCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
@@ -92,49 +109,53 @@ public class CyberarmItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    public void onInstalled(LivingEntity entity) {
+        boolean hasRight;
+        boolean hasLeft;
 
-        if (data.hasAnyTagged(ModTags.Items.RIGHT_CYBERARM, CyberwareSlot.RARM) && data.hasAnyTagged(ModTags.Items.LEFT_CYBERARM, CyberwareSlot.LARM)) {
-            CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength1");
-            CyberwareAttributeHelper.applyModifier(player, "cyberarm_blockbreak1");
+        if (entity instanceof Player player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            hasRight = data.hasAnyTagged(ModTags.Items.RIGHT_CYBERARM, CyberwareSlot.RARM);
+            hasLeft = data.hasAnyTagged(ModTags.Items.LEFT_CYBERARM, CyberwareSlot.LARM);
+        } else {
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            hasRight = data.hasAnyTagged(ModTags.Items.RIGHT_CYBERARM, CyberwareSlot.RARM);
+            hasLeft = data.hasAnyTagged(ModTags.Items.LEFT_CYBERARM, CyberwareSlot.LARM);
+        }
 
-            CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength2");
-            CyberwareAttributeHelper.applyModifier(player, "cyberarm_blockbreak2");
-        } else if (data.hasAnyTagged(ModTags.Items.RIGHT_CYBERARM, CyberwareSlot.RARM) || data.hasAnyTagged(ModTags.Items.LEFT_CYBERARM, CyberwareSlot.LARM)) {
-            CyberwareAttributeHelper.applyModifier(player, "cyberarm_strength1");
-            CyberwareAttributeHelper.applyModifier(player, "cyberarm_blockbreak1");
-
-            CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength2");
-            CyberwareAttributeHelper.removeModifier(player, "cyberarm_blockbreak2");
+        if (hasRight && hasLeft) {
+            CyberwareAttributeHelper.applyModifier(entity, "cyberarm_strength1");
+            CyberwareAttributeHelper.applyModifier(entity, "cyberarm_blockbreak1");
+            CyberwareAttributeHelper.applyModifier(entity, "cyberarm_strength2");
+            CyberwareAttributeHelper.applyModifier(entity, "cyberarm_blockbreak2");
+        } else if (hasRight || hasLeft) {
+            CyberwareAttributeHelper.applyModifier(entity, "cyberarm_strength1");
+            CyberwareAttributeHelper.applyModifier(entity, "cyberarm_blockbreak1");
+            CyberwareAttributeHelper.removeModifier(entity, "cyberarm_strength2");
+            CyberwareAttributeHelper.removeModifier(entity, "cyberarm_blockbreak2");
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength1");
-        CyberwareAttributeHelper.removeModifier(player, "cyberarm_blockbreak1");
-
-        CyberwareAttributeHelper.removeModifier(player, "cyberarm_strength2");
-        CyberwareAttributeHelper.removeModifier(player, "cyberarm_blockbreak2");
-
-        onInstalled(player);
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "cyberarm_strength1");
+        CyberwareAttributeHelper.removeModifier(entity, "cyberarm_blockbreak1");
+        CyberwareAttributeHelper.removeModifier(entity, "cyberarm_strength2");
+        CyberwareAttributeHelper.removeModifier(entity, "cyberarm_blockbreak2");
+        onInstalled(entity);
     }
 
     @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onTick(LivingEntity entity) {
+        ICyberwareItem.super.onTick(entity);
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class PowerFailHooks {
         private PowerFailHooks() {}
 
-        /* ---- reflection caches (so we don’t scan every event) ---- */
         private static final ConcurrentHashMap<Class<?>, Method> POWER_METHOD_CACHE = new ConcurrentHashMap<>();
-        private static final ConcurrentHashMap<Class<?>, Field>  POWER_FIELD_CACHE  = new ConcurrentHashMap<>();
-
-        /* -------------------- Tick enforcement: drop items + stop use -------------------- */
+        private static final ConcurrentHashMap<Class<?>, Field> POWER_FIELD_CACHE = new ConcurrentHashMap<>();
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -144,7 +165,7 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            boolean leftDead  = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
+            boolean leftDead = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
             boolean rightDead = isCyberarmUnpowered(player, data, CyberwareSlot.RARM);
 
             if (!leftDead && !rightDead) return;
@@ -172,9 +193,6 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             player.inventoryMenu.broadcastChanges();
         }
 
-        /* -------------------- Interactions: right click item/block -------------------- */
-        // Cancel on BOTH sides to reduce “hand swing still happens” feel.
-
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
             Player player = event.getEntity();
@@ -182,7 +200,7 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            boolean leftDead  = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
+            boolean leftDead = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
             boolean rightDead = isCyberarmUnpowered(player, data, CyberwareSlot.RARM);
 
             if (!isHandDisabled(player, leftDead, rightDead, event.getHand())) return;
@@ -198,7 +216,7 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            boolean leftDead  = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
+            boolean leftDead = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
             boolean rightDead = isCyberarmUnpowered(player, data, CyberwareSlot.RARM);
 
             if (!isHandDisabled(player, leftDead, rightDead, event.getHand())) return;
@@ -207,8 +225,6 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             event.setCancellationResult(InteractionResult.FAIL);
         }
 
-        /* -------------------- Item use: eating/bow/shield/etc. -------------------- */
-
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onUseItemStart(LivingEntityUseItemEvent.Start event) {
             if (!(event.getEntity() instanceof Player player)) return;
@@ -216,7 +232,7 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            boolean leftDead  = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
+            boolean leftDead = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
             boolean rightDead = isCyberarmUnpowered(player, data, CyberwareSlot.RARM);
 
             if (!leftDead && !rightDead) return;
@@ -233,8 +249,6 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             return null;
         }
 
-        /* -------------------- Attack: main hand -------------------- */
-
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onAttack(AttackEntityEvent event) {
             Player player = event.getEntity();
@@ -242,7 +256,7 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            boolean leftDead  = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
+            boolean leftDead = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
             boolean rightDead = isCyberarmUnpowered(player, data, CyberwareSlot.RARM);
 
             if (!leftDead && !rightDead) return;
@@ -252,8 +266,6 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             }
         }
 
-        /* -------------------- Block breaking: main hand -------------------- */
-
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
             Player player = event.getEntity();
@@ -261,7 +273,7 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            boolean leftDead  = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
+            boolean leftDead = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
             boolean rightDead = isCyberarmUnpowered(player, data, CyberwareSlot.RARM);
 
             if (!isHandDisabled(player, leftDead, rightDead, InteractionHand.MAIN_HAND)) return;
@@ -277,15 +289,13 @@ public class CyberarmItem extends Item implements ICyberwareItem {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return;
 
-            boolean leftDead  = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
+            boolean leftDead = isCyberarmUnpowered(player, data, CyberwareSlot.LARM);
             boolean rightDead = isCyberarmUnpowered(player, data, CyberwareSlot.RARM);
 
             if (!isHandDisabled(player, leftDead, rightDead, InteractionHand.MAIN_HAND)) return;
 
             event.setCanceled(true);
         }
-
-        /* -------------------- Core mapping/logic -------------------- */
 
         private static boolean isHandDisabled(Player player, boolean leftDead, boolean rightDead, InteractionHand hand) {
             HumanoidArm arm = armForHand(player, hand);
@@ -311,38 +321,23 @@ public class CyberarmItem extends Item implements ICyberwareItem {
 
                 Item item = st.getItem();
                 if (!(item instanceof CyberarmItem cyberarm)) continue;
-
-                // Ensure we’re looking at the arm that belongs in this slot.
                 if (cyberarm.side != armSlot) continue;
-
                 if (!data.isEnabled(armSlot, idx)) continue;
-
-                // If it doesn't require energy, it can't be "unpowered".
                 if (!cyberarm.requiresEnergyToFunction(player, st, armSlot)) return false;
 
-                // EnergyController is authoritative: it sets cw.setPowered(powered) each tick.
                 return !readInstalledPowered(installed);
             }
 
             return false;
         }
 
-        /**
-         * Robust "powered" reader that works even if InstalledCyberware uses:
-         * - non-public accessor
-         * - a boolean field instead of a method
-         */
         private static boolean readInstalledPowered(Object installedCyberware) {
-            // Fail-open ONLY if we truly cannot read anything.
             try {
                 Class<?> cls = installedCyberware.getClass();
 
-                // 1) Method cache
                 Method m = POWER_METHOD_CACHE.computeIfAbsent(cls, c -> {
                     Method found = findBoolMethod(c, "isPowered", "getPowered", "powered");
-                    if (found != null) {
-                        found.setAccessible(true);
-                    }
+                    if (found != null) found.setAccessible(true);
                     return found;
                 });
 
@@ -351,12 +346,9 @@ public class CyberarmItem extends Item implements ICyberwareItem {
                     if (v instanceof Boolean b) return b;
                 }
 
-                // 2) Field cache
                 Field f = POWER_FIELD_CACHE.computeIfAbsent(cls, c -> {
                     Field found = findBoolField(c, "powered", "isPowered", "poweredFlag");
-                    if (found != null) {
-                        found.setAccessible(true);
-                    }
+                    if (found != null) found.setAccessible(true);
                     return found;
                 });
 
@@ -364,7 +356,6 @@ public class CyberarmItem extends Item implements ICyberwareItem {
                     return f.getBoolean(installedCyberware);
                 }
 
-                // If we get here, we couldn't read it at all.
                 return true;
             } catch (Throwable t) {
                 return true;
@@ -373,7 +364,6 @@ public class CyberarmItem extends Item implements ICyberwareItem {
 
         private static Method findBoolMethod(Class<?> cls, String... names) {
             for (String n : names) {
-                // Try declared first (non-public), then public.
                 try {
                     Method m = cls.getDeclaredMethod(n);
                     if (m.getReturnType() == boolean.class || m.getReturnType() == Boolean.class) return m;

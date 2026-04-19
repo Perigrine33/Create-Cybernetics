@@ -34,21 +34,21 @@ public final class AerostasisGyrobladderAirHandler {
 
         if (!player.hasEffect(ModEffects.AEROSTASIS_GYROBLADDER_EFFECT)) return;
         if (player.isCreative() || player.isSpectator()) return;
-
         if (player.isInWaterOrBubble()) return;
 
         final int maxAir = player.getMaxAirSupply();
         int o2 = getO2(player);
 
-        boolean holdingBreath = AerostasisGyrobladderEffect.isJumpHeldServer(player);
+        boolean flying = player.getAbilities().flying;
 
-        if (holdingBreath) {
+        if (flying) {
             o2 = Math.max(0, o2 - 1);
         } else {
             o2 = Math.min(maxAir, o2 + 4);
         }
 
         setO2(player, o2);
+
         int preAir = Mth.clamp(o2 - 4, -20, maxAir);
         player.setAirSupply(preAir);
     }

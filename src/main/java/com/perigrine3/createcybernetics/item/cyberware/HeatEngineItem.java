@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -38,8 +38,10 @@ public class HeatEngineItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyGeneratedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    public int getEnergyGeneratedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (!(entity instanceof ServerPlayer sp)) return 0;
+
+        PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
         return data.isHeatEngineActive() ? 50 : 0;
     }
 
@@ -64,15 +66,15 @@ public class HeatEngineItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        if (player instanceof ServerPlayer sp) {
+    public void onInstalled(LivingEntity entity) {
+        if (entity instanceof ServerPlayer sp) {
             sp.syncData(ModAttachments.CYBERWARE);
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (!(player instanceof ServerPlayer sp)) return;
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof ServerPlayer sp)) return;
 
         PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
@@ -87,8 +89,8 @@ public class HeatEngineItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onTick(Player player) {
-        if (!(player instanceof ServerPlayer sp)) return;
+    public void onTick(LivingEntity entity) {
+        if (!(entity instanceof ServerPlayer sp)) return;
 
         PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
@@ -135,15 +137,19 @@ public class HeatEngineItem extends Item implements ICyberwareItem {
         if (!(sp.level() instanceof ServerLevel level)) return;
         if (sp.tickCount % Math.max(1, HeatEngineParticleTuning.SPAWN_EVERY_TICKS) != 0) return;
 
-        Vec3Pos belly = anchoredToBody(sp,
+        Vec3Pos belly = anchoredToBody(
+                sp,
                 HeatEngineParticleTuning.BELLY_UP,
                 HeatEngineParticleTuning.BELLY_FORWARD,
-                HeatEngineParticleTuning.BELLY_RIGHT);
+                HeatEngineParticleTuning.BELLY_RIGHT
+        );
 
-        Vec3Pos back = anchoredToBody(sp,
+        Vec3Pos back = anchoredToBody(
+                sp,
                 HeatEngineParticleTuning.BACK_UP,
                 HeatEngineParticleTuning.BACK_FORWARD,
-                HeatEngineParticleTuning.BACK_RIGHT);
+                HeatEngineParticleTuning.BACK_RIGHT
+        );
 
         spawnJittered(level, ParticleTypes.FLAME, belly, HeatEngineParticleTuning.FIRE_COUNT, HeatEngineParticleTuning.FIRE_SPEED);
         spawnJittered(level, ParticleTypes.CAMPFIRE_COSY_SMOKE, back, HeatEngineParticleTuning.SMOKE_COUNT, HeatEngineParticleTuning.SMOKE_SPEED);

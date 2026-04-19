@@ -4,7 +4,9 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
@@ -82,19 +84,19 @@ public class DragonSkinItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "dragonskin_armor");
-        CyberwareAttributeHelper.applyModifier(player, "dragonskin_toughness");
+    public void onInstalled(LivingEntity entity) {
+        CyberwareAttributeHelper.applyModifier(entity, "dragonskin_armor");
+        CyberwareAttributeHelper.applyModifier(entity, "dragonskin_toughness");
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "dragonskin_armor");
-        CyberwareAttributeHelper.removeModifier(player, "dragonskin_toughness");
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "dragonskin_armor");
+        CyberwareAttributeHelper.removeModifier(entity, "dragonskin_toughness");
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -104,9 +106,8 @@ public class DragonSkinItem extends Item implements ICyberwareItem {
         @SubscribeEvent
         public static void onIncomingDamage(LivingIncomingDamageEvent event) {
             LivingEntity living = event.getEntity();
-            if (!(living instanceof Player player)) return;
-            if (player.level().isClientSide) return;
-            if (!isDragonSkinInstalled(player)) return;
+            if (living.level().isClientSide) return;
+            if (!isDragonSkinInstalled(living)) return;
 
             DamageSource src = event.getSource();
             if (!isDragonFireDamage(src)) return;
@@ -133,12 +134,29 @@ public class DragonSkinItem extends Item implements ICyberwareItem {
         return false;
     }
 
-    private static boolean isDragonSkinInstalled(Player player) {
-        if (player == null) return false;
-        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+    private static boolean isDragonSkinInstalled(LivingEntity living) {
+        if (living == null) return false;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (living instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return false;
 
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.SKIN);
+            if (arr == null) return false;
+
+            for (InstalledCyberware cw : arr) {
+                if (cw == null) continue;
+
+                ItemStack stack = cw.getItem();
+                if (stack == null || stack.isEmpty()) continue;
+
+                if (stack.is(ModItems.WETWARE_DRAGONSKIN.get())) return true;
+            }
+
+            return false;
+        }
+
+        EntityCyberwareData data = living.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.SKIN);
         if (arr == null) return false;
 

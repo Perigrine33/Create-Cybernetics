@@ -20,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -62,14 +63,14 @@ public class ManaSkinItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyGeneratedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        if (player.level().isClientSide) return 0;
+    public int getEnergyGeneratedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (entity.level().isClientSide) return 0;
 
-        if (player instanceof ServerPlayer sp && hasBossBar(sp)) return 50;
-        if (player instanceof ServerPlayer sp && isInsideIronsStructure(sp)) return 10;
+        if (entity instanceof ServerPlayer sp && hasBossBar(sp)) return 50;
+        if (entity instanceof ServerPlayer sp && isInsideIronsStructure(sp)) return 10;
 
-        if (player.level() instanceof ServerLevel sl) {
-            var key = sl.getBiome(player.blockPosition()).unwrapKey();
+        if (entity.level() instanceof ServerLevel sl) {
+            var key = sl.getBiome(entity.blockPosition()).unwrapKey();
             if (key.isPresent() && key.get().equals(Biomes.DARK_FOREST)) return 7;
         }
 
@@ -99,27 +100,47 @@ public class ManaSkinItem extends Item implements ICyberwareItem {
         }
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.SKIN); }
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
-    @Override public int maxStacksPerSlotType(ItemStack stack, CyberwareSlot slotType) { return 1; }
-
     @Override
-    public void onInstalled(Player player) {
-        CyberwareAttributeHelper.applyModifier(player, "irons_spell_resist_manaskin");
-        player.getPersistentData().putBoolean(TAG_INSTALLED, true);
+    public int getHumanityCost() {
+        return humanityCost;
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "irons_spell_resist_manaskin");
-        player.getPersistentData().remove(TAG_INSTALLED);
-        player.getPersistentData().remove(TAG_LAST_TICK);
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.SKIN);
     }
 
     @Override
-    public void onTick(Player player) {}
+    public boolean replacesOrgan() {
+        return false;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
+
+    @Override
+    public int maxStacksPerSlotType(ItemStack stack, CyberwareSlot slotType) {
+        return 1;
+    }
+
+    @Override
+    public void onInstalled(LivingEntity entity) {
+        CyberwareAttributeHelper.applyModifier(entity, "irons_spell_resist_manaskin");
+        entity.getPersistentData().putBoolean(TAG_INSTALLED, true);
+    }
+
+    @Override
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "irons_spell_resist_manaskin");
+        entity.getPersistentData().remove(TAG_INSTALLED);
+        entity.getPersistentData().remove(TAG_LAST_TICK);
+    }
+
+    @Override
+    public void onTick(LivingEntity entity) {
+    }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class ManaSkinSpellHitHandler {

@@ -1,0 +1,40 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "M": {
+      "item": "createcybernetics:boneupgrades_bonebattery"
+    },
+    "A": {
+      "item": "createcybernetics:component_actuator"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "L": {
+      "item": "minecraft:lightning_rod"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+
+  "pattern": [
+    "  L  ",
+    " MNM ",
+    "MAGAM",
+    "WMNMW",
+    "MAGAM"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:boneupgrades_capacitorframe"
+  },
+  "show_notification": false
+}

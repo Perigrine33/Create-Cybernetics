@@ -13,7 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
@@ -40,19 +39,19 @@ public class SpursEffect extends MobEffect {
 
         @SubscribeEvent
         public static void onMount(EntityMountEvent event) {
-            if (!(event.getEntityMounting() instanceof Player player)) return;
-            if (player.level().isClientSide) return;
+            if (!(event.getEntityMounting() instanceof LivingEntity rider)) return;
+            if (rider.level().isClientSide) return;
 
             Entity beingMounted = event.getEntityBeingMounted();
 
             if (event.isMounting()) {
                 if (!(beingMounted instanceof LivingEntity mount)) return;
 
-                MobEffectInstance spurs = getEffectById(player, SPURS_EFFECT_ID);
+                MobEffectInstance spurs = getEffectById(rider, SPURS_EFFECT_ID);
                 if (spurs == null) return;
 
                 applyToMount(mount, spurs.getAmplifier());
-                player.getPersistentData().putUUID(NBT_LAST_MOUNT_UUID, mount.getUUID());
+                rider.getPersistentData().putUUID(NBT_LAST_MOUNT_UUID, mount.getUUID());
                 return;
             }
 
@@ -60,9 +59,9 @@ public class SpursEffect extends MobEffect {
                 if (beingMounted instanceof LivingEntity mount) {
                     removeFromMount(mount);
                 } else {
-                    cleanupLastMount(player);
+                    cleanupLastMount(rider);
                 }
-                player.getPersistentData().remove(NBT_LAST_MOUNT_UUID);
+                rider.getPersistentData().remove(NBT_LAST_MOUNT_UUID);
             }
         }
 
@@ -77,28 +76,28 @@ public class SpursEffect extends MobEffect {
         }
 
         private static void cleanupIfSpurs(MobEffectInstance inst, LivingEntity entity) {
-            if (!(entity instanceof Player player)) return;
-            if (player.level().isClientSide) return;
+            if (entity.level().isClientSide) return;
             if (inst == null) return;
 
             ResourceLocation key = BuiltInRegistries.MOB_EFFECT.getKey(inst.getEffect().value());
             if (!SPURS_EFFECT_ID.equals(key)) return;
 
-            Entity vehicle = player.getVehicle();
+            Entity vehicle = entity.getVehicle();
             if (vehicle instanceof LivingEntity mount) {
                 removeFromMount(mount);
             }
-            cleanupLastMount(player);
-            player.getPersistentData().remove(NBT_LAST_MOUNT_UUID);
+
+            cleanupLastMount(entity);
+            entity.getPersistentData().remove(NBT_LAST_MOUNT_UUID);
         }
 
-        private static void cleanupLastMount(Player player) {
-            CompoundTag tag = player.getPersistentData();
+        private static void cleanupLastMount(LivingEntity entity) {
+            CompoundTag tag = entity.getPersistentData();
             if (!tag.hasUUID(NBT_LAST_MOUNT_UUID)) return;
 
             UUID uuid = tag.getUUID(NBT_LAST_MOUNT_UUID);
 
-            if (player.level() instanceof ServerLevel serverLevel) {
+            if (entity.level() instanceof ServerLevel serverLevel) {
                 Entity e = serverLevel.getEntity(uuid);
                 if (e instanceof LivingEntity mount) {
                     removeFromMount(mount);
@@ -110,6 +109,7 @@ public class SpursEffect extends MobEffect {
             for (var entry : entity.getActiveEffectsMap().entrySet()) {
                 MobEffectInstance inst = entry.getValue();
                 if (inst == null) continue;
+
                 ResourceLocation key = BuiltInRegistries.MOB_EFFECT.getKey(inst.getEffect().value());
                 if (effectId.equals(key)) return inst;
             }
@@ -138,5 +138,7 @@ public class SpursEffect extends MobEffect {
             if (speed == null) return;
             speed.removeModifier(MOUNT_SPEED_MODIFIER_ID);
         }
+
+        private Events() {}
     }
 }

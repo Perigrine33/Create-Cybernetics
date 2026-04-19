@@ -6,6 +6,7 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -62,14 +63,7 @@ public class CybereyeModuleItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onTick(Player player) {
-        if (!player.level().isClientSide) return;
-        if (ModItems.EYEUPGRADES_NAVIGATIONCHIP != null) {
-            if (net.neoforged.fml.ModList.get().isLoaded("xaerominimap")) {
-                // interact with minimap indirectly (capabilities, packets, etc.)
-            }
-        }
+    public void onTick(LivingEntity entity) {
 
-        ICyberwareItem.super.onTick(player);
     }
 }

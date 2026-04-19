@@ -3,7 +3,6 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -75,21 +74,23 @@ public class GrassfedStomachItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (!player.level().isClientSide) {
             player.getPersistentData().putBoolean(NBT_INSTALLED, true);
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (!player.level().isClientSide) {
             player.getPersistentData().putBoolean(NBT_INSTALLED, false);
         }
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
     private static boolean isInstalled(Player player) {

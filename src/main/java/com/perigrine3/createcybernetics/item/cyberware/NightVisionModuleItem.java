@@ -3,7 +3,9 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.ChatFormatting;
@@ -11,6 +13,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -65,49 +68,60 @@ public class NightVisionModuleItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return isEnabledByWheel(player) ? ENERGY_PER_TICK : 0;
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return isEnabledByWheel(entity) ? ENERGY_PER_TICK : 0;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
     @Override
-    public void onInstalled(Player player) { }
+    public void onInstalled(LivingEntity entity) { }
 
     @Override
-    public void onRemoved(Player player) {
-        if (!player.level().isClientSide) {
-            player.removeEffect(MobEffects.NIGHT_VISION);
+    public void onRemoved(LivingEntity entity) {
+        if (!entity.level().isClientSide) {
+            entity.removeEffect(MobEffects.NIGHT_VISION);
         }
     }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
-        if (player.level().isClientSide) return;
-        if (!player.isAlive()) return;
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (entity.level().isClientSide) return;
+        if (!entity.isAlive()) return;
 
-        if (!player.hasData(ModAttachments.CYBERWARE)) return;
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
+        InstalledCyberware cw;
 
-        InstalledCyberware cw = data.get(slot, index);
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return;
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return;
+
+            cw = data.get(slot, index);
+        } else {
+            if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            if (data == null) return;
+
+            cw = data.get(slot, index);
+        }
+
         if (cw == null) return;
 
-        boolean wantsOn = isEnabledByWheel(player);
+        boolean wantsOn = isEnabledByWheel(entity);
 
         if (!wantsOn || !cw.isPowered()) {
-            player.removeEffect(MobEffects.NIGHT_VISION);
+            entity.removeEffect(MobEffects.NIGHT_VISION);
             return;
         }
 
-        player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 220, 0, false, false, false));
+        entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 220, 0, false, false, false));
     }
 
     @Override
-    public void onTick(Player player) {
-        if (player.level().isClientSide) return;
+    public void onTick(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
     }
 }

@@ -185,7 +185,7 @@ public final class PlayerAttachmentManager {
     }
 
     // =========================
-    // GUARDIAN EYE
+    // WARDEN ANTLERS
     // =========================
     private static final ResourceLocation WARDEN_ANTLERS_ITEM_ID =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "wetware_wardenantlers");
@@ -206,6 +206,31 @@ public final class PlayerAttachmentManager {
     private static Item wardenAntlersItemOrNull() {
         if (!BuiltInRegistries.ITEM.containsKey(WARDEN_ANTLERS_ITEM_ID)) return null;
         Item item = BuiltInRegistries.ITEM.get(WARDEN_ANTLERS_ITEM_ID);
+        return item == null ? null : item;
+    }
+
+    // =========================
+    // NEURAL PROCESSOR PORT
+    // =========================
+    private static final ResourceLocation NEURAL_PROCESSOR_ITEM_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "brainupgrades_neuralprocessor");
+
+    public static final ResourceLocation NEURAL_PROCESSOR_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/neural_processor_port.png");
+
+    private static NeuralProcessorAttachmentModel NEURAL_PROCESSOR_MODEL;
+
+    public static NeuralProcessorAttachmentModel neuralProcessorModel() {
+        if (NEURAL_PROCESSOR_MODEL == null) {
+            var baked = Minecraft.getInstance().getEntityModels().bakeLayer(NeuralProcessorAttachmentModel.LAYER);
+            NEURAL_PROCESSOR_MODEL = new NeuralProcessorAttachmentModel(baked);
+        }
+        return NEURAL_PROCESSOR_MODEL;
+    }
+
+    private static Item neuralProcessorItemOrNull() {
+        if (!BuiltInRegistries.ITEM.containsKey(NEURAL_PROCESSOR_ITEM_ID)) return null;
+        Item item = BuiltInRegistries.ITEM.get(NEURAL_PROCESSOR_ITEM_ID);
         return item == null ? null : item;
     }
 
@@ -233,6 +258,7 @@ public final class PlayerAttachmentManager {
         Item spurItem = spurItemOrNull();
         Item guardianEyeItem = guardianEyeItemOrNull();
         Item wardenAntlersItem = wardenAntlersItemOrNull();
+        Item neuralProcessorItem = neuralProcessorItemOrNull();
 
         if (clawsItem == null && drillItem == null && pawsItem == null && calfPropellerItem == null && spurItem == null && guardianEyeItem == null && wardenAntlersItem == null) return state;
 
@@ -280,6 +306,10 @@ public final class PlayerAttachmentManager {
                 if (wardenAntlersItem != null && stack.is(wardenAntlersItem)) {
                     state.add(new WardenAntlersAttachment(anchor));
                 }
+
+                if (neuralProcessorItem != null && stack.is(neuralProcessorItem)) {
+                    state.add(new NeuralProcessorAttachment(anchor));
+                }
             }
         }
 
@@ -291,7 +321,11 @@ public final class PlayerAttachmentManager {
         if (slot == CyberwareSlot.RARM) return AttachmentAnchor.RIGHT_ARM;
         if (slot == CyberwareSlot.LLEG) return AttachmentAnchor.LEFT_LEG;
         if (slot == CyberwareSlot.RLEG) return AttachmentAnchor.RIGHT_LEG;
+        if (slot == CyberwareSlot.ORGANS) return AttachmentAnchor.BODY;
+        if (slot == CyberwareSlot.HEART) return AttachmentAnchor.BODY;
+        if (slot == CyberwareSlot.LUNGS) return AttachmentAnchor.BODY;
         if (slot == CyberwareSlot.EYES) return AttachmentAnchor.HEAD;
+        if (slot == CyberwareSlot.BRAIN) return AttachmentAnchor.HEAD;
         return null;
     }
 
@@ -391,6 +425,14 @@ public final class PlayerAttachmentManager {
     }
 
     public static void applyWardenAntlersTransform(PoseStack pose, AttachmentAnchor headAnchor) {
+        pose.translate(0.0F, 0.0F, 0.0F);
+        pose.mulPose(Axis.XN.rotationDegrees(0.0F));
+        pose.mulPose(Axis.YP.rotationDegrees(0.0F));
+
+        pose.scale(1, 1, 1);
+    }
+
+    public static void applyNeuralProcessorTransform(PoseStack pose, AttachmentAnchor headAnchor) {
         pose.translate(0.0F, 0.0F, 0.0F);
         pose.mulPose(Axis.XN.rotationDegrees(0.0F));
         pose.mulPose(Axis.YP.rotationDegrees(0.0F));
@@ -699,6 +741,44 @@ public final class PlayerAttachmentManager {
         @Override
         public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
             applyWardenAntlersTransform(poseStack, anchor);
+        }
+    }
+
+    private static final class NeuralProcessorAttachment implements PlayerAttachment {
+        private final AttachmentAnchor anchor;
+
+        private NeuralProcessorAttachment(AttachmentAnchor anchor) {
+            this.anchor = anchor;
+        }
+
+        @Override
+        public AttachmentAnchor anchor() {
+            return anchor;
+        }
+
+        @Override
+        public ResourceLocation texture(PlayerSkin.Model modelType) {
+            return NEURAL_PROCESSOR_TEXTURE;
+        }
+
+        @Override
+        public Model model(PlayerSkin.Model modelType) {
+            return neuralProcessorModel();
+        }
+
+        @Override
+        public int color() {
+            return 0xFFFFFFFF;
+        }
+
+        @Override
+        public boolean thirdPersonOnly() {
+            return true;
+        }
+
+        @Override
+        public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
+            applyNeuralProcessorTransform(poseStack, anchor);
         }
     }
 }

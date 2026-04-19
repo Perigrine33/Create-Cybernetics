@@ -10,6 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,14 +32,24 @@ public class MetalDetectorItem extends Item implements ICyberwareItem {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        // SAFE OPTION: no Screen.hasShiftDown() here.
         tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
         tooltip.add(Component.translatable("tooltip.createcybernetics.legupgrades_metaldetector.energy").withStyle(ChatFormatting.RED));
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
-    @Override public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) { return ENERGY_PER_TICK; }
-    @Override public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) { return true; }
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
+
+    @Override
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return ENERGY_PER_TICK;
+    }
+
+    @Override
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
 
     @Override
     public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
@@ -49,13 +60,29 @@ public class MetalDetectorItem extends Item implements ICyberwareItem {
         };
     }
 
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.RLEG, CyberwareSlot.LLEG); }
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
-    @Override public void onInstalled(Player player) {}
-    @Override public void onRemoved(Player player) {}
+    @Override
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.RLEG, CyberwareSlot.LLEG);
+    }
 
-    // Keep this helper PUBLIC/STATIC so the client ticker can reuse it without duplicating logic
+    @Override
+    public boolean replacesOrgan() {
+        return false;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
+
+    @Override
+    public void onInstalled(LivingEntity entity) {
+    }
+
+    @Override
+    public void onRemoved(LivingEntity entity) {
+    }
+
     public static DetectionResult scanForMetal(Level level, Player player) {
         BlockPos onPos = BlockPos.containing(player.getX(), player.getY() - 0.05D, player.getZ());
 

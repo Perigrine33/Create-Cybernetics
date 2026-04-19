@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.mixin.client;
 
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;

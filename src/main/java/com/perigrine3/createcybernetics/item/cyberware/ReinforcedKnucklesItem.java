@@ -5,7 +5,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.item.ModItems; // adjust to your actual ModItems path
+import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -13,6 +13,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +42,10 @@ public class ReinforcedKnucklesItem extends Item implements ICyberwareItem {
         }
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
 
     @Override
     public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
@@ -57,24 +61,38 @@ public class ReinforcedKnucklesItem extends Item implements ICyberwareItem {
         return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
     }
 
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
+    @Override
+    public boolean replacesOrgan() {
+        return false;
+    }
 
     @Override
-    public void onInstalled(Player player) {
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
 
-        if (data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.RARM) && data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.LARM)) {
+    @Override
+    public void onInstalled(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
+
+        if (data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.RARM)
+                && data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.LARM)) {
             CyberwareAttributeHelper.applyModifier(player, "reinforced_knuckles_damage1");
             CyberwareAttributeHelper.applyModifier(player, "reinforced_knuckles_damage2");
-        } else if (data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.RARM) || data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.LARM)) {
+        } else if (data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.RARM)
+                || data.hasSpecificItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get(), CyberwareSlot.LARM)) {
             CyberwareAttributeHelper.applyModifier(player, "reinforced_knuckles_damage1");
             CyberwareAttributeHelper.removeModifier(player, "reinforced_knuckles_damage2");
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+
         CyberwareAttributeHelper.removeModifier(player, "reinforced_knuckles_damage1");
         CyberwareAttributeHelper.removeModifier(player, "reinforced_knuckles_damage2");
 
@@ -82,7 +100,7 @@ public class ReinforcedKnucklesItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
     private static int countInstalledKnuckles(Player player) {
@@ -137,5 +155,7 @@ public class ReinforcedKnucklesItem extends Item implements ICyberwareItem {
 
             event.setNewSpeed(original * 6.0F);
         }
+
+        private MiningHooks() {}
     }
 }

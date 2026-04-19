@@ -1,26 +1,29 @@
 package com.perigrine3.createcybernetics.item.cyberware;
 
-import com.perigrine3.createcybernetics.CreateCybernetics; // ADDED
+import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.advancement.ModCriteria;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.common.capabilities.ModAttachments; // ADDED
-import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData; // ADDED
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel; // ADDED
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity; // ADDED
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level; // ADDED
-import net.neoforged.bus.api.SubscribeEvent; // ADDED
-import net.neoforged.fml.common.EventBusSubscriber; // ADDED
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent; // ADDED
+import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 import java.util.List;
 import java.util.Set;
@@ -66,15 +69,15 @@ public class CreeperheartItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
     @Override
@@ -82,35 +85,40 @@ public class CreeperheartItem extends Item implements ICyberwareItem {
         return false;
     }
 
+    private static boolean hasSpecificItem(LivingEntity entity, Item item, CyberwareSlot slot) {
+        if (entity instanceof Player player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            return data != null && data.hasSpecificItem(item, slot);
+        }
+
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+        return data != null && data.hasSpecificItem(item, slot);
+    }
+
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class Events {
 
         @SubscribeEvent
         public static void onLivingDeath(LivingDeathEvent event) {
-
-            if (!(event.getEntity() instanceof Player player)) return;
-            if (player.level().isClientSide) return;
-            if (!(player.level() instanceof ServerLevel level)) return;
+            if (!(event.getEntity() instanceof LivingEntity living)) return;
+            if (living.level().isClientSide) return;
+            if (!(living.level() instanceof ServerLevel level)) return;
 
             Entity killer = event.getSource().getEntity();
             if (killer == null) return;
 
-            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-            if (data == null) return;
-            if (data.hasSpecificItem(ModItems.HEARTUPGRADES_CREEPERHEART.get(), CyberwareSlot.HEART)) {
+            if (!hasSpecificItem(living, ModItems.HEARTUPGRADES_CREEPERHEART.get(), CyberwareSlot.HEART)) return;
 
-                if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_MAGICCATALYST.get(), CyberwareSlot.ORGANS)) {
-                    level.explode(player, player.getX(), player.getY()-2, player.getZ(), 50, true, Level.ExplosionInteraction.MOB);
+            if (hasSpecificItem(living, ModItems.ORGANSUPGRADES_MAGICCATALYST.get(), CyberwareSlot.ORGANS)) {
+                level.explode(living, living.getX(), living.getY() - 2, living.getZ(), 50, true, Level.ExplosionInteraction.MOB);
 
-                    if (!(event.getEntity() instanceof ServerPlayer sp)) return;
+                if (living instanceof ServerPlayer sp) {
                     ModCriteria.DESTROYER_OF_WORLDS.get().trigger(sp);
-
-                } else if (data.hasSpecificItem(ModItems.ORGANSUPGRADES_DUALISTICCONVERTER.get(), CyberwareSlot.ORGANS)) {
-                    level.explode(player, player.getX(), player.getY()-2, player.getZ(), 25, true, Level.ExplosionInteraction.MOB);
-
-                } else {
-                    level.explode(player, player.getX(), player.getY(), player.getZ(), 6, false, Level.ExplosionInteraction.MOB);
                 }
+            } else if (hasSpecificItem(living, ModItems.ORGANSUPGRADES_DUALISTICCONVERTER.get(), CyberwareSlot.ORGANS)) {
+                level.explode(living, living.getX(), living.getY() - 2, living.getZ(), 25, true, Level.ExplosionInteraction.MOB);
+            } else {
+                level.explode(living, living.getX(), living.getY(), living.getZ(), 6, false, Level.ExplosionInteraction.MOB);
             }
         }
 

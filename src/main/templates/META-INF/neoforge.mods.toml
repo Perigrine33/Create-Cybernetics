@@ -115,6 +115,13 @@ config="createcybernetics.mixins.json"
     ordering="NONE"
     side="CLIENT"
 
+[[dependencies.${mod_id}]]
+    modId="corpse"
+    type="optional"
+    versionRange="*"
+    ordering="NONE"
+    side="BOTH"
+
 # Here's another dependency
 [[dependencies.${mod_id}]]
     modId="minecraft"

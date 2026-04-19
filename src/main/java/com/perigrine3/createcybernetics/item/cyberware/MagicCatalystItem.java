@@ -5,7 +5,7 @@ import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -35,27 +35,27 @@ public class MagicCatalystItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyGeneratedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyGeneratedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return ENERGY_PER_TICK;
     }
 
     @Override
-    public int getEnergyCapacity(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyCapacity(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 0;
     }
 
     @Override
-    public boolean acceptsGeneratedEnergy(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean acceptsGeneratedEnergy(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return false;
     }
 
     @Override
-    public boolean acceptsChargerEnergy(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean acceptsChargerEnergy(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return false;
     }
 
     @Override
-    public int getChargerEnergyReceivePerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getChargerEnergyReceivePerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 0;
     }
 
@@ -85,11 +85,11 @@ public class MagicCatalystItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {}
+    public void onInstalled(LivingEntity entity) {}
 
     @Override
-    public void onRemoved(Player player) {}
+    public void onRemoved(LivingEntity entity) {}
 
     @Override
-    public void onTick(Player player) {}
+    public void onTick(LivingEntity entity) {}
 }

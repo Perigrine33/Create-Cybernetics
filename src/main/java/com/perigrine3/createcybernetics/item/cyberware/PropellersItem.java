@@ -2,7 +2,6 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
@@ -12,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +34,6 @@ public class PropellersItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-
             tooltip.add(Component.translatable("tooltip.createcybernetics.legupgrades_propellers.energy").withStyle(ChatFormatting.RED));
         }
     }
@@ -69,41 +68,47 @@ public class PropellersItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return (player != null && !player.level().isClientSide && player.isSwimming())
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return (entity != null && !entity.level().isClientSide && entity.isSwimming())
                 ? ENERGY_PER_TICK_WHEN_SWIMMING
                 : 0;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "propeller_swim_1");
-        CyberwareAttributeHelper.removeModifier(player, "propeller_swim_2");
+    public void onRemoved(LivingEntity entity) {
+        if (entity instanceof Player player) {
+            CyberwareAttributeHelper.removeModifier(player, "propeller_swim_1");
+            CyberwareAttributeHelper.removeModifier(player, "propeller_swim_2");
+        }
     }
 
     @Override
-    public void onTick(Player player) { }
+    public void onTick(LivingEntity entity) { }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return;
 
         if (player.isSwimming()) {
-            if (data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.RLEG) && data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.LLEG)) {
+            if (data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.RLEG)
+                    && data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.LLEG)) {
                 CyberwareAttributeHelper.applyModifier(player, "propeller_swim_1");
                 CyberwareAttributeHelper.applyModifier(player, "propeller_swim_2");
-            } else if (data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.RLEG) || data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.LLEG)) {
+            } else if (data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.RLEG)
+                    || data.hasSpecificItem(ModItems.LEGUPGRADES_PROPELLERS.get(), CyberwareSlot.LLEG)) {
                 CyberwareAttributeHelper.applyModifier(player, "propeller_swim_1");
                 CyberwareAttributeHelper.removeModifier(player, "propeller_swim_2");
             }

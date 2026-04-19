@@ -4,7 +4,9 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -16,6 +18,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -57,8 +60,15 @@ public class ArmSpinneretteItem extends Item implements ICyberwareItem {
         return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
     }
 
-    @Override public boolean replacesOrgan() { return true; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM); }
+    @Override
+    public boolean replacesOrgan() {
+        return true;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of(CyberwareSlot.RARM, CyberwareSlot.LARM);
+    }
 
     @Override
     public Set<TagKey<Item>> incompatibleCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
@@ -73,10 +83,33 @@ public class ArmSpinneretteItem extends Item implements ICyberwareItem {
 
     /* -------------------- INTERACTION (INSTALLED CYBERWARE) -------------------- */
 
-    private static boolean hasSpinneretteOnSide(Player player, CyberwareSlot slot) {
-        if (player == null) return false;
+    private static boolean hasSpinneretteOnSide(LivingEntity entity, CyberwareSlot slot) {
+        if (entity == null) return false;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (entity instanceof Player player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return false;
+
+            InstalledCyberware[] arr = data.getAll().get(slot);
+            if (arr == null) return false;
+
+            for (int i = 0; i < arr.length; i++) {
+                InstalledCyberware cw = arr[i];
+                if (cw == null) continue;
+
+                ItemStack st = cw.getItem();
+                if (st == null || st.isEmpty()) continue;
+
+                if (st.getItem() instanceof ArmSpinneretteItem) {
+                    if (!data.isEnabled(slot, i)) continue;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) return false;
 
         InstalledCyberware[] arr = data.getAll().get(slot);
@@ -109,8 +142,14 @@ public class ArmSpinneretteItem extends Item implements ICyberwareItem {
         level.setBlock(placePos, cobweb, 3);
 
         SoundType sound = cobweb.getSoundType(level, placePos, player);
-        level.playSound(null, placePos, sound.getPlaceSound(), SoundSource.BLOCKS,
-                (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+        level.playSound(
+                null,
+                placePos,
+                sound.getPlaceSound(),
+                SoundSource.BLOCKS,
+                (sound.getVolume() + 1.0F) / 2.0F,
+                sound.getPitch() * 0.8F
+        );
 
         return true;
     }

@@ -8,12 +8,12 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 
 import java.util.List;
 import java.util.Set;
@@ -35,30 +35,31 @@ public class SolarskinItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.translatable("tooltip.createcybernetics.skinupgrades_solarskin.energy").withStyle(ChatFormatting.DARK_GREEN));
-
+            tooltip.add(Component.translatable("tooltip.createcybernetics.skinupgrades_solarskin.energy")
+                    .withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 
     @Override
-    public boolean shouldGenerateEnergyThisTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return isInDirectSunlight(player);
+    public boolean shouldGenerateEnergyThisTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return isInDirectSunlight(entity);
     }
 
     @Override
-    public int getEnergyGeneratedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return isInDirectSunlight(player) ? SOLAR_ENERGY_PER_TICK : 0;
+    public int getEnergyGeneratedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return isInDirectSunlight(entity) ? SOLAR_ENERGY_PER_TICK : 0;
     }
 
-    private static boolean isInDirectSunlight(Player player) {
-        Level level = player.level();
+    private static boolean isInDirectSunlight(LivingEntity entity) {
+        Level level = entity.level();
 
         if (!level.dimensionType().hasSkyLight()) return false;
         if (!level.isDay()) return false;
 
-        BlockPos pos = player.blockPosition();
+        BlockPos pos = entity.blockPosition();
         if (!level.canSeeSky(pos)) return false;
         if (level.isRainingAt(pos)) return false;
+
         int skyLight = level.getBrightness(LightLayer.SKY, pos);
         return skyLight >= MIN_SKY_LIGHT_FOR_SUN;
     }
@@ -94,11 +95,11 @@ public class SolarskinItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {}
+    public void onInstalled(LivingEntity entity) {}
 
     @Override
-    public void onRemoved(Player player) {}
+    public void onRemoved(LivingEntity entity) {}
 
     @Override
-    public void onTick(Player player) {}
+    public void onTick(LivingEntity entity) {}
 }

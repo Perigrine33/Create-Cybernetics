@@ -11,10 +11,10 @@ import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +42,8 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
 
-            tooltip.add(Component.translatable("tooltip.createcybernetics.lungsupgrades_oxygen.energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.lungsupgrades_oxygen.energy")
+                    .withStyle(ChatFormatting.RED));
         }
     }
 
@@ -77,25 +78,25 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return (player != null && player.isEyeInFluid(FluidTags.WATER)) ? ENERGY_PER_TICK_UNDERWATER : 0;
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return (entity != null && entity.isEyeInFluid(FluidTags.WATER)) ? ENERGY_PER_TICK_UNDERWATER : 0;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
     @Override
-    public void onInstalled(Player player) {
-        if (!player.level().isClientSide) {
+    public void onInstalled(LivingEntity entity) {
+        if (!entity.level().isClientSide && entity instanceof Player player) {
             AirHandler.resetOxygenTankTracking(player);
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (!player.level().isClientSide) {
+    public void onRemoved(LivingEntity entity) {
+        if (!entity.level().isClientSide && entity instanceof Player player) {
             AirHandler.resetOxygenTankTracking(player);
         }
     }
@@ -113,42 +114,30 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
             Player player = event.getEntity();
             if (player.level().isClientSide) return;
 
-            if (!hasOxygenTankInstalled(player)) {
+            int poweredTankCount = getPoweredOxygenTankCount(player);
+            if (poweredTankCount <= 0) {
                 resetOxygenTankTracking(player);
                 return;
             }
 
-            boolean eyesInWater = player.isEyeInFluid(FluidTags.WATER);
-
-            if (!eyesInWater || !isOxygenTankPowered(player)) {
-                CompoundTag data = player.getPersistentData();
-                data.putBoolean(KEY_HAS_PREV, true);
-                data.putInt(KEY_PREV_AIR, player.getAirSupply());
-                data.putInt(KEY_DECREMENT_COUNT, 0);
+            if (!player.isUnderWater()) {
+                syncTrackingToCurrentAir(player);
                 return;
             }
 
+            CompoundTag tag = player.getPersistentData();
             int air = player.getAirSupply();
             int maxAir = player.getMaxAirSupply();
 
-            CompoundTag data = player.getPersistentData();
-
-            if (air >= maxAir) {
-                data.putBoolean(KEY_HAS_PREV, true);
-                data.putInt(KEY_PREV_AIR, air);
-                data.putInt(KEY_DECREMENT_COUNT, 0);
+            if (!tag.getBoolean(KEY_HAS_PREV)) {
+                tag.putBoolean(KEY_HAS_PREV, true);
+                tag.putInt(KEY_PREV_AIR, air);
+                tag.putInt(KEY_DECREMENT_COUNT, 0);
                 return;
             }
 
-            if (!data.contains(KEY_HAS_PREV, Tag.TAG_BYTE)) {
-                data.putBoolean(KEY_HAS_PREV, true);
-                data.putInt(KEY_PREV_AIR, air);
-                data.putInt(KEY_DECREMENT_COUNT, 0);
-                return;
-            }
-
-            int prevAir = data.getInt(KEY_PREV_AIR);
-            int decCount = data.getInt(KEY_DECREMENT_COUNT);
+            int prevAir = tag.getInt(KEY_PREV_AIR);
+            int decCount = tag.getInt(KEY_DECREMENT_COUNT);
 
             if (air < prevAir) {
                 int delta = prevAir - air;
@@ -156,7 +145,11 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
 
                 for (int i = 0; i < delta; i++) {
                     decCount++;
-                    if ((decCount % 4) != 0) {
+
+                    // 1 tank: refund 1 out of every 2 losses
+                    // 2 tanks: refund 2 out of every 3 losses
+                    // 3 tanks: refund 3 out of every 4 losses
+                    if ((decCount % (poweredTankCount + 1)) != 0) {
                         refund++;
                     }
                 }
@@ -167,47 +160,51 @@ public class OxygenTankItem extends Item implements ICyberwareItem {
                     air = newAir;
                 }
 
-                data.putInt(KEY_DECREMENT_COUNT, decCount);
+                tag.putInt(KEY_DECREMENT_COUNT, decCount);
+            } else if (air > prevAir) {
+                air = Math.min(air, maxAir);
             }
 
-            data.putInt(KEY_PREV_AIR, air);
+            tag.putBoolean(KEY_HAS_PREV, true);
+            tag.putInt(KEY_PREV_AIR, air);
         }
 
         public static void resetOxygenTankTracking(Player player) {
-            CompoundTag data = player.getPersistentData();
-            data.remove(KEY_HAS_PREV);
-            data.remove(KEY_PREV_AIR);
-            data.remove(KEY_DECREMENT_COUNT);
+            CompoundTag tag = player.getPersistentData();
+            tag.remove(KEY_HAS_PREV);
+            tag.remove(KEY_PREV_AIR);
+            tag.remove(KEY_DECREMENT_COUNT);
         }
 
-        private static boolean hasOxygenTankInstalled(Player player) {
-            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-            if (data == null) return false;
-
-            return data.hasSpecificItem(ModItems.LUNGSUPGRADES_OXYGEN.get(), CyberwareSlot.LUNGS);
+        private static void syncTrackingToCurrentAir(Player player) {
+            CompoundTag tag = player.getPersistentData();
+            tag.putBoolean(KEY_HAS_PREV, true);
+            tag.putInt(KEY_PREV_AIR, player.getAirSupply());
+            tag.putInt(KEY_DECREMENT_COUNT, 0);
         }
 
-        private static boolean isOxygenTankPowered(Player player) {
-            if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+        private static int getPoweredOxygenTankCount(Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return 0;
 
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-            if (data == null) return false;
+            if (data == null) return 0;
 
             Item target = ModItems.LUNGSUPGRADES_OXYGEN.get();
+            int count = 0;
 
             for (int i = 0; i < CyberwareSlot.LUNGS.size; i++) {
                 InstalledCyberware cw = data.get(CyberwareSlot.LUNGS, i);
                 if (cw == null) continue;
 
-                ItemStack st = cw.getItem();
-                if (st == null || st.isEmpty()) continue;
+                ItemStack stack = cw.getItem();
+                if (stack == null || stack.isEmpty()) continue;
+                if (stack.getItem() != target) continue;
+                if (!cw.isPowered()) continue;
 
-                if (st.getItem() != target) continue;
-
-                return cw.isPowered();
+                count++;
             }
 
-            return false;
+            return count;
         }
     }
 }

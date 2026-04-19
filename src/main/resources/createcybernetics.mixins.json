@@ -5,7 +5,10 @@
   "mixins": [
     "AbstractContainerMenuAccessor",
     "AbstractContainerMenuInvoker",
+    "CorpseEntityMixin",
+    "CorpseEntityRemoveMixin",
     "InventoryMenuChipwareSlotsMixin",
+    "LivingEntitySandevistanTrailMixin",
     "PlayerSprintWhileCrouchingMixin",
     "ProjectileInaccuracyMixin",
     "RaidMixin",
@@ -14,10 +17,15 @@
   "client": [
     "PlayerEyeHeightMixin",
     "client.AbstractContainerScreenAccessor",
+    "client.CorpseAdditionalScreenMixin",
+    "client.CorpseInventoryScreenMixin",
+    "client.CorpseRendererMixin",
+    "client.CorpseRendererSkeletonOverlayMixin",
     "client.CreativeModeInventoryChipwareButtonMixin",
     "client.CreativeSlotWrapperHideChipwareMixin",
     "client.InventoryScreenChipwareSlotsMixin",
     "client.ItemInHandRendererMixin",
+    "client.LivingEntityRendererAccessor",
     "client.ScreenInvoker"
   ],
   "injectors": {

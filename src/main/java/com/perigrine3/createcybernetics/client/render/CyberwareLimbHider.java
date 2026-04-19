@@ -2,14 +2,11 @@ package com.perigrine3.createcybernetics.client.render;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
-import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,51 +22,40 @@ public final class CyberwareLimbHider {
 
     private static final Map<Integer, VisibilitySnapshot> SNAPSHOTS = new HashMap<>();
 
-    private static final String ENTITY_HOLO_SNAPSHOT_KEY = "cc_holo_snapshot";
-
     @SubscribeEvent
     public static void onRenderLivingPre(RenderLivingEvent.Pre<?, ?> event) {
         if (!(event.getEntity() instanceof AbstractClientPlayer player)) return;
         if (!(event.getRenderer() instanceof PlayerRenderer renderer)) return;
-        PlayerModel<?> model = (PlayerModel<?>) renderer.getModel();
-
-        PlayerCyberwareData data = player.hasData(ModAttachments.CYBERWARE) ? player.getData(ModAttachments.CYBERWARE) : null;
+        if (!(renderer.getModel() instanceof PlayerModel<?> model)) return;
 
         SNAPSHOTS.put(player.getId(), VisibilitySnapshot.capture(model));
 
-        if (data != null) {
-            boolean hasLeftArm  = data.hasAnyTagged(ModTags.Items.LEFTARM_ITEMS,  CyberwareSlot.LARM);
-            boolean hasRightArm = data.hasAnyTagged(ModTags.Items.RIGHTARM_ITEMS, CyberwareSlot.RARM);
-            boolean hasLeftLeg  = data.hasAnyTagged(ModTags.Items.LEFTLEG_ITEMS,  CyberwareSlot.LLEG);
-            boolean hasRightLeg = data.hasAnyTagged(ModTags.Items.RIGHTLEG_ITEMS, CyberwareSlot.RLEG);
+        PlayerCyberwareData data = PlayerCyberwareData.getForVisual(player, player.registryAccess());
+        if (data == null) return;
 
-            apply(model, event, hasLeftArm, hasRightArm, hasLeftLeg, hasRightLeg);
-            return;
-        }
+        boolean hasLeftArm  = data.hasAnyTagged(ModTags.Items.LEFTARM_ITEMS,  CyberwareSlot.LARM);
+        boolean hasRightArm = data.hasAnyTagged(ModTags.Items.RIGHTARM_ITEMS, CyberwareSlot.RARM);
+        boolean hasLeftLeg  = data.hasAnyTagged(ModTags.Items.LEFTLEG_ITEMS,  CyberwareSlot.LLEG);
+        boolean hasRightLeg = data.hasAnyTagged(ModTags.Items.RIGHTLEG_ITEMS, CyberwareSlot.RLEG);
 
-        CompoundTag snap = player.getPersistentData().getCompound(ENTITY_HOLO_SNAPSHOT_KEY);
-        if (snap.isEmpty()) return;
-    }
-
-    private static void apply(PlayerModel<?> model, RenderLivingEvent.Pre<?, ?> event,
-                              boolean hasLeftArm, boolean hasRightArm, boolean hasLeftLeg, boolean hasRightLeg) {
         setLeftArmVisible(model, hasLeftArm);
         setRightArmVisible(model, hasRightArm);
         setLeftLegVisible(model, hasLeftLeg);
         setRightLegVisible(model, hasRightLeg);
 
-        if (!hasLeftLeg && !hasRightLeg) event.getPoseStack().translate(0.0D, -0.75D, 0.0D);
+        if (!hasLeftLeg && !hasRightLeg) {
+            event.getPoseStack().translate(0.0D, -0.75D, 0.0D);
+        }
     }
 
     @SubscribeEvent
     public static void onRenderLivingPost(RenderLivingEvent.Post<?, ?> event) {
-        if (!(event.getEntity() instanceof Player player)) return;
+        if (!(event.getEntity() instanceof AbstractClientPlayer player)) return;
+        if (!(event.getRenderer() instanceof PlayerRenderer renderer)) return;
+        if (!(renderer.getModel() instanceof PlayerModel<?> model)) return;
 
         VisibilitySnapshot snap = SNAPSHOTS.remove(player.getId());
         if (snap == null) return;
-
-        if (!(event.getRenderer() instanceof PlayerRenderer renderer)) return;
-        if (!(renderer.getModel() instanceof PlayerModel<?> model)) return;
 
         snap.restore(model);
     }
@@ -95,12 +81,24 @@ public final class CyberwareLimbHider {
     }
 
     private static final class VisibilitySnapshot {
-        private final boolean leftArm, rightArm, leftLeg, rightLeg;
-        private final boolean leftSleeve, rightSleeve, leftPants, rightPants;
+        private final boolean leftArm;
+        private final boolean rightArm;
+        private final boolean leftLeg;
+        private final boolean rightLeg;
+        private final boolean leftSleeve;
+        private final boolean rightSleeve;
+        private final boolean leftPants;
+        private final boolean rightPants;
 
         private VisibilitySnapshot(
-                boolean leftArm, boolean rightArm, boolean leftLeg, boolean rightLeg,
-                boolean leftSleeve, boolean rightSleeve, boolean leftPants, boolean rightPants
+                boolean leftArm,
+                boolean rightArm,
+                boolean leftLeg,
+                boolean rightLeg,
+                boolean leftSleeve,
+                boolean rightSleeve,
+                boolean leftPants,
+                boolean rightPants
         ) {
             this.leftArm = leftArm;
             this.rightArm = rightArm;
@@ -130,7 +128,6 @@ public final class CyberwareLimbHider {
             model.rightArm.visible = rightArm;
             model.leftLeg.visible = leftLeg;
             model.rightLeg.visible = rightLeg;
-
             model.leftSleeve.visible = leftSleeve;
             model.rightSleeve.visible = rightSleeve;
             model.leftPants.visible = leftPants;

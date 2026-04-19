@@ -87,6 +87,15 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.DATA_SHARD_BIOCHIP.get())
                 .add(ModItems.DATA_SHARD_INFOLOG.get());
 
+//QUICKHACK SHARDS
+        tag(ModTags.Items.QUICKHACK_SHARDS)
+                .add(ModItems.QUICKHACK_DRAIN.get())
+                .add(ModItems.QUICKHACK_BEHINDYOU.get())
+                .add(ModItems.QUICKHACK_CYBERPSYCHOSIS.get())
+                .add(ModItems.QUICKHACK_OPTICMALFUNCTION.get())
+                .add(ModItems.QUICKHACK_SCRAMBLE.get())
+                .add(ModItems.QUICKHACK_REBOOT.get())
+                .add(ModItems.QUICKHACK_OVERHEAT.get());
 
 //CYBERWARE
         tag(ModTags.Items.CYBERWARE_ITEM)
@@ -130,6 +139,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_CYBERDECK.get())
                 .add(ModItems.BRAINUPGRADES_IDEM.get())
                 .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
+                .add(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get())
+                .add(ModItems.BRAINUPGRADES_ICEPROTOCOL.get())
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get())
                 .add(ModItems.HEARTUPGRADES_COUPLER.get())
                 .add(ModItems.HEARTUPGRADES_CREEPERHEART.get())
@@ -377,6 +388,9 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_CYBERDECK.get())
                 .add(ModItems.BRAINUPGRADES_IDEM.get())
                 .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
+                .add(ModItems.BONEUPGRADES_CAPACITORFRAME.get())
+                .add(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get())
+                .add(ModItems.BRAINUPGRADES_ICEPROTOCOL.get())
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_consciousnesstransmitter"))
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"))
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_spelljammer"));
@@ -422,6 +436,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_BONEBATTERY.get())
                 .add(ModItems.SCAVENGED_BONEFLEX.get())
                 .add(ModItems.SCAVENGED_BONELACING.get())
+                .add(ModItems.SCAVENGED_CAPACITORFRAME.get())
                 .add(ModItems.SCAVENGED_PIEZO.get())
                 .add(ModItems.SCAVENGED_SPINALINJECTOR.get())
                 .add(ModItems.SCAVENGED_SANDEVISTAN.get())
@@ -432,6 +447,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_NEURALCONTEXTUALIZER.get())
                 .add(ModItems.SCAVENGED_CYBERDECK.get())
                 .add(ModItems.SCAVENGED_CHIPWARESLOTS.get())
+                .add(ModItems.SCAVENGED_NEURALPROCESSOR.get())
+                .add(ModItems.SCAVENGED_ICEPROTOCOL.get())
                 .add(ModItems.SCAVENGED_IDEM.get())
 
                 .add(ModItems.SCAVENGED_CYBERHEART.get())
@@ -470,7 +487,10 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .addOptional(resourceLocation("createcybernetics:scavenged_navigationchip"))
                 .addOptional(resourceLocation("createcybernetics:scavenged_consciousnesstransmitter"))
                 .addOptional(resourceLocation("createcybernetics:scavenged_corticalstack"))
-                .addOptional(resourceLocation("createcybernetics:scavenged_sweat"));
+                .addOptional(resourceLocation("createcybernetics:scavenged_sweat"))
+                .addOptional(resourceLocation("createcybernetics:scavenged_manabattery"))
+                .addOptional(resourceLocation("createcybernetics:scavenged_manaskin"))
+                .addOptional(resourceLocation("createcybernetics:scavenged_spelljammer"));
 
 
         tag(ModTags.Items.BRAIN_ITEMS)
@@ -507,6 +527,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         tag(ModTags.Items.BONE_ITEMS)
                 .add(ModItems.BASECYBERWARE_LINEARFRAME.get())
+                .add(ModItems.BONEUPGRADES_CAPACITORFRAME.get())
                 .add(ModItems.WETWARE_BLASTEMASKELETON.get())
                 .add(ModItems.BODYPART_SKELETON.get());
 
@@ -599,6 +620,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         tag(ModTags.Items.BONE_REPLACEMENTS)
                 .add(ModItems.BASECYBERWARE_LINEARFRAME.get())
+                .add(ModItems.BONEUPGRADES_CAPACITORFRAME.get())
                 .add(ModItems.WETWARE_BLASTEMASKELETON.get());
 
         tag(ModTags.Items.HEART_REPLACEMENTS)

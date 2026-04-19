@@ -4,7 +4,9 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
@@ -14,6 +16,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +48,6 @@ public class PlateletDispatcherItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-
             tooltip.add(Component.translatable("tooltip.createcybernetics.heartupgrades_platelets.energy").withStyle(ChatFormatting.RED));
         }
     }
@@ -76,95 +78,110 @@ public class PlateletDispatcherItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        if (player == null) return 0;
-        if (player.level().isClientSide) return 0;
-        if (!player.isAlive()) return 0;
-        if (player.isCreative() || player.isSpectator()) return 0;
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (entity == null) return 0;
+        if (entity.level().isClientSide) return 0;
+        if (!entity.isAlive()) return 0;
 
-        long now = player.level().getGameTime();
-        long lastCombat = player.getPersistentData().getLong(NBT_LAST_COMBAT_TICK);
+        if (entity instanceof Player player && (player.isCreative() || player.isSpectator())) {
+            return 0;
+        }
+
+        long now = entity.level().getGameTime();
+        long lastCombat = entity.getPersistentData().getLong(NBT_LAST_COMBAT_TICK);
         boolean inCombatWindow = lastCombat != 0L && (now - lastCombat) < OUT_OF_COMBAT_TICKS;
         if (inCombatWindow) return 0;
 
-        boolean active = player.getPersistentData().getBoolean(NBT_ACTIVE);
-        boolean needsHeal = player.getHealth() < player.getMaxHealth();
+        boolean active = entity.getPersistentData().getBoolean(NBT_ACTIVE);
+        boolean needsHeal = entity.getHealth() < entity.getMaxHealth();
 
         return (active || needsHeal) ? ENERGY_PER_TICK_WHEN_ACTIVE : 0;
     }
 
     @Override
-    public void onInstalled(Player player) {
-        if (!player.level().isClientSide) {
-            player.getPersistentData().remove(NBT_ACTIVE);
+    public void onInstalled(LivingEntity entity) {
+        if (!entity.level().isClientSide) {
+            entity.getPersistentData().remove(NBT_ACTIVE);
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (!player.level().isClientSide) {
-            player.getPersistentData().remove(NBT_ACTIVE);
-            player.removeEffect(MobEffects.REGENERATION);
+    public void onRemoved(LivingEntity entity) {
+        if (!entity.level().isClientSide) {
+            entity.getPersistentData().remove(NBT_ACTIVE);
+            entity.removeEffect(MobEffects.REGENERATION);
         }
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
-        if (player.level().isClientSide) return;
-        if (!player.isAlive()) return;
-        if (player.isCreative() || player.isSpectator()) return;
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (entity.level().isClientSide) return;
+        if (!entity.isAlive()) return;
 
-        if (!player.hasData(ModAttachments.CYBERWARE)) return;
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
-
-        InstalledCyberware cw = data.get(slot, index);
-        if (cw == null) return;
-
-        long now = player.level().getGameTime();
-        long lastCombat = player.getPersistentData().getLong(NBT_LAST_COMBAT_TICK);
-        boolean inCombatWindow = lastCombat != 0L && (now - lastCombat) < OUT_OF_COMBAT_TICKS;
-
-        if (inCombatWindow) {
-            if (player.hasEffect(MobEffects.REGENERATION)) {
-                player.removeEffect(MobEffects.REGENERATION);
-            }
-            player.getPersistentData().putBoolean(NBT_ACTIVE, false);
+        if (entity instanceof Player player && (player.isCreative() || player.isSpectator())) {
             return;
         }
 
-        boolean active = player.getPersistentData().getBoolean(NBT_ACTIVE);
-        MobEffectInstance existing = player.getEffect(MobEffects.REGENERATION);
+        InstalledCyberware cw;
+
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return;
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return;
+            cw = data.get(slot, index);
+        } else {
+            if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            if (data == null) return;
+            cw = data.get(slot, index);
+        }
+
+        if (cw == null) return;
+
+        long now = entity.level().getGameTime();
+        long lastCombat = entity.getPersistentData().getLong(NBT_LAST_COMBAT_TICK);
+        boolean inCombatWindow = lastCombat != 0L && (now - lastCombat) < OUT_OF_COMBAT_TICKS;
+
+        if (inCombatWindow) {
+            if (entity.hasEffect(MobEffects.REGENERATION)) {
+                entity.removeEffect(MobEffects.REGENERATION);
+            }
+            entity.getPersistentData().putBoolean(NBT_ACTIVE, false);
+            return;
+        }
+
+        boolean active = entity.getPersistentData().getBoolean(NBT_ACTIVE);
+        MobEffectInstance existing = entity.getEffect(MobEffects.REGENERATION);
 
         if (active && existing == null) {
-            player.getPersistentData().putBoolean(NBT_ACTIVE, false);
+            entity.getPersistentData().putBoolean(NBT_ACTIVE, false);
             active = false;
         }
 
         if (!cw.isPowered()) {
-            if (player.hasEffect(MobEffects.REGENERATION)) {
-                player.removeEffect(MobEffects.REGENERATION);
+            if (entity.hasEffect(MobEffects.REGENERATION)) {
+                entity.removeEffect(MobEffects.REGENERATION);
             }
-            player.getPersistentData().putBoolean(NBT_ACTIVE, false);
+            entity.getPersistentData().putBoolean(NBT_ACTIVE, false);
             return;
         }
 
-        if (player.getHealth() >= player.getMaxHealth()) {
+        if (entity.getHealth() >= entity.getMaxHealth()) {
             return;
         }
 
         if (existing == null || existing.getDuration() < 40) {
-            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, REGEN_TICKS, 0, false, true, true));
-            player.getPersistentData().putBoolean(NBT_ACTIVE, true);
+            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, REGEN_TICKS, 0, false, true, true));
+            entity.getPersistentData().putBoolean(NBT_ACTIVE, true);
         }
     }
 
@@ -173,7 +190,7 @@ public class PlateletDispatcherItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onLivingDamagePost(net.neoforged.neoforge.event.entity.living.LivingDamageEvent.Post event) {
-            if (!(event.getEntity() instanceof Player victim)) return;
+            if (!(event.getEntity() instanceof LivingEntity victim)) return;
             if (victim.level().isClientSide) return;
 
             long now = victim.level().getGameTime();
@@ -185,7 +202,7 @@ public class PlateletDispatcherItem extends Item implements ICyberwareItem {
             victim.getPersistentData().putBoolean(NBT_ACTIVE, false);
 
             Entity src = event.getSource().getEntity();
-            if (src instanceof Player attacker && !attacker.level().isClientSide) {
+            if (src instanceof LivingEntity attacker && !attacker.level().isClientSide) {
                 attacker.getPersistentData().putLong(NBT_LAST_COMBAT_TICK, attacker.level().getGameTime());
 
                 if (attacker.hasEffect(MobEffects.REGENERATION)) {

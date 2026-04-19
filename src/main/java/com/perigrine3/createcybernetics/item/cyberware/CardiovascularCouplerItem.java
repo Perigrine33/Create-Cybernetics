@@ -3,11 +3,10 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,26 +45,33 @@ public class CardiovascularCouplerItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyGeneratedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        int pulseTicks = computePulseTicks(player);
-        return (player.tickCount % pulseTicks) == 0 ? ENERGY_PER_PULSE : 0;
+    public int getEnergyGeneratedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        int pulseTicks = computePulseTicks(entity);
+        return (entity.tickCount % pulseTicks) == 0 ? ENERGY_PER_PULSE : 0;
     }
 
-    private static int computePulseTicks(Player player) {
-        boolean attacked = player.hurtTime > 0;
+    private static int computePulseTicks(LivingEntity entity) {
+        boolean attacked = entity.hurtTime > 0;
+
+        boolean playerFlying = entity instanceof Player player && player.getAbilities().flying;
+
         boolean meaningfulFalling =
-                !player.onGround() && !player.isSwimming() && !player.isFallFlying() && !player.getAbilities().flying
-                        && player.getDeltaMovement().y < 0.0D && player.fallDistance >= FEAR_FALL_DISTANCE_THRESHOLD;
+                !entity.onGround()
+                        && !entity.isSwimming()
+                        && !entity.isFallFlying()
+                        && !playerFlying
+                        && entity.getDeltaMovement().y < 0.0D
+                        && entity.fallDistance >= FEAR_FALL_DISTANCE_THRESHOLD;
 
         if (attacked || meaningfulFalling) {
             return PULSE_TICKS_FEAR;
         }
 
-        if (player.isSprinting() || player.isSwimming()) {
+        if (entity.isSprinting() || entity.isSwimming()) {
             return PULSE_TICKS_EXERTION;
         }
 
-        double horizontalSpeedSqr = player.getDeltaMovement().horizontalDistanceSqr();
+        double horizontalSpeedSqr = entity.getDeltaMovement().horizontalDistanceSqr();
         if (horizontalSpeedSqr > WALKING_SPEED_SQR_EPS) {
             return PULSE_TICKS_WALK;
         }
@@ -74,22 +80,22 @@ public class CardiovascularCouplerItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyCapacity(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyCapacity(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 0;
     }
 
     @Override
-    public boolean acceptsGeneratedEnergy(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean acceptsGeneratedEnergy(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return false;
     }
 
     @Override
-    public boolean acceptsChargerEnergy(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean acceptsChargerEnergy(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return false;
     }
 
     @Override
-    public int getChargerEnergyReceivePerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getChargerEnergyReceivePerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 0;
     }
 
@@ -124,11 +130,11 @@ public class CardiovascularCouplerItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {}
+    public void onInstalled(LivingEntity entity) {}
 
     @Override
-    public void onRemoved(Player player) {}
+    public void onRemoved(LivingEntity entity) {}
 
     @Override
-    public void onTick(Player player) {}
+    public void onTick(LivingEntity entity) {}
 }

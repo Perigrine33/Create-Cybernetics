@@ -273,6 +273,35 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
                                 LootItemRandomChanceCondition.randomChance(0.25f).build()}, ModItems.DATA_SHARD_BLACK.get()));
 
+                this.add("abandoned_mineshaft_quickhack_overheat",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.QUICKHACK_OVERHEAT.get()));
+                this.add("abandoned_mineshaft_quickhack_reboot",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.QUICKHACK_REBOOT.get()));
+                this.add("abandoned_mineshaft_quickhack_scramble",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.QUICKHACK_SCRAMBLE.get()));
+                this.add("abandoned_mineshaft_quickhack_opticmalfunction",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.QUICKHACK_OPTICMALFUNCTION.get()));
+                this.add("abandoned_mineshaft_quickhack_cyberpsychosis",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.QUICKHACK_CYBERPSYCHOSIS.get()));
+                this.add("abandoned_mineshaft_quickhack_behindyou",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.QUICKHACK_BEHINDYOU.get()));
+                this.add("abandoned_mineshaft_quickhack_drain",
+                        new AddItemModifier(new LootItemCondition[]{
+                                new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/abandoned_mineshaft")).build(),
+                                LootItemRandomChanceCondition.randomChance(0.1f).build()}, ModItems.QUICKHACK_DRAIN.get()));
+
 
 //ANCIENT CITY
 

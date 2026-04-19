@@ -80,7 +80,6 @@ public final class CybereyeOverlayHandler {
         EyePlacement right = readPlacement(player, EyeSide.RIGHT);
 
         // Default: 1x1 for both eyes, with a sane default position on face
-        // (these should match your "default offsets in mind")
         if (left == null) left = defaultPlacement(EyeSide.LEFT);
         if (right == null) right = defaultPlacement(EyeSide.RIGHT);
 
@@ -131,19 +130,12 @@ public final class CybereyeOverlayHandler {
         return e.textureId;
     }
 
-    /**
-     * Call this when you *know* the config changed (e.g., right after your UI saves),
-     * to force rebuild next time.
-     */
     public static void invalidate(Player player) {
         if (player == null) return;
         Entry e = CACHE.get(player.getUUID());
         if (e != null) e.lastHash = -1;
     }
 
-    /**
-     * Cleanup on world unload if you want to be tidy.
-     */
     public static void clearAll() {
         CACHE.clear();
     }
@@ -245,12 +237,10 @@ public final class CybereyeOverlayHandler {
         try (InputStream in = res.open()) {
             NativeImage img = NativeImage.read(in);
 
-            // Optional sanity: ensure dimensions match variant
             int wantW = variantW(variant);
             int wantH = variantH(variant);
             if (img.getWidth() != wantW || img.getHeight() != wantH) {
-                // You *can* allow mismatches, but they usually indicate wrong asset.
-                // We'll still accept it but stamping uses the image's actual dimensions.
+
             }
 
             TEMPLATES.get(side).put(variant, img);

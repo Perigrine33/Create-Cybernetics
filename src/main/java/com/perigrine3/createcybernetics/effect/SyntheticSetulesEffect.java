@@ -61,15 +61,12 @@ public class SyntheticSetulesEffect extends MobEffect {
 
         Vec3 v = player.getDeltaMovement();
 
-        // Holding ONLY shift while still next to a wall: hard-stick in place (no slide, no drop).
         if (shift && !hasMoveInput) {
             player.setDeltaMovement(0.0D, 0.0D, 0.0D);
             player.hurtMarked = true;
             return true;
         }
 
-        // Preserve existing climb behavior: only climb when the collision says you're pushing into the wall.
-        // (This avoids climbing when you're merely adjacent but not actively pressing into it.)
         if (hasMoveInput && onWallCollision) {
             double speed = CLIMB_SPEED + 0.03D * amplifier;
             double newY = Math.min(speed, MAX_UP);
@@ -87,7 +84,6 @@ public class SyntheticSetulesEffect extends MobEffect {
 
         AABB box = player.getBoundingBox();
 
-        // Focus checks on the "body" slice so floors/ceilings don't count as walls.
         double y0 = box.minY + 0.10D;
         double y1 = box.maxY - 0.10D;
         if (y1 <= y0) return false;
@@ -97,7 +93,6 @@ public class SyntheticSetulesEffect extends MobEffect {
         BlockPos base = player.blockPosition();
 
         for (Direction dir : Direction.Plane.HORIZONTAL) {
-            // Sample two heights (feet-ish and torso-ish) to catch partial blocks.
             if (hitsWallAt(level, body, base, dir, 0) || hitsWallAt(level, body, base, dir, 1)) {
                 return true;
             }
@@ -114,7 +109,6 @@ public class SyntheticSetulesEffect extends MobEffect {
         VoxelShape shape = state.getCollisionShape(level, pos);
         if (shape.isEmpty()) return false;
 
-        // Move the player's body box slightly toward the direction and see if it intersects the neighbor block's collision AABBs.
         AABB probe = body.move(dir.getStepX() * WALL_SAMPLE_DIST, 0.0D, dir.getStepZ() * WALL_SAMPLE_DIST);
 
         for (AABB aabb : shape.toAabbs()) {

@@ -9,7 +9,6 @@ import com.perigrine3.createcybernetics.client.model.AttachmentAnchor;
 import com.perigrine3.createcybernetics.client.model.PlayerAttachmentManager;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import com.perigrine3.createcybernetics.util.ModTags;
@@ -29,20 +28,29 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MaceItem;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderArmEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,11 +103,14 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
     public static final class ServerHandler {
+
+        private static final Map<UUID, Boolean> LAST_LEFT = new HashMap<>();
+        private static final Map<UUID, Boolean> LAST_RIGHT = new HashMap<>();
 
         @SubscribeEvent
         public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -113,7 +124,7 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
             boolean leftEnabled = isLeftEnabled(data);
             boolean rightEnabled = isRightEnabled(data);
 
-            java.util.UUID id = player.getUUID();
+            UUID id = player.getUUID();
 
             boolean prevLeft = LAST_LEFT.getOrDefault(id, false);
             if (leftEnabled != prevLeft) {
@@ -172,15 +183,20 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
             return false;
         }
 
-        private static final java.util.Map<java.util.UUID, Boolean> LAST_LEFT = new java.util.HashMap<>();
-        private static final java.util.Map<java.util.UUID, Boolean> LAST_RIGHT = new java.util.HashMap<>();
-
         private static void playToggleSound(Player player, boolean enabledNow) {
             SoundEvent snd = clawsToggleSound();
             if (snd == null) return;
 
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), snd,
-                    SoundSource.PLAYERS, 0.9F, enabledNow ? 1.15F : 0.95F);
+            player.level().playSound(
+                    null,
+                    player.getX(),
+                    player.getY(),
+                    player.getZ(),
+                    snd,
+                    SoundSource.PLAYERS,
+                    0.9F,
+                    enabledNow ? 1.15F : 0.95F
+            );
         }
 
         private static SoundEvent clawsToggleSound() {
@@ -189,7 +205,7 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent
         public static void onLogout(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
-            java.util.UUID id = event.getEntity().getUUID();
+            UUID id = event.getEntity().getUUID();
             LAST_LEFT.remove(id);
             LAST_RIGHT.remove(id);
         }
@@ -220,6 +236,8 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
 
             return false;
         }
+
+        private ServerHandler() {}
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
@@ -229,6 +247,7 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
         public static void onRenderArm(RenderArmEvent event) {
             AbstractClientPlayer player = event.getPlayer();
             if (player == null) return;
+
             Minecraft mc = Minecraft.getInstance();
             Player viewer = mc.player;
             if (viewer != null) {
@@ -262,9 +281,9 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
             try {
                 pose.translate(armPart.x / 16.0F, armPart.y / 16.0F, armPart.z / 16.0F);
 
-                pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(/* pitch */ 0.0F));
-                pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(/* yaw   */ 0.0F));
-                pose.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(/* roll  */ 5F));
+                pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0.0F));
+                pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(0.0F));
+                pose.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(5F));
 
                 AttachmentAnchor anchor = (arm == HumanoidArm.LEFT)
                         ? AttachmentAnchor.LEFT_ARM
@@ -278,8 +297,9 @@ public class RetractableClawsItem extends Item implements ICyberwareItem {
                 pose.popPose();
             }
         }
-    }
 
+        private ClientFirstPerson() {}
+    }
 
     private static boolean hasEnabledClawsInSlot(PlayerCyberwareData data, CyberwareSlot slot) {
         InstalledCyberware[] arr = data.getAll().get(slot);

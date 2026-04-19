@@ -2,10 +2,9 @@ package com.perigrine3.createcybernetics.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.util.ModTags;
+import com.perigrine3.createcybernetics.compat.replay.ReplayCameraCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.api.distmarker.Dist;
@@ -29,8 +28,8 @@ public final class MissingEyesOverlayClient {
 
         PlayerCyberwareData data = mc.player.getData(ModAttachments.CYBERWARE);
 
-        boolean missingEyes = !data.hasAnyTagged(ModTags.Items.EYE_ITEMS, CyberwareSlot.EYES);
-        if (!missingEyes) return;
+        boolean hasEyes = ReplayCameraCompat.hasEyesForVision(mc.player, data);
+        if (hasEyes) return;
 
         GuiGraphics gg = event.getGuiGraphics();
         int w = mc.getWindow().getGuiScaledWidth();

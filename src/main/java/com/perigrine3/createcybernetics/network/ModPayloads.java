@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.network;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.client.render.CyberentitySandevistanMirageTrail;
 import com.perigrine3.createcybernetics.client.render.SandevistanMirageTrail;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
@@ -12,6 +13,7 @@ import com.perigrine3.createcybernetics.network.payload.*;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -36,16 +38,6 @@ public final class ModPayloads {
                 (payload, ctx) -> ctx.enqueueWork(() -> {
                     if (ctx.player() instanceof net.minecraft.server.level.ServerPlayer sp) {
                         GuardianEyeEffect.setUseHeld(sp, payload.held());
-                    }
-                })
-        );
-
-        r.playToServer(
-                AerostasisGyrobladderEffect.GyroJumpHeldPayload.TYPE,
-                AerostasisGyrobladderEffect.GyroJumpHeldPayload.STREAM_CODEC,
-                (payload, ctx) -> ctx.enqueueWork(() -> {
-                    if (ctx.player() instanceof net.minecraft.server.level.ServerPlayer sp) {
-                        AerostasisGyrobladderEffect.handleJumpHeldPayload(sp, payload.held());
                     }
                 })
         );
@@ -166,6 +158,12 @@ public final class ModPayloads {
                 })
         );
 
+        r.playToServer(
+                OpenCyberdeckPayload.TYPE,
+                OpenCyberdeckPayload.STREAM_CODEC,
+                OpenCyberdeckPayloadHandler::handle
+        );
+
         r.playToClient(
                 SandevistanSnapshotPayload.TYPE,
                 SandevistanSnapshotPayload.STREAM_CODEC,
@@ -198,6 +196,36 @@ public final class ModPayloads {
                 EnergyHudSyncPayload.TYPE,
                 EnergyHudSyncPayload.STREAM_CODEC,
                 EnergyHudSyncPayload::handle
+        );
+
+        r.playToServer(
+                CastCyberdeckQuickhackPayload.TYPE,
+                CastCyberdeckQuickhackPayload.STREAM_CODEC,
+                CastCyberdeckQuickhackHandler::handle
+        );
+
+        r.playToClient(
+                BehindYouSoundPayload.TYPE,
+                BehindYouSoundPayload.STREAM_CODEC,
+                (payload, ctx) -> ctx.enqueueWork(() -> BehindYouSoundPayload.handle(payload))
+        );
+
+        r.playToServer(
+                com.perigrine3.createcybernetics.compat.corpse.OpenCorpseCyberwarePayload.TYPE,
+                com.perigrine3.createcybernetics.compat.corpse.OpenCorpseCyberwarePayload.STREAM_CODEC,
+                com.perigrine3.createcybernetics.compat.corpse.OpenCorpseCyberwarePayload::handle
+        );
+
+        r.playToClient(
+                com.perigrine3.createcybernetics.compat.corpse.CorpseVisualSnapshotPayload.TYPE,
+                com.perigrine3.createcybernetics.compat.corpse.CorpseVisualSnapshotPayload.STREAM_CODEC,
+                com.perigrine3.createcybernetics.compat.corpse.CorpseVisualSnapshotPayload::handle
+        );
+
+        r.playToServer(
+                com.perigrine3.createcybernetics.compat.corpse.RequestCorpseVisualSnapshotPayload.TYPE,
+                com.perigrine3.createcybernetics.compat.corpse.RequestCorpseVisualSnapshotPayload.STREAM_CODEC,
+                com.perigrine3.createcybernetics.compat.corpse.RequestCorpseVisualSnapshotPayload::handle
         );
 
         // ---------------- CYBEREYE IRIS LAYOUT SYNC ----------------

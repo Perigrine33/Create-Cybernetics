@@ -2,7 +2,9 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
@@ -11,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -63,28 +66,37 @@ public class AnkleBracerItem extends Item implements ICyberwareItem {
         return Set.of();
     }
 
-
     @Override
-    public void onInstalled(Player player) {
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    public void onInstalled(LivingEntity entity) {
+        boolean hasRight = false;
+        boolean hasLeft = false;
 
-        if (data.hasSpecificItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get(), CyberwareSlot.RLEG) && data.hasSpecificItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get(), CyberwareSlot.LLEG)) {
-            CyberwareAttributeHelper.applyModifier(player, "fall_bracer_fall_1");
-            CyberwareAttributeHelper.applyModifier(player, "fall_bracer_fall_2");
-        } else if (data.hasSpecificItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get(), CyberwareSlot.RLEG) || data.hasSpecificItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get(), CyberwareSlot.LLEG)) {
-            CyberwareAttributeHelper.applyModifier(player, "fall_bracer_fall_1");
+        if (entity instanceof Player player) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            hasRight = data.hasSpecificItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get(), CyberwareSlot.RLEG);
+            hasLeft = data.hasSpecificItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get(), CyberwareSlot.LLEG);
+        } else {
+            EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+            hasRight = data.hasSpecificItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get(), CyberwareSlot.RLEG);
+            hasLeft = data.hasSpecificItem(ModItems.LEGUPGRADES_ANKLEBRACERS.get(), CyberwareSlot.LLEG);
+        }
 
+        if (hasRight && hasLeft) {
+            CyberwareAttributeHelper.applyModifier(entity, "fall_bracer_fall_1");
+            CyberwareAttributeHelper.applyModifier(entity, "fall_bracer_fall_2");
+        } else if (hasRight || hasLeft) {
+            CyberwareAttributeHelper.applyModifier(entity, "fall_bracer_fall_1");
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "fall_bracer_fall_1");
-        CyberwareAttributeHelper.removeModifier(player, "fall_bracer_fall_2");
+    public void onRemoved(LivingEntity entity) {
+        CyberwareAttributeHelper.removeModifier(entity, "fall_bracer_fall_1");
+        CyberwareAttributeHelper.removeModifier(entity, "fall_bracer_fall_2");
     }
 
     @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onTick(LivingEntity entity) {
+        ICyberwareItem.super.onTick(entity);
     }
 }

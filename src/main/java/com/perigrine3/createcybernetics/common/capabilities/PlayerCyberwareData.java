@@ -69,10 +69,13 @@ public class PlayerCyberwareData implements ICyberwareData {
     private boolean copernicusOxygenatedEnvironment = false;
     private int copernicusOxygenSecondTicker = 0;
 
-
     public static final int CHIPWARE_SLOT_COUNT = 2;
     private static final String NBT_CHIPWARE_INV = "ChipwareInv";
     private final ItemStack[] chipwareInv = new ItemStack[CHIPWARE_SLOT_COUNT];
+
+    public static final int CYBERDECK_SLOT_COUNT = 4;
+    private static final String NBT_CYBERDECK_INV = "CyberdeckInv";
+    private final ItemStack[] cyberdeckInv = new ItemStack[CYBERDECK_SLOT_COUNT];
 
     // ---- Heat Engine (fuel/input/output + timers) ----
     public static final int HEAT_ENGINE_SLOT_COUNT = 3;
@@ -92,7 +95,6 @@ public class PlayerCyberwareData implements ICyberwareData {
     private int heatEngineBurnTimeTotal = 0;
     private int heatEngineCookTime = 0;
     private int heatEngineCookTimeTotal = 200;
-
 
     private final EnumMap<CyberwareSlot, InstalledCyberware[]> slots =
             new EnumMap<>(CyberwareSlot.class);
@@ -124,10 +126,12 @@ public class PlayerCyberwareData implements ICyberwareData {
         for (int i = 0; i < chipwareInv.length; i++) {
             chipwareInv[i] = ItemStack.EMPTY;
         }
+        for (int i = 0; i < cyberdeckInv.length; i++) {
+            cyberdeckInv[i] = ItemStack.EMPTY;
+        }
         for (int i = 0; i < heatEngineInv.length; i++) {
             heatEngineInv[i] = ItemStack.EMPTY;
         }
-
 
         armCannonSelected = 0;
     }
@@ -330,7 +334,45 @@ public class PlayerCyberwareData implements ICyberwareData {
                 return true;
             }
         }
+
         return false;
+    }
+
+    /* ---------------- CYBERDECK QUICKHACK INVENTORY (4 SLOTS) ---------------- */
+
+    public ItemStack getCyberdeckStack(int slot) {
+        if (slot < 0 || slot >= cyberdeckInv.length) return ItemStack.EMPTY;
+        ItemStack st = cyberdeckInv[slot];
+        return st == null ? ItemStack.EMPTY : st;
+    }
+
+    public void setCyberdeckStack(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= cyberdeckInv.length) return;
+
+        if (stack == null || stack.isEmpty()) {
+            cyberdeckInv[slot] = ItemStack.EMPTY;
+            dirty = true;
+            return;
+        }
+
+        if (!stack.is(ModTags.Items.QUICKHACK_SHARDS)) {
+            cyberdeckInv[slot] = ItemStack.EMPTY;
+            dirty = true;
+            return;
+        }
+
+        ItemStack copy = stack.copy();
+        copy.setCount(1);
+
+        cyberdeckInv[slot] = copy;
+        dirty = true;
+    }
+
+    public void clearCyberdeckInventory() {
+        for (int i = 0; i < cyberdeckInv.length; i++) {
+            cyberdeckInv[i] = ItemStack.EMPTY;
+        }
+        dirty = true;
     }
 
     /* ---------------- ENABLED HELPERS ---------------- */
@@ -494,7 +536,6 @@ public class PlayerCyberwareData implements ICyberwareData {
     public boolean isInstalled(Item item, CyberwareSlot slot) {
         return hasSpecificItem(item, slot);
     }
-
 
     public boolean isDyed(CyberwareSlot slot, int index) {
         InstalledCyberware installed = get(slot, index);
@@ -760,6 +801,9 @@ public class PlayerCyberwareData implements ICyberwareData {
         }
         for (int i = 0; i < chipwareInv.length; i++) {
             chipwareInv[i] = ItemStack.EMPTY;
+        }
+        for (int i = 0; i < cyberdeckInv.length; i++) {
+            cyberdeckInv[i] = ItemStack.EMPTY;
         }
         for (int i = 0; i < heatEngineInv.length; i++) {
             heatEngineInv[i] = ItemStack.EMPTY;
@@ -1230,6 +1274,20 @@ public class PlayerCyberwareData implements ICyberwareData {
             }
         }
 
+        ListTag cyberdeck = new ListTag();
+        for (int i = 0; i < cyberdeckInv.length; i++) {
+            ItemStack st = cyberdeckInv[i];
+
+            if (st != null && !st.isEmpty() && st.is(ModTags.Items.QUICKHACK_SHARDS)) {
+                ItemStack copy = st.copy();
+                copy.setCount(1);
+
+                cyberdeck.add(cc$saveStackToCompound(provider, copy));
+            } else {
+                cyberdeck.add(new CompoundTag());
+            }
+        }
+
         ListTag heat = new ListTag();
         for (int i = 0; i < heatEngineInv.length; i++) {
             ItemStack st = heatEngineInv[i];
@@ -1243,6 +1301,7 @@ public class PlayerCyberwareData implements ICyberwareData {
         tag.putInt(NBT_HEAT_ENGINE_COOK_TOTAL, heatEngineCookTimeTotal);
 
         tag.put(NBT_CHIPWARE_INV, chip);
+        tag.put(NBT_CYBERDECK_INV, cyberdeck);
 
         tag.putInt(NBT_NEUROPOZYNE_APPLY_COUNT, neuropozyneApplyCount);
 
@@ -1354,6 +1413,24 @@ public class PlayerCyberwareData implements ICyberwareData {
 
                 st.setCount(1);
                 chipwareInv[i] = st;
+            }
+        }
+
+        for (int i = 0; i < cyberdeckInv.length; i++) cyberdeckInv[i] = ItemStack.EMPTY;
+
+        if (tag.contains(NBT_CYBERDECK_INV, Tag.TAG_LIST)) {
+            ListTag cyberdeck = tag.getList(NBT_CYBERDECK_INV, Tag.TAG_COMPOUND);
+            for (int i = 0; i < cyberdeckInv.length && i < cyberdeck.size(); i++) {
+                CompoundTag c = cyberdeck.getCompound(i);
+                ItemStack st = ItemStack.parseOptional(provider, c);
+
+                if (st.isEmpty() || !st.is(ModTags.Items.QUICKHACK_SHARDS)) {
+                    cyberdeckInv[i] = ItemStack.EMPTY;
+                    continue;
+                }
+
+                st.setCount(1);
+                cyberdeckInv[i] = st;
             }
         }
 
@@ -1583,5 +1660,4 @@ public class PlayerCyberwareData implements ICyberwareData {
 
         return player.getData(ModAttachments.CYBERWARE);
     }
-
 }

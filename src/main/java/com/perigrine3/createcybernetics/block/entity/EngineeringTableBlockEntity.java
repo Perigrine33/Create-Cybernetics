@@ -1,6 +1,6 @@
 package com.perigrine3.createcybernetics.block.entity;
 
-import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.screen.custom.EngineeringTableMenu;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import com.perigrine3.createcybernetics.util.ModTags;
@@ -45,7 +45,6 @@ public class EngineeringTableBlockEntity extends BlockEntity implements MenuProv
         }
     };
 
-    // Guard to prevent recursion when we mutate handlers during deconstruction
     private boolean deconProcessing = false;
 
     private final ItemStackHandler deconstructInput = new ItemStackHandler(DECONSTRUCT_INPUT_SIZE) {
@@ -53,7 +52,6 @@ public class EngineeringTableBlockEntity extends BlockEntity implements MenuProv
         protected void onContentsChanged(int slot) {
             setChanged();
             if (level != null && !level.isClientSide()) {
-                // When server receives an input change, attempt instant deconstruct
                 if (!deconProcessing && level instanceof ServerLevel sl) {
                     tryInstantDeconstruct(sl);
                 }
@@ -102,30 +100,19 @@ public class EngineeringTableBlockEntity extends BlockEntity implements MenuProv
 
     public static boolean isDeconstructable(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        // Accept either scavenged cyberware or regular cyberware
         return stack.is(ModTags.Items.SCAVENGED_CYBERWARE) || stack.is(ModTags.Items.CYBERWARE_ITEM);
     }
 
-    /**
-     * Server-side: consumes the input item (if valid) and fills all 6 output slots with rolled items.
-     * Does nothing if outputs are not empty or input is invalid.
-     */
     private void tryInstantDeconstruct(ServerLevel level) {
         ItemStack in = deconstructInput.getStackInSlot(0);
         if (in.isEmpty()) return;
-
-        // Only deconstruct cyberware/scavenged cyberware
         if (!isDeconstructable(in)) return;
-
-        // Don't overwrite existing outputs
         if (!outputsAreEmpty()) return;
 
         deconProcessing = true;
         try {
-            // Consume input immediately
             deconstructInput.setStackInSlot(0, ItemStack.EMPTY);
 
-            // Roll and fill outputs
             for (int i = 0; i < DECONSTRUCT_OUTPUT_SIZE; i++) {
                 ItemStack rolled = rollFromPool(level.random, in);
                 deconstructOutputs.setStackInSlot(i, rolled);
@@ -155,54 +142,58 @@ public class EngineeringTableBlockEntity extends BlockEntity implements MenuProv
 
         ItemStack create(RandomSource r) {
             int count = (min == max) ? min : Mth.nextInt(r, min, max);
-            return new ItemStack(item, count);
+            return count <= 0 ? ItemStack.EMPTY : new ItemStack(item, count);
         }
     }
 
     private ItemStack rollFromPool(RandomSource r, ItemStack originalInput) {
         boolean scavenged = originalInput.is(ModTags.Items.SCAVENGED_CYBERWARE);
-        List<PoolEntry> pool = new ArrayList<>();
-
-        if (scavenged) {
-            pool.add(new PoolEntry(ModItems.COMPONENT_ACTUATOR.get(), 0, 2, 3));
-            pool.add(new PoolEntry(ModItems.COMPONENT_FIBEROPTICS.get(), 0, 2, 3));
-            pool.add(new PoolEntry(ModItems.COMPONENT_WIRING.get(), 0, 3, 5));
-            pool.add(new PoolEntry(ModItems.COMPONENT_DIODES.get(), 0, 2, 2));
-            pool.add(new PoolEntry(ModItems.COMPONENT_PLATING.get(), 0, 2, 5));
-            pool.add(new PoolEntry(ModItems.COMPONENT_GRAPHICSCARD.get(), 0, 2, 2));
-            pool.add(new PoolEntry(ModItems.COMPONENT_SSD.get(), 0, 2, 3));
-            pool.add(new PoolEntry(ModItems.COMPONENT_STORAGE.get(), 0, 2, 4));
-            pool.add(new PoolEntry(ModItems.COMPONENT_SYNTHNERVES.get(), 0, 2, 1));
-            pool.add(new PoolEntry(ModItems.COMPONENT_MESH.get(), 0, 2, 2));
-            if (ModItems.COMPONENT_LED != null) pool.add(new PoolEntry(ModItems.COMPONENT_LED.get(), 0, 2, 3));
-            if (ModItems.COMPONENT_TITANIUMROD != null) pool.add(new PoolEntry(ModItems.COMPONENT_TITANIUMROD.get(), 0, 2, 2));
-        } else {
-            // Regular cyberware pool
-            pool.add(new PoolEntry(ModItems.COMPONENT_ACTUATOR.get(), 0, 5, 4));
-            pool.add(new PoolEntry(ModItems.COMPONENT_FIBEROPTICS.get(), 0, 5, 4));
-            pool.add(new PoolEntry(ModItems.COMPONENT_WIRING.get(), 1, 5, 5));
-            pool.add(new PoolEntry(ModItems.COMPONENT_DIODES.get(), 0, 5, 4));
-            pool.add(new PoolEntry(ModItems.COMPONENT_PLATING.get(), 0, 5, 5));
-            pool.add(new PoolEntry(ModItems.COMPONENT_GRAPHICSCARD.get(), 0, 5, 4));
-            pool.add(new PoolEntry(ModItems.COMPONENT_SSD.get(), 0, 5, 4));
-            pool.add(new PoolEntry(ModItems.COMPONENT_STORAGE.get(), 0, 5, 4));
-            pool.add(new PoolEntry(ModItems.COMPONENT_SYNTHNERVES.get(), 0, 5, 3));
-            pool.add(new PoolEntry(ModItems.COMPONENT_MESH.get(), 0, 5, 2));
-            if (ModItems.COMPONENT_LED != null) pool.add(new PoolEntry(ModItems.COMPONENT_LED.get(), 0, 5, 3));
-            if (ModItems.COMPONENT_TITANIUMROD != null) pool.add(new PoolEntry(ModItems.COMPONENT_TITANIUMROD.get(), 0, 5, 2));
-        }
+        List<PoolEntry> pool = buildPool(scavenged);
 
         if (pool.isEmpty()) return ItemStack.EMPTY;
 
         int total = 0;
-        for (PoolEntry e : pool) total += e.weight;
+        for (PoolEntry e : pool) {
+            total += e.weight;
+        }
+
+        if (total <= 0) return ItemStack.EMPTY;
 
         int roll = r.nextInt(total);
         for (PoolEntry e : pool) {
             roll -= e.weight;
-            if (roll < 0) return e.create(r);
+            if (roll < 0) {
+                return e.create(r);
+            }
         }
+
         return pool.get(0).create(r);
+    }
+
+    private static List<PoolEntry> buildPool(boolean scavenged) {
+        List<PoolEntry> pool = new ArrayList<>();
+        List<ConfigValues.EngineeringRoll> configRolls = scavenged
+                ? ConfigValues.ENGINEERING_SCAVENGED_DECONSTRUCT_ROLLS
+                : ConfigValues.ENGINEERING_DECONSTRUCT_ROLLS;
+
+        if (configRolls == null || configRolls.isEmpty()) {
+            return pool;
+        }
+
+        for (ConfigValues.EngineeringRoll roll : configRolls) {
+            if (roll == null) continue;
+            if (roll.item() == null) continue;
+            if (roll.weight() <= 0) continue;
+
+            pool.add(new PoolEntry(
+                    roll.item(),
+                    Math.max(0, roll.min()),
+                    Math.max(0, roll.max()),
+                    roll.weight()
+            ));
+        }
+
+        return pool;
     }
 
     public void drops() {

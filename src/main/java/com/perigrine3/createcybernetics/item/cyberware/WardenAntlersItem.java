@@ -2,14 +2,13 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
-import com.perigrine3.createcybernetics.effect.ModEffects;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -54,27 +53,32 @@ public class WardenAntlersItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public Set<TagKey<Item>> incompatibleCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModTags.Items.EYE_ITEMS);
+    }
+
+    @Override
+    public void onInstalled(LivingEntity entity) {
 
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
 
     }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
-        if (player.hasEffect(MobEffects.BLINDNESS)) {
-            player.removeEffect(MobEffects.BLINDNESS);
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (entity.hasEffect(MobEffects.BLINDNESS)) {
+            entity.removeEffect(MobEffects.BLINDNESS);
         }
-        if (player.hasEffect(MobEffects.DARKNESS)) {
-            player.removeEffect(MobEffects.DARKNESS);
+        if (entity.hasEffect(MobEffects.DARKNESS)) {
+            entity.removeEffect(MobEffects.DARKNESS);
         }
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
 
     }
 }

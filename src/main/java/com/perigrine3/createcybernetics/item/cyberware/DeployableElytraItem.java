@@ -4,6 +4,7 @@ import com.perigrine3.createcybernetics.compat.caelus.CaelusCompat;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.event.custom.FullBorgHandler;
@@ -20,6 +21,7 @@ import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.Item;
@@ -62,13 +64,13 @@ public class DeployableElytraItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyActivationCost(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyActivationCost(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return ACTIVATION_COST;
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
-        return (player != null && player.isFallFlying()) ? GLIDE_COST_PER_TICK : 0;
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        return (entity != null && entity.isFallFlying()) ? GLIDE_COST_PER_TICK : 0;
     }
 
     @Override
@@ -109,25 +111,91 @@ public class DeployableElytraItem extends Item implements ICyberwareItem {
                 return;
             }
 
-            boolean allow = shouldAllowCyberFallFlyingAndPayEnergy(player);
+            if (!player.hasData(ModAttachments.CYBERWARE)) {
+                CaelusCompat.removeFallFlyingModifier(player, CC_CAELUS_FLIGHT_ID);
+                return;
+            }
 
-            if (allow) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) {
+                CaelusCompat.removeFallFlyingModifier(player, CC_CAELUS_FLIGHT_ID);
+                return;
+            }
+
+            CyberState state = getCyberState(player, data);
+
+            if (state.active) {
                 CaelusCompat.addOrUpdateFallFlyingTransient(player, CC_CAELUS_FLIGHT_ID, 1.0D);
             } else {
                 CaelusCompat.removeFallFlyingModifier(player, CC_CAELUS_FLIGHT_ID);
-                if (player.isFallFlying()) {
-                    player.stopFallFlying();
-                }
             }
+
+            if (state.anyInstalledStack.isEmpty()) return;
+            if (!state.active) {
+                clearActivationPaid(state.anyInstalledStack);
+                return;
+            }
+
+            if (player.isFallFlying()) {
+                ensureActivationPaid(state.anyInstalledStack, data);
+
+                if (!data.tryConsumeEnergy(GLIDE_COST_PER_TICK)) {
+
+                }
+
+                if (FullBorgHandler.isWingman(data)) {
+                    if (!player.isShiftKeyDown()) {
+                        player.displayClientMessage(Component.literal("Hold SHIFT to slow down"), true);
+                    }
+                }
+            } else {
+                clearActivationPaid(state.anyInstalledStack);
+            }
+        }
+
+        private static final class CyberState {
+            final boolean installed;
+            final boolean active;
+            final ItemStack anyInstalledStack;
+
+            private CyberState(boolean installed, boolean active, ItemStack anyInstalledStack) {
+                this.installed = installed;
+                this.active = active;
+                this.anyInstalledStack = anyInstalledStack;
+            }
+        }
+
+        private static CyberState getCyberState(Player player, PlayerCyberwareData data) {
+            boolean installed = false;
+            boolean active = false;
+            ItemStack anyStack = ItemStack.EMPTY;
+
+            for (int i = 0; i < CyberwareSlot.BONE.size; i++) {
+                if (!data.isInstalled(ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE, i)) continue;
+
+                installed = true;
+
+                InstalledCyberware inst = data.get(CyberwareSlot.BONE, i);
+                if (inst == null) continue;
+
+                ItemStack stack = inst.getItem();
+                if (stack == null || stack.isEmpty()) continue;
+                if (anyStack.isEmpty()) anyStack = stack;
+                if (!data.isEnabled(CyberwareSlot.BONE, i)) continue;
+                if (!inst.isPowered()) continue;
+
+                active = true;
+                break;
+            }
+
+            return new CyberState(installed, active, anyStack);
         }
     }
 
     private static boolean cc$hasRealChestElytra(Player player) {
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
         if (chest.isEmpty()) return false;
-
         if (!(chest.getItem() instanceof ElytraItem)) return false;
-
         return ElytraItem.isFlyEnabled(chest);
     }
 
@@ -143,61 +211,7 @@ public class DeployableElytraItem extends Item implements ICyberwareItem {
             if (!data.isEnabled(CyberwareSlot.BONE, i)) continue;
             return true;
         }
-
         return false;
-    }
-
-    private static boolean shouldAllowCyberFallFlyingAndPayEnergy(Player player) {
-        if (!cc$hasEnabledDeployable(player)) {
-            return false;
-        }
-
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return false;
-
-        ItemStack enabledStack = ItemStack.EMPTY;
-
-        for (int i = 0; i < CyberwareSlot.BONE.size; i++) {
-            if (!data.isInstalled(ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE, i)) continue;
-
-            var installed = data.get(CyberwareSlot.BONE, i);
-            if (installed == null) continue;
-
-            ItemStack stack = installed.getItem();
-            if (stack == null || stack.isEmpty()) continue;
-
-            boolean enabled = data.isEnabled(CyberwareSlot.BONE, i);
-
-            if (!enabled) {
-                clearActivationPaid(stack);
-                continue;
-            }
-
-            if (enabledStack.isEmpty()) {
-                enabledStack = stack;
-            }
-        }
-
-        if (enabledStack.isEmpty()) {
-            return false;
-        }
-
-        if (!ensureActivationPaid(enabledStack, data)) {
-            return false;
-        }
-
-        if (player.isFallFlying()) {
-            if (!data.tryConsumeEnergy(GLIDE_COST_PER_TICK)) {
-                return false;
-            }
-            if (FullBorgHandler.isWingman(data)) {
-                if (!player.isShiftKeyDown()) {
-                    player.displayClientMessage(Component.literal("Hold SHIFT to slow down"), true);
-                }
-            }
-        }
-
-        return true;
     }
 
     private static boolean ensureActivationPaid(ItemStack stack, PlayerCyberwareData data) {

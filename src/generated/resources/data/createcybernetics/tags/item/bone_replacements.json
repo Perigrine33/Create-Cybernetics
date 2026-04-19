@@ -1,6 +1,7 @@
 {
   "values": [
     "createcybernetics:basecyberware_linearframe",
+    "createcybernetics:boneupgrades_capacitorframe",
     "createcybernetics:wetware_blastemaskeleton"
   ]
 }

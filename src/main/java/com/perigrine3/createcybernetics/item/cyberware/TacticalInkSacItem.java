@@ -17,7 +17,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -74,38 +73,38 @@ public class TacticalInkSacItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        if (!player.level().isClientSide) {
-            player.getPersistentData().putBoolean(NBT_INSTALLED, true);
+    public void onInstalled(LivingEntity entity) {
+        if (!entity.level().isClientSide) {
+            entity.getPersistentData().putBoolean(NBT_INSTALLED, true);
         }
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (!player.level().isClientSide) {
-            player.getPersistentData().putBoolean(NBT_INSTALLED, false);
+    public void onRemoved(LivingEntity entity) {
+        if (!entity.level().isClientSide) {
+            entity.getPersistentData().putBoolean(NBT_INSTALLED, false);
         }
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 
-    private static boolean isInstalled(Player player) {
-        return player.getPersistentData().getBoolean(NBT_INSTALLED);
+    private static boolean isInstalled(LivingEntity entity) {
+        return entity.getPersistentData().getBoolean(NBT_INSTALLED);
     }
 
     @SubscribeEvent
     public static void onPlayerDamaged(LivingDamageEvent.Post event) {
-        if (!(event.getEntity() instanceof Player player)) return;
-        if (player.level().isClientSide) return;
-        if (!isInstalled(player)) return;
+        if (!(event.getEntity() instanceof LivingEntity victim)) return;
+        if (victim.level().isClientSide) return;
+        if (!isInstalled(victim)) return;
 
         LivingEntity attacker = resolveLivingAttacker(event.getSource());
-        if (attacker == null || attacker == player || !attacker.isAlive()) return;
+        if (attacker == null || attacker == victim || !attacker.isAlive()) return;
 
         double r2 = TRIGGER_RADIUS * TRIGGER_RADIUS;
-        if (attacker.distanceToSqr(player) > r2) return;
+        if (attacker.distanceToSqr(victim) > r2) return;
 
         MobEffectInstance existing = attacker.getEffect(MobEffects.BLINDNESS);
         if (existing == null || existing.getDuration() < 10) {
@@ -113,8 +112,8 @@ public class TacticalInkSacItem extends Item implements ICyberwareItem {
             attacker.addEffect(new MobEffectInstance(ModEffects.INKED_EFFECT, 600, 0, true, true, true));
         }
 
-        if (player.level() instanceof ServerLevel serverLevel) {
-            spawnInkSpray(serverLevel, player, attacker);
+        if (victim.level() instanceof ServerLevel serverLevel) {
+            spawnInkSpray(serverLevel, victim, attacker);
         }
     }
 
@@ -128,8 +127,8 @@ public class TacticalInkSacItem extends Item implements ICyberwareItem {
         return null;
     }
 
-    private static void spawnInkSpray(ServerLevel level, Player player, LivingEntity attacker) {
-        Vec3 start = player.getEyePosition();
+    private static void spawnInkSpray(ServerLevel level, LivingEntity victim, LivingEntity attacker) {
+        Vec3 start = victim.getEyePosition();
         Vec3 end = attacker.getEyePosition();
 
         Vec3 delta = end.subtract(start);

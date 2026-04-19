@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import net.minecraft.client.DeltaTracker;
@@ -98,6 +99,14 @@ public final class CyberwareRejectionOverlay {
         Player player = mc.player;
         if (player == null) return;
         if (mc.options.hideGui) return;
+
+        if (ConfigValues.EPILEPSY_MODE) {
+            wasActive = false;
+            burstOnTicksLeft = 0;
+            burstOffTicksLeft = 0;
+            flickerHoldTicks = 0;
+            return;
+        }
 
         boolean active = hasEffect(player, ModEffects.CYBERWARE_REJECTION);
         if (!active) {
@@ -231,8 +240,6 @@ public final class CyberwareRejectionOverlay {
                                    int texW, int texH) {
         gui.blit(tex, x, y, dstW, dstH, u, v, srcW, srcH, texW, texH);
     }
-
-
 
     private static boolean hasEffect(Player player, Holder<MobEffect> effect) {
         for (MobEffectInstance inst : player.getActiveEffects()) {

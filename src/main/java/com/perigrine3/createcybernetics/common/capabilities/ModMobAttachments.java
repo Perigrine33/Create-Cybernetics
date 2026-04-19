@@ -19,40 +19,42 @@ public final class ModMobAttachments {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
             DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, CreateCybernetics.MODID);
 
-    public static final AttachmentType<PlayerCyberwareData> CYBERENTITY_CYBERWARE =
-            AttachmentType.builder(PlayerCyberwareData::new)
-                    .serialize(new IAttachmentSerializer<CompoundTag, PlayerCyberwareData>() {
+    public static final AttachmentType<EntityCyberwareData> CYBERENTITY_CYBERWARE =
+            AttachmentType.builder(EntityCyberwareData::new)
+                    .serialize(new IAttachmentSerializer<CompoundTag, EntityCyberwareData>() {
                         @Override
-                        public PlayerCyberwareData read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider provider) {
-                            PlayerCyberwareData data = new PlayerCyberwareData();
+                        public EntityCyberwareData read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider provider) {
+                            EntityCyberwareData data = new EntityCyberwareData();
                             data.deserializeNBT(tag, provider);
                             return data;
                         }
 
                         @Override
-                        public @Nullable CompoundTag write(PlayerCyberwareData data, HolderLookup.Provider provider) {
+                        public @Nullable CompoundTag write(EntityCyberwareData data, HolderLookup.Provider provider) {
                             return data.serializeNBT(provider);
                         }
                     })
                     .sync(new CyberentitySyncHandler())
                     .build();
 
-    private static final class CyberentitySyncHandler implements AttachmentSyncHandler<PlayerCyberwareData> {
+    private static final class CyberentitySyncHandler implements AttachmentSyncHandler<EntityCyberwareData> {
 
         @Override
-        public void write(RegistryFriendlyByteBuf buf, PlayerCyberwareData attachment, boolean initialSync) {
+        public void write(RegistryFriendlyByteBuf buf, EntityCyberwareData attachment, boolean initialSync) {
             buf.writeNbt(attachment.serializeNBT(buf.registryAccess()));
         }
 
         @Override
-        public @Nullable PlayerCyberwareData read(
+        public @Nullable EntityCyberwareData read(
                 IAttachmentHolder holder,
                 RegistryFriendlyByteBuf buf,
-                @Nullable PlayerCyberwareData previousValue
+                @Nullable EntityCyberwareData previousValue
         ) {
-            PlayerCyberwareData out = (previousValue != null) ? previousValue : new PlayerCyberwareData();
+            EntityCyberwareData out = previousValue != null ? previousValue : new EntityCyberwareData();
             CompoundTag tag = buf.readNbt();
-            if (tag != null) out.deserializeNBT(tag, buf.registryAccess());
+            if (tag != null) {
+                out.deserializeNBT(tag, buf.registryAccess());
+            }
             return out;
         }
 

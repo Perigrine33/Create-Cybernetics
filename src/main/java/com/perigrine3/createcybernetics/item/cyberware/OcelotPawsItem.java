@@ -3,7 +3,9 @@ package com.perigrine3.createcybernetics.item.cyberware;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
@@ -16,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +26,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.PlayLevelSoundEvent;
 
 import java.util.List;
@@ -86,29 +88,43 @@ public class OcelotPawsItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
     }
 
     @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onTick(LivingEntity entity) {
+        ICyberwareItem.super.onTick(entity);
     }
 
     public static boolean shouldSuppressVibration(Player player, Holder<GameEvent> event, GameEvent.Context context) {
-        if (player.level().isClientSide) return false;
-        if (!isInstalled(player)) return false;
+        return shouldSuppressVibration((LivingEntity) player, event, context);
+    }
+
+    public static boolean shouldSuppressVibration(LivingEntity entity, Holder<GameEvent> event, GameEvent.Context context) {
+        if (entity == null) return false;
+        if (entity.level().isClientSide) return false;
+        if (!isInstalled(entity)) return false;
 
         return event == GameEvent.STEP || event == GameEvent.HIT_GROUND;
     }
 
     public static boolean cancelFeetSounds(Player player, Holder<SoundEvent> sound, SoundSource source) {
-        if (!isInstalled(player)) return false;
+        return cancelFeetSounds((LivingEntity) player, sound, source);
+    }
 
-        if (source != SoundSource.PLAYERS) return false;
+    public static boolean cancelFeetSounds(LivingEntity entity, Holder<SoundEvent> sound, SoundSource source) {
+        if (entity == null) return false;
+        if (!isInstalled(entity)) return false;
+
+        if (entity instanceof Player) {
+            if (source != SoundSource.PLAYERS) return false;
+        } else {
+            if (source != SoundSource.HOSTILE && source != SoundSource.NEUTRAL) return false;
+        }
 
         ResourceLocation id = sound.unwrapKey().map(ResourceKey::location).orElse(null);
         if (id == null) return false;
@@ -123,15 +139,29 @@ public class OcelotPawsItem extends Item implements ICyberwareItem {
 
     @SubscribeEvent
     public static void onPlayLevelSoundAtEntity(PlayLevelSoundEvent.AtEntity event) {
-        if (!(event.getEntity() instanceof Player player)) return;
+        if (!(event.getEntity() instanceof LivingEntity living)) return;
 
-        if (cancelFeetSounds(player, event.getSound(), event.getSource())) {
+        if (cancelFeetSounds(living, event.getSound(), event.getSource())) {
             event.setCanceled(true);
         }
     }
 
-    private static boolean isInstalled(Player player) {
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    private static boolean isInstalled(LivingEntity entity) {
+        if (entity == null) return false;
+
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return false;
+
+            return data.hasSpecificItem(ModItems.LEGUPGRADES_OCELOTPAWS.get(), CyberwareSlot.RLEG)
+                    && data.hasSpecificItem(ModItems.LEGUPGRADES_OCELOTPAWS.get(), CyberwareSlot.LLEG);
+        }
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return false;
+
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) return false;
 
         return data.hasSpecificItem(ModItems.LEGUPGRADES_OCELOTPAWS.get(), CyberwareSlot.RLEG)

@@ -5,7 +5,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.block.entity.RobosurgeonBlockEntity;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.common.surgery.SurgeryController;
+import com.perigrine3.createcybernetics.common.surgery.SurgeryChamberSurgeryHandler;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -79,6 +79,7 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         VoxelShape baseShape = state.getValue(OPENED) ? SHAPE_OPEN : SHAPE_CLOSED;
         VoxelShape normalCollision = rotateShapeFromNorth(state.getValue(FACING), baseShape);
+
         if (context instanceof EntityCollisionContext ecc && ecc.getEntity() instanceof Player player) {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
 
@@ -172,6 +173,10 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
         if (!level.isClientSide) {
             boolean newState = !state.getValue(OPENED);
 
+            if (newState && level instanceof net.minecraft.server.level.ServerLevel sl) {
+                SurgeryChamberSurgeryHandler.cancelIfActive(sl, pos, true);
+            }
+
             level.setBlock(pos, state.setValue(OPENED, newState), 3);
 
             BlockPos topPos = pos.above();
@@ -186,7 +191,6 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    //Thx TwistedGate :D
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         if (brokenByCreativePlayer(builder)) return List.of();
@@ -202,6 +206,10 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
+            if (!level.isClientSide && level instanceof net.minecraft.server.level.ServerLevel sl) {
+                SurgeryChamberSurgeryHandler.cancelIfActive(sl, pos, false);
+            }
+
             BlockPos topPos = pos.above();
             BlockState topState = level.getBlockState(topPos);
             if (topState.is(ModBlocks.SURGERY_CHAMBER_TOP.get())) {
@@ -214,25 +222,50 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (level.isClientSide) return;
-        if (!(entity instanceof Player player)) return;
+        if (!(entity instanceof net.minecraft.server.level.ServerPlayer player)) return;
 
         BlockPos topPos = pos.above();
         BlockState topState = level.getBlockState(topPos);
         if (!topState.is(ModBlocks.SURGERY_CHAMBER_TOP.get())) return;
 
         boolean connected = topState.getValue(SurgeryChamberBlockTop.CONNECTED);
-        boolean closed = !topState.getValue(SurgeryChamberBlockTop.OPENED);
+        boolean closed = !topState.getValue(SurgeryChamberBlockTop.OPENED) && !state.getValue(OPENED);
 
-        if (!connected || !closed || state.getValue(SURGERY_DONE)) return;
+        if (!connected || !closed) return;
+        if (state.getValue(SURGERY_DONE)) return;
+        if (SurgeryChamberSurgeryHandler.isActive(pos)) return;
 
         BlockPos surgeonPos = topPos.above();
         if (!level.getBlockState(surgeonPos).is(ModBlocks.ROBOSURGEON.get())) return;
         if (!(level.getBlockEntity(surgeonPos) instanceof RobosurgeonBlockEntity surgeon)) return;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        SurgeryController.performSurgery(player, surgeon);
+        if (!hasPendingSurgeryWork(surgeon)) return;
 
-        level.setBlock(pos, state.setValue(SURGERY_DONE, true), 3);
+        if (level instanceof net.minecraft.server.level.ServerLevel sl) {
+            SurgeryChamberSurgeryHandler.start(player, sl, pos, topPos, surgeonPos);
+        }
+    }
+
+    private static boolean hasPendingSurgeryWork(RobosurgeonBlockEntity surgeon) {
+        boolean[] marked = surgeon.markedForRemoval;
+        if (marked != null) {
+            for (boolean b : marked) {
+                if (b) return true;
+            }
+        }
+
+        boolean[] staged = surgeon.staged;
+        if (staged != null) {
+            int slots = surgeon.inventory.getSlots();
+            int len = Math.min(staged.length, slots);
+
+            for (int i = 0; i < len; i++) {
+                if (!staged[i]) continue;
+                if (!surgeon.inventory.getStackInSlot(i).isEmpty()) return true;
+            }
+        }
+
+        return false;
     }
 
     private static VoxelShape rotateShapeFromNorth(Direction facing, VoxelShape shapeNorth) {

@@ -4,7 +4,9 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -12,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -53,16 +56,52 @@ public class IntestineSpinneretteItem extends Item implements ICyberwareItem {
         return Set.of(CyberwareSlot.ORGANS);
     }
 
-    @Override public boolean replacesOrgan() { return true; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(CyberwareSlot.ORGANS); }
+    @Override
+    public boolean replacesOrgan() {
+        return true;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of(CyberwareSlot.ORGANS);
+    }
 
     /* -------------------- INTERACTION (INSTALLED CYBERWARE) -------------------- */
 
-    private static boolean hasSpinneretteInstalled(Player player) {
-        if (player == null) return false;
-        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+    private static boolean hasSpinneretteInstalled(LivingEntity entity) {
+        if (entity == null) return false;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            if (data == null) return false;
+
+            for (var entry : data.getAll().entrySet()) {
+                CyberwareSlot slot = entry.getKey();
+                InstalledCyberware[] arr = entry.getValue();
+                if (arr == null) continue;
+
+                for (int i = 0; i < arr.length; i++) {
+                    InstalledCyberware cw = arr[i];
+                    if (cw == null) continue;
+
+                    ItemStack st = cw.getItem();
+                    if (st == null || st.isEmpty()) continue;
+
+                    if (st.getItem() instanceof IntestineSpinneretteItem) {
+                        if (!data.isEnabled(slot, i)) continue;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return false;
+
+        EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) return false;
 
         for (var entry : data.getAll().entrySet()) {

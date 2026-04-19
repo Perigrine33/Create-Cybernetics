@@ -2,15 +2,15 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.FaceplateAliasHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import com.perigrine3.createcybernetics.common.FaceplateAliasHandler;
 
 import java.util.List;
 import java.util.Set;
@@ -51,18 +51,18 @@ public class InterchangeableFaceplateItem extends Item implements ICyberwareItem
     }
 
     @Override
-    public void onInstalled(Player player) {
+    public void onInstalled(LivingEntity entity) {
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (player.level().isClientSide) return;
-        if (player instanceof ServerPlayer sp) {
+    public void onRemoved(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
+        if (entity instanceof ServerPlayer sp) {
             FaceplateAliasHandler.clear(sp, true);
         }
     }
 
     @Override
-    public void onTick(Player player) {
+    public void onTick(LivingEntity entity) {
     }
 }

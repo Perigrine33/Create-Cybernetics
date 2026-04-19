@@ -2,8 +2,12 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
@@ -20,7 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.DragonFireball;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
@@ -46,7 +50,6 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
     private final int humanityCost;
 
     private static final String NBT_LAST_SHOT_TICK = "cc_igniphorus_lastDragonFireballTick";
-    // “About as long as the dragon” — tune as desired; 100 ticks = 5 seconds.
     private static final int COOLDOWN_TICKS = 100;
 
     public IgniphorusGlandItem(Properties props, int humanityCost) {
@@ -93,26 +96,27 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) { }
-
-    @Override
-    public void onRemoved(Player player) { }
-
-    @Override
-    public void onTick(Player player) {
-        ICyberwareItem.super.onTick(player);
+    public void onInstalled(LivingEntity entity) {
     }
 
-    public record DragonBreathFireballPayload() implements net.minecraft.network.protocol.common.custom.CustomPacketPayload {
-        public static final net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type<DragonBreathFireballPayload> TYPE =
-                new net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type<>(
-                        ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "igniphorus_dragon_fireball"));
+    @Override
+    public void onRemoved(LivingEntity entity) {
+    }
+
+    @Override
+    public void onTick(LivingEntity entity) {
+        ICyberwareItem.super.onTick(entity);
+    }
+
+    public record DragonBreathFireballPayload() implements CustomPacketPayload {
+        public static final Type<DragonBreathFireballPayload> TYPE =
+                new Type<>(ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "igniphorus_dragon_fireball"));
 
         public static final StreamCodec<ByteBuf, DragonBreathFireballPayload> STREAM_CODEC =
                 StreamCodec.unit(new DragonBreathFireballPayload());
 
         @Override
-        public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        public Type<? extends CustomPacketPayload> type() {
             return TYPE;
         }
     }
@@ -121,11 +125,11 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
     public static final class NetworkRegistration {
         @SubscribeEvent
         public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-            final PayloadRegistrar registrar = event.registrar("1");
+            PayloadRegistrar registrar = event.registrar("1");
             registrar.playToServer(DragonBreathFireballPayload.TYPE, DragonBreathFireballPayload.STREAM_CODEC, NetworkRegistration::handle);
         }
 
-        private static void handle(final DragonBreathFireballPayload payload, final IPayloadContext context) {
+        private static void handle(DragonBreathFireballPayload payload, IPayloadContext context) {
             context.enqueueWork(() -> {
                 if (!(context.player() instanceof ServerPlayer sp)) return;
                 tryShoot(sp);
@@ -139,12 +143,12 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent
         public static void onClientTick(ClientTickEvent.Post event) {
-            final Minecraft mc = Minecraft.getInstance();
+            Minecraft mc = Minecraft.getInstance();
             if (mc.player == null || mc.level == null) return;
             if (mc.screen != null) return;
 
-            final boolean useDown = mc.options.keyUse.isDown();
-            final boolean risingEdge = useDown && !wasUseDown;
+            boolean useDown = mc.options.keyUse.isDown();
+            boolean risingEdge = useDown && !wasUseDown;
             wasUseDown = useDown;
 
             if (!risingEdge) return;
@@ -154,51 +158,93 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
             HitResult.Type type = mc.hitResult.getType();
             if (type != HitResult.Type.MISS && type != HitResult.Type.ENTITY && type != HitResult.Type.BLOCK) return;
             if (!mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty()) return;
+
             if (mc.getConnection() != null) {
                 mc.getConnection().send(new ServerboundCustomPayloadPacket(new DragonBreathFireballPayload()));
             }
         }
     }
 
+    private static ICyberwareData getCyberwareData(LivingEntity entity) {
+        if (entity == null) return null;
+
+        if (entity instanceof ServerPlayer player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return null;
+            return player.getData(ModAttachments.CYBERWARE);
+        }
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return null;
+        return entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+    }
+
+    private static boolean hasIgniphorusInstalled(LivingEntity entity) {
+        ICyberwareData data = getCyberwareData(entity);
+        if (data == null) return false;
+
+        InstalledCyberware[] installed = data.getAll().get(CyberwareSlot.LUNGS);
+        if (installed == null) return false;
+
+        for (InstalledCyberware entry : installed) {
+            if (entry == null) continue;
+
+            ItemStack stack = entry.getItem();
+            if (stack == null || stack.isEmpty()) continue;
+
+            if (stack.is(ModItems.WETWARE_FIREBREATHINGLUNGS.get())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static void tryShoot(ServerPlayer player) {
-        final ServerLevel level = player.serverLevel();
+        ServerLevel level = player.serverLevel();
         if (!player.isCrouching()) return;
-        final PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null || !data.hasSpecificItem(ModItems.WETWARE_FIREBREATHINGLUNGS.get(), CyberwareSlot.LUNGS)) return;
+        if (!hasIgniphorusInstalled(player)) return;
 
-        final double reach = 5.0D;
-        final Vec3 start = player.getEyePosition();
-        final Vec3 look = player.getLookAngle();
-        final Vec3 end = start.add(look.scale(reach));
+        double reach = 5.0D;
+        Vec3 start = player.getEyePosition();
+        Vec3 look = player.getLookAngle();
+        Vec3 end = start.add(look.scale(reach));
 
-        final BlockHitResult blockHit = level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+        BlockHitResult blockHit = level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 
-        final EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, start, end, player.getBoundingBox().expandTowards(look.scale(reach)).inflate(1.0D), e -> e.isPickable() && e != player);
+        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
+                level,
+                player,
+                start,
+                end,
+                player.getBoundingBox().expandTowards(look.scale(reach)).inflate(1.0D),
+                e -> e.isPickable() && e != player
+        );
 
         if (entityHit != null) {
             double entityDist2 = entityHit.getLocation().distanceToSqr(start);
-            double blockDist2 = (blockHit.getType() == HitResult.Type.MISS)
+            double blockDist2 = blockHit.getType() == HitResult.Type.MISS
                     ? Double.POSITIVE_INFINITY
                     : blockHit.getLocation().distanceToSqr(start);
 
             if (entityDist2 <= blockDist2) return;
         }
 
-        final long now = level.getGameTime();
-        final CompoundTag tag = player.getPersistentData();
-        final long last = tag.getLong(NBT_LAST_SHOT_TICK);
+        long now = level.getGameTime();
+        CompoundTag tag = player.getPersistentData();
+        long last = tag.getLong(NBT_LAST_SHOT_TICK);
         if (now - last < COOLDOWN_TICKS) return;
         tag.putLong(NBT_LAST_SHOT_TICK, now);
 
-        final Vec3 target = (blockHit.getType() == HitResult.Type.MISS) ? end : blockHit.getLocation();
+        Vec3 target = blockHit.getType() == HitResult.Type.MISS ? end : blockHit.getLocation();
         Vec3 dir = target.subtract(start);
-        if (dir.lengthSqr() < 1.0E-6D) dir = look;
+        if (dir.lengthSqr() < 1.0E-6D) {
+            dir = look;
+        }
 
-        final Vec3 power = dir.normalize().scale(5.0D);
+        Vec3 power = dir.normalize().scale(5.0D);
 
-        final DragonFireball fireball = new DragonFireball(level, player, power);
+        DragonFireball fireball = new DragonFireball(level, player, power);
 
-        final Vec3 spawnPos = start.add(look.scale(0.6D));
+        Vec3 spawnPos = start.add(look.scale(0.6D));
         fireball.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, player.getYRot(), player.getXRot());
 
         level.addFreshEntity(fireball);

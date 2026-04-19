@@ -5,8 +5,8 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerLookAtPacket;
 import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
@@ -15,11 +15,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.client.gui.screens.Screen;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -49,12 +48,12 @@ public class WiredReflexesItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public int getEnergyUsedPerTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return 3;
     }
 
     @Override
-    public boolean requiresEnergyToFunction(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
 
@@ -84,43 +83,39 @@ public class WiredReflexesItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onInstalled(Player player) {
-        if (player.level().isClientSide) return;
-        player.getPersistentData().putBoolean(NBT_INSTALLED, true);
+    public void onInstalled(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
+        entity.getPersistentData().putBoolean(NBT_INSTALLED, true);
     }
 
     @Override
-    public void onRemoved(Player player) {
-        if (player.level().isClientSide) return;
-        player.getPersistentData().remove(NBT_INSTALLED);
+    public void onRemoved(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
+        entity.getPersistentData().remove(NBT_INSTALLED);
     }
 
     @Override
-    public void onTick(Player player) {
-        // Critical: ensure the flag is definitely present while installed.
-        // This removes reliance on onInstalled firing in your install pipeline.
-        if (player.level().isClientSide) return;
-        player.getPersistentData().putBoolean(NBT_INSTALLED, true);
+    public void onTick(LivingEntity entity) {
+        if (entity.level().isClientSide) return;
+        entity.getPersistentData().putBoolean(NBT_INSTALLED, true);
     }
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
-        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!(event.getEntity() instanceof LivingEntity entity)) return;
+        if (entity.level().isClientSide) return;
 
-        // Gate on “installed”
-        if (!player.getPersistentData().getBoolean(NBT_INSTALLED)) return;
+        if (!entity.getPersistentData().getBoolean(NBT_INSTALLED)) return;
 
         DamageSource source = event.getSource();
 
-        // Prefer attacker (shooter), fallback to direct entity (projectile)
         Entity attacker = source.getEntity();
         if (attacker == null) attacker = source.getDirectEntity();
-        if (attacker == null || attacker == player) return;
+        if (attacker == null || attacker == entity) return;
 
-        // Compute yaw + pitch to face attacker from player eyes
-        double px = player.getX();
-        double py = player.getEyeY();
-        double pz = player.getZ();
+        double px = entity.getX();
+        double py = entity.getEyeY();
+        double pz = entity.getZ();
 
         double ax = attacker.getX();
         double ay = attacker.getY() + attacker.getBbHeight() * 0.5D;
@@ -133,27 +128,26 @@ public class WiredReflexesItem extends Item implements ICyberwareItem {
         double horiz = Math.sqrt(dx * dx + dz * dz);
         if (horiz < 1.0e-6) return;
 
-        float yaw = (float)(Mth.atan2(dz, dx) * (180.0D / Math.PI)) - 90.0F;
-        float pitch = (float)(-(Mth.atan2(dy, horiz) * (180.0D / Math.PI)));
+        float yaw = (float) (Mth.atan2(dz, dx) * (180.0D / Math.PI)) - 90.0F;
+        float pitch = (float) (-(Mth.atan2(dy, horiz) * (180.0D / Math.PI)));
 
         yaw = Mth.wrapDegrees(yaw);
         pitch = Mth.clamp(pitch, -90.0F, 90.0F);
 
-        // Server-side state
-        player.setYRot(yaw);
-        player.setXRot(pitch);
-        player.setYBodyRot(yaw);
-        player.setYHeadRot(yaw);
+        entity.setYRot(yaw);
+        entity.setXRot(pitch);
+        entity.setYBodyRot(yaw);
+        entity.setYHeadRot(yaw);
 
-        // Client camera snap (look-at packet)
-        player.connection.send(new ClientboundPlayerLookAtPacket(
-                EntityAnchorArgument.Anchor.EYES,
-                attacker,
-                EntityAnchorArgument.Anchor.EYES
-        ));
+        if (entity instanceof ServerPlayer player) {
+            player.connection.send(new ClientboundPlayerLookAtPacket(
+                    EntityAnchorArgument.Anchor.EYES,
+                    attacker,
+                    EntityAnchorArgument.Anchor.EYES
+            ));
 
-        // Client head render snap (useful in third-person immediately)
-        byte headByte = (byte) Mth.floor(yaw * 256.0F / 360.0F);
-        player.connection.send(new ClientboundRotateHeadPacket(player, headByte));
+            byte headByte = (byte) Mth.floor(yaw * 256.0F / 360.0F);
+            player.connection.send(new ClientboundRotateHeadPacket(player, headByte));
+        }
     }
 }

@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "item": "create:crushed_raw_iron"
+    }
+  ],
+  "results": [
+    {
+      "count": 9,
+      "id": "minecraft:iron_nugget"
+    },
+    {
+      "chance": 0.75,
+      "id": "minecraft:redstone"
+    },
+    {
+      "id": "createcybernetics:titaniumnugget",
+      "count": 1,
+      "chance": 0.1
+    }
+  ]
+}

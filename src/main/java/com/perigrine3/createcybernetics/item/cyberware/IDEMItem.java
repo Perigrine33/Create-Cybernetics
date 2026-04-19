@@ -2,9 +2,12 @@ package com.perigrine3.createcybernetics.item.cyberware;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
@@ -20,14 +23,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.RelativeMovement;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
@@ -36,7 +38,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -63,30 +64,45 @@ public class IDEMItem extends Item implements ICyberwareItem {
         if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.brainupgrades_idem.tooltip3").withStyle(ChatFormatting.DARK_GRAY));
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
-
             tooltip.add(Component.translatable("tooltip.createcybernetics.brainupgrades_idem.energy").withStyle(ChatFormatting.RED));
         }
     }
 
-    @Override public int getHumanityCost() { return humanityCost; }
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
 
     @Override
     public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         return Set.of(ModTags.Items.BRAIN_ITEMS);
     }
 
-    @Override public Set<CyberwareSlot> getSupportedSlots() { return Set.of(CyberwareSlot.BRAIN); }
-    @Override public boolean replacesOrgan() { return false; }
-    @Override public Set<CyberwareSlot> getReplacedOrgans() { return Set.of(); }
-
     @Override
-    public void onRemoved(Player player) {
-        if (player instanceof ServerPlayer sp) clearPending(sp);
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.BRAIN);
     }
 
     @Override
-    public void onTick(Player player) {
-        if (!(player instanceof ServerPlayer sp)) return;
+    public boolean replacesOrgan() {
+        return false;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
+
+    @Override
+    public void onRemoved(LivingEntity entity) {
+        if (entity instanceof ServerPlayer sp) {
+            clearPending(sp);
+        }
+    }
+
+    @Override
+    public void onTick(LivingEntity entity) {
+        if (!(entity instanceof ServerPlayer sp)) return;
 
         tickCooldown(sp);
         tickReturnCountdown(sp);
@@ -100,21 +116,19 @@ public class IDEMItem extends Item implements ICyberwareItem {
             if (!(event.getEntity() instanceof ServerPlayer player)) return;
             if (event.isCanceled()) return;
 
-            if (!player.hasData(ModAttachments.CYBERWARE)) return;
-            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+            ICyberwareData data = getCyberwareData(player);
             if (data == null) return;
 
             if (isActive(player)) return;
-
             if (getCooldownTicks(player) > 0) return;
 
             InstalledLoc loc = findInstalledIdem(data);
             if (loc == null) return;
 
             if (!loc.stack.is(ModTags.Items.TOGGLEABLE_CYBERWARE)) return;
-            if (!data.isEnabled(loc.slot, loc.index)) return;
+            if (!isEnabled(data, loc.slot, loc.index)) return;
 
-            if (!data.tryConsumeEnergy(ACTIVATION_COST)) return;
+            if (!tryConsumeEnergy(data, ACTIVATION_COST)) return;
 
             event.setCanceled(true);
 
@@ -135,10 +149,12 @@ public class IDEMItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent
         public static void onDeath(LivingDeathEvent event) {
-            if (event.getEntity() instanceof ServerPlayer sp) clearPending(sp);
+            if (event.getEntity() instanceof ServerPlayer sp) {
+                clearPending(sp);
+            }
         }
 
-        private static InstalledLoc findInstalledIdem(PlayerCyberwareData data) {
+        private static InstalledLoc findInstalledIdem(ICyberwareData data) {
             InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.BRAIN);
             if (arr == null) return null;
 
@@ -155,10 +171,43 @@ public class IDEMItem extends Item implements ICyberwareItem {
                     return new InstalledLoc(CyberwareSlot.BRAIN, i, st);
                 }
             }
+
             return null;
         }
 
         private record InstalledLoc(CyberwareSlot slot, int index, ItemStack stack) {}
+    }
+
+    private static ICyberwareData getCyberwareData(LivingEntity entity) {
+        if (entity == null) return null;
+
+        if (entity instanceof ServerPlayer player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return null;
+            return player.getData(ModAttachments.CYBERWARE);
+        }
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return null;
+        return entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+    }
+
+    private static boolean isEnabled(ICyberwareData data, CyberwareSlot slot, int index) {
+        if (data instanceof PlayerCyberwareData playerData) {
+            return playerData.isEnabled(slot, index);
+        }
+        if (data instanceof EntityCyberwareData entityData) {
+            return entityData.isEnabled(slot, index);
+        }
+        return true;
+    }
+
+    private static boolean tryConsumeEnergy(ICyberwareData data, int amount) {
+        if (data instanceof PlayerCyberwareData playerData) {
+            return playerData.tryConsumeEnergy(amount);
+        }
+        if (data instanceof EntityCyberwareData entityData) {
+            return entityData.tryConsumeEnergy(amount);
+        }
+        return false;
     }
 
     private static void tickCooldown(ServerPlayer player) {
@@ -166,12 +215,14 @@ public class IDEMItem extends Item implements ICyberwareItem {
         if (root == null) return;
 
         int cd = root.getInt(NBT_COOLDOWN);
-        if (cd > 0) root.putInt(NBT_COOLDOWN, cd - 1);
+        if (cd > 0) {
+            root.putInt(NBT_COOLDOWN, cd - 1);
+        }
     }
 
     private static int getCooldownTicks(ServerPlayer player) {
         CompoundTag root = getOrCreateRoot(player, false);
-        return (root == null) ? 0 : Math.max(0, root.getInt(NBT_COOLDOWN));
+        return root == null ? 0 : Math.max(0, root.getInt(NBT_COOLDOWN));
     }
 
     private static void setCooldownTicks(ServerPlayer player, int ticks) {
@@ -200,11 +251,10 @@ public class IDEMItem extends Item implements ICyberwareItem {
             return;
         }
 
-        if (!player.hasData(ModAttachments.CYBERWARE)) return;
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        ICyberwareData data = getCyberwareData(player);
         if (data == null) return;
 
-        if (!data.tryConsumeEnergy(ACTIVATION_COST)) {
+        if (!tryConsumeEnergy(data, ACTIVATION_COST)) {
             root.putInt(NBT_RETURN_TICKS, 0);
             return;
         }
@@ -229,9 +279,8 @@ public class IDEMItem extends Item implements ICyberwareItem {
         clearPending(player);
     }
 
-    private static boolean stillHasIdemInstalled(ServerPlayer player) {
-        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    private static boolean stillHasIdemInstalled(LivingEntity entity) {
+        ICyberwareData data = getCyberwareData(entity);
         if (data == null) return false;
 
         InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.BRAIN);
@@ -240,10 +289,15 @@ public class IDEMItem extends Item implements ICyberwareItem {
         Item idemItem = ModItems.BRAINUPGRADES_IDEM.get();
         for (InstalledCyberware cw : arr) {
             if (cw == null) continue;
+
             ItemStack st = cw.getItem();
             if (st == null || st.isEmpty()) continue;
-            if (st.getItem() == idemItem) return true;
+
+            if (st.getItem() == idemItem) {
+                return true;
+            }
         }
+
         return false;
     }
 
@@ -266,7 +320,6 @@ public class IDEMItem extends Item implements ICyberwareItem {
         if (cd <= 0) {
         }
     }
-
 
     private static boolean isActive(ServerPlayer player) {
         CompoundTag root = getOrCreateRoot(player, false);
@@ -312,7 +365,6 @@ public class IDEMItem extends Item implements ICyberwareItem {
         }
     }
 
-
     private record VecXZ(double x, double z) {}
 
     private static VecXZ mapXZ(ResourceKey<Level> fromDim, ResourceKey<Level> toDim, double x, double z) {
@@ -349,21 +401,20 @@ public class IDEMItem extends Item implements ICyberwareItem {
 
         double jitter = Math.max(0.05D, (w * 0.5D) * 0.25D);
 
-        double[] dx = new double[]{ 0,  jitter, -jitter, 0, 0 };
-        double[] dz = new double[]{ 0,  0,      0,      jitter, -jitter };
+        double[] dx = new double[] {0, jitter, -jitter, 0, 0};
+        double[] dz = new double[] {0, 0, 0, jitter, -jitter};
 
         for (int i = 0; i < dx.length; i++) {
             double xx = x + dx[i];
             double zz = z + dz[i];
 
             AABB aabb = new AABB(
-                    xx - w / 2.0D, y,         zz - w / 2.0D,
-                    xx + w / 2.0D, y + h,     zz + w / 2.0D
+                    xx - w / 2.0D, y, zz - w / 2.0D,
+                    xx + w / 2.0D, y + h, zz + w / 2.0D
             );
 
             if (!level.noCollision(aabb)) return false;
             if (level.containsAnyLiquid(aabb)) return false;
-
             if (!level.getWorldBorder().isWithinBounds(BlockPos.containing(xx, y, zz))) return false;
         }
 
@@ -379,14 +430,16 @@ public class IDEMItem extends Item implements ICyberwareItem {
             double ny = player.getY() + dy;
             AABB moved = player.getBoundingBox().move(0.0D, dy, 0.0D);
             if (level.noCollision(moved) && !level.containsAnyLiquid(moved)) {
-                player.teleportTo(level, player.getX(), ny, player.getZ(),
-                        Set.<RelativeMovement>of(), player.getYRot(), player.getXRot());
+                player.teleportTo(
+                        level,
+                        player.getX(), ny, player.getZ(),
+                        Set.<RelativeMovement>of(),
+                        player.getYRot(), player.getXRot()
+                );
                 player.fallDistance = 0.0F;
                 player.setDeltaMovement(Vec3.ZERO);
                 return;
             }
         }
     }
-
-
 }

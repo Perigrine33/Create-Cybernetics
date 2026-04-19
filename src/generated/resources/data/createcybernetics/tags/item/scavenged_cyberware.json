@@ -30,6 +30,7 @@
     "createcybernetics:scavenged_bonebattery",
     "createcybernetics:scavenged_boneflex",
     "createcybernetics:scavenged_bonelacing",
+    "createcybernetics:scavenged_capacitorframe",
     "createcybernetics:scavenged_piezo",
     "createcybernetics:scavenged_spinalinjector",
     "createcybernetics:scavenged_sandevistan",
@@ -39,6 +40,8 @@
     "createcybernetics:scavenged_neuralcontextualizer",
     "createcybernetics:scavenged_cyberdeck",
     "createcybernetics:scavenged_chipwareslots",
+    "createcybernetics:scavenged_neuralprocessor",
+    "createcybernetics:scavenged_iceprotocol",
     "createcybernetics:scavenged_idem",
     "createcybernetics:scavenged_cyberheart",
     "createcybernetics:scavenged_coupler",
@@ -87,6 +90,18 @@
     },
     {
       "id": "createcybernetics:scavenged_sweat",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:scavenged_manabattery",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:scavenged_manaskin",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:scavenged_spelljammer",
       "required": false
     }
   ]

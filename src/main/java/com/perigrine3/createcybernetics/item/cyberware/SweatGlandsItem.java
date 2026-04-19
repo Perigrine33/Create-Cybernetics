@@ -10,6 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -62,7 +63,8 @@ public class SweatGlandsItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onTick(Player player, ItemStack installedStack, CyberwareSlot slot, int index) {
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
         if (!player.hasData(ModAttachments.CYBERWARE)) {
             ColdSweatCompat.clearHeat(player);
@@ -84,17 +86,19 @@ public class SweatGlandsItem extends Item implements ICyberwareItem {
     }
 
     @Override
-    public void onUnpoweredTick(Player player, ItemStack installedStack, CyberwareSlot slot) {
+    public void onUnpoweredTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
         ColdSweatCompat.clearHeat(player);
     }
 
     @Override
-    public void onRemoved(Player player) {
+    public void onRemoved(LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
         ColdSweatCompat.clearHeat(player);
     }
 
     @Override
-    public void onTick(Player player) {}
+    public void onTick(LivingEntity entity) {}
 }
