@@ -7,7 +7,7 @@ import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.network.payload.OpenExpandedInventoryPayload;
-import com.perigrine3.createcybernetics.screen.custom.ExpandedInventoryScreen;
+import com.perigrine3.createcybernetics.screen.custom.crafting.ExpandedInventoryScreen;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

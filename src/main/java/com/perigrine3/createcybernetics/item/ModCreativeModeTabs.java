@@ -23,6 +23,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModBlocks.ROBOSURGEON);
                         output.accept(ModBlocks.SURGERY_CHAMBER_BOTTOM);
+                        output.accept(ModBlocks.SURGERY_TABLE);
                         output.accept(ModBlocks.ENGINEERING_TABLE);
                         output.accept(ModBlocks.GRAFTING_TABLE);
                         output.accept(ModBlocks.CHARGING_BLOCK);

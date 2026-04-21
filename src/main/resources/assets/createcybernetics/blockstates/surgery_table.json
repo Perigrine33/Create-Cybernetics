@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "facing=north,part=foot": { "model": "createcybernetics:block/surgery_table_foot", "y": 180 },
+    "facing=east,part=foot":  { "model": "createcybernetics:block/surgery_table_foot", "y": 270 },
+    "facing=south,part=foot": { "model": "createcybernetics:block/surgery_table_foot", "y": 0 },
+    "facing=west,part=foot":  { "model": "createcybernetics:block/surgery_table_foot", "y": 90 },
+
+    "facing=north,part=head": { "model": "createcybernetics:block/surgery_table_head", "y": 180 },
+    "facing=east,part=head":  { "model": "createcybernetics:block/surgery_table_head", "y": 270 },
+    "facing=south,part=head": { "model": "createcybernetics:block/surgery_table_head", "y": 0 },
+    "facing=west,part=head":  { "model": "createcybernetics:block/surgery_table_head", "y": 90 }
+  }
+}

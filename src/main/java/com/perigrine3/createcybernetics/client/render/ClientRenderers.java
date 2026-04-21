@@ -3,6 +3,7 @@ package com.perigrine3.createcybernetics.client.render;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.block.entity.HoloprojectorBlockEntityRenderer;
 import com.perigrine3.createcybernetics.block.entity.ModBlockEntities;
+import com.perigrine3.createcybernetics.entity.ModEntities;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -14,9 +15,6 @@ public final class ClientRenderers {
 
     @SubscribeEvent
     public static void registerBERs(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(
-                ModBlockEntities.HOLOPROJECTOR_BLOCKENTITY.get(),
-                HoloprojectorBlockEntityRenderer::new
-        );
+        event.registerBlockEntityRenderer(ModBlockEntities.HOLOPROJECTOR_BLOCKENTITY.get(), HoloprojectorBlockEntityRenderer::new);
     }
 }

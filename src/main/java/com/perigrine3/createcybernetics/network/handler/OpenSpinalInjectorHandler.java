@@ -5,7 +5,7 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.network.payload.OpenSpinalInjectorPayload;
-import com.perigrine3.createcybernetics.screen.custom.SpinalInjectorMenu;
+import com.perigrine3.createcybernetics.screen.custom.spinal_injector.SpinalInjectorMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;

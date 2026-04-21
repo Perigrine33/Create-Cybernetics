@@ -6,7 +6,7 @@ import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.network.payload.OpenCyberdeckPayload;
 import com.perigrine3.createcybernetics.screen.container.CyberdeckInventoryHandler;
-import com.perigrine3.createcybernetics.screen.custom.CyberdeckMenu;
+import com.perigrine3.createcybernetics.screen.custom.cyberdeck.CyberdeckMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;

@@ -4,7 +4,7 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.cyberware.CraftingHandsItem;
-import com.perigrine3.createcybernetics.screen.custom.ExpandedInventoryMenu;
+import com.perigrine3.createcybernetics.screen.custom.crafting.ExpandedInventoryMenu;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;

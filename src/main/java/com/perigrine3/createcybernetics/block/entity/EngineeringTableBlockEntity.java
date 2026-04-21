@@ -1,7 +1,7 @@
 package com.perigrine3.createcybernetics.block.entity;
 
 import com.perigrine3.createcybernetics.ConfigValues;
-import com.perigrine3.createcybernetics.screen.custom.EngineeringTableMenu;
+import com.perigrine3.createcybernetics.screen.custom.crafting.EngineeringTableMenu;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.BlockPos;

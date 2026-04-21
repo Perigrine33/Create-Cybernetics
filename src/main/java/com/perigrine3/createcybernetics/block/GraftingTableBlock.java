@@ -1,6 +1,6 @@
 package com.perigrine3.createcybernetics.block;
 
-import com.perigrine3.createcybernetics.screen.custom.GraftingTableMenu;
+import com.perigrine3.createcybernetics.screen.custom.crafting.GraftingTableMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

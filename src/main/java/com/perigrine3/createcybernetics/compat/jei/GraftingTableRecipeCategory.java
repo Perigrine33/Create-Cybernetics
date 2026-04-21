@@ -4,7 +4,7 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.recipe.GraftingTableRecipe;
-import com.perigrine3.createcybernetics.screen.custom.GraftingTableMenu;
+import com.perigrine3.createcybernetics.screen.custom.crafting.GraftingTableMenu;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

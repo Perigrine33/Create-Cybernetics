@@ -21,12 +21,16 @@ public class ModBlockEntities {
                     RobosurgeonBlockEntity::new, ModBlocks.ROBOSURGEON.get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EngineeringTableBlockEntity>> ENGINEERING_TABLE_BLOCKENTITY =
-            (ModBlocks.ENGINEERING_TABLE == null) ? null : BLOCK_ENTITIES.register("engineering_table",
-                    () -> BlockEntityType.Builder.of(EngineeringTableBlockEntity::new, ModBlocks.ENGINEERING_TABLE.get()).build(null));
+            BLOCK_ENTITIES.register("engineering_table", () -> BlockEntityType.Builder.of(
+                    EngineeringTableBlockEntity::new, ModBlocks.ENGINEERING_TABLE.get()).build(null));
 
     public static final Supplier<BlockEntityType<HoloprojectorBlockEntity>> HOLOPROJECTOR_BLOCKENTITY =
             BLOCK_ENTITIES.register("holoprojector_blockentity", () -> BlockEntityType.Builder.of(
                     HoloprojectorBlockEntity::new, ModBlocks.HOLOPROJECTOR.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SurgeryTableBlockEntity>> SURGERY_TABLE =
+            BLOCK_ENTITIES.register("surgery_table", () -> BlockEntityType.Builder.of(
+                    SurgeryTableBlockEntity::new, ModBlocks.SURGERY_TABLE.get()).build(null));
 
 
     public static void register(IEventBus eventBus) {

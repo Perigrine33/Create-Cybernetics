@@ -7,7 +7,7 @@ import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.screen.custom.CyberwareToggleWheelScreen;
+import com.perigrine3.createcybernetics.screen.custom.toggle_wheel.CyberwareToggleWheelScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;

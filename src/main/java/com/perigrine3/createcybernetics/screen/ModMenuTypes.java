@@ -1,8 +1,16 @@
 package com.perigrine3.createcybernetics.screen;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.compat.corpse.CorpseCyberwareMenu;
 import com.perigrine3.createcybernetics.screen.custom.*;
+import com.perigrine3.createcybernetics.screen.custom.arm_cannon.ArmCannonMenu;
+import com.perigrine3.createcybernetics.screen.custom.chipware.ChipwareMiniMenu;
+import com.perigrine3.createcybernetics.screen.custom.crafting.EngineeringTableMenu;
+import com.perigrine3.createcybernetics.screen.custom.crafting.ExpandedInventoryMenu;
+import com.perigrine3.createcybernetics.screen.custom.crafting.GraftingTableMenu;
+import com.perigrine3.createcybernetics.screen.custom.cyberdeck.CyberdeckMenu;
+import com.perigrine3.createcybernetics.screen.custom.heat_engine.HeatEngineMenu;
+import com.perigrine3.createcybernetics.screen.custom.spinal_injector.SpinalInjectorMenu;
+import com.perigrine3.createcybernetics.screen.custom.surgery.RobosurgeonMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -23,6 +31,8 @@ public class ModMenuTypes {
             registerMenuType("engineering_table_menu", EngineeringTableMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<GraftingTableMenu>> GRAFTING_TABLE_MENU =
             registerMenuType("grafting_table_menu", GraftingTableMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<SurgeryTableMenu>> SURGERY_TABLE_MENU =
+            registerMenuType("surgery_table_menu", SurgeryTableMenu::new);
 
     public static final DeferredHolder<MenuType<?>, MenuType<ExpandedInventoryMenu>> EXPANDED_INVENTORY_MENU =
             registerMenuType("expanded_inventory_menu", ExpandedInventoryMenu::new);

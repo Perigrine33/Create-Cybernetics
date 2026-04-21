@@ -2,13 +2,12 @@ package com.perigrine3.createcybernetics.event;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.entity.ModEntities;
-import com.perigrine3.createcybernetics.entity.client.*;
+import com.perigrine3.createcybernetics.entity.client.models.CyberskeletonModel;
+import com.perigrine3.createcybernetics.entity.client.models.CyberzombieModel;
+import com.perigrine3.createcybernetics.entity.client.models.SmasherModel;
 import com.perigrine3.createcybernetics.entity.custom.*;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

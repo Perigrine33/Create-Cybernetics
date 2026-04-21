@@ -1,7 +1,7 @@
 package com.perigrine3.createcybernetics.network.handler;
 
 import com.perigrine3.createcybernetics.screen.container.ChipwareContainer;
-import com.perigrine3.createcybernetics.screen.custom.ChipwareMiniMenu;
+import com.perigrine3.createcybernetics.screen.custom.chipware.ChipwareMiniMenu;
 import com.perigrine3.createcybernetics.network.payload.OpenChipwareMiniPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

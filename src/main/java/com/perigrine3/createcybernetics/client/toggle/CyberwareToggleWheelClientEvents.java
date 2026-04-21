@@ -3,7 +3,7 @@ package com.perigrine3.createcybernetics.client.toggle;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.client.ModKeyMappings;
-import com.perigrine3.createcybernetics.screen.custom.CyberwareToggleWheelScreen;
+import com.perigrine3.createcybernetics.screen.custom.toggle_wheel.CyberwareToggleWheelScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;

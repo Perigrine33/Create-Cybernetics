@@ -6,7 +6,7 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.cyberware.HeatEngineItem;
 import com.perigrine3.createcybernetics.network.payload.OpenHeatEnginePayload;
-import com.perigrine3.createcybernetics.screen.custom.HeatEngineMenu;
+import com.perigrine3.createcybernetics.screen.custom.heat_engine.HeatEngineMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;

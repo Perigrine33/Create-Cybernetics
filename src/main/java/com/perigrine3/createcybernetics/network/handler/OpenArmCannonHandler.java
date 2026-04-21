@@ -5,7 +5,7 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.network.payload.OpenArmCannonPayload;
-import com.perigrine3.createcybernetics.screen.custom.ArmCannonMenu;
+import com.perigrine3.createcybernetics.screen.custom.arm_cannon.ArmCannonMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
