@@ -185,6 +185,9 @@ public class ModItems {
 
 
 //SPAWN EGGS
+    public static final DeferredItem<Item> RIPPER_SPAWN_EGG = ITEMS.register("ripper_spawn_egg",
+        () -> new DeferredSpawnEggItem(ModEntities.RIPPER, 0x969696, 0xFFFF003C,
+                new Item.Properties()));
     public static final DeferredItem<Item> SMASHER_SPAWN_EGG = ITEMS.register("smasher_spawn_egg",
         () -> new DeferredSpawnEggItem(ModEntities.SMASHER, 0x7f7b7b, 0xf44336,
                 new Item.Properties()));

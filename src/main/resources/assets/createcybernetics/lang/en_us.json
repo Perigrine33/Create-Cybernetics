@@ -209,6 +209,7 @@
   "item.createcybernetics.cyberskeleton_spawn_egg": "Cyberskeleton Spawn Egg",
 
   "item.createcybernetics.smasher_spawn_egg": "Smasher Spawn Egg",
+  "item.createcybernetics.ripper_spawn_egg": "Ripper Spawn Egg",
   "item.createcybernetics.punklin_spawn_egg": "Punklin Spawn Egg",
   "item.createcybernetics.pigstrom_spawn_egg": "Pigstrom Spawn Egg",
   "item.createcybernetics.hogboy_spawn_egg": "HogBoy Spawn Egg",
@@ -431,6 +432,7 @@
   "item.createcybernetics.scavenged_elytra": "Deployable Elytra",
   "item.createcybernetics.scavenged_piezo": "Piezoelectric Energy Generator",
   "item.createcybernetics.scavenged_spinalinjector": "Spinal Injector",
+  "item.createcybernetics.scavenged_capacitorframe": "High Voltaic Capacitor Frame",
   "item.createcybernetics.scavenged_sandevistan": "Sandevistan",
   "item.createcybernetics.scavenged_eyeofdefender": "Eye of Defender",
   "item.createcybernetics.scavenged_consciousnesstransmitter": "Needlecaster",
@@ -507,6 +509,8 @@
   "block.createcybernetics.datura_bush": "Datura Bush",
 
 
+  "entity.createcybernetics.ripper": "Ripper",
+
   "entity.createcybernetics.smasher": "Smasher",
   "entity.createcybernetics.cyberzombie": "Cyberzombie",
   "entity.createcybernetics.cyberskeleton": "Cyberskeleton",
@@ -525,6 +529,13 @@
   "key.createcybernetics.cyberdeck": "Open Cyberdeck",
   "key.createcybernetics.cyberdeck_wheel": "Open Cyberdeck Wheel",
   "key.createcybernetics.infolog_gui": "Open A Slotted Infolog",
+
+
+  "key.createcybernetics.rippergui.trade_title":  "Trade",
+  "key.createcybernetics.rippergui.refurbish_title":  "Refurbish",
+  "key.createcybernetics.rippergui.trade_input_desc":  "Fresh/Scavenged Cyberware",
+  "key.createcybernetics.rippergui.refurbish_input1_desc":  "Scavenged Cyberware",
+  "key.createcybernetics.rippergui.refurbish_input2_desc":  "20x Emeralds",
 
 
   "advancement.cybernetics": "Cybernetics",

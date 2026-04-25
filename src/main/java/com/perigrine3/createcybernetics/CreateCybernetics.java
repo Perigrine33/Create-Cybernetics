@@ -24,7 +24,6 @@ import com.perigrine3.createcybernetics.potion.ModPotions;
 import com.perigrine3.createcybernetics.recipe.ModRecipeSerializers;
 import com.perigrine3.createcybernetics.recipe.ModRecipes;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
-import com.perigrine3.createcybernetics.screen.custom.*;
 import com.perigrine3.createcybernetics.screen.custom.arm_cannon.ArmCannonScreen;
 import com.perigrine3.createcybernetics.screen.custom.chipware.ChipwareMiniScreen;
 import com.perigrine3.createcybernetics.screen.custom.crafting.EngineeringTableScreen;
@@ -33,7 +32,10 @@ import com.perigrine3.createcybernetics.screen.custom.crafting.GraftingTableScre
 import com.perigrine3.createcybernetics.screen.custom.cyberdeck.CyberdeckScreen;
 import com.perigrine3.createcybernetics.screen.custom.heat_engine.HeatEngineScreen;
 import com.perigrine3.createcybernetics.screen.custom.spinal_injector.SpinalInjectorScreen;
-import com.perigrine3.createcybernetics.screen.custom.surgery.RobosurgeonScreen;
+import com.perigrine3.createcybernetics.screen.custom.surgery.ripper.RipperTradeScreen;
+import com.perigrine3.createcybernetics.screen.custom.surgery.ripper.SurgeryPaymentScreen;
+import com.perigrine3.createcybernetics.screen.custom.surgery.robosurgeon.RobosurgeonScreen;
+import com.perigrine3.createcybernetics.screen.custom.surgery.surgery_table.SurgeryTableScreen;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -156,6 +158,7 @@ public class CreateCybernetics {
         }
 
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.accept(ModItems.RIPPER_SPAWN_EGG);
             event.accept(ModItems.SMASHER_SPAWN_EGG);
             event.accept(ModItems.CYBERZOMBIE_SPAWN_EGG);
             event.accept(ModItems.CYBERSKELETON_SPAWN_EGG);
@@ -207,6 +210,7 @@ public class CreateCybernetics {
             EntityRenderers.register(ModEntities.NUGGET_PROJECTILE.get(), NuggetProjectileRenderer::new);
             EntityRenderers.register(ModEntities.EMP_GRENADE_PROJECTILE.get(), ThrownItemRenderer::new);
 
+            EntityRenderers.register(ModEntities.RIPPER.get(), RipperRenderer::new);
             EntityRenderers.register(ModEntities.SMASHER.get(), SmasherRenderer::new);
             EntityRenderers.register(ModEntities.CYBERZOMBIE.get(), CyberzombieRenderer::new);
             EntityRenderers.register(ModEntities.CYBERSKELETON.get(), CyberskeletonRenderer::new);
@@ -225,6 +229,8 @@ public class CreateCybernetics {
             event.register(ModMenuTypes.HEAT_ENGINE_MENU.get(), HeatEngineScreen::new);
             event.register(ModMenuTypes.CYBERDECK_MENU.get(), CyberdeckScreen::new);
             event.register(ModMenuTypes.SURGERY_TABLE_MENU.get(), SurgeryTableScreen::new);
+            event.register(ModMenuTypes.RIPPER_TRADE_MENU.get(), RipperTradeScreen::new);
+            event.register(ModMenuTypes.SURGERY_PAYMENT_MENU.get(), SurgeryPaymentScreen::new);
 
             if (CorpseCompat.isLoaded()) {
                 event.register(ModCorpseCompatMenus.CORPSE_CYBERWARE.get(), CorpseCyberwareScreen::new);

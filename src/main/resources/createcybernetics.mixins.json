@@ -9,6 +9,7 @@
     "CorpseEntityRemoveMixin",
     "InventoryMenuChipwareSlotsMixin",
     "LivingEntitySandevistanTrailMixin",
+    "LivingEntitySurgerySleepDamageMixin",
     "PlayerSprintWhileCrouchingMixin",
     "ProjectileInaccuracyMixin",
     "RaidMixin",

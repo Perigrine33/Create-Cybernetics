@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.screen.custom.surgery;
+package com.perigrine3.createcybernetics.screen.custom.surgery.robosurgeon;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;

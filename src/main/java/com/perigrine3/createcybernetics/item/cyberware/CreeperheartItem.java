@@ -100,7 +100,7 @@ public class CreeperheartItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent
         public static void onLivingDeath(LivingDeathEvent event) {
-            if (!(event.getEntity() instanceof LivingEntity living)) return;
+            LivingEntity living = event.getEntity();
             if (living.level().isClientSide) return;
             if (!(living.level() instanceof ServerLevel level)) return;
 

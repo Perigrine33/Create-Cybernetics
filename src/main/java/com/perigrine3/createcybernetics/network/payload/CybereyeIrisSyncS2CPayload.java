@@ -3,12 +3,10 @@ package com.perigrine3.createcybernetics.network.payload;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.client.skin.CybereyeOverlayHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
 
@@ -41,38 +39,31 @@ public record CybereyeIrisSyncS2CPayload(
 
     private static CybereyeIrisSyncS2CPayload decode(FriendlyByteBuf buf) {
         UUID id = buf.readUUID();
+
         int lx = buf.readVarInt();
         int ly = buf.readVarInt();
         int lv = buf.readVarInt();
+
         int rx = buf.readVarInt();
         int ry = buf.readVarInt();
         int rv = buf.readVarInt();
+
         return new CybereyeIrisSyncS2CPayload(id, lx, ly, lv, rx, ry, rv);
     }
 
     public static void handle(CybereyeIrisSyncS2CPayload payload) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null) return;
 
-        Player target = mc.level.getPlayerByUUID(payload.playerId);
-        if (target == null) return;
-
-        CompoundTag root = target.getPersistentData().getCompound(CybereyeOverlayHandler.NBT_ROOT);
-
-        CompoundTag left = new CompoundTag();
-        left.putInt(CybereyeOverlayHandler.NBT_X, payload.leftX);
-        left.putInt(CybereyeOverlayHandler.NBT_Y, payload.leftY);
-        left.putInt(CybereyeOverlayHandler.NBT_VARIANT, payload.leftVariant);
-        root.put(CybereyeOverlayHandler.NBT_LEFT, left);
-
-        CompoundTag right = new CompoundTag();
-        right.putInt(CybereyeOverlayHandler.NBT_X, payload.rightX);
-        right.putInt(CybereyeOverlayHandler.NBT_Y, payload.rightY);
-        right.putInt(CybereyeOverlayHandler.NBT_VARIANT, payload.rightVariant);
-        root.put(CybereyeOverlayHandler.NBT_RIGHT, right);
-
-        target.getPersistentData().put(CybereyeOverlayHandler.NBT_ROOT, root);
-
-        CybereyeOverlayHandler.invalidate(target);
+        mc.execute(() -> {
+            CybereyeOverlayHandler.applySyncedConfig(
+                    payload.playerId,
+                    payload.leftX,
+                    payload.leftY,
+                    payload.leftVariant,
+                    payload.rightX,
+                    payload.rightY,
+                    payload.rightVariant
+            );
+        });
     }
 }

@@ -85,7 +85,7 @@ public class CyberskeletonEntity extends Skeleton {
     protected void registerGoals() {
         super.registerGoals();
 
-        this.goalSelector.addGoal(3, new CyberentityPneumaticCalvesJumpGoal(this));
+        this.goalSelector.addGoal(4, new CyberentityPneumaticCalvesJumpGoal(this));
         this.goalSelector.addGoal(3, new CyberentitySandevistanGoal(this));
     }
 }

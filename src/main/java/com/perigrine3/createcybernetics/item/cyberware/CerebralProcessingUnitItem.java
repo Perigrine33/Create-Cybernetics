@@ -9,7 +9,6 @@ import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
-import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.network.payload.CerebralShutdownStatePayload;
 import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
@@ -21,7 +20,6 @@ import net.minecraft.client.player.Input;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -52,14 +50,6 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
 
     private static volatile boolean CLIENT_SHUTDOWN_ACTIVE = false;
 
-    public static void setClientShutdownActive(boolean active) {
-        CLIENT_SHUTDOWN_ACTIVE = active;
-    }
-
-    public static boolean clientShutdownActive() {
-        return CLIENT_SHUTDOWN_ACTIVE;
-    }
-
     private static final String NBT_SHUTDOWN_ACTIVE = "cc_cpu_shutdown_active";
 
     private static final String NBT_ANCHOR_SET = "cc_cpu_shutdown_anchor";
@@ -74,12 +64,21 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         this.humanityCost = humanityCost;
     }
 
+    public static void setClientShutdownActive(boolean active) {
+        CLIENT_SHUTDOWN_ACTIVE = active;
+    }
+
+    public static boolean clientShutdownActive() {
+        return CLIENT_SHUTDOWN_ACTIVE;
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
-            tooltip.add(Component.translatable("tooltip.createcybernetics.brainupgrades_cyberbrain.energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.createcybernetics.brainupgrades_cyberbrain.energy")
+                    .withStyle(ChatFormatting.RED));
         }
     }
 
@@ -142,15 +141,7 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
             if (st == null || st.isEmpty()) continue;
 
             if (!(st.getItem() instanceof CerebralProcessingUnitItem)) continue;
-
-            boolean enabled = true;
-            if (data instanceof PlayerCyberwareData pData) {
-                enabled = pData.isEnabled(CyberwareSlot.BRAIN, idx);
-            } else if (data instanceof EntityCyberwareData eData) {
-                enabled = eData.isEnabled(CyberwareSlot.BRAIN, idx);
-            }
-
-            if (!enabled) continue;
+            if (!isEnabled(data, CyberwareSlot.BRAIN, idx)) continue;
 
             return !installed.isPowered();
         }
@@ -158,47 +149,20 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         return false;
     }
 
-    private static boolean clientOverlayActive(Player player) {
-        if (player == null) return false;
-        if (CLIENT_SHUTDOWN_ACTIVE) return true;
-
-        PlayerCyberwareData data = player.hasData(ModAttachments.CYBERWARE) ? player.getData(ModAttachments.CYBERWARE) : null;
-        if (data == null) return false;
-
-        boolean eyesEnabled = hasCybereyesInstalledAndEnabled(data);
-        if (!eyesEnabled) return false;
-
-        return player.hasEffect(MobEffects.BLINDNESS) || player.hasEffect(MobEffects.DARKNESS);
-    }
-
-    private static boolean hasCybereyesInstalledAndEnabled(ICyberwareData data) {
-        if (data == null) return false;
-
-        InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.EYES);
-        if (arr == null) return false;
-
-        for (int idx = 0; idx < arr.length; idx++) {
-            InstalledCyberware installed = arr[idx];
-            if (installed == null) continue;
-
-            ItemStack st = installed.getItem();
-            if (st == null || st.isEmpty()) continue;
-
-            if (!(st.getItem() instanceof CybereyeItem)) continue;
-
-            boolean enabled = true;
-            if (data instanceof PlayerCyberwareData pData) {
-                enabled = pData.isEnabled(CyberwareSlot.EYES, idx);
-            } else if (data instanceof EntityCyberwareData eData) {
-                enabled = eData.isEnabled(CyberwareSlot.EYES, idx);
-            }
-
-            if (!enabled) continue;
-
-            return true;
+    private static boolean isEnabled(ICyberwareData data, CyberwareSlot slot, int index) {
+        if (data instanceof PlayerCyberwareData pData) {
+            return pData.isEnabled(slot, index);
         }
 
-        return false;
+        if (data instanceof EntityCyberwareData eData) {
+            return eData.isEnabled(slot, index);
+        }
+
+        return true;
+    }
+
+    private static boolean clientOverlayActive(Player player) {
+        return player != null && CLIENT_SHUTDOWN_ACTIVE;
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -211,30 +175,43 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
             if (p.level().isClientSide) return;
             if (!(p instanceof ServerPlayer sp)) return;
 
-            if (!sp.hasData(ModAttachments.CYBERWARE)) return;
+            if (!sp.hasData(ModAttachments.CYBERWARE)) {
+                clearShutdownState(sp);
+                PacketDistributor.sendToPlayer(sp, new CerebralShutdownStatePayload(false));
+                return;
+            }
+
             PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
-            if (data == null) return;
+            if (data == null) {
+                clearShutdownState(sp);
+                PacketDistributor.sendToPlayer(sp, new CerebralShutdownStatePayload(false));
+                return;
+            }
 
             boolean shutdownNow = cpuInstalledEnabledAndUnpowered(data);
 
             CompoundTag pt = sp.getPersistentData();
             boolean prev = pt.getBoolean(NBT_SHUTDOWN_ACTIVE);
 
-            if (shutdownNow != prev) {
-                pt.putBoolean(NBT_SHUTDOWN_ACTIVE, shutdownNow);
-
-                if (shutdownNow) {
-                    ModCriteria.THOUGHTS_NOT_FOUND.get().trigger(sp);
-                }
-
-                if (!shutdownNow) {
-                    pt.remove(NBT_ANCHOR_SET);
-                } else {
-                    pt.putBoolean(NBT_ANCHOR_SET, false);
-                }
-
-                PacketDistributor.sendToPlayer(sp, new CerebralShutdownStatePayload(shutdownNow));
+            if (shutdownNow == prev) {
+                return;
             }
+
+            pt.putBoolean(NBT_SHUTDOWN_ACTIVE, shutdownNow);
+
+            if (shutdownNow) {
+                ModCriteria.THOUGHTS_NOT_FOUND.get().trigger(sp);
+                pt.putBoolean(NBT_ANCHOR_SET, false);
+            } else {
+                pt.remove(NBT_ANCHOR_SET);
+                pt.remove(NBT_AX);
+                pt.remove(NBT_AY);
+                pt.remove(NBT_AZ);
+                pt.remove(NBT_AYAW);
+                pt.remove(NBT_APITCH);
+            }
+
+            PacketDistributor.sendToPlayer(sp, new CerebralShutdownStatePayload(shutdownNow));
         }
     }
 
@@ -416,7 +393,7 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         private ShutdownResetHooks() {}
 
         @SubscribeEvent
-        public static void onClone(net.neoforged.neoforge.event.entity.player.PlayerEvent.Clone event) {
+        public static void onClone(PlayerEvent.Clone event) {
             if (!event.isWasDeath()) return;
             if (!(event.getEntity() instanceof ServerPlayer sp)) return;
 
@@ -425,23 +402,24 @@ public class CerebralProcessingUnitItem extends Item implements ICyberwareItem {
         }
 
         @SubscribeEvent
-        public static void onRespawn(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerRespawnEvent event) {
+        public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
             if (!(event.getEntity() instanceof ServerPlayer sp)) return;
 
             clearShutdownState(sp);
             PacketDistributor.sendToPlayer(sp, new CerebralShutdownStatePayload(false));
         }
+    }
 
-        private static void clearShutdownState(ServerPlayer sp) {
-            CompoundTag pt = sp.getPersistentData();
-            pt.putBoolean(NBT_SHUTDOWN_ACTIVE, false);
+    private static void clearShutdownState(ServerPlayer sp) {
+        CompoundTag pt = sp.getPersistentData();
 
-            pt.remove(NBT_ANCHOR_SET);
-            pt.remove(NBT_AX);
-            pt.remove(NBT_AY);
-            pt.remove(NBT_AZ);
-            pt.remove(NBT_AYAW);
-            pt.remove(NBT_APITCH);
-        }
+        pt.putBoolean(NBT_SHUTDOWN_ACTIVE, false);
+
+        pt.remove(NBT_ANCHOR_SET);
+        pt.remove(NBT_AX);
+        pt.remove(NBT_AY);
+        pt.remove(NBT_AZ);
+        pt.remove(NBT_AYAW);
+        pt.remove(NBT_APITCH);
     }
 }

@@ -320,5 +320,35 @@ public final class ModPayloads {
                 CyberwareEnabledStatePayload.STREAM_CODEC,
                 (payload, ctx) -> ctx.enqueueWork(() -> CyberwareEnabledStatePayload.handle(payload, ctx))
         );
+
+        r.playToClient(
+                PlayerSurgeryStartPayload.TYPE,
+                PlayerSurgeryStartPayload.STREAM_CODEC,
+                PlayerSurgeryPayloadHandler::handleStart
+        );
+
+        r.playToClient(
+                PlayerSurgeryRoundPayload.TYPE,
+                PlayerSurgeryRoundPayload.STREAM_CODEC,
+                PlayerSurgeryPayloadHandler::handleRound
+        );
+
+        r.playToServer(
+                PlayerSurgeryClickPayload.TYPE,
+                PlayerSurgeryClickPayload.STREAM_CODEC,
+                PlayerSurgeryPayloadHandler::handleClick
+        );
+
+        r.playToClient(
+                PlayerSurgeryResultPayload.TYPE,
+                PlayerSurgeryResultPayload.STREAM_CODEC,
+                PlayerSurgeryPayloadHandler::handleResult
+        );
+
+        r.playToClient(
+                PlayerSurgeryEndPayload.TYPE,
+                PlayerSurgeryEndPayload.STREAM_CODEC,
+                PlayerSurgeryPayloadHandler::handleEnd
+        );
     }
 }

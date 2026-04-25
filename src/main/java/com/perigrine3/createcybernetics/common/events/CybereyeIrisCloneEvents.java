@@ -24,15 +24,48 @@ public final class CybereyeIrisCloneEvents {
         if (oldRoot == null || oldRoot.isEmpty()) return;
 
         newPlayer.getPersistentData().put(CybereyeOverlayHandler.NBT_ROOT, oldRoot.copy());
-        sendCurrentToClients(newPlayer);
+        sendCurrentToSelfAndTrackers(newPlayer);
     }
 
-    private static void sendCurrentToClients(ServerPlayer player) {
+    @SubscribeEvent
+    public static void onStartTracking(PlayerEvent.StartTracking event) {
+        if (!(event.getEntity() instanceof ServerPlayer viewer)) return;
+        if (!(event.getTarget() instanceof ServerPlayer target)) return;
+
+        sendCurrentToViewer(target, viewer);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        sendCurrentToSelfAndTrackers(player);
+    }
+
+    private static void sendCurrentToSelfAndTrackers(ServerPlayer player) {
+        CybereyeIrisSyncS2CPayload out = makePayload(player);
+        if (out == null) return;
+
+        PacketDistributor.sendToPlayer(player, out);
+        PacketDistributor.sendToPlayersTrackingEntity(player, out);
+    }
+
+    private static void sendCurrentToViewer(ServerPlayer target, ServerPlayer viewer) {
+        CybereyeIrisSyncS2CPayload out = makePayload(target);
+        if (out == null) return;
+
+        PacketDistributor.sendToPlayer(viewer, out);
+    }
+
+    private static CybereyeIrisSyncS2CPayload makePayload(ServerPlayer player) {
         CompoundTag root = player.getPersistentData().getCompound(CybereyeOverlayHandler.NBT_ROOT);
-        if (root == null || root.isEmpty()) return;
+        if (root == null || root.isEmpty()) return null;
 
         CompoundTag left = root.getCompound(CybereyeOverlayHandler.NBT_LEFT);
         CompoundTag right = root.getCompound(CybereyeOverlayHandler.NBT_RIGHT);
+
+        if (left == null || left.isEmpty()) return null;
+        if (right == null || right.isEmpty()) return null;
 
         int lx = left.getInt(CybereyeOverlayHandler.NBT_X);
         int ly = left.getInt(CybereyeOverlayHandler.NBT_Y);
@@ -42,10 +75,6 @@ public final class CybereyeIrisCloneEvents {
         int ry = right.getInt(CybereyeOverlayHandler.NBT_Y);
         int rv = right.getInt(CybereyeOverlayHandler.NBT_VARIANT);
 
-        CybereyeIrisSyncS2CPayload out =
-                new CybereyeIrisSyncS2CPayload(player.getUUID(), lx, ly, lv, rx, ry, rv);
-
-        PacketDistributor.sendToPlayer(player, out);
-        PacketDistributor.sendToPlayersTrackingEntity(player, out);
+        return new CybereyeIrisSyncS2CPayload(player.getUUID(), lx, ly, lv, rx, ry, rv);
     }
 }

@@ -1,0 +1,39 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+
+  "key": {
+    "B": {
+      "item": "minecraft:white_bed"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "T": {
+      "item": "createcybernetics:titanium_block"
+    },
+    "I": {
+      "item": "createcybernetics:titaniumingot"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    },
+    "G": {
+      "item": "createcybernetics:component_graphicscard"
+    }
+  },
+
+  "pattern": [
+    "     ",
+    "II   ",
+    "IGBSI",
+    "TIRIT",
+    "     "
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:surgery_table"
+  }
+}

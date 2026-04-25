@@ -23,35 +23,59 @@ public final class SonarPingManager {
 
     private SonarPingManager() {}
 
-    /** Push newest ping (ring buffer). */
     public static void push(Vec3 worldPos) {
+        if (worldPos == null) {
+            return;
+        }
+
         long now = Util.getNanos();
-        if (PINGS.size() >= MAX_PINGS) PINGS.remove(0);
+
+        pruneInvalidEntries();
+
+        if (PINGS.size() >= MAX_PINGS) {
+            PINGS.remove(0);
+        }
+
         PINGS.add(new Ping(worldPos, now));
     }
 
-    /** Remove pings older than lifeSeconds (prevents dead junk). */
     public static void prune(float lifeSeconds) {
         long now = Util.getNanos();
         long maxAgeNanos = (long) (lifeSeconds * 1_000_000_000L);
 
         for (int i = PINGS.size() - 1; i >= 0; i--) {
             Ping p = PINGS.get(i);
-            if (now - p.timeNanos > maxAgeNanos) {
+
+            if (p == null || p.worldPos == null || now - p.timeNanos > maxAgeNanos) {
                 PINGS.remove(i);
             }
         }
     }
 
-    /** Newest-first snapshot (stable order for uniform filling). */
     public static List<Ping> snapshotNewestFirst() {
         int n = PINGS.size();
         ArrayList<Ping> out = new ArrayList<>(n);
-        for (int i = n - 1; i >= 0; i--) out.add(PINGS.get(i));
+
+        for (int i = n - 1; i >= 0; i--) {
+            Ping p = PINGS.get(i);
+            if (p != null && p.worldPos != null) {
+                out.add(p);
+            }
+        }
+
         return out;
     }
 
     public static void clear() {
         PINGS.clear();
+    }
+
+    private static void pruneInvalidEntries() {
+        for (int i = PINGS.size() - 1; i >= 0; i--) {
+            Ping p = PINGS.get(i);
+            if (p == null || p.worldPos == null) {
+                PINGS.remove(i);
+            }
+        }
     }
 }

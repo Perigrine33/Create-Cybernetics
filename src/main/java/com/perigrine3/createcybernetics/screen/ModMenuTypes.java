@@ -1,7 +1,6 @@
 package com.perigrine3.createcybernetics.screen;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.screen.custom.*;
 import com.perigrine3.createcybernetics.screen.custom.arm_cannon.ArmCannonMenu;
 import com.perigrine3.createcybernetics.screen.custom.chipware.ChipwareMiniMenu;
 import com.perigrine3.createcybernetics.screen.custom.crafting.EngineeringTableMenu;
@@ -10,7 +9,10 @@ import com.perigrine3.createcybernetics.screen.custom.crafting.GraftingTableMenu
 import com.perigrine3.createcybernetics.screen.custom.cyberdeck.CyberdeckMenu;
 import com.perigrine3.createcybernetics.screen.custom.heat_engine.HeatEngineMenu;
 import com.perigrine3.createcybernetics.screen.custom.spinal_injector.SpinalInjectorMenu;
-import com.perigrine3.createcybernetics.screen.custom.surgery.RobosurgeonMenu;
+import com.perigrine3.createcybernetics.screen.custom.surgery.ripper.RipperTradeMenu;
+import com.perigrine3.createcybernetics.screen.custom.surgery.ripper.SurgeryPaymentMenu;
+import com.perigrine3.createcybernetics.screen.custom.surgery.robosurgeon.RobosurgeonMenu;
+import com.perigrine3.createcybernetics.screen.custom.surgery.surgery_table.SurgeryTableMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -34,6 +36,9 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<SurgeryTableMenu>> SURGERY_TABLE_MENU =
             registerMenuType("surgery_table_menu", SurgeryTableMenu::new);
 
+    public static final DeferredHolder<MenuType<?>, MenuType<SurgeryPaymentMenu>> SURGERY_PAYMENT_MENU =
+            registerMenuType("surgery_payment_menu", SurgeryPaymentMenu::new);
+
     public static final DeferredHolder<MenuType<?>, MenuType<ExpandedInventoryMenu>> EXPANDED_INVENTORY_MENU =
             registerMenuType("expanded_inventory_menu", ExpandedInventoryMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<ChipwareMiniMenu>> CHIPWARE_MINI_MENU =
@@ -47,6 +52,10 @@ public class ModMenuTypes {
             registerMenuType("heat_engine_menu", HeatEngineMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<CyberdeckMenu>> CYBERDECK_MENU =
             registerMenuType("cyberdeck_menu", CyberdeckMenu::new);
+
+
+    public static final DeferredHolder<MenuType<?>, MenuType<RipperTradeMenu>> RIPPER_TRADE_MENU =
+            registerMenuType("ripper_trade_menu", RipperTradeMenu::new);
 
 
     private static <T extends AbstractContainerMenu>DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {

@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.item.cyberware;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
@@ -7,6 +8,8 @@ import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,16 +19,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.bus.api.EventPriority;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 import java.util.List;
 import java.util.Set;
 
 public class CybereyeItem extends Item implements ICyberwareItem {
     private final int humanityCost;
+
+    private static final int OVERLAY_ALPHA = 0xFF;
 
     public CybereyeItem(Properties props, int humanityCost) {
         super(props);
@@ -37,7 +42,8 @@ public class CybereyeItem extends Item implements ICyberwareItem {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost)
                     .withStyle(ChatFormatting.GOLD));
-            tooltip.add(Component.translatable("tooltip.basecyberware_cybereye.energy").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tooltip.basecyberware_cybereye.energy")
+                    .withStyle(ChatFormatting.RED));
         }
     }
 
@@ -99,57 +105,87 @@ public class CybereyeItem extends Item implements ICyberwareItem {
         ICyberwareItem.super.onTick(entity);
     }
 
-    @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME)
-    public static final class PowerFailHooks {
-        private PowerFailHooks() {}
+    private static boolean enabledCybereyesInstalledAndUnpowered(PlayerCyberwareData data) {
+        if (data == null) {
+            return false;
+        }
 
-        private static final int DURATION = 30;
-        private static final int BLINDNESS_AMPLIFIER = 1;
-        private static final int DARKNESS_AMPLIFIER = 0;
+        InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.EYES);
+        if (arr == null) {
+            return false;
+        }
 
-        @SubscribeEvent(priority = EventPriority.LOWEST)
-        public static void onPlayerTick(PlayerTickEvent.Post event) {
-            Player player = event.getEntity();
-            if (player.level().isClientSide) return;
+        boolean hasEnabledCybereyes = false;
+        boolean hasPoweredEnabledCybereyes = false;
 
-            if (!player.hasData(ModAttachments.CYBERWARE)) return;
-            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-            if (data == null) return;
+        for (int idx = 0; idx < arr.length; idx++) {
+            InstalledCyberware installed = arr[idx];
+            if (installed == null) {
+                continue;
+            }
 
-            EyesStatus status = getEyesStatus(player, data);
+            ItemStack stack = installed.getItem();
+            if (stack == null || stack.isEmpty()) {
+                continue;
+            }
 
-            if (status.hasCybereyes && status.unpowered) {
-                player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, DURATION, BLINDNESS_AMPLIFIER, false, false, false));
-                player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, DURATION, DARKNESS_AMPLIFIER, false, false, false));
+            if (!(stack.getItem() instanceof CybereyeItem)) {
+                continue;
+            }
+
+            if (!data.isEnabled(CyberwareSlot.EYES, idx)) {
+                continue;
+            }
+
+            hasEnabledCybereyes = true;
+
+            if (installed.isPowered()) {
+                hasPoweredEnabledCybereyes = true;
             }
         }
 
-        private record EyesStatus(boolean hasCybereyes, boolean unpowered) {}
+        return hasEnabledCybereyes && !hasPoweredEnabledCybereyes;
+    }
 
-        private static EyesStatus getEyesStatus(Player player, PlayerCyberwareData data) {
-            InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.EYES);
-            if (arr == null) return new EyesStatus(false, false);
+    @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+    public static final class PowerFailOverlayHooks {
+        private PowerFailOverlayHooks() {
+        }
 
-            boolean hasEyes = false;
-
-            for (int idx = 0; idx < arr.length; idx++) {
-                InstalledCyberware installed = arr[idx];
-                if (installed == null) continue;
-
-                ItemStack st = installed.getItem();
-                if (st == null || st.isEmpty()) continue;
-
-                if (!(st.getItem() instanceof CybereyeItem)) continue;
-                if (!data.isEnabled(CyberwareSlot.EYES, idx)) continue;
-
-                hasEyes = true;
-
-                if (!installed.isPowered()) {
-                    return new EyesStatus(true, true);
-                }
+        @SubscribeEvent
+        public static void onRenderGuiPost(RenderGuiEvent.Post event) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player == null) {
+                return;
             }
 
-            return new EyesStatus(hasEyes, false);
+            if (mc.screen != null) {
+                return;
+            }
+
+            if (!mc.player.hasData(ModAttachments.CYBERWARE)) {
+                return;
+            }
+
+            PlayerCyberwareData data = mc.player.getData(ModAttachments.CYBERWARE);
+            if (!enabledCybereyesInstalledAndUnpowered(data)) {
+                return;
+            }
+
+            renderBlackOverlay(event.getGuiGraphics(), mc);
+        }
+
+        private static void renderBlackOverlay(GuiGraphics guiGraphics, Minecraft mc) {
+            int w = mc.getWindow().getGuiScaledWidth();
+            int h = mc.getWindow().getGuiScaledHeight();
+
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+
+            int argb = (OVERLAY_ALPHA << 24) | 0x000000;
+            guiGraphics.fill(0, 0, w, h, argb);
+
+            RenderSystem.disableBlend();
         }
     }
 }

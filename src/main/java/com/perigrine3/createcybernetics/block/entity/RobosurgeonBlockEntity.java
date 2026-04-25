@@ -2,7 +2,7 @@ package com.perigrine3.createcybernetics.block.entity;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
-import com.perigrine3.createcybernetics.screen.custom.surgery.RobosurgeonMenu;
+import com.perigrine3.createcybernetics.screen.custom.surgery.robosurgeon.RobosurgeonMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

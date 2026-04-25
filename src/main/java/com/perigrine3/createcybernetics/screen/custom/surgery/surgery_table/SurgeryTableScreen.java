@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.screen.custom.surgery;
+package com.perigrine3.createcybernetics.screen.custom.surgery.surgery_table;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
@@ -11,8 +11,8 @@ import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.screen.custom.surgery.robosurgeon.RobosurgeonSlotItemHandler;
 import com.perigrine3.createcybernetics.util.ModTags;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -38,10 +38,10 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> {
+public class SurgeryTableScreen extends AbstractContainerScreen<SurgeryTableMenu> {
     private ViewMode viewMode = ViewMode.FULL_BODY;
-    private final ModelViewer modelViewer = new ModelViewer();
-    private final MarkerManager markerManager = new MarkerManager(MARKER_ICON);
+    private final SurgeryTableModelViewer modelViewer = new SurgeryTableModelViewer();
+    private final SurgeryTableMarkerManager markerManager = new SurgeryTableMarkerManager(MARKER_ICON);
     private int typingTicks = 0;
     private String animatedTitle = "";
     private static final int TYPE_DELAY = 4;
@@ -62,61 +62,46 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private final ItemStack renderMuscle = new ItemStack(ModItems.BODYPART_MUSCLE.get());
     private final ItemStack renderBone = new ItemStack(Items.BONE);
 
-    // -----------------------
-    // Resources
-    // -----------------------
     private static final ResourceLocation GUI_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_gui.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_gui.png");
     private static final ResourceLocation MARKER_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_marker.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_interface_marker.png");
     private static final ResourceLocation BACK_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_backbutton.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_interface_backbutton.png");
     private static final ResourceLocation SLOT_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_slot.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_interface_slot.png");
     private static final ResourceLocation REMOVALSLOT_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_slotmarkedforremoval.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_interface_slotmarkedforremoval.png");
     private static final ResourceLocation STAGEDINSTALLSLOT_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_stagedinstallslot.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_interface_stagedinstallslot.png");
     private static final ResourceLocation REMOVESLOT_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_removeslot.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_interface_removeslot.png");
     private static final ResourceLocation SLOTHOVER_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_slothover.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_interface_slothover.png");
     private static final ResourceLocation WARNING_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/robosurgeon_interface_warning.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/robosurgeon_interface_warning.png");
 
-    private static final ResourceLocation LINEAR_FRAME = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/linear_frame_robosurgeonoverlay.png");
-    private static final ResourceLocation TITANIUM_SKULL = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/titanium_skull_robosurgeonoverlay.png");
-    private static final ResourceLocation CAPACITOR_FRAME = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/capacitor_frame_robosurgeonoverlay.png");
-    private static final ResourceLocation MARROW_BATTERY = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/marrow_battery_robosurgeonoverlay.png");
-    private static final ResourceLocation BONELACING = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/bonelacing_robosurgeonoverlay.png");
-    private static final ResourceLocation BONEFLEX = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/boneflex_robosurgeonoverlay.png");
-    private static final ResourceLocation PIEZO = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/piezo_robosurgeonoverlay.png");
-    private static final ResourceLocation DEPLOYABLE_ELYTRA = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/deployable_elytra_robosurgeonoverlay.png");
-    private static final ResourceLocation SANDEVISTAN = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/sandevistan_robosurgeonoverlay.png");
-    private static final ResourceLocation SPINAL_INJECTOR = ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/robosurgeon/spinal_injector_robosurgeonoverlay.png");
+    private static final ResourceLocation LINEAR_FRAME =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/linear_frame_robosurgeonoverlay.png");
+    private static final ResourceLocation TITANIUM_SKULL =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/titanium_skull_robosurgeonoverlay.png");
+    private static final ResourceLocation CAPACITOR_FRAME =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/capacitor_frame_robosurgeonoverlay.png");
+    private static final ResourceLocation MARROW_BATTERY =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/marrow_battery_robosurgeonoverlay.png");
+    private static final ResourceLocation BONELACING =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/bonelacing_robosurgeonoverlay.png");
+    private static final ResourceLocation BONEFLEX =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/boneflex_robosurgeonoverlay.png");
+    private static final ResourceLocation PIEZO =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/piezo_robosurgeonoverlay.png");
+    private static final ResourceLocation DEPLOYABLE_ELYTRA =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/deployable_elytra_robosurgeonoverlay.png");
+    private static final ResourceLocation SANDEVISTAN =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/sandevistan_robosurgeonoverlay.png");
+    private static final ResourceLocation SPINAL_INJECTOR =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/robosurgeon/spinal_injector_robosurgeonoverlay.png");
 
-    // -----------------------
-    // toggle buttons
-    // -----------------------
     private static final int ROT_TOGGLE_W = 12;
     private static final int ROT_TOGGLE_H = 12;
     private static final int ROT_TOGGLE_PAD_X = 8;
@@ -131,21 +116,16 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private static final int TOGGLE_LABEL_COLOR = 0xFFE7E7E7;
 
     private static final ResourceLocation ROT_TOGGLE_ON_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/on_toggle.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/on_toggle.png");
     private static final ResourceLocation ROT_TOGGLE_OFF_ICON =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID,
-                    "textures/gui/off_toggle.png");
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/off_toggle.png");
 
-    public RobosurgeonScreen(RobosurgeonMenu menu, Inventory playerInventory, Component title) {
+    public SurgeryTableScreen(SurgeryTableMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.imageWidth = 176;
         this.imageHeight = 222;
     }
 
-    // -----------------------
-    // Init & Marker Setup
-    // -----------------------
     @Override
     protected void init() {
         super.init();
@@ -162,48 +142,42 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
     private void registerMarkers() {
         markerManager.clear();
-        // Full body selection
-        markerManager.add(new MarkerManager.Marker(-8, -78, ViewMode.FULL_BODY, ViewMode.HEAD, Component.translatable("gui.marker.head"), false));
-        markerManager.add(new MarkerManager.Marker(-8, -52, ViewMode.FULL_BODY, ViewMode.TORSO, Component.translatable("gui.marker.torso"), false));
-        markerManager.add(new MarkerManager.Marker(50, -52, ViewMode.FULL_BODY, ViewMode.SKIN, Component.translatable("gui.marker.skin"), false));
-        markerManager.add(new MarkerManager.Marker(9, -55, ViewMode.FULL_BODY, ViewMode.LARM, Component.translatable("gui.marker.larm"), true));
-        markerManager.add(new MarkerManager.Marker(-25, -55, ViewMode.FULL_BODY, ViewMode.RARM, Component.translatable("gui.marker.rarm"), true));
-        markerManager.add(new MarkerManager.Marker(-2, -28, ViewMode.FULL_BODY, ViewMode.LLEG, Component.translatable("gui.marker.lleg"), true));
-        markerManager.add(new MarkerManager.Marker(-14, -28, ViewMode.FULL_BODY, ViewMode.RLEG, Component.translatable("gui.marker.rleg"), true));
-        // Expanded head details
-        markerManager.add(new MarkerManager.Marker(-35, -210, ViewMode.HEAD, ViewMode.BRAIN, Component.translatable("gui.marker.brain"), false));
-        markerManager.add(new MarkerManager.Marker(-10, -197, ViewMode.HEAD, ViewMode.EYES, Component.translatable("gui.marker.eyes"), false));
-        markerManager.add(new MarkerManager.Marker(15, -197, ViewMode.HEAD, ViewMode.EYES, Component.translatable("gui.marker.eyes"), false));
-        // Expanded torso details
-        markerManager.add(new MarkerManager.Marker(0, -185, ViewMode.TORSO, ViewMode.HEART, Component.translatable("gui.marker.heart"), false));
-        markerManager.add(new MarkerManager.Marker(-15, -170, ViewMode.TORSO, ViewMode.LUNGS, Component.translatable("gui.marker.lungs"), false));
-        markerManager.add(new MarkerManager.Marker(-5, -135, ViewMode.TORSO, ViewMode.ORGANS, Component.translatable("gui.marker.organs"), false));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-8, -78, ViewMode.FULL_BODY, ViewMode.HEAD, Component.translatable("gui.marker.head"), false));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-8, -52, ViewMode.FULL_BODY, ViewMode.TORSO, Component.translatable("gui.marker.torso"), false));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(50, -52, ViewMode.FULL_BODY, ViewMode.SKIN, Component.translatable("gui.marker.skin"), false));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(9, -55, ViewMode.FULL_BODY, ViewMode.LARM, Component.translatable("gui.marker.larm"), true));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-25, -55, ViewMode.FULL_BODY, ViewMode.RARM, Component.translatable("gui.marker.rarm"), true));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-2, -28, ViewMode.FULL_BODY, ViewMode.LLEG, Component.translatable("gui.marker.lleg"), true));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-14, -28, ViewMode.FULL_BODY, ViewMode.RLEG, Component.translatable("gui.marker.rleg"), true));
+
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-35, -210, ViewMode.HEAD, ViewMode.BRAIN, Component.translatable("gui.marker.brain"), false));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-10, -197, ViewMode.HEAD, ViewMode.EYES, Component.translatable("gui.marker.eyes"), false));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(15, -197, ViewMode.HEAD, ViewMode.EYES, Component.translatable("gui.marker.eyes"), false));
+
+        markerManager.add(new SurgeryTableMarkerManager.Marker(0, -185, ViewMode.TORSO, ViewMode.HEART, Component.translatable("gui.marker.heart"), false));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-15, -170, ViewMode.TORSO, ViewMode.LUNGS, Component.translatable("gui.marker.lungs"), false));
+        markerManager.add(new SurgeryTableMarkerManager.Marker(-5, -135, ViewMode.TORSO, ViewMode.ORGANS, Component.translatable("gui.marker.organs"), false));
     }
 
-    // -----------------------
-    // Enum representing zoom categories
-    // -----------------------
     public enum ViewMode {
-        //               scale         rotate        animated        offsetY        offsetX
-        FULL_BODY      (45,     true,   true,   0,      0),
-        HEAD(FULL_BODY, 110,    false,  false,  150,    0),
-        TORSO(FULL_BODY,135,    false,  false,  110,    0),
-        SKIN(FULL_BODY, 75,     false,  true,   0,      0),
-        LARM(FULL_BODY, 130,    true,   true,   110,    -40),
-        RARM(FULL_BODY, 130,    true,   true,   110,    40),
-        LLEG(FULL_BODY, 130,    true,   true,   20,     0),
-        RLEG(FULL_BODY, 130,    true,   true,   20,     0),
-        BRAIN(HEAD,     110,    false,  false,  150,    0),
-        EYES(HEAD,      110,    false,  false,  150,    0),
-        HEART(TORSO,    135,    false,  false,  110,    0),
-        LUNGS(TORSO,    135,    false,  false,  110,    0),
-        ORGANS(TORSO,   135,    false,  false,  110,    0);
+        FULL_BODY(45, true, true, 0, 0),
+        HEAD(FULL_BODY, 110, false, false, 150, 0),
+        TORSO(FULL_BODY, 135, false, false, 110, 0),
+        SKIN(FULL_BODY, 75, false, true, 0, 0),
+        LARM(FULL_BODY, 130, true, true, 110, -40),
+        RARM(FULL_BODY, 130, true, true, 110, 40),
+        LLEG(FULL_BODY, 130, true, true, 20, 0),
+        RLEG(FULL_BODY, 130, true, true, 20, 0),
+        BRAIN(HEAD, 110, false, false, 150, 0),
+        EYES(HEAD, 110, false, false, 150, 0),
+        HEART(TORSO, 135, false, false, 110, 0),
+        LUNGS(TORSO, 135, false, false, 110, 0),
+        ORGANS(TORSO, 135, false, false, 110, 0);
 
         public final ViewMode parent;
         public final int baseScale;
         public final boolean allowRotation;
         public final boolean allowMarkerAnimation;
-
         public final int verticalOffset;
         public final int horizontalOffset;
 
@@ -226,15 +200,10 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         }
     }
 
-    // -----------------------
-    // Title Typing Animation
-    // -----------------------
     private void updateTypingAnimation() {
         String full = this.title.getString();
-
         if (animatedTitle.length() < full.length()) {
             typingTicks++;
-
             if (typingTicks >= TYPE_DELAY) {
                 typingTicks = 0;
                 animatedTitle = full.substring(0, animatedTitle.length() + 1);
@@ -242,9 +211,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         }
     }
 
-    // -----------------------
-    // Label Rendering
-    // -----------------------
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         float scale = 0.75f;
@@ -265,9 +231,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         guiGraphics.pose().popPose();
     }
 
-    // -----------------------
-    // Background Rendering
-    // -----------------------
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float p, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -284,21 +247,17 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             if (!isSlotVisible(rsSlot)) continue;
 
             int handlerIndex = rsSlot.getSlotIndex();
-
             int x = leftPos + rsSlot.x - 1;
             int y = topPos + rsSlot.y - 1;
 
             guiGraphics.blit(SLOT_ICON, x, y, 0, 0, 18, 18, 18, 18);
 
             if (menu.isMarkedForRemoval(handlerIndex)) {
-
                 guiGraphics.setColor(1f, 1f, 1f, 0.6f);
                 guiGraphics.blit(REMOVALSLOT_ICON, x, y, 0, 0, 18, 18, 18, 18);
                 guiGraphics.blit(REMOVESLOT_ICON, x, y, 0, 0, 18, 18, 18, 18);
                 guiGraphics.setColor(1f, 1f, 1f, 1f);
-
             } else if (menu.isStaged(handlerIndex)) {
-
                 guiGraphics.setColor(1f, 1f, 1f, 0.6f);
                 guiGraphics.blit(STAGEDINSTALLSLOT_ICON, x, y, 0, 0, 18, 18, 18, 18);
                 guiGraphics.setColor(1f, 1f, 1f, 1f);
@@ -308,14 +267,12 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         RenderSystem.disableBlend();
     }
 
-    // -----------------------
-    // Humanity Bar
-    // -----------------------
     private void drawHumanityBar(GuiGraphics gui) {
-        Player player = minecraft.player;
-        if (player == null) return;
+        Player operator = minecraft.player;
+        if (operator == null) return;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        Player patient = menu.getTargetPatient(operator);
+        PlayerCyberwareData data = patient.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
         int humanity = calculatePreviewHumanity();
@@ -343,9 +300,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         gui.pose().pushPose();
         gui.pose().scale(labelScale, labelScale, 1f);
-
         gui.drawString(minecraft.font, text, (int) (textX / labelScale), (int) ((y - 7) / labelScale), 0xFF34D5EB, false);
-
         gui.pose().popPose();
     }
 
@@ -365,24 +320,21 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     }
 
     private int getHumanityColor(float percent) {
-        if (percent > 0.66f) {
-            return 0xFF2AFF00;  // green
-        } else if (percent > 0.25f) {
-            return 0xFFFFAA00;  // orange
-        } else {
-            return 0xFFFF0000;  // red
-        }
+        if (percent > 0.66f) return 0xFF2AFF00;
+        if (percent > 0.25f) return 0xFFFFAA00;
+        return 0xFFFF0000;
     }
 
     private int calculatePreviewHumanity() {
-        Player player = minecraft.player;
-        if (player == null) return 100;
+        Player operator = minecraft.player;
+        if (operator == null) return 100;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        Player patient = menu.getTargetPatient(operator);
+        PlayerCyberwareData data = patient.getData(ModAttachments.CYBERWARE);
         if (data == null) return 100;
 
         int humanity = data.getHumanity();
-        humanity += getNeuropozyneBonusClient(player);
+        humanity += getNeuropozyneBonusClient(patient);
 
         ItemStack[] guiStacks = new ItemStack[65];
         for (Slot s : menu.slots) {
@@ -394,7 +346,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         for (CyberwareSlot slotType : CyberwareSlot.values()) {
             for (int i = 0; i < slotType.size; i++) {
-
                 int invIndex = RobosurgeonSlotMap.toInventoryIndex(slotType, i);
                 if (invIndex < 0 || invIndex >= 65) continue;
 
@@ -413,11 +364,9 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
                 if (staged) {
                     ItemStack stagedStack = guiStacks[invIndex];
                     if (!stagedStack.isEmpty() && stagedStack.getItem() instanceof ICyberwareItem stagedItem) {
-
                         if (!marked && !installedStack.isEmpty() && installedStack.getItem() instanceof ICyberwareItem instItem) {
                             humanity += instItem.getHumanityCost();
                         }
-
                         humanity -= stagedItem.getHumanityCost();
                     }
                 }
@@ -427,9 +376,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         return humanity;
     }
 
-    // -----------------------
-    // Slot Handling
-    // -----------------------
     private record SlotBackground(int x, int y, ViewMode viewMode, ResourceLocation texture) {}
     private final List<SlotBackground> slotBackgrounds = new ArrayList<>();
 
@@ -441,112 +387,87 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
     private void registerSlotBackgrounds() {
         slotBackgrounds.clear();
-        //BRAIN SLOTS   = 5
-        {
-            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.BRAIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.BRAIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.BRAIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.BRAIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.BRAIN, SLOT_ICON));
-        }
-        //EYE SLOTS     = 5
-        {
-            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.EYES, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.EYES, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.EYES, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.EYES, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.EYES, SLOT_ICON));
-        }
-        //HEART SLOTS   = 6
-        {
-            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.HEART, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.HEART, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.HEART, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.HEART, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.HEART, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.HEART, SLOT_ICON));
-        }
-        //LUNGS SLOTS   = 6
-        {
-            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.LUNGS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.LUNGS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.LUNGS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.LUNGS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.LUNGS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.LUNGS, SLOT_ICON));
-        }
-        //ORGANS SLOTS  = 6
-        {
-            slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.ORGANS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.ORGANS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.ORGANS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.ORGANS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.ORGANS, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.ORGANS, SLOT_ICON));
-        }
-        //R ARM SLOTS   = 6
-        {
-            slotBackgrounds.add(new SlotBackground(43, 110, ViewMode.RARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 92, ViewMode.RARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 74, ViewMode.RARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 56, ViewMode.RARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 38, ViewMode.RARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 20, ViewMode.RARM, SLOT_ICON));
-        }
-        //L ARM SLOTS   = 6
-        {
-            slotBackgrounds.add(new SlotBackground(115, 110, ViewMode.LARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 92, ViewMode.LARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 74, ViewMode.LARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 56, ViewMode.LARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 38, ViewMode.LARM, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 20, ViewMode.LARM, SLOT_ICON));
-        }
-        //R LEG SLOTS   = 5
-        {
-            slotBackgrounds.add(new SlotBackground(43, 110, ViewMode.RLEG, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 92, ViewMode.RLEG, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 74, ViewMode.RLEG, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 56, ViewMode.RLEG, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(43, 38, ViewMode.RLEG, SLOT_ICON));
-        }
-        //L LEG SLOTS   = 5
-        {
-            slotBackgrounds.add(new SlotBackground(115, 110, ViewMode.LLEG, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 92, ViewMode.LLEG, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 74, ViewMode.LLEG, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 56, ViewMode.LLEG, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(115, 38, ViewMode.LLEG, SLOT_ICON));
-        }
-        //MUSCLE SLOTS  = 5
-        {
-            slotBackgrounds.add(new SlotBackground(79, 110, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(79, 92, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(79, 74, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(79, 56, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(79, 38, ViewMode.SKIN, SLOT_ICON));
-        }
-        //BONE SLOTS    = 5
-        {
-            slotBackgrounds.add(new SlotBackground(106, 110, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(106, 92, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(106, 74, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(106, 56, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(106, 38, ViewMode.SKIN, SLOT_ICON));
-        }
-        //SKIN SLOTS    = 5
-        {
-            slotBackgrounds.add(new SlotBackground(52, 110, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(52, 92, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(52, 74, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(52, 56, ViewMode.SKIN, SLOT_ICON));
-            slotBackgrounds.add(new SlotBackground(52, 38, ViewMode.SKIN, SLOT_ICON));
-        }
+
+        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.BRAIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.BRAIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.BRAIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.BRAIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.BRAIN, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.EYES, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.EYES, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.EYES, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.EYES, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.EYES, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.HEART, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.HEART, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.HEART, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.HEART, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.HEART, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.HEART, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.LUNGS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.LUNGS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.LUNGS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.LUNGS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.LUNGS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.LUNGS, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(151, 110, ViewMode.ORGANS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 92, ViewMode.ORGANS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 74, ViewMode.ORGANS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 56, ViewMode.ORGANS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 38, ViewMode.ORGANS, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(151, 20, ViewMode.ORGANS, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(43, 110, ViewMode.RARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 92, ViewMode.RARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 74, ViewMode.RARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 56, ViewMode.RARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 38, ViewMode.RARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 20, ViewMode.RARM, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(115, 110, ViewMode.LARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 92, ViewMode.LARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 74, ViewMode.LARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 56, ViewMode.LARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 38, ViewMode.LARM, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 20, ViewMode.LARM, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(43, 110, ViewMode.RLEG, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 92, ViewMode.RLEG, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 74, ViewMode.RLEG, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 56, ViewMode.RLEG, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(43, 38, ViewMode.RLEG, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(115, 110, ViewMode.LLEG, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 92, ViewMode.LLEG, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 74, ViewMode.LLEG, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 56, ViewMode.LLEG, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(115, 38, ViewMode.LLEG, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(79, 110, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(79, 92, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(79, 74, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(79, 56, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(79, 38, ViewMode.SKIN, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(106, 110, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(106, 92, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(106, 74, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(106, 56, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(106, 38, ViewMode.SKIN, SLOT_ICON));
+
+        slotBackgrounds.add(new SlotBackground(52, 110, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(52, 92, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(52, 74, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(52, 56, ViewMode.SKIN, SLOT_ICON));
+        slotBackgrounds.add(new SlotBackground(52, 38, ViewMode.SKIN, SLOT_ICON));
     }
 
     private void drawSlotBackground(GuiGraphics gui, SlotBackground bg) {
-        gui.blit(bg.texture, leftPos + bg.x, topPos + bg.y,
-                0, 0, 18, 18, 18, 18);
+        gui.blit(bg.texture, leftPos + bg.x, topPos + bg.y, 0, 0, 18, 18, 18, 18);
     }
 
     private record SlotView(int slotIndex, ViewMode viewMode) {}
@@ -561,7 +482,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         for (Slot slot : menu.slots) {
             if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) continue;
 
-            int handlerIndex = rsSlot.getSlotIndex(); // 0..64
+            int handlerIndex = rsSlot.getSlotIndex();
             boolean visible = isHandlerSlotVisible(handlerIndex);
             rsSlot.setActiveFlag(visible);
         }
@@ -588,124 +509,29 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
     private void registerSlotViews() {
         slotViews.clear();
-        slotViews.add(new SlotView(0, ViewMode.BRAIN));
-        slotViews.add(new SlotView(1, ViewMode.BRAIN));
-        slotViews.add(new SlotView(2, ViewMode.BRAIN));
-        slotViews.add(new SlotView(3, ViewMode.BRAIN));
-        slotViews.add(new SlotView(4, ViewMode.BRAIN));
 
-        slotViews.add(new SlotView(5, ViewMode.EYES));
-        slotViews.add(new SlotView(6, ViewMode.EYES));
-        slotViews.add(new SlotView(7, ViewMode.EYES));
-        slotViews.add(new SlotView(8, ViewMode.EYES));
-        slotViews.add(new SlotView(9, ViewMode.EYES));
-
-        slotViews.add(new SlotView(10, ViewMode.HEART));
-        slotViews.add(new SlotView(11, ViewMode.HEART));
-        slotViews.add(new SlotView(12, ViewMode.HEART));
-        slotViews.add(new SlotView(13, ViewMode.HEART));
-        slotViews.add(new SlotView(14, ViewMode.HEART));
-        slotViews.add(new SlotView(15, ViewMode.HEART));
-
-        slotViews.add(new SlotView(16, ViewMode.LUNGS));
-        slotViews.add(new SlotView(17, ViewMode.LUNGS));
-        slotViews.add(new SlotView(18, ViewMode.LUNGS));
-        slotViews.add(new SlotView(19, ViewMode.LUNGS));
-        slotViews.add(new SlotView(20, ViewMode.LUNGS));
-        slotViews.add(new SlotView(21, ViewMode.LUNGS));
-
-        slotViews.add(new SlotView(22, ViewMode.ORGANS));
-        slotViews.add(new SlotView(23, ViewMode.ORGANS));
-        slotViews.add(new SlotView(24, ViewMode.ORGANS));
-        slotViews.add(new SlotView(25, ViewMode.ORGANS));
-        slotViews.add(new SlotView(26, ViewMode.ORGANS));
-        slotViews.add(new SlotView(27, ViewMode.ORGANS));
-
-        slotViews.add(new SlotView(28, ViewMode.RARM));
-        slotViews.add(new SlotView(29, ViewMode.RARM));
-        slotViews.add(new SlotView(30, ViewMode.RARM));
-        slotViews.add(new SlotView(31, ViewMode.RARM));
-        slotViews.add(new SlotView(32, ViewMode.RARM));
-        slotViews.add(new SlotView(33, ViewMode.RARM));
-
-        slotViews.add(new SlotView(34, ViewMode.LARM));
-        slotViews.add(new SlotView(35, ViewMode.LARM));
-        slotViews.add(new SlotView(36, ViewMode.LARM));
-        slotViews.add(new SlotView(37, ViewMode.LARM));
-        slotViews.add(new SlotView(38, ViewMode.LARM));
-        slotViews.add(new SlotView(39, ViewMode.LARM));
-
-        slotViews.add(new SlotView(40, ViewMode.RLEG));
-        slotViews.add(new SlotView(41, ViewMode.RLEG));
-        slotViews.add(new SlotView(42, ViewMode.RLEG));
-        slotViews.add(new SlotView(43, ViewMode.RLEG));
-        slotViews.add(new SlotView(44, ViewMode.RLEG));
-
-        slotViews.add(new SlotView(45, ViewMode.LLEG));
-        slotViews.add(new SlotView(46, ViewMode.LLEG));
-        slotViews.add(new SlotView(47, ViewMode.LLEG));
-        slotViews.add(new SlotView(48, ViewMode.LLEG));
-        slotViews.add(new SlotView(49, ViewMode.LLEG));
-
-        slotViews.add(new SlotView(50, ViewMode.SKIN));
-        slotViews.add(new SlotView(51, ViewMode.SKIN));
-        slotViews.add(new SlotView(52, ViewMode.SKIN));
-        slotViews.add(new SlotView(53, ViewMode.SKIN));
-        slotViews.add(new SlotView(54, ViewMode.SKIN));
-
-        slotViews.add(new SlotView(55, ViewMode.SKIN));
-        slotViews.add(new SlotView(56, ViewMode.SKIN));
-        slotViews.add(new SlotView(57, ViewMode.SKIN));
-        slotViews.add(new SlotView(58, ViewMode.SKIN));
-        slotViews.add(new SlotView(59, ViewMode.SKIN));
-
-        slotViews.add(new SlotView(60, ViewMode.SKIN));
-        slotViews.add(new SlotView(61, ViewMode.SKIN));
-        slotViews.add(new SlotView(62, ViewMode.SKIN));
-        slotViews.add(new SlotView(63, ViewMode.SKIN));
-        slotViews.add(new SlotView(64, ViewMode.SKIN));
+        for (int i = 0; i <= 4; i++) slotViews.add(new SlotView(i, ViewMode.BRAIN));
+        for (int i = 5; i <= 9; i++) slotViews.add(new SlotView(i, ViewMode.EYES));
+        for (int i = 10; i <= 15; i++) slotViews.add(new SlotView(i, ViewMode.HEART));
+        for (int i = 16; i <= 21; i++) slotViews.add(new SlotView(i, ViewMode.LUNGS));
+        for (int i = 22; i <= 27; i++) slotViews.add(new SlotView(i, ViewMode.ORGANS));
+        for (int i = 28; i <= 33; i++) slotViews.add(new SlotView(i, ViewMode.RARM));
+        for (int i = 34; i <= 39; i++) slotViews.add(new SlotView(i, ViewMode.LARM));
+        for (int i = 40; i <= 44; i++) slotViews.add(new SlotView(i, ViewMode.RLEG));
+        for (int i = 45; i <= 49; i++) slotViews.add(new SlotView(i, ViewMode.LLEG));
+        for (int i = 50; i <= 54; i++) slotViews.add(new SlotView(i, ViewMode.SKIN));
+        for (int i = 55; i <= 59; i++) slotViews.add(new SlotView(i, ViewMode.SKIN));
+        for (int i = 60; i <= 64; i++) slotViews.add(new SlotView(i, ViewMode.SKIN));
     }
 
-    private ResourceLocation getSlotBackgroundTexture(Slot slot) {
-
-        if (!(slot instanceof RobosurgeonSlotItemHandler rsSlot)) {
-            return SLOT_ICON;
-        }
-
-        int teFirst = menu.getTeInventoryFirstSlotIndex();
-        int handlerIndex = slot.index - teFirst;
-
-        if (menu.isMarkedForRemoval(handlerIndex)) {
-            return REMOVALSLOT_ICON;
-        }
-
-        if (menu.isStaged(handlerIndex)) {
-            return SLOTHOVER_ICON;
-        }
-
-        if (menu.isInstalled(handlerIndex)) {
-            return SLOT_ICON;
-        }
-
-        return SLOT_ICON;
-    }
-
-    // -----------------------
-    // Apply STATIC scissor box
-    // -----------------------
     private void applyScissor(GuiGraphics gui) {
-
-        int y1 = topPos  + 15;   // TOP edge
-        int x1 = leftPos + 3;   // LEFT edge
-        int x2 = leftPos + 173;  // RIGHT edge
-        int y2 = topPos  + 128;  // BOTTOM edge
-
+        int y1 = topPos + 15;
+        int x1 = leftPos + 3;
+        int x2 = leftPos + 173;
+        int y2 = topPos + 128;
         gui.enableScissor(x1, y1, x2, y2);
     }
 
-    // -----------------------
-    // Auto-rotate toggle rendering
-    // -----------------------
     private void renderRotationToggle(GuiGraphics gui, int mouseX, int mouseY) {
         int x = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
         int y = topPos + ROT_TOGGLE_PAD_Y;
@@ -743,13 +569,10 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             }
             return true;
         }
+
         return false;
     }
 
-
-    // -----------------------
-    // Render Marker toggle
-    // -----------------------
     private void renderMarkerToggle(GuiGraphics gui, int mouseX, int mouseY) {
         int x = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
         int y = topPos + ROT_TOGGLE_PAD_Y + ROT_TOGGLE_H + MARKER_TOGGLE_SPACING_Y;
@@ -782,45 +605,38 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             markerManager.setEnabled(!markerManager.isEnabled());
 
             if (minecraft.player != null) {
-                minecraft.player.playNotifySound(net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK.value(),
-                        net.minecraft.sounds.SoundSource.MASTER, 1f, 1f);
+                minecraft.player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, 1f, 1f);
             }
             return true;
         }
+
         return false;
     }
 
     private void renderRotationToggleLabel(GuiGraphics gui) {
         int toggleX = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
         int toggleY = topPos + ROT_TOGGLE_PAD_Y;
-
         renderToggleLabel(gui, "ROTATION:", toggleX, toggleY, ROT_TOGGLE_H);
     }
 
     private void renderMarkerToggleLabel(GuiGraphics gui) {
         int toggleX = leftPos + imageWidth - ROT_TOGGLE_PAD_X - ROT_TOGGLE_W;
         int toggleY = topPos + ROT_TOGGLE_PAD_Y + ROT_TOGGLE_H + MARKER_TOGGLE_SPACING_Y;
-
         renderToggleLabel(gui, "MARKERS:", toggleX, toggleY, MARKER_TOGGLE_H);
     }
 
     private void renderToggleLabel(GuiGraphics gui, String text, int toggleX, int toggleY, int toggleH) {
         int textW = this.font.width(text);
-
-        // Position: left of toggle, vertically centered to toggle
         int x = toggleX - TOGGLE_LABEL_GAP_PX - Math.round(textW * TOGGLE_LABEL_SCALE);
         int y = toggleY + (toggleH / 2) - Math.round((this.font.lineHeight * TOGGLE_LABEL_SCALE) / 2f);
 
         gui.pose().pushPose();
-        gui.pose().translate(0, 0, 350); // match toggle layer
+        gui.pose().translate(0, 0, 350);
         gui.pose().scale(TOGGLE_LABEL_SCALE, TOGGLE_LABEL_SCALE, 1f);
         gui.drawString(this.font, text, (int) (x / TOGGLE_LABEL_SCALE), (int) (y / TOGGLE_LABEL_SCALE), TOGGLE_LABEL_COLOR, false);
         gui.pose().popPose();
     }
 
-    // -----------------------
-    // Renderer Methods
-    // -----------------------
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
         updateTeSlotActivity();
@@ -838,61 +654,45 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         int modelX = leftPos + 88 + viewMode.horizontalOffset;
         int modelY = baseModelY + viewMode.verticalOffset;
         boolean cropping = (viewMode != ViewMode.FULL_BODY);
+
         if (cropping) {
             applyScissor(gui);
         }
 
-        boolean isHeadGroup =
-                viewMode == ViewMode.HEAD ||
-                        viewMode == ViewMode.BRAIN ||
-                        viewMode == ViewMode.EYES;
-        boolean isTorsoGroup =
-                viewMode == ViewMode.TORSO ||
-                        viewMode == ViewMode.HEART ||
-                        viewMode == ViewMode.LUNGS ||
-                        viewMode == ViewMode.ORGANS;
-        boolean isLeftArm =
-                viewMode == ViewMode.LARM;
-        boolean isRightArm =
-                viewMode == ViewMode.RARM;
-        boolean isLeftLeg =
-                viewMode == ViewMode.LLEG;
-        boolean isRightLeg =
-                viewMode == ViewMode.RLEG;
-        boolean isSkin =
-                viewMode == ViewMode.SKIN;
+        boolean isHeadGroup = viewMode == ViewMode.HEAD || viewMode == ViewMode.BRAIN || viewMode == ViewMode.EYES;
+        boolean isTorsoGroup = viewMode == ViewMode.TORSO || viewMode == ViewMode.HEART || viewMode == ViewMode.LUNGS || viewMode == ViewMode.ORGANS;
+        boolean isLeftArm = viewMode == ViewMode.LARM;
+        boolean isRightArm = viewMode == ViewMode.RARM;
+        boolean isLeftLeg = viewMode == ViewMode.LLEG;
+        boolean isRightLeg = viewMode == ViewMode.RLEG;
+        boolean isSkin = viewMode == ViewMode.SKIN;
 
         if (isHeadGroup) {
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderHeadModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-        }
-        else if (isTorsoGroup) {
+        } else if (isTorsoGroup) {
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderTorsoModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-        }
-        else if (isRightArm) {
+        } else if (isRightArm) {
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderRightArmModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-        }
-        else if (isLeftArm) {
+        } else if (isLeftArm) {
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderLeftArmModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-        }
-        else if (isLeftLeg) {
+        } else if (isLeftLeg) {
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderLeftLegModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-        }
-        else if (isRightLeg) {
+        } else if (isRightLeg) {
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderRightLegModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-        }
-        else if (isSkin) {
+        } else if (isSkin) {
             modelFade = Math.min(modelFade + 0.06f, 1f);
             renderSkinModeFade(gui, modelX, modelY, viewMode.baseScale, modelFade);
-        }
-        else {
+        } else {
             modelFade = Math.max(modelFade - 0.06f, 0f);
-            modelViewer.render(gui, modelX, modelY, viewMode.baseScale, minecraft.player, viewMode);
+            if (minecraft != null && minecraft.player != null) {
+                modelViewer.render(gui, modelX, modelY, viewMode.baseScale, menu.getTargetPatient(minecraft.player), viewMode);
+            }
         }
 
         if (cropping) {
@@ -900,7 +700,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         }
 
         if (viewMode != ViewMode.FULL_BODY) {
-
             gui.pose().pushPose();
             gui.pose().translate(0, 0, 300);
 
@@ -910,9 +709,8 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             int bx = leftPos + backX;
             int by = topPos + backY;
 
-            boolean hoveringBack =
-                    mouseX >= bx && mouseX <= bx + backW &&
-                            mouseY >= by && mouseY <= by + backH;
+            boolean hoveringBack = mouseX >= bx && mouseX <= bx + backW &&
+                    mouseY >= by && mouseY <= by + backH;
 
             float alpha = hoveringBack ? 1f : 0.35f;
             gui.setColor(1f, 1f, 1f, alpha);
@@ -924,8 +722,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
             gui.pose().popPose();
         }
 
-        markerManager.render(gui, modelX, modelY, mouseX, mouseY,
-                viewMode, modelViewer.getRotationPhase(), this.font);
+        markerManager.render(gui, modelX, modelY, mouseX, mouseY, viewMode, modelViewer.getRotationPhase(), this.font);
 
         renderRotationToggleLabel(gui);
         renderRotationToggle(gui, mouseX, mouseY);
@@ -937,59 +734,41 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         this.renderTooltip(gui, mouseX, mouseY);
     }
 
-    private boolean hasInstalledCyberware(Item item, CyberwareSlot... slots) {
-        Player player = minecraft.player;
-        if (player == null) return false;
-
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+    private boolean hasInstalledCyberware(Player patient, Item item, CyberwareSlot... slots) {
+        PlayerCyberwareData data = patient.getData(ModAttachments.CYBERWARE);
         return data != null && data.hasSpecificItem(item, slots);
     }
 
     private void addInstalledOverlay(List<RobosurgeonPreviewOverlayContext.Entry> overlays,
                                      ResourceLocation texture,
                                      float fade,
+                                     Player patient,
                                      Item item,
                                      CyberwareSlot... slots) {
         if (texture == null || item == null || fade <= 0f) return;
-        if (!hasInstalledCyberware(item, slots)) return;
+        if (!hasInstalledCyberware(patient, item, slots)) return;
 
         overlays.add(RobosurgeonPreviewOverlayContext.entry(texture, fade));
     }
 
     private List<RobosurgeonPreviewOverlayContext.Entry> collectBoneOverlays(float fade) {
         List<RobosurgeonPreviewOverlayContext.Entry> overlays = new ArrayList<>();
-        if (fade <= 0f) return overlays;
+        if (fade <= 0f || minecraft == null || minecraft.player == null) return overlays;
 
-        addInstalledOverlay(overlays, LINEAR_FRAME, fade,
-                ModItems.BASECYBERWARE_LINEARFRAME.get(), CyberwareSlot.BONE);
+        Player patient = menu.getTargetPatient(minecraft.player);
 
-        addInstalledOverlay(overlays, TITANIUM_SKULL, fade,
-                ModItems.BONEUPGRADES_CYBERSKULL.get(), CyberwareSlot.BONE);
-
-        addInstalledOverlay(overlays, CAPACITOR_FRAME, fade,
-                ModItems.BONEUPGRADES_CAPACITORFRAME.get(), CyberwareSlot.BONE);
-
-        addInstalledOverlay(overlays, MARROW_BATTERY, fade,
-                ModItems.BONEUPGRADES_BONEBATTERY.get(), CyberwareSlot.BONE);
-
-        addInstalledOverlay(overlays, BONELACING, fade,
-                ModItems.BONEUPGRADES_BONELACING.get(), CyberwareSlot.BONE);
-
-        addInstalledOverlay(overlays, BONEFLEX, fade,
-                ModItems.BONEUPGRADES_BONEFLEX.get(), CyberwareSlot.BONE);
-
-        addInstalledOverlay(overlays, PIEZO, fade,
-                ModItems.BONEUPGRADES_PIEZO.get(), CyberwareSlot.BONE);
-
-        addInstalledOverlay(overlays, SPINAL_INJECTOR, fade,
-                ModItems.BONEUPGRADES_SPINALINJECTOR.get(), CyberwareSlot.BONE);
-
-        addInstalledOverlay(overlays, SANDEVISTAN, fade,
-                ModItems.BONEUPGRADES_SANDEVISTAN.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, LINEAR_FRAME, fade, patient, ModItems.BASECYBERWARE_LINEARFRAME.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, TITANIUM_SKULL, fade, patient, ModItems.BONEUPGRADES_CYBERSKULL.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, CAPACITOR_FRAME, fade, patient, ModItems.BONEUPGRADES_CAPACITORFRAME.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, MARROW_BATTERY, fade, patient, ModItems.BONEUPGRADES_BONEBATTERY.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, BONELACING, fade, patient, ModItems.BONEUPGRADES_BONELACING.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, BONEFLEX, fade, patient, ModItems.BONEUPGRADES_BONEFLEX.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, PIEZO, fade, patient, ModItems.BONEUPGRADES_PIEZO.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, SPINAL_INJECTOR, fade, patient, ModItems.BONEUPGRADES_SPINALINJECTOR.get(), CyberwareSlot.BONE);
+        addInstalledOverlay(overlays, SANDEVISTAN, fade, patient, ModItems.BONEUPGRADES_SANDEVISTAN.get(), CyberwareSlot.BONE);
 
         if (ModItems.BONEUPGRADES_ELYTRA != null) {
-            addInstalledOverlay(overlays, DEPLOYABLE_ELYTRA, fade,
-                    ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE);
+            addInstalledOverlay(overlays, DEPLOYABLE_ELYTRA, fade, patient, ModItems.BONEUPGRADES_ELYTRA.get(), CyberwareSlot.BONE);
         }
 
         return overlays;
@@ -1004,13 +783,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         RobosurgeonPreviewOverlayContext.begin(skeletonPreview, overlays);
 
         try {
-            InventoryScreen.renderEntityInInventory(
-                    gui, x, y, scale,
-                    new Vector3f(),
-                    spin,
-                    null,
-                    skeletonPreview
-            );
+            InventoryScreen.renderEntityInInventory(gui, x, y, scale, new Vector3f(), spin, null, skeletonPreview);
         } finally {
             RobosurgeonPreviewOverlayContext.end();
             RenderSystem.disableBlend();
@@ -1052,7 +825,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private void renderSkinModeFade(GuiGraphics gui, int x, int y, int scale, float fade) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        gui.setColor(1f, 1f, 1f, 1f); // keep clean for UI
+        gui.setColor(1f, 1f, 1f, 1f);
 
         gui.pose().pushPose();
         int baseX = x - 43;
@@ -1069,33 +842,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         gui.renderItem(renderBone, -2, -10);
 
         gui.pose().popPose();
-
         RenderSystem.disableBlend();
-    }
-
-    // -----------------------
-    // Warning Icon Helper
-    // -----------------------
-    private int countMarkedForRemovalTotal() {
-        int count = 0;
-        for (SlotView view : slotViews) {
-            if (menu.isMarkedForRemoval(view.slotIndex)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    private int countMarkedForRemovalVisible() {
-        int count = 0;
-        for (SlotView view : slotViews) {
-            if (!matchesView(view.viewMode)) continue;
-            if (menu.isMarkedForRemoval(view.slotIndex)) {
-                count++;
-            }
-        }
-
-        return count;
     }
 
     private boolean hasDefaultOrganMarkedForRemoval() {
@@ -1114,7 +861,6 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     }
 
     private void renderRemovalWarning(GuiGraphics gui, int mouseX, int mouseY) {
-
         if (!hasDefaultOrganMarkedForRemoval()) return;
 
         int x = leftPos + WARNING_X;
@@ -1130,35 +876,28 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
 
         boolean hovering = isMouseOverRect(x, y, WARNING_W, WARNING_H, mouseX, mouseY);
         if (hovering) {
-
-            List<Component> tip = List.of(
-                    Component.translatable("gui.warning.title").withStyle(ChatFormatting.RED),
-                    Component.translatable("gui.warning.desc1").withStyle(ChatFormatting.RED),
-                    Component.translatable("gui.warning.desc2").withStyle(ChatFormatting.RED));
-
-            gui.renderComponentTooltip(this.font, tip, mouseX, mouseY);
+            gui.renderTooltip(this.font, Component.translatable("gui.createcybernetics.robosurgeon.warning.default_organ_removal"), mouseX, mouseY);
         }
 
         RenderSystem.disableBlend();
         gui.pose().popPose();
     }
 
-    // -----------------------
-    // Mouse Interaction
-    // -----------------------
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (clickRotationToggle(mouseX, mouseY)) {
+            return true;
+        }
 
-        if (button == 0 && clickRotationToggle(mouseX, mouseY)) return true;
-        if (button == 0 && clickMarkerToggle(mouseX, mouseY)) return true;
+        if (clickMarkerToggle(mouseX, mouseY)) {
+            return true;
+        }
 
-        if (button == 0 && viewMode != ViewMode.FULL_BODY) {
+        if (viewMode != ViewMode.FULL_BODY) {
             int bx = leftPos + backX;
             int by = topPos + backY;
 
-            if (mouseX >= bx && mouseX <= bx + backW &&
-                    mouseY >= by && mouseY <= by + backH) {
-
+            if (mouseX >= bx && mouseX <= bx + backW && mouseY >= by && mouseY <= by + backH) {
                 if (minecraft.player != null) {
                     minecraft.player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, 1f, 1f);
                 }
@@ -1176,11 +915,8 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         int modelX = leftPos + 88;
         int modelY = topPos + 105 + viewMode.verticalOffset;
 
-        RobosurgeonScreen.ViewMode clicked =
-                markerManager.tryClick(mouseX, mouseY,
-                        modelX, modelY,
-                        modelViewer.getRotationPhase(),
-                        viewMode);
+        SurgeryTableScreen.ViewMode clicked =
+                markerManager.tryClick(mouseX, mouseY, modelX, modelY, modelViewer.getRotationPhase(), viewMode);
 
         if (clicked != null) {
             viewMode = clicked;
@@ -1207,12 +943,27 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
     private boolean isMouseOverSlot(Slot slot, double mouseX, double mouseY) {
         int x = leftPos + slot.x;
         int y = topPos + slot.y;
-        return mouseX >= x && mouseX < x + 16
-                && mouseY >= y && mouseY < y + 16;
+        return mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16;
     }
 
-    private boolean isMouseOverRect(int x, int y, int w, int h, int mouseX, int mouseY) {
-        return mouseX >= x && mouseX < x + w
-                && mouseY >= y && mouseY < y + h;
+    private boolean isMouseOverRect(double x, double y, int w, int h, double mouseX, double mouseY) {
+        return mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + h;
+    }
+
+    @Override
+    protected void renderTooltip(GuiGraphics guiGraphics, int x, int y) {
+        Slot hovered = this.getSlotUnderMouse();
+        if (hovered != null && !isSlotVisible(hovered)) {
+            hovered = null;
+        }
+
+        if (hovered != null && hovered.hasItem() && isMouseOverSlot(hovered, x, y)) {
+            ItemStack stack = hovered.getItem();
+            List<Component> tooltip = getTooltipFromContainerItem(stack);
+            guiGraphics.renderTooltip(this.font, tooltip, stack.getTooltipImage(), x, y);
+            return;
+        }
+
+        super.renderTooltip(guiGraphics, x, y);
     }
 }

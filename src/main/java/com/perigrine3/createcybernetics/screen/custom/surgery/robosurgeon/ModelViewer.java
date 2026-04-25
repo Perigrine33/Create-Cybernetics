@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.screen.custom.surgery;
+package com.perigrine3.createcybernetics.screen.custom.surgery.robosurgeon;
 
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.client.gui.GuiGraphics;

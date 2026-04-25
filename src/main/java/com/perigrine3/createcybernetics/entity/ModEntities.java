@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -28,6 +29,11 @@ public class ModEntities {
             ENTITY_TYPES.register("emp_grenade_projectile", () -> EntityType.Builder.<EmpGrenadeProjectile>of(EmpGrenadeProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f).clientTrackingRange(8).updateInterval(10).build("emp_grenade_projectile"));
 
+
+
+    public static final DeferredHolder<EntityType<?>, EntityType<RipperEntity>> RIPPER =
+            ENTITY_TYPES.register("ripper", () -> EntityType.Builder.of(RipperEntity::new, MobCategory.CREATURE)
+                    .sized(0.6F, 1.95F).clientTrackingRange(8).build("ripper"));
 
 
     public static final Supplier<EntityType<SmasherEntity>> SMASHER =

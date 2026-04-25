@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.Mth;
@@ -16,29 +16,17 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Builds a per-player 64x64 dynamic overlay texture for cybereyes by stamping
- * one of six small mask templates (L/R × 1x1,1x2,2x2) at the offsets chosen in the UI.
- *
- * - The UI highlight is NOT used here; this produces only the overlay mask.
- * - Actual color comes from your existing SkinModifier tint (dye color).
- * - Offsets are clamped to the 8x8 *base face layer* area: (8,8) size 8x8 on 64x64 skin.
- */
 public final class CybereyeOverlayHandler {
 
     private CybereyeOverlayHandler() {}
 
-    // ---- NBT KEYS (adjust to match whatever your UI already writes) ----
-    // Stored on the PLAYER entity persistent data so it's available client-side after sync.
     public static final String NBT_ROOT = "cc_cybereye_cfg";
     public static final String NBT_LEFT = "left";
     public static final String NBT_RIGHT = "right";
     public static final String NBT_X = "x";
     public static final String NBT_Y = "y";
-    public static final String NBT_VARIANT = "variant"; // 0=1x1, 1=1x2, 2=2x2
+    public static final String NBT_VARIANT = "variant";
 
-    // ---- FACE (base layer) clamp region on 64x64 skin ----
-    // Head front face: u=8..15, v=8..15 (8x8)
     private static final int FACE_U = 8;
     private static final int FACE_V = 8;
     private static final int FACE_W = 8;
@@ -49,8 +37,8 @@ public final class CybereyeOverlayHandler {
 
     public record EyePlacement(int x, int y, Variant variant) {}
 
-    // Cache of per-player dynamic textures
     private static final Map<UUID, Entry> CACHE = new ConcurrentHashMap<>();
+    private static final Map<UUID, CompoundTag> SYNCED_CONFIGS = new ConcurrentHashMap<>();
 
     private static final class Entry {
         final ResourceLocation textureId;
@@ -64,22 +52,19 @@ public final class CybereyeOverlayHandler {
         }
     }
 
-    // Template cache: side->variant->NativeImage (small mask)
     private static final Map<EyeSide, EnumMap<Variant, NativeImage>> TEMPLATES = new EnumMap<>(EyeSide.class);
     private static boolean templatesLoaded = false;
     private static boolean templatesFailed = false;
 
-    /**
-     * Ensure and return a per-player overlay texture RL.
-     * Rebuilds only when placement changes.
-     */
     public static ResourceLocation getOrBuildOverlay(Player player) {
         if (player == null) return null;
 
-        EyePlacement left = readPlacement(player, EyeSide.LEFT);
-        EyePlacement right = readPlacement(player, EyeSide.RIGHT);
+        UUID id = player.getUUID();
+        CompoundTag root = getEffectiveRoot(player);
 
-        // Default: 1x1 for both eyes, with a sane default position on face
+        EyePlacement left = readPlacement(root, EyeSide.LEFT);
+        EyePlacement right = readPlacement(root, EyeSide.RIGHT);
+
         if (left == null) left = defaultPlacement(EyeSide.LEFT);
         if (right == null) right = defaultPlacement(EyeSide.RIGHT);
 
@@ -88,20 +73,16 @@ public final class CybereyeOverlayHandler {
 
         int hash = hash(left, right);
 
-        UUID id = player.getUUID();
         Entry e = CACHE.get(id);
-
         if (e != null && e.lastHash == hash) {
             return e.textureId;
         }
 
         ensureTemplatesLoaded();
         if (templatesFailed) {
-            // If templates are missing, fail safely: no overlay
             return null;
         }
 
-        // Create or reuse a 64x64 dynamic texture
         Minecraft mc = Minecraft.getInstance();
         if (e == null) {
             ResourceLocation texId = ResourceLocation.fromNamespaceAndPath(
@@ -116,7 +97,6 @@ public final class CybereyeOverlayHandler {
             CACHE.put(id, e);
         }
 
-        // Rebuild into the dynamic texture's image
         NativeImage img = e.dyn.getPixels();
         if (img == null) return null;
 
@@ -130,23 +110,86 @@ public final class CybereyeOverlayHandler {
         return e.textureId;
     }
 
+    public static void applySyncedConfig(UUID playerId,
+                                         int leftX, int leftY, int leftVariant,
+                                         int rightX, int rightY, int rightVariant) {
+        if (playerId == null) return;
+
+        CompoundTag root = buildRoot(leftX, leftY, leftVariant, rightX, rightY, rightVariant);
+        SYNCED_CONFIGS.put(playerId, root);
+        invalidate(playerId);
+
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level != null) {
+            Player player = mc.level.getPlayerByUUID(playerId);
+            if (player != null) {
+                player.getPersistentData().put(NBT_ROOT, root.copy());
+            }
+        }
+    }
+
+    public static void applySyncedConfig(Player player,
+                                         int leftX, int leftY, int leftVariant,
+                                         int rightX, int rightY, int rightVariant) {
+        if (player == null) return;
+
+        CompoundTag root = buildRoot(leftX, leftY, leftVariant, rightX, rightY, rightVariant);
+        SYNCED_CONFIGS.put(player.getUUID(), root.copy());
+        player.getPersistentData().put(NBT_ROOT, root.copy());
+        invalidate(player);
+    }
+
     public static void invalidate(Player player) {
         if (player == null) return;
-        Entry e = CACHE.get(player.getUUID());
-        if (e != null) e.lastHash = -1;
+        invalidate(player.getUUID());
+    }
+
+    public static void invalidate(UUID playerId) {
+        if (playerId == null) return;
+        Entry e = CACHE.get(playerId);
+        if (e != null) {
+            e.lastHash = -1;
+        }
     }
 
     public static void clearAll() {
         CACHE.clear();
+        SYNCED_CONFIGS.clear();
     }
 
-    /* ---------------------------- Placement IO ---------------------------- */
+    private static CompoundTag getEffectiveRoot(Player player) {
+        CompoundTag synced = SYNCED_CONFIGS.get(player.getUUID());
+        if (synced != null && !synced.isEmpty()) {
+            return synced;
+        }
 
-    private static EyePlacement readPlacement(Player player, EyeSide side) {
-        var root = player.getPersistentData().getCompound(NBT_ROOT);
+        CompoundTag root = player.getPersistentData().getCompound(NBT_ROOT);
+        return root == null ? new CompoundTag() : root;
+    }
+
+    private static CompoundTag buildRoot(int leftX, int leftY, int leftVariant,
+                                         int rightX, int rightY, int rightVariant) {
+        CompoundTag root = new CompoundTag();
+
+        CompoundTag left = new CompoundTag();
+        left.putInt(NBT_X, leftX);
+        left.putInt(NBT_Y, leftY);
+        left.putInt(NBT_VARIANT, clampVariant(leftVariant));
+        root.put(NBT_LEFT, left);
+
+        CompoundTag right = new CompoundTag();
+        right.putInt(NBT_X, rightX);
+        right.putInt(NBT_Y, rightY);
+        right.putInt(NBT_VARIANT, clampVariant(rightVariant));
+        root.put(NBT_RIGHT, right);
+
+        return root;
+    }
+
+    private static EyePlacement readPlacement(CompoundTag root, EyeSide side) {
         if (root == null || root.isEmpty()) return null;
 
-        var tag = root.getCompound(side == EyeSide.LEFT ? NBT_LEFT : NBT_RIGHT);
+        CompoundTag tag = root.getCompound(side == EyeSide.LEFT ? NBT_LEFT : NBT_RIGHT);
         if (tag == null || tag.isEmpty()) return null;
 
         int x = tag.getInt(NBT_X);
@@ -163,10 +206,6 @@ public final class CybereyeOverlayHandler {
     }
 
     private static EyePlacement defaultPlacement(EyeSide side) {
-        // These defaults are on the head-front face area (8..15,8..15).
-        // Tune these to your exact desired defaults.
-        // Common Steve-ish defaults:
-        // left eye around (10, 10), right eye around (13, 10) for 1x1.
         int x = (side == EyeSide.LEFT) ? 10 : 13;
         int y = 10;
         return new EyePlacement(x, y, Variant.V1x1);
@@ -188,11 +227,15 @@ public final class CybereyeOverlayHandler {
     }
 
     private static int variantW(Variant v) {
-        return (v == Variant.V2x2) ? 2 : 1;
+        return v == Variant.V2x2 ? 2 : 1;
     }
 
     private static int variantH(Variant v) {
-        return (v == Variant.V1x2 || v == Variant.V2x2) ? 2 : 1;
+        return v == Variant.V1x2 || v == Variant.V2x2 ? 2 : 1;
+    }
+
+    private static int clampVariant(int variant) {
+        return Mth.clamp(variant, 0, 2);
     }
 
     private static int hash(EyePlacement l, EyePlacement r) {
@@ -206,8 +249,6 @@ public final class CybereyeOverlayHandler {
         return h;
     }
 
-    /* ---------------------------- Template IO ---------------------------- */
-
     private static void ensureTemplatesLoaded() {
         if (templatesLoaded || templatesFailed) return;
 
@@ -215,9 +256,9 @@ public final class CybereyeOverlayHandler {
             TEMPLATES.put(EyeSide.LEFT, new EnumMap<>(Variant.class));
             TEMPLATES.put(EyeSide.RIGHT, new EnumMap<>(Variant.class));
 
-            loadTemplate(EyeSide.LEFT, Variant.V1x1,  "textures/entity/cybereyes/left_1x1.png");
-            loadTemplate(EyeSide.LEFT, Variant.V1x2,  "textures/entity/cybereyes/left_1x2.png");
-            loadTemplate(EyeSide.LEFT, Variant.V2x2,  "textures/entity/cybereyes/left_2x2.png");
+            loadTemplate(EyeSide.LEFT, Variant.V1x1, "textures/entity/cybereyes/left_1x1.png");
+            loadTemplate(EyeSide.LEFT, Variant.V1x2, "textures/entity/cybereyes/left_1x2.png");
+            loadTemplate(EyeSide.LEFT, Variant.V2x2, "textures/entity/cybereyes/left_2x2.png");
 
             loadTemplate(EyeSide.RIGHT, Variant.V1x1, "textures/entity/cybereyes/right_1x1.png");
             loadTemplate(EyeSide.RIGHT, Variant.V1x2, "textures/entity/cybereyes/right_1x2.png");
@@ -236,21 +277,11 @@ public final class CybereyeOverlayHandler {
 
         try (InputStream in = res.open()) {
             NativeImage img = NativeImage.read(in);
-
-            int wantW = variantW(variant);
-            int wantH = variantH(variant);
-            if (img.getWidth() != wantW || img.getHeight() != wantH) {
-
-            }
-
             TEMPLATES.get(side).put(variant, img);
         }
     }
 
-    /* ---------------------------- Composition ---------------------------- */
-
     private static void clear(NativeImage img) {
-        // Set all pixels to transparent
         for (int y = 0; y < 64; y++) {
             for (int x = 0; x < 64; x++) {
                 img.setPixelRGBA(x, y, 0x00000000);
@@ -265,7 +296,6 @@ public final class CybereyeOverlayHandler {
         int w = mask.getWidth();
         int h = mask.getHeight();
 
-        // p.x,p.y already clamped, but clamp again using actual mask dims just in case.
         int maxX = FACE_U + FACE_W - w;
         int maxY = FACE_V + FACE_H - h;
         int ox = Mth.clamp(p.x, FACE_U, maxX);
@@ -280,7 +310,6 @@ public final class CybereyeOverlayHandler {
                 int dx = ox + mx;
                 int dy = oy + my;
 
-                // Set to white with mask alpha. Tint is applied later via SkinModifier color.
                 int out = (a << 24) | 0x00FFFFFF;
                 dst.setPixelRGBA(dx, dy, out);
             }

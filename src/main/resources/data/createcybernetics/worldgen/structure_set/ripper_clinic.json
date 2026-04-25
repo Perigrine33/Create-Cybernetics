@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 32,
+    "separation": 12,
+    "salt": 18472651
+  },
+  "structures": [
+    {
+      "structure": "createcybernetics:ripper_clinic",
+      "weight": 1
+    }
+  ]
+}

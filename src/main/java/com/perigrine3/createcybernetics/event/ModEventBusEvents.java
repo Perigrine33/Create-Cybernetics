@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.event;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.entity.ModEntities;
+import com.perigrine3.createcybernetics.entity.client.RipperModel;
 import com.perigrine3.createcybernetics.entity.client.models.CyberskeletonModel;
 import com.perigrine3.createcybernetics.entity.client.models.CyberzombieModel;
 import com.perigrine3.createcybernetics.entity.client.models.SmasherModel;
@@ -20,6 +21,7 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(RipperModel.LAYER_LOCATION, RipperModel::createBodyLayer);
         event.registerLayerDefinition(SmasherModel.LAYER_LOCATION, SmasherModel::createBodyLayer);
         event.registerLayerDefinition(CyberzombieModel.LAYER_LOCATION, CyberzombieModel::createBodyLayer);
         event.registerLayerDefinition(CyberskeletonModel.LAYER_LOCATION, CyberskeletonModel::createBodyLayer);
@@ -27,6 +29,7 @@ public class ModEventBusEvents {
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(ModEntities.RIPPER.get(), RipperEntity.createAttributes().build());
         event.put(ModEntities.SMASHER.get(), SmasherEntity.createAttributes().build());
         event.put(ModEntities.CYBERZOMBIE.get(), CyberzombieEntity.createAttributes().build());
         event.put(ModEntities.CYBERSKELETON.get(), CyberskeletonEntity.createAttributes().build());

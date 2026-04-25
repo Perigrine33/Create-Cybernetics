@@ -855,7 +855,7 @@ public class SkinModifierManager {
             }
             if (data.hasSpecificItem(ModItems.BRAINUPGRADES_CYBERDECK.get(), CyberwareSlot.BRAIN)) {
                 state.addModifier(new SkinModifier(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
-                        0xFFFFFFFF, true));
+                        0xFFFFFFFF, false));
                 state.addHighlight(new SkinHighlight(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
                         0xFFFFFFFF, true));
             }

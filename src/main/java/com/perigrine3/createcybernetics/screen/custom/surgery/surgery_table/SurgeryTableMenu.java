@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.screen.custom;
+package com.perigrine3.createcybernetics.screen.custom.surgery.surgery_table;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
@@ -10,7 +10,7 @@ import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.common.surgery.DefaultOrgans;
 import com.perigrine3.createcybernetics.common.surgery.RobosurgeonSlotMap;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
-import com.perigrine3.createcybernetics.screen.custom.surgery.RobosurgeonSlotItemHandler;
+import com.perigrine3.createcybernetics.screen.custom.surgery.robosurgeon.RobosurgeonSlotItemHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,10 +44,7 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
-    private static final int FLAG_WORD_COUNT = 3; // 3 * 32 = 96 bits, enough for 65 slots
-    private final int[] installedWords = new int[FLAG_WORD_COUNT];
-    private final int[] stagedWords = new int[FLAG_WORD_COUNT];
-    private final int[] removalWords = new int[FLAG_WORD_COUNT];
+    private static final int TE_INVENTORY_SLOT_COUNT = 65;
 
     public SurgeryTableMenu(int containerId, Inventory inv, FriendlyByteBuf buf) {
         super(ModMenuTypes.SURGERY_TABLE_MENU.get(), containerId);
@@ -60,130 +56,26 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
             throw new IllegalStateException("Invalid surgery table block entity");
         }
 
-        this.blockEntity = table;
+        SurgeryTableBlockEntity controller = table.getController();
+        this.blockEntity = controller != null ? controller : table;
         this.level = inv.player.level();
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
         addSurgerySlots();
-        addFlagDataSlots();
         populateFromTarget(inv.player);
-        refreshFlagWordsFromBlockEntity();
     }
 
     public SurgeryTableMenu(int containerId, Inventory inv, SurgeryTableBlockEntity blockEntity) {
         super(ModMenuTypes.SURGERY_TABLE_MENU.get(), containerId);
-        this.blockEntity = blockEntity;
+        SurgeryTableBlockEntity controller = blockEntity.getController();
+        this.blockEntity = controller != null ? controller : blockEntity;
         this.level = inv.player.level();
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
         addSurgerySlots();
-        addFlagDataSlots();
         populateFromTarget(inv.player);
-        refreshFlagWordsFromBlockEntity();
-    }
-
-    private void addFlagDataSlots() {
-        for (int i = 0; i < FLAG_WORD_COUNT; i++) {
-            final int idx = i;
-            addDataSlot(new DataSlot() {
-                @Override
-                public int get() {
-                    return installedWords[idx];
-                }
-
-                @Override
-                public void set(int value) {
-                    installedWords[idx] = value;
-                }
-            });
-        }
-
-        for (int i = 0; i < FLAG_WORD_COUNT; i++) {
-            final int idx = i;
-            addDataSlot(new DataSlot() {
-                @Override
-                public int get() {
-                    return stagedWords[idx];
-                }
-
-                @Override
-                public void set(int value) {
-                    stagedWords[idx] = value;
-                }
-            });
-        }
-
-        for (int i = 0; i < FLAG_WORD_COUNT; i++) {
-            final int idx = i;
-            addDataSlot(new DataSlot() {
-                @Override
-                public int get() {
-                    return removalWords[idx];
-                }
-
-                @Override
-                public void set(int value) {
-                    removalWords[idx] = value;
-                }
-            });
-        }
-    }
-
-    @Override
-    public void broadcastChanges() {
-        if (!level.isClientSide) {
-            refreshFlagWordsFromBlockEntity();
-        }
-        super.broadcastChanges();
-    }
-
-    private void refreshFlagWordsFromBlockEntity() {
-        for (int i = 0; i < FLAG_WORD_COUNT; i++) {
-            installedWords[i] = 0;
-            stagedWords[i] = 0;
-            removalWords[i] = 0;
-        }
-
-        for (int i = 0; i < SurgeryTableBlockEntity.SLOT_COUNT; i++) {
-            setPacked(installedWords, i, blockEntity.isInstalled(i));
-            setPacked(stagedWords, i, blockEntity.isStaged(i));
-            setPacked(removalWords, i, blockEntity.isMarkedForRemoval(i));
-        }
-    }
-
-    private static boolean getPacked(int[] words, int index) {
-        if (index < 0) return false;
-        int word = index >> 5;
-        int bit = index & 31;
-        if (word < 0 || word >= words.length) return false;
-        return (words[word] & (1 << bit)) != 0;
-    }
-
-    private static void setPacked(int[] words, int index, boolean value) {
-        if (index < 0) return;
-        int word = index >> 5;
-        int bit = index & 31;
-        if (word < 0 || word >= words.length) return;
-
-        if (value) {
-            words[word] |= (1 << bit);
-        } else {
-            words[word] &= ~(1 << bit);
-        }
-    }
-
-    private void setInstalledLocal(int index, boolean value) {
-        setPacked(installedWords, index, value);
-    }
-
-    private void setStagedLocal(int index, boolean value) {
-        setPacked(stagedWords, index, value);
-    }
-
-    private void setRemovalLocal(int index, boolean value) {
-        setPacked(removalWords, index, value);
     }
 
     public int getTeInventoryFirstSlotIndex() {
@@ -195,30 +87,27 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
     }
 
     public boolean isInstalled(int index) {
-        return getPacked(installedWords, index);
+        return blockEntity.isInstalled(index);
     }
 
     public boolean isStaged(int index) {
-        return getPacked(stagedWords, index);
+        return blockEntity.isStaged(index);
     }
 
     public boolean isMarkedForRemoval(int index) {
-        return getPacked(removalWords, index);
+        return blockEntity.isMarkedForRemoval(index);
     }
 
     public void toggleMarkedForRemoval(int index) {
         blockEntity.toggleMarkedForRemoval(index);
-        setRemovalLocal(index, blockEntity.isMarkedForRemoval(index));
     }
 
     public void setStaged(int index, boolean value) {
         blockEntity.setStaged(index, value);
-        setStagedLocal(index, value);
     }
 
     public void setInstalled(int index, boolean value) {
         blockEntity.setInstalled(index, value);
-        setInstalledLocal(index, value);
     }
 
     private void setMarkedForRemoval(int invIndex, boolean value) {
@@ -240,7 +129,7 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
                     );
 
             surgerySlots.add(slot);
-            addSlot(slot);
+            this.addSlot(slot);
         }
     }
 
@@ -260,15 +149,11 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
     }
 
     private void populateFromTarget(Player operator) {
-        if (operator.level().isClientSide) {
-            return;
-        }
+        if (operator.level().isClientSide) return;
 
         Player patient = getTargetPatient(operator);
         PlayerCyberwareData data = patient.getData(ModAttachments.CYBERWARE);
-        if (data == null) {
-            return;
-        }
+        if (data == null) return;
 
         for (CyberwareSlot slot : CyberwareSlot.values()) {
             InstalledCyberware[] installedData = data.getAll().get(slot);
@@ -276,34 +161,25 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
 
             for (int i = 0; i < mappedSize; i++) {
                 int invIndex = RobosurgeonSlotMap.toInventoryIndex(slot, i);
-                if (invIndex < 0 || invIndex >= blockEntity.inventory.getSlots()) {
-                    continue;
-                }
+                if (invIndex < 0 || invIndex >= blockEntity.inventory.getSlots()) continue;
 
-                if (blockEntity.isStaged(invIndex)) {
-                    continue;
-                }
-                if (blockEntity.isMarkedForRemoval(invIndex)) {
-                    continue;
-                }
+                if (isStaged(invIndex)) continue;
+                if (isMarkedForRemoval(invIndex)) continue;
 
                 ItemStack stack = ItemStack.EMPTY;
 
                 if (installedData != null && i < installedData.length && installedData[i] != null) {
                     ItemStack inst = installedData[i].getItem();
-                    if (inst != null && !inst.isEmpty()) {
-                        stack = inst.copy();
-                    }
+                    if (inst != null && !inst.isEmpty()) stack = inst.copy();
                 }
 
                 blockEntity.inventory.setStackInSlot(invIndex, stack);
-                blockEntity.setInstalled(invIndex, !stack.isEmpty());
-                blockEntity.setStaged(invIndex, false);
-                blockEntity.setMarkedForRemoval(invIndex, false);
+
+                setInstalled(invIndex, !stack.isEmpty());
+                setStaged(invIndex, false);
+                setMarkedForRemoval(invIndex, false);
             }
         }
-
-        refreshFlagWordsFromBlockEntity();
     }
 
     @Override
@@ -325,6 +201,7 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
 
             if (clickType == ClickType.PICKUP && button == 1) {
                 if (carried.isEmpty() && rsSlot.hasItem() && isStaged(handlerIndex)) {
+
                     ItemStack stagedStack = rsSlot.getItem().copy();
 
                     rsSlot.set(ItemStack.EMPTY);
@@ -342,16 +219,19 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
                     if (!player.getInventory().add(stagedStack)) {
                         player.drop(stagedStack, false);
                     }
+                    return;
                 }
 
                 return;
             }
 
             if (clickType == ClickType.PICKUP && button == 0) {
+
                 if (carried.isEmpty()
                         && rsSlot.hasItem()
                         && isInstalled(handlerIndex)
                         && !isStaged(handlerIndex)) {
+
                     toggleMarkedForRemoval(handlerIndex);
                     return;
                 }
@@ -368,6 +248,7 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
                     setStaged(handlerIndex, true);
                     setMarkedForRemoval(handlerIndex, true);
                     setInstalled(handlerIndex, true);
+
                     return;
                 }
 
@@ -407,96 +288,65 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
         boolean replacesOrgan = stackReplacesOrgan(sourceStack);
 
         if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
+
             CyberwareSlot forcedSide = null;
-            if (sourceStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.LEFTLEG_ITEMS)) {
-                forcedSide = CyberwareSlot.LLEG;
-            } else if (sourceStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.RIGHTLEG_ITEMS)) {
-                forcedSide = CyberwareSlot.RLEG;
-            } else if (sourceStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.LEFTARM_ITEMS)) {
-                forcedSide = CyberwareSlot.LARM;
-            } else if (sourceStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.RIGHTARM_ITEMS)) {
-                forcedSide = CyberwareSlot.RARM;
-            }
+            if (sourceStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.LEFTLEG_ITEMS)) forcedSide = CyberwareSlot.LLEG;
+            else if (sourceStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.RIGHTLEG_ITEMS)) forcedSide = CyberwareSlot.RLEG;
+            else if (sourceStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.LEFTARM_ITEMS)) forcedSide = CyberwareSlot.LARM;
+            else if (sourceStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.RIGHTARM_ITEMS)) forcedSide = CyberwareSlot.RARM;
 
             for (int pass = 0; pass < 2; pass++) {
                 for (RobosurgeonSlotItemHandler targetSlot : surgerySlots) {
                     int handlerIndex = targetSlot.getSlotIndex();
 
-                    if (!targetSlot.isActive()) {
-                        continue;
-                    }
+                    if (!targetSlot.isActive()) continue;
 
                     CyberwareSlot targetType = targetSlot.getSlotType();
 
-                    if (forcedSide != null && targetType != forcedSide) {
-                        continue;
-                    }
+                    if (forcedSide != null && targetType != forcedSide) continue;
 
-                    if (!sideMatches(sourceStack, targetType)) {
-                        continue;
-                    }
+                    if (!sideMatches(sourceStack, targetType)) continue;
 
-                    if (!targetSlot.mayPlace(sourceStack)) {
-                        continue;
-                    }
+                    if (!targetSlot.mayPlace(sourceStack)) continue;
 
                     int maxStacks = getMaxStacksPerSlotType(sourceStack, targetType);
                     int alreadyInType = countItemInSlotType(targetType, sourceStack);
                     boolean hasInType = alreadyInType > 0;
 
-                    if (pass == 0 && hasInType) {
-                        continue;
-                    }
+                    if (pass == 0 && hasInType) continue;
 
-                    if (pass == 1 && hasInType && alreadyInType >= maxStacks) {
-                        continue;
-                    }
+                    if (pass == 1 && hasInType && alreadyInType >= maxStacks) continue;
 
                     boolean installed = isInstalled(handlerIndex);
                     boolean staged = isStaged(handlerIndex);
 
                     if (!installed) {
-                        if (targetSlot.hasItem()) {
-                            continue;
-                        }
+                        if (targetSlot.hasItem()) continue;
 
                         ItemStack moved = sourceStack.split(1);
                         targetSlot.set(moved);
                         setStaged(handlerIndex, true);
 
-                        if (sourceStack.isEmpty()) {
-                            sourceSlot.set(ItemStack.EMPTY);
-                        } else {
-                            sourceSlot.setChanged();
-                        }
+                        if (sourceStack.isEmpty()) sourceSlot.set(ItemStack.EMPTY);
+                        else sourceSlot.setChanged();
 
                         return copy;
                     }
 
                     if (installed) {
-                        if (!targetSlot.hasItem()) {
-                            continue;
-                        }
-                        if (staged) {
-                            continue;
-                        }
-                        if (!replacesOrgan) {
-                            continue;
-                        }
-                        if (!canReplaceExisting(sourceStack, targetSlot.getItem(), targetType)) {
-                            continue;
-                        }
+                        if (!targetSlot.hasItem()) continue;
+                        if (staged) continue;
+
+                        if (!replacesOrgan) continue;
+                        if (!canReplaceExisting(sourceStack, targetSlot.getItem(), targetType)) continue;
 
                         ItemStack moved = sourceStack.split(1);
                         targetSlot.set(moved);
                         setStaged(handlerIndex, true);
                         setMarkedForRemoval(handlerIndex, true);
 
-                        if (sourceStack.isEmpty()) {
-                            sourceSlot.set(ItemStack.EMPTY);
-                        } else {
-                            sourceSlot.setChanged();
-                        }
+                        if (sourceStack.isEmpty()) sourceSlot.set(ItemStack.EMPTY);
+                        else sourceSlot.setChanged();
 
                         return copy;
                     }
@@ -510,22 +360,15 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
     }
 
     private static TagKey<Item> getReplacementTag(ItemStack incoming, CyberwareSlot targetType) {
-        if (!(incoming.getItem() instanceof ICyberwareItem cw)) {
-            return null;
-        }
+        if (!(incoming.getItem() instanceof ICyberwareItem cw)) return null;
         return cw.getReplacedOrganItemTag(incoming, targetType);
     }
 
     private static boolean canReplaceExisting(ItemStack incoming, ItemStack existing, CyberwareSlot targetType) {
-        if (existing.isEmpty()) {
-            return false;
-        }
+        if (existing.isEmpty()) return false;
 
         TagKey<Item> tag = getReplacementTag(incoming, targetType);
-        if (tag == null) {
-            return true;
-        }
-
+        if (tag == null) return true;
         return existing.is(tag);
     }
 
@@ -545,6 +388,7 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
         if (stack.is(com.perigrine3.createcybernetics.util.ModTags.Items.RIGHTARM_ITEMS)) {
             return targetType == CyberwareSlot.RARM;
         }
+
         if (stack.is(com.perigrine3.createcybernetics.util.ModTags.Items.LEFTLEG_ITEMS)) {
             return targetType == CyberwareSlot.LLEG;
         }
@@ -556,9 +400,7 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
     }
 
     private static boolean stackReplacesOrgan(ItemStack stack) {
-        if (!(stack.getItem() instanceof ICyberwareItem cw)) {
-            return false;
-        }
+        if (!(stack.getItem() instanceof ICyberwareItem cw)) return false;
         return cw.replacesOrgan();
     }
 
@@ -574,9 +416,7 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
 
         for (int i = 0; i < RobosurgeonSlotMap.mappedSize(slotType); i++) {
             int invIndex = RobosurgeonSlotMap.toInventoryIndex(slotType, i);
-            if (invIndex < 0) {
-                continue;
-            }
+            if (invIndex < 0) continue;
 
             ItemStack inTe = blockEntity.inventory.getStackInSlot(invIndex);
             if (!inTe.isEmpty() && ItemStack.isSameItemSameComponents(inTe, stack)) {
@@ -605,14 +445,10 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
     private ItemStack getInstalledOrDefault(Player operator, int invIndex) {
         Player patient = getTargetPatient(operator);
         PlayerCyberwareData data = patient.getData(ModAttachments.CYBERWARE);
-        if (data == null) {
-            return ItemStack.EMPTY;
-        }
+        if (data == null) return ItemStack.EMPTY;
 
         SlotRef ref = resolveSlotRef(invIndex);
-        if (ref == null) {
-            return ItemStack.EMPTY;
-        }
+        if (ref == null) return ItemStack.EMPTY;
 
         InstalledCyberware[] arr = data.getAll().get(ref.slot());
         if (arr != null && ref.idx() >= 0 && ref.idx() < arr.length) {
