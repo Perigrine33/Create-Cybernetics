@@ -1,7 +1,7 @@
 package com.perigrine3.createcybernetics.network.payload;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.item.cyberware.CerebralProcessingUnitItem;
+import com.perigrine3.createcybernetics.item.cyberware.brain.CerebralProcessingUnitItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

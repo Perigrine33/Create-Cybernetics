@@ -261,13 +261,16 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "neuralprocessor_speed"),
                 1, AttributeModifier.Operation.ADD_VALUE));
 
-
         registerModifier("dragonskin_armor", new AttributeModifierData(armorAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragonskin_armor"),
                 5, AttributeModifier.Operation.ADD_VALUE));
         registerModifier("dragonskin_toughness", new AttributeModifierData(armorToughnessAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dragonskin_toughness"),
                 5, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("ripperclaw_damage", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "ripperclaw_damage"),
+                2, AttributeModifier.Operation.ADD_VALUE));
 
 
 

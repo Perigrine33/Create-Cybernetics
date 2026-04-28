@@ -33,6 +33,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider {
@@ -40,6 +42,11 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
     public static final int SLOT_COUNT = 65;
     private static final int TIMED_SURGERY_DURATION_TICKS = 10 * 20;
     private static final int EFFECT_INTERVAL_TICKS = 20;
+
+    private static final String TAG_DISPLAYED_TARGET_UUID = "DisplayedTargetUuid";
+    private static final String TAG_REMOVAL_STATE_BY_TARGET = "RemovalStateByTarget";
+    private static final String TAG_TARGET_UUID = "TargetUuid";
+    private static final String TAG_REMOVAL_FLAGS = "RemovalFlags";
 
     private static final DustParticleOptions BLOOD =
             new DustParticleOptions(new Vector3f(0.75f, 0.05f, 0.05f), 1.25f);
@@ -81,8 +88,13 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
     private final boolean[] staged = new boolean[SLOT_COUNT];
     private final boolean[] markedForRemoval = new boolean[SLOT_COUNT];
 
+    private final Map<UUID, boolean[]> removalFlagsByTarget = new HashMap<>();
+
     @Nullable
     private UUID patientUuid;
+
+    @Nullable
+    private UUID displayedTargetUuid;
 
     private boolean timedSurgeryInProgress = false;
     private boolean surgeryApplying = false;
@@ -191,6 +203,56 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
         surgeryApplying = false;
     }
 
+    @Nullable
+    public UUID getDisplayedTargetUuid() {
+        SurgeryTableBlockEntity controller = getController();
+        if (controller != null && controller != this) {
+            return controller.getDisplayedTargetUuid();
+        }
+
+        return displayedTargetUuid;
+    }
+
+    public void switchDisplayedTarget(UUID targetUuid) {
+        SurgeryTableBlockEntity controller = getController();
+        if (controller != null && controller != this) {
+            controller.switchDisplayedTarget(targetUuid);
+            return;
+        }
+
+        if (displayedTargetUuid != null && displayedTargetUuid.equals(targetUuid)) {
+            return;
+        }
+
+        if (displayedTargetUuid != null) {
+            removalFlagsByTarget.put(displayedTargetUuid, markedForRemoval.clone());
+        }
+
+        displayedTargetUuid = targetUuid;
+
+        boolean[] savedRemovalFlags = removalFlagsByTarget.get(targetUuid);
+        for (int i = 0; i < SLOT_COUNT; i++) {
+            markedForRemoval[i] = savedRemovalFlags != null && i < savedRemovalFlags.length && savedRemovalFlags[i];
+        }
+
+        sync();
+    }
+
+    public void forgetDisplayedTarget() {
+        SurgeryTableBlockEntity controller = getController();
+        if (controller != null && controller != this) {
+            controller.forgetDisplayedTarget();
+            return;
+        }
+
+        if (displayedTargetUuid != null) {
+            removalFlagsByTarget.put(displayedTargetUuid, markedForRemoval.clone());
+        }
+
+        displayedTargetUuid = null;
+        sync();
+    }
+
     public boolean isTimedSurgeryInProgress() {
         SurgeryTableBlockEntity controller = getController();
         if (controller != null && controller != this) {
@@ -210,8 +272,6 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
         timedSurgeryInProgress = true;
         timedSurgeryTicksRemaining = TIMED_SURGERY_DURATION_TICKS;
         timedSurgeryEffectTicks = EFFECT_INTERVAL_TICKS;
-
-        // level.playSound(null, worldPosition, ModSounds.SURGERY_LOOP.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 
         sync();
     }
@@ -267,11 +327,11 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
             return controller.getPatient();
         }
 
-        if (patientUuid == null || !(level instanceof ServerLevel serverLevel)) {
+        if (patientUuid == null || level == null) {
             return null;
         }
 
-        return serverLevel.getPlayerByUUID(patientUuid);
+        return level.getPlayerByUUID(patientUuid);
     }
 
     public Player getPatientOr(Player fallback) {
@@ -410,6 +470,20 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
             tag.putUUID("PatientUuid", patientUuid);
         }
 
+        if (displayedTargetUuid != null) {
+            tag.putUUID(TAG_DISPLAYED_TARGET_UUID, displayedTargetUuid);
+            removalFlagsByTarget.put(displayedTargetUuid, markedForRemoval.clone());
+        }
+
+        ListTag savedRemovalStates = new ListTag();
+        for (Map.Entry<UUID, boolean[]> entry : removalFlagsByTarget.entrySet()) {
+            CompoundTag entryTag = new CompoundTag();
+            entryTag.putUUID(TAG_TARGET_UUID, entry.getKey());
+            entryTag.put(TAG_REMOVAL_FLAGS, writeFlags(entry.getValue()));
+            savedRemovalStates.add(entryTag);
+        }
+        tag.put(TAG_REMOVAL_STATE_BY_TARGET, savedRemovalStates);
+
         tag.putBoolean("TimedSurgeryInProgress", timedSurgeryInProgress);
         tag.putInt("TimedSurgeryTicksRemaining", timedSurgeryTicksRemaining);
         tag.putInt("TimedSurgeryEffectTicks", timedSurgeryEffectTicks);
@@ -432,6 +506,27 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
             patientUuid = tag.getUUID("PatientUuid");
         } else {
             patientUuid = null;
+        }
+
+        if (tag.hasUUID(TAG_DISPLAYED_TARGET_UUID)) {
+            displayedTargetUuid = tag.getUUID(TAG_DISPLAYED_TARGET_UUID);
+        } else {
+            displayedTargetUuid = null;
+        }
+
+        removalFlagsByTarget.clear();
+        if (tag.contains(TAG_REMOVAL_STATE_BY_TARGET, Tag.TAG_LIST)) {
+            ListTag savedRemovalStates = tag.getList(TAG_REMOVAL_STATE_BY_TARGET, Tag.TAG_COMPOUND);
+            for (int i = 0; i < savedRemovalStates.size(); i++) {
+                CompoundTag entryTag = savedRemovalStates.getCompound(i);
+                if (!entryTag.hasUUID(TAG_TARGET_UUID)) {
+                    continue;
+                }
+
+                boolean[] flags = new boolean[SLOT_COUNT];
+                readFlags(entryTag.getList(TAG_REMOVAL_FLAGS, Tag.TAG_BYTE), flags);
+                removalFlagsByTarget.put(entryTag.getUUID(TAG_TARGET_UUID), flags);
+            }
         }
 
         timedSurgeryInProgress = tag.getBoolean("TimedSurgeryInProgress");

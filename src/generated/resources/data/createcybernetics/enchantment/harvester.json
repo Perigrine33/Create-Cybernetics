@@ -14,7 +14,7 @@
       }
     ]
   },
-  "exclusive_set": "#minecraft:on_random_loot",
+  "exclusive_set": "#createcybernetics:harvester_exclusive",
   "max_cost": {
     "base": 25,
     "per_level_above_first": 8

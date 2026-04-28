@@ -1,15 +1,15 @@
 package com.perigrine3.createcybernetics.common.surgery;
 
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.block.entity.SurgeryTableBlockEntity;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryEndPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryResultPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryRoundPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryStartPayload;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
@@ -25,14 +25,11 @@ public final class PlayerSurgeryMinigameManager {
 
     private static final float MIN_SUCCESS_ZONE_WIDTH = 0.10F;
     private static final float MAX_SUCCESS_ZONE_WIDTH = 0.16F;
-    private static final float IMPLANT_MARGIN_MULTIPLIER = 4.0F / 3.0F;
+    private static final float IMPLANT_MARGIN_MULTIPLIER = 1.5F;
 
-    private static final int SUCCESS_DAMAGE = 2;
-    private static final int FAILURE_DAMAGE_MIN = 3;
-    private static final int FAILURE_DAMAGE_MAX = 7;
-
-    private static final ResourceLocation SURGICAL_ASSIST_IMPLANT_ID =
-            ResourceLocation.fromNamespaceAndPath("createcybernetics", "surgical_assistant");
+    private static final int SUCCESS_DAMAGE = 3;
+    private static final int FAILURE_DAMAGE_MIN = 4;
+    private static final int FAILURE_DAMAGE_MAX = 6;
 
     private static final Map<UUID, Session> SESSIONS_BY_SURGEON = new HashMap<>();
 
@@ -94,6 +91,17 @@ public final class PlayerSurgeryMinigameManager {
         }
     }
 
+    public static void handleCancel(ServerPlayer surgeon, UUID sessionId) {
+        Session session = SESSIONS_BY_SURGEON.get(surgeon.getUUID());
+        if (session == null || !session.sessionId.equals(sessionId)) {
+            return;
+        }
+
+        if (session.cancelFromSurgeon()) {
+            SESSIONS_BY_SURGEON.remove(surgeon.getUUID());
+        }
+    }
+
     public static void tickAll() {
         if (SESSIONS_BY_SURGEON.isEmpty()) {
             return;
@@ -111,12 +119,13 @@ public final class PlayerSurgeryMinigameManager {
     }
 
     private static boolean hasSurgicalAssistImplant(ServerPlayer surgeon) {
-        Item implant = BuiltInRegistries.ITEM.getOptional(SURGICAL_ASSIST_IMPLANT_ID).orElse(null);
-        if (implant == null) {
-            return false;
+        PlayerCyberwareData data = surgeon.getData(ModAttachments.CYBERWARE);
+        if (data.hasSpecificItem(ModItems.ARMUPGRADES_RIPPERCLAW.get(), CyberwareSlot.LARM) ||
+                data.hasSpecificItem(ModItems.ARMUPGRADES_RIPPERCLAW.get(), CyberwareSlot.RARM)) {
+            return true;
         }
 
-        return surgeon.getData(ModAttachments.CYBERWARE).hasSpecificItem(implant);
+        return false;
     }
 
     private static final class Session {
@@ -180,6 +189,15 @@ public final class PlayerSurgeryMinigameManager {
             return false;
         }
 
+        private boolean cancelFromSurgeon() {
+            if (countdownComplete) {
+                return false;
+            }
+
+            cancel();
+            return true;
+        }
+
         private boolean resolveClick() {
             if (!countdownComplete || resolvedThisRound) {
                 return false;
@@ -199,7 +217,7 @@ public final class PlayerSurgeryMinigameManager {
         private boolean resolve(boolean success, int damage) {
             resolvedThisRound = true;
 
-            patient.hurt(patient.damageSources().generic(), damage);
+            applySurgeryDamage(damage);
 
             PacketDistributor.sendToPlayer(surgeon, new PlayerSurgeryResultPayload(
                     sessionId,
@@ -214,6 +232,12 @@ public final class PlayerSurgeryMinigameManager {
             }
 
             return startNextRound();
+        }
+
+        private void applySurgeryDamage(int damage) {
+            patient.invulnerableTime = 0;
+            patient.hurtTime = 0;
+            patient.hurt(patient.damageSources().generic(), damage);
         }
 
         private boolean startNextRound() {

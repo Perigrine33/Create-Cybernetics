@@ -1,0 +1,78 @@
+package com.perigrine3.createcybernetics.item.cyberware.leg;
+
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.effect.ModEffects;
+import com.perigrine3.createcybernetics.util.ModTags;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+
+import java.util.List;
+import java.util.Set;
+
+public class SpursItem extends Item implements ICyberwareItem {
+    private final int humanityCost;
+
+    public SpursItem(Properties props, int humanityCost) {
+        super(props);
+        this.humanityCost = humanityCost;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        if (Screen.hasShiftDown()) {
+            tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+        }
+    }
+
+    @Override
+    public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
+        return switch (slot) {
+            case RLEG -> Set.of(ModTags.Items.RIGHTLEG_ITEMS);
+            case LLEG -> Set.of(ModTags.Items.LEFTLEG_ITEMS);
+            default -> Set.of();
+        };
+    }
+
+    @Override
+    public int getHumanityCost() {
+        return humanityCost;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getSupportedSlots() {
+        return Set.of(CyberwareSlot.RLEG, CyberwareSlot.LLEG);
+    }
+
+    @Override
+    public boolean replacesOrgan() {
+        return false;
+    }
+
+    @Override
+    public Set<CyberwareSlot> getReplacedOrgans() {
+        return Set.of();
+    }
+
+    @Override
+    public void onInstalled(LivingEntity entity) {
+    }
+
+    @Override
+    public void onRemoved(LivingEntity entity) {
+    }
+
+    @Override
+    public void onTick(LivingEntity entity) {
+        if (!entity.level().isClientSide) {
+            entity.addEffect(new MobEffectInstance(ModEffects.SPURS_EFFECT, 20, 0, false, false, false));
+        }
+    }
+}

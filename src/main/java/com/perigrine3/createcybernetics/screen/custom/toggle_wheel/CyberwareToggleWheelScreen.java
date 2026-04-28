@@ -10,7 +10,7 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.item.cyberware.PneumaticCalvesItem;
+import com.perigrine3.createcybernetics.item.cyberware.leg.PneumaticCalvesItem;
 import com.perigrine3.createcybernetics.network.payload.CyberwareTogglePayloads;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.DeltaTracker;

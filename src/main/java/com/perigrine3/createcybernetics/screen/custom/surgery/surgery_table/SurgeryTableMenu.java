@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SurgeryTableMenu extends AbstractContainerMenu {
 
@@ -149,11 +150,23 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
     }
 
     private void populateFromTarget(Player operator) {
-        if (operator.level().isClientSide) return;
+        if (operator.level().isClientSide) {
+            return;
+        }
 
         Player patient = getTargetPatient(operator);
         PlayerCyberwareData data = patient.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
+
+        UUID targetUuid = patient.getUUID();
+        UUID previousTargetUuid = blockEntity.getDisplayedTargetUuid();
+        boolean targetChanged = previousTargetUuid == null || !previousTargetUuid.equals(targetUuid);
+
+        if (targetChanged) {
+            blockEntity.switchDisplayedTarget(targetUuid);
+        }
 
         for (CyberwareSlot slot : CyberwareSlot.values()) {
             InstalledCyberware[] installedData = data.getAll().get(slot);
@@ -161,23 +174,33 @@ public class SurgeryTableMenu extends AbstractContainerMenu {
 
             for (int i = 0; i < mappedSize; i++) {
                 int invIndex = RobosurgeonSlotMap.toInventoryIndex(slot, i);
-                if (invIndex < 0 || invIndex >= blockEntity.inventory.getSlots()) continue;
+                if (invIndex < 0 || invIndex >= blockEntity.inventory.getSlots()) {
+                    continue;
+                }
 
-                if (isStaged(invIndex)) continue;
-                if (isMarkedForRemoval(invIndex)) continue;
+                if (isStaged(invIndex)) {
+                    if (targetChanged) {
+                        setInstalled(invIndex, false);
+                    }
+                    continue;
+                }
 
                 ItemStack stack = ItemStack.EMPTY;
 
                 if (installedData != null && i < installedData.length && installedData[i] != null) {
                     ItemStack inst = installedData[i].getItem();
-                    if (inst != null && !inst.isEmpty()) stack = inst.copy();
+                    if (inst != null && !inst.isEmpty()) {
+                        stack = inst.copy();
+                    }
                 }
 
                 blockEntity.inventory.setStackInSlot(invIndex, stack);
-
                 setInstalled(invIndex, !stack.isEmpty());
                 setStaged(invIndex, false);
-                setMarkedForRemoval(invIndex, false);
+
+                if (isMarkedForRemoval(invIndex) && stack.isEmpty()) {
+                    setMarkedForRemoval(invIndex, false);
+                }
             }
         }
     }

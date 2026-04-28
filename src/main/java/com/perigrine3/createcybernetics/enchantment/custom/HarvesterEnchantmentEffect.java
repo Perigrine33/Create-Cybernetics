@@ -75,7 +75,9 @@ public record HarvesterEnchantmentEffect() implements EnchantmentEntityEffect {
 
     private static ItemStack fixedDropFor(Entity entity) {
         if (entity instanceof Warden) {
-            return new ItemStack(ModItems.BODYPART_WARDENESOPHAGUS.get());
+            return entity.getRandom().nextFloat() < 0.5F
+                    ? new ItemStack(ModItems.BODYPART_WARDENESOPHAGUS.get())
+                    : new ItemStack(ModItems.WETWARE_WARDENANTLERS.get());
         }
         if (entity instanceof Guardian || entity instanceof ElderGuardian) {
             return new ItemStack(ModItems.BODYPART_GUARDIANRETINA.get());

@@ -355,6 +355,16 @@ public class RipperEntity extends AbstractIllager {
     }
 
     @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public boolean requiresCustomPersistence() {
+        return true;
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         return super.hurt(source, amount);
     }

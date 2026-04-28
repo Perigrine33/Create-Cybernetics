@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -119,6 +120,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.ARMUPGRADES_FIRESTARTER.get())
                 .add(ModItems.ARMUPGRADES_PNEUMATICWRIST.get())
                 .add(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get())
+                .add(ModItems.ARMUPGRADES_RIPPERCLAW.get())
                 .add(ModItems.LEGUPGRADES_METALDETECTOR.get())
                 .add(ModItems.LEGUPGRADES_ANKLEBRACERS.get())
                 .add(ModItems.LEGUPGRADES_JUMPBOOST.get())

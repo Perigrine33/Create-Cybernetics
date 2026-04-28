@@ -6,7 +6,20 @@ import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.client.ModKeyMappings;
 import com.perigrine3.createcybernetics.entity.ModEntities;
 import com.perigrine3.createcybernetics.item.cyberware.*;
+import com.perigrine3.createcybernetics.item.cyberware.arm.*;
+import com.perigrine3.createcybernetics.item.cyberware.bone.*;
+import com.perigrine3.createcybernetics.item.cyberware.brain.*;
+import com.perigrine3.createcybernetics.item.cyberware.eyes.*;
+import com.perigrine3.createcybernetics.item.cyberware.heart.*;
+import com.perigrine3.createcybernetics.item.cyberware.leg.*;
+import com.perigrine3.createcybernetics.item.cyberware.lungs.HyperoxygenationBoostItem;
+import com.perigrine3.createcybernetics.item.cyberware.lungs.OxygenTankItem;
+import com.perigrine3.createcybernetics.item.cyberware.muscle.SynthMuscleItem;
+import com.perigrine3.createcybernetics.item.cyberware.muscle.WiredReflexesItem;
+import com.perigrine3.createcybernetics.item.cyberware.organs.*;
+import com.perigrine3.createcybernetics.item.cyberware.skin.*;
 import com.perigrine3.createcybernetics.item.cyberware.upgrade_items.*;
+import com.perigrine3.createcybernetics.item.cyberware.wetware.*;
 import com.perigrine3.createcybernetics.item.generic.*;
 import com.perigrine3.createcybernetics.item.organs.*;
 import com.perigrine3.createcybernetics.item.sculked.*;
@@ -1177,6 +1190,21 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_reinforcedknuckles.tooltip1"));
+                } else {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                }
+                super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            }
+        });
+    public static final DeferredItem<Item> ARMUPGRADES_RIPPERCLAW = ITEMS.register("armupgrades_ripperclaw",
+        () -> new RipperClawItem(new Item.Properties().stacksTo(16), 7) {
+            @Override
+            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                if (Screen.hasShiftDown()) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_ripperclaw.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_ripperclaw.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));

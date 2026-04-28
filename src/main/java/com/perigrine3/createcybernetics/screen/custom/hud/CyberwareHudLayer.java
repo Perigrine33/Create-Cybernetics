@@ -11,6 +11,7 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.compat.northstar.CopernicusSuitPredicate;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.item.cyberware.eyes.CybereyeItem;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.DeltaTracker;
@@ -1232,8 +1233,39 @@ public final class CyberwareHudLayer {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return false;
 
+            return hasHudUpgrade(data) && cybereyesAreFunctionalForHud(data);
+        }
+
+        private static boolean hasHudUpgrade(PlayerCyberwareData data) {
             return data.hasSpecificItem(ModItems.EYEUPGRADES_HUDLENS.get(), CyberwareSlot.EYES)
                     || data.hasSpecificItem(ModItems.EYEUPGRADES_HUDJACK.get(), CyberwareSlot.EYES);
+        }
+
+        private static boolean cybereyesAreFunctionalForHud(PlayerCyberwareData data) {
+            InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.EYES);
+            if (arr == null) return false;
+
+            boolean foundEnabledCybereyes = false;
+            boolean foundPoweredEnabledCybereyes = false;
+
+            for (int idx = 0; idx < arr.length; idx++) {
+                InstalledCyberware installed = arr[idx];
+                if (installed == null) continue;
+
+                ItemStack stack = installed.getItem();
+                if (stack == null || stack.isEmpty()) continue;
+
+                if (!(stack.getItem() instanceof CybereyeItem)) continue;
+                if (!data.isEnabled(CyberwareSlot.EYES, idx)) continue;
+
+                foundEnabledCybereyes = true;
+
+                if (installed.isPowered()) {
+                    foundPoweredEnabledCybereyes = true;
+                }
+            }
+
+            return !foundEnabledCybereyes || foundPoweredEnabledCybereyes;
         }
     }
 

@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.enchantment;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.enchantment.custom.HarvesterEnchantmentEffect;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -23,15 +24,15 @@ public class ModEnchantments {
         var enchantments = context.lookup(Registries.ENCHANTMENT);
         var items = context.lookup(Registries.ITEM);
 
-            register(context, HARVESTER, Enchantment.enchantment(Enchantment.definition(
-                    items.getOrThrow(ItemTags.WEAPON_ENCHANTABLE),
-                    items.getOrThrow(ItemTags.SWORD_ENCHANTABLE), 3, 3,
-                    Enchantment.dynamicCost(5, 7),
-                    Enchantment.dynamicCost(25, 8),
-                    2, EquipmentSlotGroup.MAINHAND))
-                    .exclusiveWith(enchantments.getOrThrow(EnchantmentTags.ON_RANDOM_LOOT))
-                    .withEffect(EnchantmentEffectComponents.POST_ATTACK, EnchantmentTarget.ATTACKER,
-                            EnchantmentTarget.VICTIM, new HarvesterEnchantmentEffect()));
+        register(context, HARVESTER, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.WEAPON_ENCHANTABLE),
+                        items.getOrThrow(ItemTags.SWORD_ENCHANTABLE), 3, 3,
+                        Enchantment.dynamicCost(5, 7),
+                        Enchantment.dynamicCost(25, 8),
+                        2, EquipmentSlotGroup.MAINHAND))
+                .exclusiveWith(enchantments.getOrThrow(ModTags.Enchantments.HARVESTER_EXCLUSIVE))
+                .withEffect(EnchantmentEffectComponents.POST_ATTACK, EnchantmentTarget.ATTACKER,
+                        EnchantmentTarget.VICTIM, new HarvesterEnchantmentEffect()));
 
     }
 

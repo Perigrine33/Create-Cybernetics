@@ -3,7 +3,7 @@ package com.perigrine3.createcybernetics.effect.quickhacks;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.item.cyberware.ICEProtocolItem;
+import com.perigrine3.createcybernetics.item.cyberware.brain.ICEProtocolItem;
 import com.perigrine3.createcybernetics.network.payload.BehindYouSoundPayload;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.server.level.ServerPlayer;

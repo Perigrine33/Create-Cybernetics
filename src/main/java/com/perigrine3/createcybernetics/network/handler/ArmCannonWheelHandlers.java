@@ -4,7 +4,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.item.cyberware.ArmCannonItem;
+import com.perigrine3.createcybernetics.item.cyberware.arm.ArmCannonItem;
 import com.perigrine3.createcybernetics.network.payload.ArmCannonWheelPayloads;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;

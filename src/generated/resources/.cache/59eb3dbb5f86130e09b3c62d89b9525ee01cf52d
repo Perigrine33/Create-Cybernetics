@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-08T01:05:15.8520163	Loot Tables
+// 1.21.1	2026-04-27T14:46:25.6405022	Loot Tables
 20cceb562536be68c850c9590b8e4208cc23cfe8 data/createcybernetics/loot_table/blocks/charging_block.json
 a0501f7a36a8cde71e467fd206aa46f5e0f6510e data/createcybernetics/loot_table/blocks/datura_bush.json
 c8a4d3132b2416fe46c16482b8eac45044f7f755 data/createcybernetics/loot_table/blocks/deepslate_titaniumore_block.json
@@ -15,6 +15,7 @@ e523ab3f0a13c121806e9b5cf87746cf4f588ab1 data/createcybernetics/loot_table/block
 787bb5542c7b8b3d4dcdcb3279c66317af115426 data/createcybernetics/loot_table/blocks/smooth_titanium_stairs.json
 87c8c2e6317039467f40c828aaccaa1f1401ccf8 data/createcybernetics/loot_table/blocks/surgery_chamber.json
 35a7b7fed80305b39bec1c4b7041c2b460c97836 data/createcybernetics/loot_table/blocks/surgery_chamber_top.json
+34e3e9a6bcd549adff3dd75d826c35476eab65de data/createcybernetics/loot_table/blocks/surgery_table.json
 915b212d6a0ba767f4735e1a40b6df19c8a93e58 data/createcybernetics/loot_table/blocks/titaniumore_block.json
 4331278e56dcbb0efc37d2228dfc0160309bd648 data/createcybernetics/loot_table/blocks/titanium_block.json
 71703be4e93310baa5be07205c9f11119be69c19 data/createcybernetics/loot_table/blocks/titanium_clad_copper.json

@@ -8,7 +8,7 @@ import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.item.cyberware.ICEProtocolItem;
+import com.perigrine3.createcybernetics.item.cyberware.brain.ICEProtocolItem;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;

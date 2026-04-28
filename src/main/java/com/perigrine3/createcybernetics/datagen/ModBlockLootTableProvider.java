@@ -40,6 +40,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.GRAFTING_TABLE.get());
         dropSelf(ModBlocks.CHARGING_BLOCK.get());
         dropSelf(ModBlocks.HOLOPROJECTOR.get());
+        dropSelf(ModBlocks.SURGERY_TABLE.get());
 
         dropSelf(ModBlocks.TITANIUM_BLOCK.get());
 

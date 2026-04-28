@@ -5,7 +5,6 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
-import com.perigrine3.createcybernetics.item.cyberware.ICEProtocolItem;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.neoforged.bus.api.SubscribeEvent;

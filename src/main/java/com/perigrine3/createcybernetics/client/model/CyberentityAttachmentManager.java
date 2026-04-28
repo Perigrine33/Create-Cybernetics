@@ -45,6 +45,8 @@ public final class CyberentityAttachmentManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/warden_antlers.png");
     private static final ResourceLocation NEURAL_PROCESSOR_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/neural_processor_port.png");
+    private static final ResourceLocation RIPPER_CLAW_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/ripper_claw.png");
 
     private final Model clawsModel;
     private final Model drillFistModel;
@@ -54,6 +56,7 @@ public final class CyberentityAttachmentManager {
     private final Model guardianEyeModel;
     private final Model wardenAntlersModel;
     private final Model neuralProcessorModel;
+    private final Model ripperClawModel;
 
     public CyberentityAttachmentManager(net.minecraft.client.renderer.entity.EntityRendererProvider.Context context) {
         this.clawsModel = new ClawAttachmentModel(context.bakeLayer(ClawAttachmentModel.LAYER));
@@ -64,6 +67,7 @@ public final class CyberentityAttachmentManager {
         this.guardianEyeModel = new GuardianEyeAttachmentModel(context.bakeLayer(GuardianEyeAttachmentModel.LAYER));
         this.wardenAntlersModel = new WardenAntlersAttachmentModel(context.bakeLayer(WardenAntlersAttachmentModel.LAYER));
         this.neuralProcessorModel = new NeuralProcessorAttachmentModel(context.bakeLayer(NeuralProcessorAttachmentModel.LAYER));
+        this.ripperClawModel = new RipperClawAttachmentModel(context.bakeLayer(RipperClawAttachmentModel.LAYER));
     }
 
     public CyberentityAttachmentState buildState(LivingEntity entity) {
@@ -229,6 +233,17 @@ public final class CyberentityAttachmentManager {
                     anchor,
                     neuralProcessorModel,
                     NEURAL_PROCESSOR_TEXTURE,
+                    0xFFFFFFFF,
+                    false,
+                    rigType == RigType.SMASHER
+                            ? (pose, living) -> applyNeuralProcessorTransformSmasher(pose, anchor)
+                            : (pose, living) -> applyNeuralProcessorTransformDefault(pose, anchor)
+            );
+
+            case "armupgrades_ripperclaw" -> new CyberentityAttachment(
+                    anchor,
+                    ripperClawModel,
+                    RIPPER_CLAW_TEXTURE,
                     0xFFFFFFFF,
                     false,
                     rigType == RigType.SMASHER
@@ -445,6 +460,20 @@ public final class CyberentityAttachmentManager {
         pose.mulPose(Axis.XN.rotationDegrees(0.0F));
         pose.mulPose(Axis.YP.rotationDegrees(0.0F));
         pose.scale(1.0F, 1.0F, 1.0F);
+    }
+
+    public static void applyRipperClawTransform(PoseStack pose, AttachmentAnchor armAnchor) {
+        pose.translate(0.0F, -0.1F, 0.0F);
+        pose.scale(1F, 1F, 1F);
+
+        if (armAnchor == AttachmentAnchor.LEFT_ARM) {
+            pose.translate(-0.375F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+            pose.scale(-1.0F, 1.0F, 1.0F);
+        } else if (armAnchor == AttachmentAnchor.RIGHT_ARM) {
+            pose.translate(0.375F, 0.0F, 0.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(0.0F));
+        }
     }
 
 

@@ -132,6 +132,8 @@ dependencies {
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
 
+    implementation "curse.maven:cybernetics-cyberchems-1520237:8001997"
+
     implementation ("curse.maven:create-enchantment-industry-688768:7216917")
     implementation ("curse.maven:create-dragons-plus-1216624:7231493")
 
@@ -169,7 +171,7 @@ dependencies {
     implementation "curse.maven:common-network-806044:7087488"
     implementation "curse.maven:azurelib-817423:7797694"
 
-    implementation "curse.maven:reforgedplay-mod-1018692:6942967"
+    //implementation "curse.maven:reforgedplay-mod-1018692:6942967"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

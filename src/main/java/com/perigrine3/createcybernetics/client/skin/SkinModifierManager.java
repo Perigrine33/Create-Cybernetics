@@ -892,7 +892,9 @@ public class SkinModifierManager {
             state.addModifier(new SkinModifier(NETHERPLATED_SKIN_TEXTURE_WIDE, NETHERPLATED_SKIN_TEXTURE_SLIM,
                     0xFFFFFFFF, true));
 
-            return state;
+            if (!FullBorgHandler.isCopernicus(data)) {
+                return state;
+            }
         }
 // GILLS
         if (data.hasSpecificItem(ModItems.WETWARE_WATERBREATHINGLUNGS.get(), CyberwareSlot.LUNGS)) {
@@ -1470,10 +1472,11 @@ public class SkinModifierManager {
                         SkinModifier.HideVanilla.RIGHT_SLEEVE, SkinModifier.HideVanilla.LEFT_SLEEVE, SkinModifier.HideVanilla.JACKET)));
                 state.addHighlight(new SkinHighlight(GENOS_EYES_DYED, GENOS_EYES_DYED,
                         tint, true, true));
-                state.addModifier(new SkinModifier(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
-                        tint, false));
-                state.addHighlight(new SkinHighlight(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY,
-                        tint, true, true));
+                ResourceLocation dyn = CybereyeOverlayHandler.getOrBuildOverlay(player);
+                if (dyn != null) {
+                    state.addModifier(new SkinModifier(dyn, dyn, tint, false));
+                    state.addHighlight(new SkinHighlight(dyn, dyn, tint, true, true));
+                }
             }
         }
 

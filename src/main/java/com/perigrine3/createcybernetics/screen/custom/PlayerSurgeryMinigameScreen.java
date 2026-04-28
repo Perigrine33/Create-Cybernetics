@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.screen.custom;
 
+import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryCancelPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryClickPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryEndPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryResultPayload;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.UUID;
 
@@ -38,6 +40,7 @@ public class PlayerSurgeryMinigameScreen extends Screen {
 
     private boolean ending;
     private boolean completed;
+    private boolean sentCancel;
 
     public PlayerSurgeryMinigameScreen(PlayerSurgeryStartPayload payload) {
         super(Component.literal("Player Surgery"));
@@ -108,6 +111,21 @@ public class PlayerSurgeryMinigameScreen extends Screen {
     }
 
     @Override
+    public boolean shouldCloseOnEsc() {
+        return countdownActive && !roundActive && !ending;
+    }
+
+    @Override
+    public void onClose() {
+        if (countdownActive && !roundActive && !ending && !sentCancel) {
+            sentCancel = true;
+            PacketDistributor.sendToServer(new PlayerSurgeryCancelPayload(sessionId));
+        }
+
+        super.onClose();
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0 && roundActive && !clickedThisRound && !ending) {
             clickedThisRound = true;
@@ -120,7 +138,18 @@ public class PlayerSurgeryMinigameScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (roundActive && !clickedThisRound && !ending) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            if (shouldCloseOnEsc()) {
+                return super.keyPressed(keyCode, scanCode, modifiers);
+            }
+
+            return true;
+        }
+
+        if ((keyCode == GLFW.GLFW_KEY_SPACE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
+                && roundActive
+                && !clickedThisRound
+                && !ending) {
             clickedThisRound = true;
             PacketDistributor.sendToServer(new PlayerSurgeryClickPayload(sessionId));
             return true;
@@ -168,6 +197,10 @@ public class PlayerSurgeryMinigameScreen extends Screen {
         String text = "Starting in " + seconds + "...";
         int textW = font.width(text);
         guiGraphics.drawString(font, text, panelX + (panelWidth - textW) / 2, panelY + 66, 0xFFFFFF, false);
+
+        String cancelText = "ESC to cancel";
+        int cancelW = font.width(cancelText);
+        guiGraphics.drawString(font, cancelText, panelX + (panelWidth - cancelW) / 2, panelY + 84, 0xAAAAAA, false);
     }
 
     private void renderRound(GuiGraphics guiGraphics, int panelX, int panelY, int panelWidth, float partialTick) {
@@ -189,7 +222,7 @@ public class PlayerSurgeryMinigameScreen extends Screen {
         int sliderX = barX + Math.round(slider * barW);
         guiGraphics.fill(sliderX - 1, barY - 4, sliderX + 2, barY + barH + 4, 0xFFFFFFFF);
 
-        String clickText = clickedThisRound ? "Waiting..." : "Click to stop";
+        String clickText = clickedThisRound ? "Waiting..." : "Click, SPACE, or ENTER to stop";
         guiGraphics.drawString(font, clickText, panelX + 10, panelY + 90, 0xD8D8D8, false);
     }
 

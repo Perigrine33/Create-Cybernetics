@@ -2,7 +2,7 @@ package com.perigrine3.createcybernetics.screen.custom.spinal_injector;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.item.cyberware.SpinalInjectorItem;
+import com.perigrine3.createcybernetics.item.cyberware.bone.SpinalInjectorItem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;

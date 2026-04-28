@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_ripperclaw"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "createcybernetics:entities/ripper"
+}

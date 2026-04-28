@@ -4,9 +4,11 @@ import com.perigrine3.createcybernetics.CreateCybernetics;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 
 public class ModTags {
@@ -14,8 +16,6 @@ public class ModTags {
 
         public static final TagKey<Block> METAL_DETECTABLE = createTag("metal_detectable");
         public static final TagKey<Block> C_TITANIUM = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores/titanium"));
-
-
 
 
         private static TagKey<Block> createTag(String name) {
@@ -31,6 +31,7 @@ public class ModTags {
                 ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/knives"));
         public static final TagKey<Item> C_TITANIUM =
                 ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/titanium"));
+
 
         public static final TagKey<Item> TOGGLEABLE_CYBERWARE = createTag("toggleable_cyberware");
         public static final TagKey<Item> ENERGY_GENERATING_CYBERWARE = createTag("energy_generating_cyberware");
@@ -98,6 +99,14 @@ public class ModTags {
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, name));
+        }
+    }
+
+    public static class Enchantments {
+        public static final TagKey<Enchantment> HARVESTER_EXCLUSIVE = createTag("harvester_exclusive");
+
+        private static TagKey<Enchantment> createTag(String name) {
+            return TagKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, name));
         }
     }
 }

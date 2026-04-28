@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.network.handler;
 
 import com.perigrine3.createcybernetics.client.PlayerSurgeryClient;
 import com.perigrine3.createcybernetics.common.surgery.PlayerSurgeryMinigameManager;
+import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryCancelPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryClickPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryEndPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryResultPayload;
@@ -21,6 +22,14 @@ public final class PlayerSurgeryPayloadHandler {
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer serverPlayer) {
                 PlayerSurgeryMinigameManager.handleClick(serverPlayer, payload.sessionId());
+            }
+        });
+    }
+
+    public static void handleCancel(PlayerSurgeryCancelPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (context.player() instanceof ServerPlayer serverPlayer) {
+                PlayerSurgeryMinigameManager.handleCancel(serverPlayer, payload.sessionId());
             }
         });
     }

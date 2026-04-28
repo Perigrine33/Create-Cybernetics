@@ -267,6 +267,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ARMUPGRADES_FIRESTARTER);
                         output.accept(ModItems.ARMUPGRADES_PNEUMATICWRIST);
                         output.accept(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES);
+                        output.accept(ModItems.ARMUPGRADES_RIPPERCLAW);
                     //LEG UPGRADES
                         output.accept(ModItems.LEGUPGRADES_METALDETECTOR);
                         output.accept(ModItems.LEGUPGRADES_ANKLEBRACERS);

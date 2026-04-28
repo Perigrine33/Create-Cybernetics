@@ -350,5 +350,11 @@ public final class ModPayloads {
                 PlayerSurgeryEndPayload.STREAM_CODEC,
                 PlayerSurgeryPayloadHandler::handleEnd
         );
+
+        r.playToServer(
+                PlayerSurgeryCancelPayload.TYPE,
+                PlayerSurgeryCancelPayload.STREAM_CODEC,
+                PlayerSurgeryPayloadHandler::handleCancel
+        );
     }
 }

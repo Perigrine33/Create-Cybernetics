@@ -4,7 +4,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
-import com.perigrine3.createcybernetics.item.cyberware.SpinalInjectorItem;
+import com.perigrine3.createcybernetics.item.cyberware.bone.SpinalInjectorItem;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;

@@ -4,6 +4,7 @@ import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -101,11 +102,18 @@ public class SurgeryTableModelViewer {
                 .rotateX((float) Math.toRadians(180))
                 .rotateY((float) Math.toRadians(rotation));
 
-        float b1 = player.yBodyRot, b2 = player.yBodyRotO;
-        float h1 = player.yHeadRot, h2 = player.yHeadRotO;
-        float yaw = player.getYRot(), yawO = player.yRotO;
-        float pitch = player.getXRot(), pitchO = player.xRotO;
+        Pose oldPose = player.getPose();
 
+        float b1 = player.yBodyRot;
+        float b2 = player.yBodyRotO;
+        float h1 = player.yHeadRot;
+        float h2 = player.yHeadRotO;
+        float yaw = player.getYRot();
+        float yawO = player.yRotO;
+        float pitch = player.getXRot();
+        float pitchO = player.xRotO;
+
+        player.setPose(Pose.STANDING);
         player.yBodyRot = player.yBodyRotO = 180f;
         player.yHeadRot = player.yHeadRotO = 180f;
         player.setYRot(180f);
@@ -145,6 +153,7 @@ public class SurgeryTableModelViewer {
         gui.renderItem(currentItem, 0, 0);
         gui.pose().popPose();
 
+        player.setPose(oldPose);
         player.yBodyRot = b1;
         player.yBodyRotO = b2;
         player.yHeadRot = h1;

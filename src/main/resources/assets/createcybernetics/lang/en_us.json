@@ -307,6 +307,7 @@
   "item.createcybernetics.armupgrades_firestarter": "Firestarter",
   "item.createcybernetics.armupgrades_pneumaticwrist": "Pneumatic Wrist",
   "item.createcybernetics.armupgrades_reinforcedknuckles": "Reinforced Knuckles",
+  "item.createcybernetics.armupgrades_ripperclaw": "Ripper Claw",
 
   "item.createcybernetics.legupgrades_metaldetector": "Metal Detector",
   "item.createcybernetics.legupgrades_anklebracers": "Ankle Bracers",
@@ -751,6 +752,8 @@
           "tooltip.createcybernetics.armupgrades_pneumaticwrist.energy": "Costs 3 Energy",
       "tooltip.createcybernetics.armupgrades_reinforcedknuckles.tooltip1": "§1Allows the user to mine stone level blocks without a tool",
           "tooltip.createcybernetics.armupgrades_reinforcedknuckles.tooltip2": "§7Requires §9Cyberarm",
+      "tooltip.createcybernetics.armupgrades_ripperclaw.tooltip1": "§1Grants the user higher margin of success when performing manual surgery",
+          "tooltip.createcybernetics.armupgrades_ripperclaw.tooltip2": "§7Requires §9Cyberarm",
 
       "tooltip.createcybernetics.legupgrades_metaldetector.tooltip1": "§1Can detect magnetic blocks up to 15 blocks below the user",
           "tooltip.createcybernetics.legupgrades_metaldetector.tooltip2": "§7Requires §9Cyberleg",

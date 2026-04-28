@@ -1,7 +1,7 @@
 package com.perigrine3.createcybernetics.client;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.item.cyberware.MetalDetectorItem;
+import com.perigrine3.createcybernetics.item.cyberware.leg.MetalDetectorItem;
 import com.perigrine3.createcybernetics.sound.MetalDetectorLoopSound;
 import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.client.Minecraft;

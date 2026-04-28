@@ -23,6 +23,7 @@ public final class PlayerAttachmentClient {
         event.registerLayerDefinition(GuardianEyeAttachmentModel.LAYER, GuardianEyeAttachmentModel::createLayer);
         event.registerLayerDefinition(WardenAntlersAttachmentModel.LAYER, WardenAntlersAttachmentModel::createLayer);
         event.registerLayerDefinition(NeuralProcessorAttachmentModel.LAYER, NeuralProcessorAttachmentModel::createLayer);
+        event.registerLayerDefinition(RipperClawAttachmentModel.LAYER, RipperClawAttachmentModel::createLayer);
     }
 
     @SubscribeEvent

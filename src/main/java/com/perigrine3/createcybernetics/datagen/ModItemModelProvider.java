@@ -182,6 +182,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.ARMUPGRADES_FIRESTARTER.get());
         basicItem(ModItems.ARMUPGRADES_PNEUMATICWRIST.get());
         basicItem(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES.get());
+        basicItem(ModItems.ARMUPGRADES_RIPPERCLAW.get());
     }
 
 //LEGS
