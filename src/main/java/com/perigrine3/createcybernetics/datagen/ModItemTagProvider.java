@@ -98,8 +98,39 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.QUICKHACK_REBOOT.get())
                 .add(ModItems.QUICKHACK_OVERHEAT.get());
 
+//COMPONENTS
+        tag(ModTags.Items.COMPONENT_ITEM)
+                .add(ModItems.COMPONENT_ACTUATOR.get())
+                .add(ModItems.COMPONENT_FIBEROPTICS.get())
+                .add(ModItems.COMPONENT_WIRING.get())
+                .add(ModItems.COMPONENT_DIODES.get())
+                .add(ModItems.COMPONENT_PLATING.get())
+                .add(ModItems.COMPONENT_GRAPHICSCARD.get())
+                .add(ModItems.COMPONENT_SSD.get())
+                .add(ModItems.COMPONENT_STORAGE.get())
+                .add(ModItems.COMPONENT_SYNTHNERVES.get())
+                .add(ModItems.COMPONENT_MESH.get())
+                .addOptional(resourceLocation("createcybernetics:component_led"))
+                .addOptional(resourceLocation("createcybernetics:component_titaniumrod"));
+
+
 //CYBERWARE
         tag(ModTags.Items.CYBERWARE_ITEM)
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_GOLDPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_GOLDPLATED.get())
+
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_COPPERPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_COPPERPLATED.get())
+
+                .add(ModItems.BASECYBERWARE_RIGHTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTLEG_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_RIGHTARM_IRONPLATED.get())
+                .add(ModItems.BASECYBERWARE_LEFTARM_IRONPLATED.get())
+
                 .add(ModItems.BASECYBERWARE_RIGHTLEG.get())
                 .add(ModItems.BASECYBERWARE_LEFTLEG.get())
                 .add(ModItems.BASECYBERWARE_RIGHTARM.get())
@@ -143,6 +174,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
                 .add(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get())
                 .add(ModItems.BRAINUPGRADES_ICEPROTOCOL.get())
+                .add(ModItems.BRAINUPGRADES_CYBERBRAIN.get())
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get())
                 .add(ModItems.HEARTUPGRADES_COUPLER.get())
                 .add(ModItems.HEARTUPGRADES_CREEPERHEART.get())

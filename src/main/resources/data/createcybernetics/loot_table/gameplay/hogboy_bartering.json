@@ -1,0 +1,553 @@
+{
+  "type": "minecraft:barter",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_actuator",
+          "weight": 40,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_fiberoptics",
+          "weight": 40,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_wiring",
+          "weight": 45,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_diodes",
+          "weight": 35,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_plating",
+          "weight": 40,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_graphicscard",
+          "weight": 25,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_ssd",
+          "weight": 25,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_storage",
+          "weight": 30,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_synthnerves",
+          "weight": 25,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:component_mesh",
+          "weight": 25,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:gold_upgrade_template",
+          "weight": 8
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:brainupgrades_eyeofdefender",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:brainupgrades_enderjammer",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:brainupgrades_matrix",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:brainupgrades_neuralcontextualizer",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:brainupgrades_cyberdeck",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:brainupgrades_chipwareslots",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:brainupgrades_neuralprocessor",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:brainupgrades_iceprotocol",
+          "weight": 3
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_cybereyes",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:eyeupgrades_hudlens",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:eyeupgrades_hudjack",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:eyeupgrades_nightvision",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:eyeupgrades_targeting",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:eyeupgrades_underwatervision",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:eyeupgrades_zoom",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:eyeupgrades_trajectorycalculator",
+          "weight": 4
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:heartupgrades_cyberheart",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:heartupgrades_coupler",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:heartupgrades_creeperheart",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:heartupgrades_defibrillator",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:heartupgrades_stemcell",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:heartupgrades_platelets",
+          "weight": 4
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:lungsupgrades_hyperoxygenation",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:lungsupgrades_oxygen",
+          "weight": 5
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:organsupgrades_adrenaline",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:organsupgrades_battery",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:organsupgrades_diamondwaferstack",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:organsupgrades_liverfilter",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:organsupgrades_metabolic",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:organsupgrade_densebattery",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:organsupgrades_heatengine",
+          "weight": 5
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_linearframe",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:boneupgrades_bonebattery",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:boneupgrades_boneflex",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:boneupgrades_bonelacing",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:boneupgrades_capacitorframe",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:boneupgrades_piezo",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:boneupgrades_spinalinjector",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:boneupgrades_sandevistan",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:boneupgrades_cyberskull",
+          "weight": 3
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_arterialturbine",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_chromatophores",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_synthskin",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_immuno",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_faceplate",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_netheriteplating",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_solarskin",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_subdermalarmor",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_subdermalspikes",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_syntheticsetules",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:skinupgrades_metalplating",
+          "weight": 8
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:muscleupgrades_synthmuscle",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:muscleupgrades_wiredreflexes",
+          "weight": 4
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_rightarm_goldplated",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_rightarm",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_armcannon",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_flywheel",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_claws",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_crafthands",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_drillfist",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_firestarter",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_pneumaticwrist",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:armupgrades_reinforcedknuckles",
+          "weight": 6
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_leftarm",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_leftarm_goldplated",
+          "weight": 4
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_rightleg",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_rightleg_goldplated",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:legupgrades_metaldetector",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:legupgrades_anklebracers",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:legupgrades_jumpboost",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:legupgrades_propellers",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:legupgrades_spurs",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:legupgrades_ocelotpaws",
+          "weight": 4
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_leftleg",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:basecyberware_leftleg_goldplated",
+          "weight": 4
+        }
+      ]
+    }
+  ]
+}

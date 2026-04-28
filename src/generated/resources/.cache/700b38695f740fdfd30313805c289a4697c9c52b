@@ -1,4 +1,4 @@
-// 1.21.1	2026-04-27T14:46:25.6435035	Item Models: createcybernetics
+// 1.21.1	2026-04-28T12:13:50.8933873	Item Models: createcybernetics
 8570733f6ab9231502efdbe6dd1695f08dc806b1 assets/createcybernetics/models/item/andouille_sausage.json
 ae78f051d9328e5a204530b7fc2e3d88362b4e68 assets/createcybernetics/models/item/armupgrades_armcannon.json
 37f82cc0ca47be7b60c54ef6d3b7059b9b671846 assets/createcybernetics/models/item/armupgrades_claws.json
@@ -128,6 +128,7 @@ bffb81f64f2036852a361cad7b228315127f89e8 assets/createcybernetics/models/item/fr
 47984eea95573b562ff795894625a77c8a041c7f assets/createcybernetics/models/item/heartupgrades_defibrillator.json
 7715080ec20c3a85d8b2f69a95890f524332bfc0 assets/createcybernetics/models/item/heartupgrades_platelets.json
 1ae9fddfb899b3e98afdd66fc3e6cd5f32d29815 assets/createcybernetics/models/item/heartupgrades_stemcell.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/createcybernetics/models/item/hogboy_spawn_egg.json
 f9fd948a3012749c06ac5de414f5aa4e1572140e assets/createcybernetics/models/item/holoimprint_chip.json
 d0149ed15f036392062a2ea56dd70a219ebe681a assets/createcybernetics/models/item/iron_upgrade_template.json
 4c3412be5db1787ca2d4a577ffc440186e527870 assets/createcybernetics/models/item/legupgrades_anklebracers.json
@@ -156,6 +157,8 @@ be803acbd4239f1d4075e76e31c5bbc3480b5f28 assets/createcybernetics/models/item/ne
 6d75dbe717502103beb34012073399df5b6ccf9b assets/createcybernetics/models/item/organsupgrades_metabolic.json
 3354f1b40a2ddf8ae579b31fe3909ad74b69c7df assets/createcybernetics/models/item/organsupgrade_densebattery.json
 72a41b306233b2a25c7ce4a8344a1f7af1f5a263 assets/createcybernetics/models/item/parietal_lobe.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/createcybernetics/models/item/pigstrom_spawn_egg.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/createcybernetics/models/item/punklin_spawn_egg.json
 046581d62277b490ac6f6ed9d2664f5a17462535 assets/createcybernetics/models/item/quickhack_behindyou.json
 8ecf931e180d861eb52bb53c7ea4059e85ff53a9 assets/createcybernetics/models/item/quickhack_cyberpsychosis.json
 a5ff2e53969af18ef78870509d1d27fedea84cd4 assets/createcybernetics/models/item/quickhack_drain.json

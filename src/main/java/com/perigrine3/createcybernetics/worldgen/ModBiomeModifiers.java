@@ -8,6 +8,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.neoforged.neoforge.common.world.BiomeModifier;
@@ -22,6 +23,10 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> SPAWN_CYBERZOMBIE = registerKey("spawn_cyberzombie");
     public static final ResourceKey<BiomeModifier> SPAWN_CYBERSKELETON = registerKey("spawn_cyberskeleton");
 
+    public static final ResourceKey<BiomeModifier> SPAWN_HOGBOY = registerKey("spawn_hogboy");
+    public static final ResourceKey<BiomeModifier> SPAWN_PUNKLIN = registerKey("spawn_punklin");
+    public static final ResourceKey<BiomeModifier> SPAWN_PIGSTROM = registerKey("spawn_pigstrom");
+
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         var biomes = context.lookup(Registries.BIOME);
@@ -31,7 +36,6 @@ public class ModBiomeModifiers {
                 HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.TITANIUMORE_PLACED_KEY)),
                 GenerationStep.Decoration.UNDERGROUND_ORES));
 
-
         context.register(SPAWN_CYBERZOMBIE, new BiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.CYBERZOMBIE.get(), 10, 1, 3))));
@@ -39,6 +43,18 @@ public class ModBiomeModifiers {
         context.register(SPAWN_CYBERSKELETON, new BiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.CYBERSKELETON.get(), 10, 1, 3))));
+
+        context.register(SPAWN_HOGBOY, new BiomeModifiers.AddSpawnsBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.SOUL_SAND_VALLEY)),
+                List.of(new MobSpawnSettings.SpawnerData(ModEntities.HOGBOY.get(), 5, 1, 4))));
+
+        context.register(SPAWN_PUNKLIN, new BiomeModifiers.AddSpawnsBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.WARPED_FOREST)),
+                List.of(new MobSpawnSettings.SpawnerData(ModEntities.PUNKLIN.get(), 10, 3, 7))));
+
+        context.register(SPAWN_PIGSTROM, new BiomeModifiers.AddSpawnsBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.CRIMSON_FOREST)),
+                List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIGSTROM.get(), 14, 4, 8))));
     }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {

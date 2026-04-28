@@ -1,7 +1,14 @@
 package com.perigrine3.createcybernetics.entity;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.entity.custom.*;
+import com.perigrine3.createcybernetics.entity.custom.CyberskeletonEntity;
+import com.perigrine3.createcybernetics.entity.custom.CyberzombieEntity;
+import com.perigrine3.createcybernetics.entity.custom.GuardianBeamEntity;
+import com.perigrine3.createcybernetics.entity.custom.HogBoyEntity;
+import com.perigrine3.createcybernetics.entity.custom.PigstromEntity;
+import com.perigrine3.createcybernetics.entity.custom.PunklinEntity;
+import com.perigrine3.createcybernetics.entity.custom.RipperEntity;
+import com.perigrine3.createcybernetics.entity.custom.SmasherEntity;
 import com.perigrine3.createcybernetics.entity.projectile.EmpGrenadeProjectile;
 import com.perigrine3.createcybernetics.entity.projectile.NuggetProjectile;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,8 +24,6 @@ public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, CreateCybernetics.MODID);
 
-
-
     public static final Supplier<EntityType<GuardianBeamEntity>> GUARDIAN_BEAM =
             ENTITY_TYPES.register("guardian_beam", () -> EntityType.Builder.<GuardianBeamEntity>of(GuardianBeamEntity::new, MobCategory.MISC)
                     .sized(0.1F, 0.1F).clientTrackingRange(64).updateInterval(1).build("guardian_beam"));
@@ -29,12 +34,9 @@ public class ModEntities {
             ENTITY_TYPES.register("emp_grenade_projectile", () -> EntityType.Builder.<EmpGrenadeProjectile>of(EmpGrenadeProjectile::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f).clientTrackingRange(8).updateInterval(10).build("emp_grenade_projectile"));
 
-
-
     public static final DeferredHolder<EntityType<?>, EntityType<RipperEntity>> RIPPER =
             ENTITY_TYPES.register("ripper", () -> EntityType.Builder.of(RipperEntity::new, MobCategory.CREATURE)
                     .sized(0.6F, 1.95F).clientTrackingRange(8).build("ripper"));
-
 
     public static final Supplier<EntityType<SmasherEntity>> SMASHER =
             ENTITY_TYPES.register("smasher", () -> EntityType.Builder.of(SmasherEntity::new, MobCategory.MONSTER)
@@ -48,7 +50,17 @@ public class ModEntities {
             ENTITY_TYPES.register("cyberskeleton", () -> EntityType.Builder.of(CyberskeletonEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.8F).build("cyberskeleton"));
 
+    public static final Supplier<EntityType<HogBoyEntity>> HOGBOY =
+            ENTITY_TYPES.register("hogboy", () -> EntityType.Builder.of(HogBoyEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F).clientTrackingRange(8).build("hogboy"));
 
+    public static final Supplier<EntityType<PunklinEntity>> PUNKLIN =
+            ENTITY_TYPES.register("punklin", () -> EntityType.Builder.of(PunklinEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F).clientTrackingRange(8).build("punklin"));
+
+    public static final Supplier<EntityType<PigstromEntity>> PIGSTROM =
+            ENTITY_TYPES.register("pigstrom", () -> EntityType.Builder.of(PigstromEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F).clientTrackingRange(8).build("pigstrom"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

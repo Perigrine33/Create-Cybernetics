@@ -210,6 +210,15 @@ public class ModItems {
     public static final DeferredItem<Item> CYBERSKELETON_SPAWN_EGG = ITEMS.register("cyberskeleton_spawn_egg",
         () -> new DeferredSpawnEggItem(ModEntities.CYBERSKELETON, 0xC1C1C1, 0xFFFF003C,
                 new Item.Properties()));
+    public static final DeferredItem<Item> HOGBOY_SPAWN_EGG = ITEMS.register("hogboy_spawn_egg",
+        () -> new DeferredSpawnEggItem(ModEntities.HOGBOY, 0xC97A4A, 0x2F80ED,
+                new Item.Properties()));
+    public static final DeferredItem<Item> PUNKLIN_SPAWN_EGG = ITEMS.register("punklin_spawn_egg",
+        () -> new DeferredSpawnEggItem(ModEntities.PUNKLIN, 0xC97A4A, 0x8E44AD,
+                new Item.Properties()));
+    public static final DeferredItem<Item> PIGSTROM_SPAWN_EGG = ITEMS.register("pigstrom_spawn_egg",
+        () -> new DeferredSpawnEggItem(ModEntities.PIGSTROM, 0xC97A4A, 0xC0392B,
+                new Item.Properties()));
 
 
 //DATA SHARDS

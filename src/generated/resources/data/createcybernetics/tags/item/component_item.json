@@ -1,0 +1,22 @@
+{
+  "values": [
+    "createcybernetics:component_actuator",
+    "createcybernetics:component_fiberoptics",
+    "createcybernetics:component_wiring",
+    "createcybernetics:component_diodes",
+    "createcybernetics:component_plating",
+    "createcybernetics:component_graphicscard",
+    "createcybernetics:component_ssd",
+    "createcybernetics:component_storage",
+    "createcybernetics:component_synthnerves",
+    "createcybernetics:component_mesh",
+    {
+      "id": "createcybernetics:component_led",
+      "required": false
+    },
+    {
+      "id": "createcybernetics:component_titaniumrod",
+      "required": false
+    }
+  ]
+}

@@ -37,9 +37,11 @@ public final class CyberentityRolls {
 
         String tableId = getTableIdForEntity(entity);
         EnumMap<CyberwareSlot, SlotSpawnTable> tableMap = SPAWN_TABLES.get(tableId);
-        if (tableMap == null) {
+
+        if (tableMap == null && DEFAULT_TABLE_ID.equals(tableId)) {
             tableMap = SPAWN_TABLES.get(DEFAULT_TABLE_ID);
         }
+
         if (tableMap == null) {
             return;
         }
@@ -191,7 +193,10 @@ public final class CyberentityRolls {
         String path = key.getPath();
         if ("cyberzombie".equals(path)) return "cyberzombie";
         if ("cyberskeleton".equals(path)) return "cyberskeleton";
-        if ("smasher".equals(path) || "cybersmasher".equals(path)) return "smasher";
+        if ("smasher".equals(path)) return "smasher";
+        if ("hogboy".equals(path)) return "hogboy";
+        if ("punklin".equals(path)) return "punklin";
+        if ("pigstrom".equals(path)) return "pigstrom";
 
         return DEFAULT_TABLE_ID;
     }

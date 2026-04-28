@@ -36,8 +36,12 @@ public final class CyberentitySpawnEvents {
 
     private static boolean shouldRollCyberware(Mob mob) {
         EntityType<?> type = mob.getType();
+
         return type == ModEntities.CYBERZOMBIE.get()
                 || type == ModEntities.CYBERSKELETON.get()
-                || type == ModEntities.SMASHER.get();
+                || type == ModEntities.SMASHER.get()
+                || type == ModEntities.HOGBOY.get()
+                || type == ModEntities.PUNKLIN.get()
+                || type == ModEntities.PIGSTROM.get();
     }
 }

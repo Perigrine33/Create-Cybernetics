@@ -45,6 +45,10 @@ public final class CyberwareDeathReset {
     private static final float MOB_CYBERWARE_DROP_CHANCE = 0.15f;
     private static final float SMASHER_CYBERWARE_DROP_CHANCE = 0.75f;
 
+    private static final float HOGBOY_CYBERWARE_DROP_CHANCE = 0.20f;
+    private static final float PUNKLIN_CYBERWARE_DROP_CHANCE = 0.30f;
+    private static final float PIGSTROM_CYBERWARE_DROP_CHANCE = 0.45f;
+
     private CyberwareDeathReset() {}
 
     @SubscribeEvent
@@ -195,7 +199,10 @@ public final class CyberwareDeathReset {
     }
 
     private static boolean dropsFreshCyberware(LivingEntity entity) {
-        return entity.getType() == ModEntities.SMASHER.get();
+        return entity.getType() == ModEntities.SMASHER.get() ||
+                entity.getType() == ModEntities.HOGBOY.get() ||
+                entity.getType() == ModEntities.PUNKLIN.get() ||
+                entity.getType() == ModEntities.PIGSTROM.get();
     }
 
     private static void dropInstalledCyberware(LivingEntity entity, boolean scavenged) {
@@ -218,6 +225,7 @@ public final class CyberwareDeathReset {
 
                 ItemStack installedStack = installed.getItem();
                 if (installedStack == null || installedStack.isEmpty()) continue;
+                if (shouldSuppressGangMeatLimbDrop(entity, installedStack)) continue;
                 if (!shouldDropInstalledOnDeath(installedStack, slot)) continue;
                 if (entity.getRandom().nextFloat() >= dropChance) continue;
 
@@ -238,10 +246,41 @@ public final class CyberwareDeathReset {
         }
     }
 
+    private static boolean shouldSuppressGangMeatLimbDrop(LivingEntity entity, ItemStack stack) {
+        return isCyberPiglinGangEntity(entity) && isMeatLimbBodypart(stack);
+    }
+
+    private static boolean isCyberPiglinGangEntity(LivingEntity entity) {
+        if (entity == null) return false;
+
+        return entity.getType() == ModEntities.HOGBOY.get()
+                || entity.getType() == ModEntities.PUNKLIN.get()
+                || entity.getType() == ModEntities.PIGSTROM.get();
+    }
+
+    private static boolean isMeatLimbBodypart(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+
+        return stack.is(ModItems.BODYPART_RIGHTARM.get())
+                || stack.is(ModItems.BODYPART_LEFTARM.get())
+                || stack.is(ModItems.BODYPART_RIGHTLEG.get())
+                || stack.is(ModItems.BODYPART_LEFTLEG.get());
+    }
+
     private static float getMobCyberwareDropChance(LivingEntity entity) {
         if (entity != null && entity.getType() == ModEntities.SMASHER.get()) {
             return SMASHER_CYBERWARE_DROP_CHANCE;
         }
+        if (entity.getType() == ModEntities.HOGBOY.get()) {
+            return HOGBOY_CYBERWARE_DROP_CHANCE;
+        }
+        if (entity.getType() == ModEntities.PUNKLIN.get()) {
+            return PUNKLIN_CYBERWARE_DROP_CHANCE;
+        }
+        if (entity.getType() == ModEntities.PIGSTROM.get()) {
+            return PIGSTROM_CYBERWARE_DROP_CHANCE;
+        }
+
         return MOB_CYBERWARE_DROP_CHANCE;
     }
 

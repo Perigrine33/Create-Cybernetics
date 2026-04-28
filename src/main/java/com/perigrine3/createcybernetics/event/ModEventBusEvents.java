@@ -5,8 +5,18 @@ import com.perigrine3.createcybernetics.entity.ModEntities;
 import com.perigrine3.createcybernetics.entity.client.RipperModel;
 import com.perigrine3.createcybernetics.entity.client.models.CyberskeletonModel;
 import com.perigrine3.createcybernetics.entity.client.models.CyberzombieModel;
+import com.perigrine3.createcybernetics.entity.client.models.HogBoyModel;
+import com.perigrine3.createcybernetics.entity.client.models.PigstromModel;
+import com.perigrine3.createcybernetics.entity.client.models.PunklinModel;
 import com.perigrine3.createcybernetics.entity.client.models.SmasherModel;
-import com.perigrine3.createcybernetics.entity.custom.*;
+import com.perigrine3.createcybernetics.entity.custom.AbstractCyberPiglinGangEntity;
+import com.perigrine3.createcybernetics.entity.custom.CyberskeletonEntity;
+import com.perigrine3.createcybernetics.entity.custom.CyberzombieEntity;
+import com.perigrine3.createcybernetics.entity.custom.HogBoyEntity;
+import com.perigrine3.createcybernetics.entity.custom.PigstromEntity;
+import com.perigrine3.createcybernetics.entity.custom.PunklinEntity;
+import com.perigrine3.createcybernetics.entity.custom.RipperEntity;
+import com.perigrine3.createcybernetics.entity.custom.SmasherEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -25,6 +35,10 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(SmasherModel.LAYER_LOCATION, SmasherModel::createBodyLayer);
         event.registerLayerDefinition(CyberzombieModel.LAYER_LOCATION, CyberzombieModel::createBodyLayer);
         event.registerLayerDefinition(CyberskeletonModel.LAYER_LOCATION, CyberskeletonModel::createBodyLayer);
+
+        event.registerLayerDefinition(HogBoyModel.LAYER_LOCATION, HogBoyModel::createBodyLayer);
+        event.registerLayerDefinition(PunklinModel.LAYER_LOCATION, PunklinModel::createBodyLayer);
+        event.registerLayerDefinition(PigstromModel.LAYER_LOCATION, PigstromModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -33,6 +47,10 @@ public class ModEventBusEvents {
         event.put(ModEntities.SMASHER.get(), SmasherEntity.createAttributes().build());
         event.put(ModEntities.CYBERZOMBIE.get(), CyberzombieEntity.createAttributes().build());
         event.put(ModEntities.CYBERSKELETON.get(), CyberskeletonEntity.createAttributes().build());
+
+        event.put(ModEntities.HOGBOY.get(), HogBoyEntity.createAttributes().build());
+        event.put(ModEntities.PUNKLIN.get(), PunklinEntity.createAttributes().build());
+        event.put(ModEntities.PIGSTROM.get(), PigstromEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -43,12 +61,18 @@ public class ModEventBusEvents {
                 Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(ModEntities.CYBERSKELETON.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
-    }
 
+        event.register(ModEntities.HOGBOY.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                AbstractCyberPiglinGangEntity::checkCyberPiglinSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ModEntities.PUNKLIN.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                AbstractCyberPiglinGangEntity::checkCyberPiglinSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ModEntities.PIGSTROM.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                AbstractCyberPiglinGangEntity::checkCyberPiglinSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+    }
 
     @SubscribeEvent
     public static void modifyDefaultComponents(ModifyDefaultComponentsEvent event) {
         //event.modify(Items.WHEAT, builder -> builder
-                //.set(DataComponents.FOOD, new FoodProperties.Builder().nutrition(4).saturationModifier(0.1F).build()));
+        //.set(DataComponents.FOOD, new FoodProperties.Builder().nutrition(4).saturationModifier(0.1F).build()));
     }
 }

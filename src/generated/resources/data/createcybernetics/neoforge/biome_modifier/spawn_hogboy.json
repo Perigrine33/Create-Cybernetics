@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "minecraft:soul_sand_valley",
+  "spawners": {
+    "type": "createcybernetics:hogboy",
+    "maxCount": 4,
+    "minCount": 2,
+    "weight": 14
+  }
+}

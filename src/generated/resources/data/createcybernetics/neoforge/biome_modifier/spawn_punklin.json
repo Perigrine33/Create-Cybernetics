@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "minecraft:warped_forest",
+  "spawners": {
+    "type": "createcybernetics:punklin",
+    "maxCount": 3,
+    "minCount": 1,
+    "weight": 10
+  }
+}

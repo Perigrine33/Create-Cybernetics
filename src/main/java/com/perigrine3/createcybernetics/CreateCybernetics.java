@@ -162,6 +162,10 @@ public class CreateCybernetics {
             event.accept(ModItems.SMASHER_SPAWN_EGG);
             event.accept(ModItems.CYBERZOMBIE_SPAWN_EGG);
             event.accept(ModItems.CYBERSKELETON_SPAWN_EGG);
+
+            event.accept(ModItems.HOGBOY_SPAWN_EGG);
+            event.accept(ModItems.PUNKLIN_SPAWN_EGG);
+            event.accept(ModItems.PIGSTROM_SPAWN_EGG);
         }
 
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
@@ -214,7 +218,12 @@ public class CreateCybernetics {
             EntityRenderers.register(ModEntities.SMASHER.get(), SmasherRenderer::new);
             EntityRenderers.register(ModEntities.CYBERZOMBIE.get(), CyberzombieRenderer::new);
             EntityRenderers.register(ModEntities.CYBERSKELETON.get(), CyberskeletonRenderer::new);
+
             EntityRenderers.register(ModEntities.GUARDIAN_BEAM.get(), GuardianBeamRenderer::new);
+
+            EntityRenderers.register(ModEntities.HOGBOY.get(), HogBoyRenderer::new);
+            EntityRenderers.register(ModEntities.PUNKLIN.get(), PunklinRenderer::new);
+            EntityRenderers.register(ModEntities.PIGSTROM.get(), PigstromRenderer::new);
         }
 
         @SubscribeEvent
