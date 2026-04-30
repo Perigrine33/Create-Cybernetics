@@ -208,6 +208,8 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_eyes_dyed.png");
     private static final ResourceLocation GENOS_HIGHLIGHT =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_highlight.png");
+    private static final ResourceLocation KILDARE_HIGHLIGHT =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/kildare_eyes_dyed.png");
 
     private static final ResourceLocation ECLIPSE_VISOR_TRIMMED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/eclipse_visor_trimmed.png");
@@ -294,6 +296,10 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_wide.png");
     private static final ResourceLocation GENOS_WIDE_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_wide_dyed.png");
+    private static final ResourceLocation KILDARE_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/kildare_wide.png");
+    private static final ResourceLocation KILDARE_WIDE_DYED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/kildare_wide_dyed.png");
 
     private static final ResourceLocation EXOSUIT1_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/exosuit1.png");
@@ -378,6 +384,10 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_slim.png");
     private static final ResourceLocation GENOS_SLIM_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/genos_slim_dyed.png");
+    private static final ResourceLocation KILDARE_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/kildare_slim.png");
+    private static final ResourceLocation KILDARE_SLIM_DYED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/kildare_slim_dyed.png");
 
     private static final ResourceLocation EXOSUIT1_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/exosuit1_slim.png");
@@ -1439,7 +1449,6 @@ public class SkinModifierManager {
                 }
             }
         }
-
 // GENOS MODEL
         if (FullBorgHandler.isGenos(data)) {
 
@@ -1477,6 +1486,36 @@ public class SkinModifierManager {
                     state.addModifier(new SkinModifier(dyn, dyn, tint, false));
                     state.addHighlight(new SkinHighlight(dyn, dyn, tint, true, true));
                 }
+            }
+        }
+// KILDARE MODEL
+        if (FullBorgHandler.isKildare(data)) {
+
+            state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERLEG_TEXTURE, RIGHT_CYBERLEG_TEXTURE));
+            state.removeModifier(new SkinModifier(LEFT_CYBERARM_TEXTURE_WIDE, LEFT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(RIGHT_CYBERARM_TEXTURE_WIDE, RIGHT_CYBERARM_TEXTURE_SLIM));
+            state.removeModifier(new SkinModifier(CYBEREYES_PRIMARY, CYBEREYES_PRIMARY));
+            state.clearHighlights();
+            state.clearModifiers();
+
+            state.addModifier(new SkinModifier(KILDARE_WIDE, KILDARE_SLIM,
+                    0xFFFFFFFF, true));
+
+            if (data.isDyed(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)) {
+                int tint = data.dyeColor(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN);
+
+                state.addModifier(new SkinModifier(KILDARE_WIDE_DYED, KILDARE_SLIM_DYED,
+                        tint, true));
+            }
+
+            if (data.isDyed(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)) {
+                int tint = data.dyeColor(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES);
+
+                state.addModifier(new SkinModifier(KILDARE_HIGHLIGHT, KILDARE_HIGHLIGHT,
+                        tint, true));
+                state.addHighlight(new SkinHighlight(KILDARE_HIGHLIGHT, KILDARE_HIGHLIGHT,
+                        tint, true, true));
             }
         }
 

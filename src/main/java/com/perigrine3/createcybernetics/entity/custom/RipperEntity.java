@@ -409,11 +409,6 @@ public class RipperEntity extends AbstractIllager {
         return SoundEvents.PILLAGER_DEATH;
     }
 
-    @Override
-    protected void playStepSound(BlockPos pos, BlockState block) {
-        playSound(SoundEvents.PILLAGER_AMBIENT, 0.05F, 1.0F);
-    }
-
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {

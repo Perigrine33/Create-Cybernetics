@@ -43,8 +43,9 @@ public class CyberPiglinGangItemInterestGoal extends Goal {
         if (targetItem == null || !targetItem.isAlive()) return false;
         if (targetItem.getItem().isEmpty()) return false;
         if (mob.isDistracted()) return false;
+        if (mob.shouldIgnoreGroundItem(targetItem)) return false;
 
-        return mob.isInterestedInGroundItem(targetItem.getItem())
+        return mob.isInterestedInGroundItem(targetItem)
                 && mob.distanceToSqr(targetItem) <= SEARCH_RANGE * SEARCH_RANGE;
     }
 
@@ -57,6 +58,12 @@ public class CyberPiglinGangItemInterestGoal extends Goal {
     @Override
     public void tick() {
         if (targetItem == null || !targetItem.isAlive()) return;
+
+        if (mob.shouldIgnoreGroundItem(targetItem)) {
+            targetItem = null;
+            mob.getNavigation().stop();
+            return;
+        }
 
         mob.setTarget(null);
         mob.getLookControl().setLookAt(targetItem, 30.0F, 30.0F);
@@ -81,7 +88,8 @@ public class CyberPiglinGangItemInterestGoal extends Goal {
                 itemEntity -> itemEntity != null
                         && itemEntity.isAlive()
                         && !itemEntity.getItem().isEmpty()
-                        && mob.isInterestedInGroundItem(itemEntity.getItem())
+                        && !mob.shouldIgnoreGroundItem(itemEntity)
+                        && mob.isInterestedInGroundItem(itemEntity)
         );
 
         return items.stream()
@@ -90,6 +98,9 @@ public class CyberPiglinGangItemInterestGoal extends Goal {
     }
 
     private void consumeInterestingItem(ItemEntity itemEntity) {
+        if (itemEntity == null || !itemEntity.isAlive()) return;
+        if (mob.shouldIgnoreGroundItem(itemEntity)) return;
+
         ItemStack stack = itemEntity.getItem();
         if (stack.isEmpty()) return;
 

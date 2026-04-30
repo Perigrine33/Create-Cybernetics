@@ -346,6 +346,10 @@ public class CyberwareAttributeHelper {
 
 
 
+
+
+
+
 // FBCs
         registerModifier("gemini_attackstrength", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gemini_attackstrength_add"),
@@ -446,6 +450,17 @@ public class CyberwareAttributeHelper {
         registerModifier("genos_strength", new AttributeModifierData(attackDamageAttribute,
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "genos_strength_add"),
                 4, AttributeModifier.Operation.ADD_VALUE));
+
+        registerModifier("kildare_strength", new AttributeModifierData(attackDamageAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "kildare_strength_add"),
+                1, AttributeModifier.Operation.ADD_VALUE));
+        registerModifier("kildare_speed", new AttributeModifierData(speedAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "kildare_speed_add"),
+                0.01, AttributeModifier.Operation.ADD_VALUE));
+
+
+
+
 
 
 

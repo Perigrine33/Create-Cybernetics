@@ -4,6 +4,7 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.block.entity.SurgeryTableBlockEntity;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.event.custom.FullBorgHandler;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryEndPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryResultPayload;
@@ -26,6 +27,7 @@ public final class PlayerSurgeryMinigameManager {
     private static final float MIN_SUCCESS_ZONE_WIDTH = 0.10F;
     private static final float MAX_SUCCESS_ZONE_WIDTH = 0.16F;
     private static final float IMPLANT_MARGIN_MULTIPLIER = 1.5F;
+    private static final float KILDARE_MARGIN_MULTIPLIER = 1.5F;
 
     private static final int SUCCESS_DAMAGE = 3;
     private static final int FAILURE_DAMAGE_MIN = 4;
@@ -60,13 +62,15 @@ public final class PlayerSurgeryMinigameManager {
         }
 
         boolean implantBonus = hasSurgicalAssistImplant(surgeon);
+        boolean kildareBonus = isKildareSurgeon(surgeon);
 
         Session session = new Session(
                 UUID.randomUUID(),
                 surgeon,
                 patient,
                 table,
-                implantBonus
+                implantBonus,
+                kildareBonus
         );
 
         SESSIONS_BY_SURGEON.put(surgeon.getUUID(), session);
@@ -128,12 +132,18 @@ public final class PlayerSurgeryMinigameManager {
         return false;
     }
 
+    private static boolean isKildareSurgeon(ServerPlayer surgeon) {
+        PlayerCyberwareData data = surgeon.getData(ModAttachments.CYBERWARE);
+        return FullBorgHandler.isKildare(data);
+    }
+
     private static final class Session {
         private final UUID sessionId;
         private final ServerPlayer surgeon;
         private final ServerPlayer patient;
         private final SurgeryTableBlockEntity table;
         private final boolean implantBonus;
+        private final boolean kildareBonus;
 
         private int countdownTicksRemaining = COUNTDOWN_TICKS;
         private boolean countdownComplete = false;
@@ -149,13 +159,15 @@ public final class PlayerSurgeryMinigameManager {
                 ServerPlayer surgeon,
                 ServerPlayer patient,
                 SurgeryTableBlockEntity table,
-                boolean implantBonus
+                boolean implantBonus,
+                boolean kildareBonus
         ) {
             this.sessionId = sessionId;
             this.surgeon = surgeon;
             this.patient = patient;
             this.table = table;
             this.implantBonus = implantBonus;
+            this.kildareBonus = kildareBonus;
         }
 
         private boolean tick() {
@@ -253,7 +265,16 @@ public final class PlayerSurgeryMinigameManager {
             float baseWidth = MIN_SUCCESS_ZONE_WIDTH
                     + surgeon.getRandom().nextFloat() * (MAX_SUCCESS_ZONE_WIDTH - MIN_SUCCESS_ZONE_WIDTH);
 
-            successWidth = implantBonus ? baseWidth * IMPLANT_MARGIN_MULTIPLIER : baseWidth;
+            successWidth = baseWidth;
+
+            if (implantBonus) {
+                successWidth *= IMPLANT_MARGIN_MULTIPLIER;
+            }
+
+            if (kildareBonus) {
+                successWidth *= KILDARE_MARGIN_MULTIPLIER;
+            }
+
             successWidth = Math.min(successWidth, 0.95F);
 
             float halfWidth = successWidth * 0.5F;

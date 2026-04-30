@@ -146,6 +146,15 @@ public final class FullBorgHandler {
             CyberwareAttributeHelper.removeModifier(player, "genos_strength");
             CyberwareAttributeHelper.removeModifier(player, "genos_speed");
         }
+
+        boolean kildareModel = isKildare(data);
+        if (kildareModel) {
+            CyberwareAttributeHelper.applyModifier(player, "kildare_strength");
+            CyberwareAttributeHelper.applyModifier(player, "kildare_speed");
+        } else {
+            CyberwareAttributeHelper.removeModifier(player, "kildare_strength");
+            CyberwareAttributeHelper.removeModifier(player, "kildare_speed");
+        }
     }
 
     /* -------------------- Model predicates (reused by other systems) -------------------- */
@@ -339,6 +348,32 @@ public final class FullBorgHandler {
                 && data.hasSpecificItem(ModItems.BRAINUPGRADES_MATRIX.get(), CyberwareSlot.BRAIN);
     }
 
+    public static boolean isKildare(PlayerCyberwareData data) {
+        if (data == null) return false;
+        return data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTARM.get(), CyberwareSlot.RARM)
+                && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTARM.get(), CyberwareSlot.LARM)
+                && data.hasSpecificItem(ModItems.BASECYBERWARE_RIGHTLEG.get(), CyberwareSlot.RLEG)
+                && data.hasSpecificItem(ModItems.BASECYBERWARE_LEFTLEG.get(), CyberwareSlot.LLEG)
+                && data.hasSpecificItem(ModItems.SKINUPGRADES_METALPLATING.get(), CyberwareSlot.SKIN)
+                && data.hasSpecificItem(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE.get(), CyberwareSlot.MUSCLE)
+                && data.hasSpecificItem(ModItems.HEARTUPGRADES_CYBERHEART.get(), CyberwareSlot.HEART)
+                && data.hasSpecificItem(ModItems.BASECYBERWARE_LINEARFRAME.get(), CyberwareSlot.BONE)
+                && data.hasSpecificItem(ModItems.BASECYBERWARE_CYBEREYES.get(), CyberwareSlot.EYES)
+                && data.hasSpecificItem(ModItems.EYEUPGRADES_ZOOM.get(), CyberwareSlot.EYES)
+                && data.hasSpecificItem(ModItems.EYEUPGRADES_HUDJACK.get(), CyberwareSlot.EYES)
+                && data.hasSpecificItem(ModItems.ARMUPGRADES_CRAFTHANDS.get(), CyberwareSlot.LARM, CyberwareSlot.RARM)
+                && data.hasSpecificItem(ModItems.ARMUPGRADES_RIPPERCLAW.get(), CyberwareSlot.LARM, CyberwareSlot.RARM);
+    }
+
+
+
+
+
+
+
+
+
+
     public static boolean isFullBorg(ServerPlayer player) {
         if (player == null) return false;
         if (!player.hasData(ModAttachments.CYBERWARE)) return false;
@@ -356,6 +391,7 @@ public final class FullBorgHandler {
         if (isDragoon(data)) return true;
         if (isCopernicus(data)) return true;
         if (isGenos(data)) return true;
+        if (isKildare(data)) return true;
 
         return false;
     }

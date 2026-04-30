@@ -28,11 +28,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -43,6 +42,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class AbstractCyberPiglinGangEntity extends Monster {
+
+    public static final String NBT_HOGBOY_BARTER_OUTPUT = "cc_hogboy_barter_output";
+    public static final String NBT_HOGBOY_BARTER_OWNER = "cc_hogboy_barter_owner";
 
     private static final String NBT_VARIANT = "CyberPiglinGangVariant";
     private static final String NBT_DISTRACTED_TICKS = "CyberPiglinGangDistractedTicks";
@@ -161,18 +163,37 @@ public abstract class AbstractCyberPiglinGangEntity extends Monster {
         return BuiltInLootTables.PIGLIN_BARTERING;
     }
 
+    public boolean shouldIgnoreGroundItem(ItemEntity itemEntity) {
+        if (!(this instanceof HogBoyEntity)) return false;
+        if (itemEntity == null) return true;
+        return itemEntity.getPersistentData().getBoolean(NBT_HOGBOY_BARTER_OUTPUT);
+    }
+
+    public boolean isInterestedInGroundItem(ItemEntity itemEntity) {
+        if (itemEntity == null || !itemEntity.isAlive()) return false;
+        if (itemEntity.getItem().isEmpty()) return false;
+        if (shouldIgnoreGroundItem(itemEntity)) return false;
+
+        return isInterestedInGroundItem(itemEntity.getItem());
+    }
+
     public boolean isInterestedInGroundItem(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
+        if (isBarterItem(stack)) return true;
         if (isDistractedByCyberware() && isCyberware(stack)) return true;
         return isDistractedByGold() && isGold(stack);
     }
 
     public boolean isBarterItem(ItemStack stack) {
-        return canBarter() && isCyberware(stack);
+        return canBarter() && (isCyberware(stack) || isComponent(stack) || isGold(stack));
     }
 
     public static boolean isCyberware(ItemStack stack) {
         return stack != null && !stack.isEmpty() && stack.is(ModTags.Items.CYBERWARE_ITEM);
+    }
+
+    public static boolean isComponent(ItemStack stack) {
+        return stack != null && !stack.isEmpty() && stack.is(ModTags.Items.COMPONENT_ITEM);
     }
 
     public static boolean isGold(ItemStack stack) {
@@ -254,9 +275,16 @@ public abstract class AbstractCyberPiglinGangEntity extends Monster {
             if (nearestPlayer != null) {
                 throwStackToward(stack, nearestPlayer.position());
             } else {
-                this.spawnAtLocation(stack);
+                dropMarkedBarterOutput(stack);
             }
         }
+    }
+
+    private void markBarterOutput(ItemEntity itemEntity) {
+        if (itemEntity == null) return;
+
+        itemEntity.getPersistentData().putBoolean(NBT_HOGBOY_BARTER_OUTPUT, true);
+        itemEntity.getPersistentData().putUUID(NBT_HOGBOY_BARTER_OWNER, this.getUUID());
     }
 
     private void throwStackToward(ItemStack stack, Vec3 target) {
@@ -270,6 +298,8 @@ public abstract class AbstractCyberPiglinGangEntity extends Monster {
                 stack.copy()
         );
 
+        markBarterOutput(itemEntity);
+
         Vec3 direction = target.subtract(this.position());
         if (direction.lengthSqr() > 1.0E-6D) {
             direction = direction.normalize();
@@ -278,6 +308,21 @@ public abstract class AbstractCyberPiglinGangEntity extends Monster {
         }
 
         itemEntity.setDeltaMovement(direction.x * 0.3D, 0.25D, direction.z * 0.3D);
+        this.level().addFreshEntity(itemEntity);
+    }
+
+    private void dropMarkedBarterOutput(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return;
+
+        ItemEntity itemEntity = new ItemEntity(
+                this.level(),
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                stack.copy()
+        );
+
+        markBarterOutput(itemEntity);
         this.level().addFreshEntity(itemEntity);
     }
 

@@ -27,7 +27,10 @@
     "client.InventoryScreenChipwareSlotsMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityRendererAccessor",
-    "client.ScreenInvoker"
+    "client.ScreenInvoker",
+    "playeranimator.LivingEntityRendererFirstPersonOverlayMixin",
+    "pointblank.GunItemRendererMixin",
+    "wildfire.GenderLayerOverlayMixin"
   ],
   "injectors": {
     "defaultRequire": 1

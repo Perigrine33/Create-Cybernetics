@@ -39,7 +39,6 @@ public class ModBiomeModifiers {
         context.register(SPAWN_CYBERZOMBIE, new BiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.CYBERZOMBIE.get(), 10, 1, 3))));
-
         context.register(SPAWN_CYBERSKELETON, new BiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.CYBERSKELETON.get(), 10, 1, 3))));
@@ -47,11 +46,9 @@ public class ModBiomeModifiers {
         context.register(SPAWN_HOGBOY, new BiomeModifiers.AddSpawnsBiomeModifier(
                 HolderSet.direct(biomes.getOrThrow(Biomes.SOUL_SAND_VALLEY)),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.HOGBOY.get(), 5, 1, 4))));
-
         context.register(SPAWN_PUNKLIN, new BiomeModifiers.AddSpawnsBiomeModifier(
                 HolderSet.direct(biomes.getOrThrow(Biomes.WARPED_FOREST)),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.PUNKLIN.get(), 10, 3, 7))));
-
         context.register(SPAWN_PIGSTROM, new BiomeModifiers.AddSpawnsBiomeModifier(
                 HolderSet.direct(biomes.getOrThrow(Biomes.CRIMSON_FOREST)),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIGSTROM.get(), 14, 4, 8))));
