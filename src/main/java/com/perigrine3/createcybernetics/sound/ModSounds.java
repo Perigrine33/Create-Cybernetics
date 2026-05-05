@@ -24,6 +24,7 @@ public class ModSounds {
 //UI SOUNDS
     public static final Supplier<SoundEvent> METAL_CRUSHING = registerSoundEvent("metal_crushing");
     public static final Supplier<SoundEvent> SURGERY = registerSoundEvent("surgery");
+    public static final Supplier<SoundEvent> SURGERY_TABLE = registerSoundEvent("surgery_table");
 //EFFECT SOUNDS
     public static final Supplier<SoundEvent> GLITCHY = registerSoundEvent("glitchy");
 

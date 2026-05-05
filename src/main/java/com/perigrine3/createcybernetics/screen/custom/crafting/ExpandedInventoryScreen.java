@@ -1,7 +1,9 @@
 package com.perigrine3.createcybernetics.screen.custom.crafting;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.compat.curios.CuriosClientCompat;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
@@ -13,6 +15,25 @@ public class ExpandedInventoryScreen extends AbstractContainerScreen<ExpandedInv
     private static final ResourceLocation TEX =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/inventory_crafting.png");
 
+    private static final int COSMETIC_BUTTON_SIZE = 10;
+
+    /*
+     * Player preview box:
+     * x1 = leftPos + 26
+     * y1 = topPos + 8
+     * x2 = leftPos + 75
+     * y2 = topPos + 78
+     *
+     * Bottom-right inside that box, with 1px inset:
+     * x = 75 - 10 - 1 = 64
+     * y = 78 - 10 - 1 = 67
+     */
+    private static final int COSMETIC_BUTTON_X = 64;
+    private static final int COSMETIC_BUTTON_Y = 67;
+
+    private AbstractWidget curiosButton;
+    private SoftCompatInventoryIconButton cosmeticButton;
+
     public ExpandedInventoryScreen(ExpandedInventoryMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
         this.imageWidth = 176;
@@ -22,10 +43,38 @@ public class ExpandedInventoryScreen extends AbstractContainerScreen<ExpandedInv
     @Override
     protected void init() {
         super.init();
+
         this.titleLabelX = 8;
         this.titleLabelY = 6;
         this.inventoryLabelX = 8;
         this.inventoryLabelY = this.imageHeight - 94;
+
+        addCuriosButtons();
+    }
+
+    private void addCuriosButtons() {
+        this.curiosButton = null;
+        this.cosmeticButton = null;
+
+        if (!CuriosClientCompat.isLoaded()) return;
+
+        AbstractWidget nativeCurios = CuriosClientCompat.createNativeCuriosButton(this);
+        if (nativeCurios != null) {
+            this.curiosButton = nativeCurios;
+            this.addRenderableWidget(nativeCurios);
+        }
+
+        this.cosmeticButton = new SoftCompatInventoryIconButton(
+                this.leftPos + COSMETIC_BUTTON_X,
+                this.topPos + COSMETIC_BUTTON_Y,
+                COSMETIC_BUTTON_SIZE,
+                COSMETIC_BUTTON_SIZE,
+                SoftCompatInventoryIconButton.Kind.CURIOS_COSMETIC,
+                Component.translatable("gui.curios.toggle.cosmetics"),
+                () -> CuriosClientCompat.openCuriosCosmetics(this.curiosButton)
+        );
+
+        this.addRenderableWidget(this.cosmeticButton);
     }
 
     @Override
@@ -37,7 +86,6 @@ public class ExpandedInventoryScreen extends AbstractContainerScreen<ExpandedInv
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(TEX, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
 
-        // Custom slot backgrounds for shard slots (only when present)
         if (this.menu != null && this.menu.hasDataShardSlots()) {
             int sx = leftPos + ExpandedInventoryMenu.DATA_SHARD_X;
             int sy0 = topPos + ExpandedInventoryMenu.DATA_SHARD_Y;
@@ -57,10 +105,14 @@ public class ExpandedInventoryScreen extends AbstractContainerScreen<ExpandedInv
 
         InventoryScreen.renderEntityInInventoryFollowsMouse(
                 graphics,
-                x1, y1, x2, y2,
+                x1,
+                y1,
+                x2,
+                y2,
                 scale,
                 0.0f,
-                (float) mouseX, (float) mouseY,
+                (float) mouseX,
+                (float) mouseY,
                 this.minecraft.player
         );
     }
@@ -82,6 +134,11 @@ public class ExpandedInventoryScreen extends AbstractContainerScreen<ExpandedInv
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
+
+        if (this.cosmeticButton != null) {
+            this.cosmeticButton.renderTooltipIfHovered(graphics, mouseX, mouseY);
+        }
+
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 }

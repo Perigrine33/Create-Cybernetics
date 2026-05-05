@@ -1,4 +1,4 @@
-package com.perigrine3.createcybernetics.screen.custom;
+package com.perigrine3.createcybernetics.screen.custom.surgery;
 
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryCancelPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryClickPayload;

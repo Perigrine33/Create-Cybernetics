@@ -27,6 +27,8 @@
     "client.InventoryScreenChipwareSlotsMixin",
     "client.ItemInHandRendererMixin",
     "client.LivingEntityRendererAccessor",
+    "client.PlayerModelVanillaWearHideMixin",
+    "client.PlayerRendererSkinHideMixin",
     "client.ScreenInvoker",
     "playeranimator.LivingEntityRendererFirstPersonOverlayMixin",
     "pointblank.GunItemRendererMixin",

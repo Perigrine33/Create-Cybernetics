@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:charcoal",
+    "minecraft:coal",
+    {
+      "id": "cyberspace:graphite_blend",
+      "required": false
+    }
+  ]
+}

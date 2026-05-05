@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "item": "minecraft:slime_ball"
+    },
+    "C": {
+      "tag": "createcybernetics:graphene"
+    }
+  },
+  "pattern": [
+    " R ",
+    "CSR",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:graphene_elastomer"
+  }
+}

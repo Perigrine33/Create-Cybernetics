@@ -98,6 +98,12 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.QUICKHACK_REBOOT.get())
                 .add(ModItems.QUICKHACK_OVERHEAT.get());
 
+//GRAPHENE
+        tag(ModTags.Items.GRAPHENE)
+                .add(Items.CHARCOAL)
+                .add(Items.COAL)
+                .addOptional(resourceLocation("cyberspace:graphite_blend"));
+
 //COMPONENTS
         tag(ModTags.Items.COMPONENT_ITEM)
                 .add(ModItems.COMPONENT_ACTUATOR.get())

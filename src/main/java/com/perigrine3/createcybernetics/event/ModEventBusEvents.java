@@ -9,14 +9,7 @@ import com.perigrine3.createcybernetics.entity.client.models.HogBoyModel;
 import com.perigrine3.createcybernetics.entity.client.models.PigstromModel;
 import com.perigrine3.createcybernetics.entity.client.models.PunklinModel;
 import com.perigrine3.createcybernetics.entity.client.models.SmasherModel;
-import com.perigrine3.createcybernetics.entity.custom.AbstractCyberPiglinGangEntity;
-import com.perigrine3.createcybernetics.entity.custom.CyberskeletonEntity;
-import com.perigrine3.createcybernetics.entity.custom.CyberzombieEntity;
-import com.perigrine3.createcybernetics.entity.custom.HogBoyEntity;
-import com.perigrine3.createcybernetics.entity.custom.PigstromEntity;
-import com.perigrine3.createcybernetics.entity.custom.PunklinEntity;
-import com.perigrine3.createcybernetics.entity.custom.RipperEntity;
-import com.perigrine3.createcybernetics.entity.custom.SmasherEntity;
+import com.perigrine3.createcybernetics.entity.custom.*;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -32,6 +25,7 @@ public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(RipperModel.LAYER_LOCATION, RipperModel::createBodyLayer);
+
         event.registerLayerDefinition(SmasherModel.LAYER_LOCATION, SmasherModel::createBodyLayer);
         event.registerLayerDefinition(CyberzombieModel.LAYER_LOCATION, CyberzombieModel::createBodyLayer);
         event.registerLayerDefinition(CyberskeletonModel.LAYER_LOCATION, CyberskeletonModel::createBodyLayer);
@@ -44,6 +38,8 @@ public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.RIPPER.get(), RipperEntity.createAttributes().build());
+        event.put(ModEntities.TATHOG.get(), TatHogEntity.createAttributes().build());
+
         event.put(ModEntities.SMASHER.get(), SmasherEntity.createAttributes().build());
         event.put(ModEntities.CYBERZOMBIE.get(), CyberzombieEntity.createAttributes().build());
         event.put(ModEntities.CYBERSKELETON.get(), CyberskeletonEntity.createAttributes().build());

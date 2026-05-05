@@ -32,10 +32,18 @@ public class Config {
             .comment("If false, the surgery chamber will apply 10 damage.")
             .define("scaleSurgeryDamage", false);
 
-        public static final ModConfigSpec.BooleanValue EPILEPSY_MODE = BUILDER
+    public static final ModConfigSpec.BooleanValue EPILEPSY_MODE = BUILDER
             .comment("Epilepsy Mode")
             .comment("Activate this to disable the cyberware rejection overlay. Good if you or a friend has epilepsy.")
             .define("epilepsyMode", false);
+
+    public static final ModConfigSpec.EnumValue<ConfigValues.TattooUploadMode> TATTOO_UPLOAD_MODE = BUILDER
+            .comment("Tattoo Upload Mode")
+            .comment("SERVER_FILES_ONLY: Only PNGs manually placed in the server tattoo folder are available.")
+            .comment("OP_ONLY_AUTO_APPROVE: Only operators may upload tattoos, and uploads are immediately approved.")
+            .comment("ANY_PLAYER_PENDING_APPROVAL: Any player may upload tattoos, but uploads must be approved by an admin before appearing.")
+            .comment("ANY_PLAYER_AUTO_APPROVE: Any player may upload tattoos, and uploads are immediately approved. Not recommended for public servers.")
+            .defineEnum("tattooUploadMode", ConfigValues.TattooUploadMode.OP_ONLY_AUTO_APPROVE);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> ENGINEERING_DECONSTRUCT_ROLLS = BUILDER
             .comment("Engineering Table deconstruction rolls for regular cyberware.")

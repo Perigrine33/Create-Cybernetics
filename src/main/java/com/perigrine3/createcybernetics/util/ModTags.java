@@ -16,6 +16,8 @@ public class ModTags {
 
         public static final TagKey<Block> METAL_DETECTABLE = createTag("metal_detectable");
         public static final TagKey<Block> C_TITANIUM = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores/titanium"));
+        public static final TagKey<Block> C_ORES_IN_GROUND_STONE = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores_in_ground/stone"));
+        public static final TagKey<Block> C_ORES_IN_GROUND_DEEPSLATE = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores_in_ground/deepslate"));
 
 
         private static TagKey<Block> createTag(String name) {
@@ -25,19 +27,16 @@ public class ModTags {
 
     public static class Items {
 
-        public static final TagKey<Item> C_FOODS_RAW_MEATS =
-                TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "foods/raw_meats"));
-        public static final TagKey<Item> FD_KNIVES =
-                ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/knives"));
-        public static final TagKey<Item> C_TITANIUM =
-                ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/titanium"));
-
+        public static final TagKey<Item> C_FOODS_RAW_MEATS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "foods/raw_meats"));
+        public static final TagKey<Item> FD_KNIVES = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/knives"));
+        public static final TagKey<Item> C_TITANIUM = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/titanium"));
 
         public static final TagKey<Item> TOGGLEABLE_CYBERWARE = createTag("toggleable_cyberware");
         public static final TagKey<Item> ENERGY_GENERATING_CYBERWARE = createTag("energy_generating_cyberware");
         public static final TagKey<Item> ARM_CANNON_AMMO = createTag("arm_cannon_ammo");
         public static final TagKey<Item> DATA_SHARDS = createTag("data_shards");
         public static final TagKey<Item> QUICKHACK_SHARDS = createTag("quickhack_shards");
+        public static final TagKey<Item> GRAPHENE = createTag("graphene");
 
         public static final TagKey<Item> COMPONENT_ITEM = createTag("component_item");
         public static final TagKey<Item> CYBERWARE_ITEM = createTag("cyberware_item");

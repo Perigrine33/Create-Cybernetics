@@ -966,14 +966,14 @@ public final class CyberwareHudLayer {
         int rgbTint = hudTintArgb & 0x00FFFFFF;
         int color = low ? OXYGEN_TEXT_COLOR_LOW : (rgbTint != 0 ? rgbTint : OXYGEN_TEXT_COLOR);
 
-        int airRightX = (screenPxW / 2) + 91;
-        int airY = screenPxH - 52;
+        int oxygenBarCenterX = (screenPxW / 2) + 200;
+        int oxygenBarTopY = screenPxH - 200;
 
         int scaledTextW = Math.round(mc.font.width(text) * hudTextScale);
         int scaledTextH = Math.round(mc.font.lineHeight * hudTextScale);
 
-        int textX = airRightX - scaledTextW;
-        int textY = airY - scaledTextH - 1;
+        int textX = oxygenBarCenterX - (scaledTextW / 2);
+        int textY = oxygenBarTopY - scaledTextH - 1;
 
         gg.pose().pushPose();
         gg.pose().translate(textX, textY, 0);

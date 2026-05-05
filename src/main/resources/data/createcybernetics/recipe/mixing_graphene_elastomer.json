@@ -1,0 +1,15 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    { "item": "minecraft:redstone" },
+    { "item": "minecraft:slime_ball" },
+    { "tag": "createcybernetics:graphene" }
+  ],
+  "results": [
+    {
+      "id": "createcybernetics:graphene_elastomer",
+      "count": 2
+    }
+  ],
+  "heatRequirement": "none"
+}

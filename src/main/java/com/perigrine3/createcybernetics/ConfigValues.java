@@ -21,17 +21,31 @@ public final class ConfigValues {
     /** Epilepsy Mode. */
     public static boolean EPILEPSY_MODE = false;
 
+    /** Tattoo upload policy. */
+    public static TattooUploadMode TATTOO_UPLOAD_MODE = TattooUploadMode.SERVER_FILES_ONLY;
+
+    public enum TattooUploadMode {
+        SERVER_FILES_ONLY,
+        OP_ONLY_AUTO_APPROVE,
+        ANY_PLAYER_PENDING_APPROVAL,
+        ANY_PLAYER_AUTO_APPROVE
+    }
+
     /** Engineering Table deconstruction rolls for regular cyberware. */
     public static List<EngineeringRoll> ENGINEERING_DECONSTRUCT_ROLLS = new ArrayList<>();
+
     /** Engineering Table deconstruction rolls for scavenged cyberware. */
     public static List<EngineeringRoll> ENGINEERING_SCAVENGED_DECONSTRUCT_ROLLS = new ArrayList<>();
+
     public record EngineeringRoll(Item item, int min, int max, int weight) {
     }
 
     public static List<EntitySlotRoll> ENTITY_SLOT_ROLLS = new ArrayList<>();
     public static List<EntityCyberwareRoll> ENTITY_CYBERWARE_ROLLS = new ArrayList<>();
+
     public record EntitySlotRoll(String tableId, CyberwareSlot slot, float rollChance, int minRolls, int maxRolls) {
     }
+
     public record EntityCyberwareRoll(String tableId, Item item, CyberwareSlot slot, int weight, String requiredModId) {
     }
 }

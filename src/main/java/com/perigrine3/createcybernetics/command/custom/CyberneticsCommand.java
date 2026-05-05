@@ -2,16 +2,18 @@ package com.perigrine3.createcybernetics.command.custom;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.perigrine3.createcybernetics.ConfigValues;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
-import com.perigrine3.createcybernetics.entity.custom.CyberskeletonEntity;
-import com.perigrine3.createcybernetics.entity.custom.CyberzombieEntity;
+import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -26,26 +28,44 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.function.Supplier;
+
 public final class CyberneticsCommand {
     private CyberneticsCommand() {}
 
-    // ---- Translation keys for KeepCyberware ----
     private static final String KEY_KEEP_QUERY = "command.createcybernetics.keep_cyberware.query";
-    private static final String KEY_KEEP_SET   = "command.createcybernetics.keep_cyberware.set";
+    private static final String KEY_KEEP_SET = "command.createcybernetics.keep_cyberware.set";
 
-    // ---- Translation keys for Implants ----
     private static final String KEY_INVALID_ENTITY = "commands.createcybernetics.implants.invalid_entity_target";
-    private static final String KEY_WRONG_ITEM   = "commands.createcybernetics.implants.wrong_item";
+    private static final String KEY_WRONG_ITEM = "commands.createcybernetics.implants.wrong_item";
     private static final String KEY_NO_CYBERWARE = "commands.createcybernetics.implants.no_cyberware";
     private static final String KEY_INSTALL_FAIL = "commands.createcybernetics.implants.install_fail";
-    private static final String KEY_INSTALL_OK   = "commands.createcybernetics.implants.install_success";
-    private static final String KEY_REMOVE_FAIL  = "commands.createcybernetics.implants.remove_fail";
-    private static final String KEY_REMOVE_OK    = "commands.createcybernetics.implants.remove_success";
-    private static final String KEY_CLEAR_OK     = "commands.createcybernetics.implants.clear_success";
+    private static final String KEY_INSTALL_OK = "commands.createcybernetics.implants.install_success";
+    private static final String KEY_REMOVE_FAIL = "commands.createcybernetics.implants.remove_fail";
+    private static final String KEY_REMOVE_OK = "commands.createcybernetics.implants.remove_success";
+    private static final String KEY_CLEAR_OK = "commands.createcybernetics.implants.clear_success";
 
-    // ---- Persistent key + translation key for Energy Debug ----
     private static final String PKEY_ENERGY_DEBUG = "cc_energy_debug_enabled";
     private static final String KEY_ENERGY_DEBUG_SET = "commands.createcybernetics.energy_debug.set";
+
+    private static final String[] FBC_NAMES = {
+            "gemini",
+            "samson",
+            "eclipse",
+            "spyder",
+            "wingman",
+            "aquarius",
+            "dymond",
+            "dragoon",
+            "copernicus",
+            "genos",
+            "kildare"
+    };
 
     private static final SuggestionProvider<CommandSourceStack> CYBERWARE_ITEM_SUGGESTIONS =
             (context, builder) -> SharedSuggestionProvider.suggestResource(
@@ -54,6 +74,13 @@ public final class CyberneticsCommand {
                             .filter(e -> e.getValue() instanceof ICyberwareItem)
                             .map(e -> e.getKey().location())
                             .sorted(), builder);
+
+    private static final SuggestionProvider<CommandSourceStack> FBC_SUGGESTIONS =
+            (context, builder) -> SharedSuggestionProvider.suggest(FBC_NAMES, builder);
+
+    private record FbcRequirement(Supplier<? extends Item> item, int count, CyberwareSlot... slots) {}
+
+    private record InstallPlacement(CyberwareSlot slot, int index) {}
 
     private static boolean isCreateCyberneticsCyberwareItem(Item item) {
         if (!(item instanceof ICyberwareItem)) return false;
@@ -109,6 +136,16 @@ public final class CyberneticsCommand {
                                         })
                                 )
                         )
+
+                        .then(Commands.literal("fbc")
+                                .then(Commands.argument("name", StringArgumentType.word())
+                                        .suggests(FBC_SUGGESTIONS)
+                                        .executes(c -> installFbc(
+                                                c.getSource(),
+                                                StringArgumentType.getString(c, "name")
+                                        ))
+                                )
+                        )
                 )
 
                 .then(Commands.literal("keepCyberware")
@@ -144,6 +181,437 @@ public final class CyberneticsCommand {
         );
     }
 
+    private static int installFbc(CommandSourceStack src, String rawName) {
+        ServerPlayer player;
+
+        try {
+            player = src.getPlayerOrException();
+        } catch (Exception e) {
+            src.sendFailure(Component.literal("This command must be run as a player."));
+            return 0;
+        }
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) {
+            src.sendFailure(Component.translatable(KEY_NO_CYBERWARE));
+            return 0;
+        }
+
+        String name = rawName == null ? "" : rawName.toLowerCase(Locale.ROOT);
+        List<FbcRequirement> requirements = fbcRequirements(name);
+
+        if (requirements == null) {
+            src.sendFailure(Component.literal("Unknown FBC: " + rawName));
+            return 0;
+        }
+
+        if (requirements.isEmpty()) {
+            src.sendFailure(Component.literal("FBC is unavailable: " + rawName));
+            return 0;
+        }
+
+        String invalid = validateFbcRequirements(requirements);
+        if (invalid != null) {
+            src.sendFailure(Component.literal("FBC " + name + " has an invalid requirement: " + invalid));
+            return 0;
+        }
+
+        clearFbcRecipeSlots(player, data, requirements);
+
+        int installed = 0;
+
+        for (FbcRequirement requirement : requirements) {
+            Item item = requirement.item().get();
+
+            for (int i = 0; i < requirement.count(); i++) {
+                ItemStack stack = new ItemStack(item);
+                boolean ok = installFbcStackDirect(player, data, stack, requirement.slots());
+
+                if (!ok) {
+                    finishPlayerCyberwareUpdate(player, data);
+
+                    src.sendFailure(Component.literal(
+                            "Failed to install " + stack.getHoverName().getString()
+                                    + " for FBC " + name
+                                    + ". Missing after install attempt: "
+                                    + describeMissingFbcRequirements(data, requirements)
+                    ));
+                    return 0;
+                }
+
+                installed++;
+            }
+        }
+
+        finishPlayerCyberwareUpdate(player, data);
+
+        if (!allFbcRequirementsInstalled(data, requirements)) {
+            src.sendFailure(Component.literal(
+                    "FBC " + name + " was only partially installed. Missing: "
+                            + describeMissingFbcRequirements(data, requirements)
+            ));
+            return 0;
+        }
+
+        final int installedCount = installed;
+        final String fbcName = name;
+        final Component playerName = player.getDisplayName();
+
+        src.sendSuccess(() -> Component.literal(
+                "Installed FBC " + fbcName + " on " + playerName.getString()
+                        + " (" + installedCount + " implant" + (installedCount == 1 ? "" : "s") + ")."
+        ), false);
+
+        return 1;
+    }
+
+    private static String validateFbcRequirements(List<FbcRequirement> requirements) {
+        for (FbcRequirement requirement : requirements) {
+            if (requirement == null) {
+                return "null requirement";
+            }
+
+            if (requirement.item() == null) {
+                return "null item supplier";
+            }
+
+            Item item = requirement.item().get();
+            if (item == null) {
+                return "null item";
+            }
+
+            if (!isCreateCyberneticsCyberwareItem(item)) {
+                return item.getDescription().getString() + " is not a Create Cybernetics cyberware item";
+            }
+
+            if (requirement.count() <= 0) {
+                return item.getDescription().getString() + " has invalid count " + requirement.count();
+            }
+
+            if (requirement.slots() == null || requirement.slots().length == 0) {
+                return item.getDescription().getString() + " has no allowed slots";
+            }
+
+            int capacity = 0;
+            for (CyberwareSlot slot : requirement.slots()) {
+                if (slot != null) {
+                    capacity += slot.size;
+                }
+            }
+
+            if (requirement.count() > capacity) {
+                return item.getDescription().getString() + " requires " + requirement.count()
+                        + " but only has " + capacity + " allowed slot(s)";
+            }
+        }
+
+        return null;
+    }
+
+    private static void clearFbcRecipeSlots(ServerPlayer player, PlayerCyberwareData data, List<FbcRequirement> requirements) {
+        Set<CyberwareSlot> slotsToClear = new LinkedHashSet<>();
+
+        for (FbcRequirement requirement : requirements) {
+            if (requirement == null || requirement.slots() == null) continue;
+
+            for (CyberwareSlot slot : requirement.slots()) {
+                if (slot != null) {
+                    slotsToClear.add(slot);
+                }
+            }
+        }
+
+        for (CyberwareSlot slot : slotsToClear) {
+            InstalledCyberware[] arr = data.getAll().get(slot);
+            if (arr == null) continue;
+
+            for (int i = 0; i < arr.length; i++) {
+                InstalledCyberware existing = data.get(slot, i);
+                if (existing == null) continue;
+
+                ItemStack stack = existing.getItem();
+                if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ICyberwareItem cyberwareItem) {
+                    cyberwareItem.onRemoved(player);
+                }
+
+                data.remove(slot, i);
+            }
+        }
+    }
+
+    private static boolean installFbcStackDirect(ServerPlayer player, PlayerCyberwareData data, ItemStack stack, CyberwareSlot... allowedSlots) {
+        if (player == null) return false;
+        if (data == null) return false;
+        if (stack == null || stack.isEmpty()) return false;
+        if (allowedSlots == null || allowedSlots.length == 0) return false;
+
+        Item item = stack.getItem();
+        if (!(item instanceof ICyberwareItem cyberwareItem)) return false;
+
+        ItemStack installStack = stack.copy();
+        installStack.setCount(1);
+
+        InstallPlacement placement = findFbcPlacement(data, installStack, allowedSlots);
+        if (placement == null) return false;
+
+        int humanityCost = cyberwareItem.getHumanityCost();
+
+        InstalledCyberware installed = new InstalledCyberware(
+                installStack,
+                placement.slot(),
+                placement.index(),
+                humanityCost
+        );
+        installed.setPowered(true);
+
+        data.set(placement.slot(), placement.index(), installed);
+        cyberwareItem.onInstalled(player, installed.getItem());
+
+        return true;
+    }
+
+    private static InstallPlacement findFbcPlacement(PlayerCyberwareData data, ItemStack incoming, CyberwareSlot... allowedSlots) {
+        if (data == null) return null;
+        if (incoming == null || incoming.isEmpty()) return null;
+
+        for (CyberwareSlot slot : allowedSlots) {
+            if (slot == null) continue;
+
+            InstalledCyberware[] arr = data.getAll().get(slot);
+            if (arr == null) continue;
+
+            for (int i = 0; i < arr.length; i++) {
+                InstalledCyberware existing = data.get(slot, i);
+
+                if (existing == null || existing.getItem() == null || existing.getItem().isEmpty()) {
+                    return new InstallPlacement(slot, i);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean allFbcRequirementsInstalled(PlayerCyberwareData data, List<FbcRequirement> requirements) {
+        for (FbcRequirement requirement : requirements) {
+            Item item = requirement.item().get();
+            int installed = countInstalled(data, item, requirement.slots());
+
+            if (installed < requirement.count()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static String describeMissingFbcRequirements(PlayerCyberwareData data, List<FbcRequirement> requirements) {
+        ArrayList<String> missing = new ArrayList<>();
+
+        for (FbcRequirement requirement : requirements) {
+            Item item = requirement.item().get();
+            int installed = countInstalled(data, item, requirement.slots());
+            int needed = requirement.count();
+
+            if (installed >= needed) continue;
+
+            missing.add(item.getDescription().getString() + " " + installed + "/" + needed);
+        }
+
+        return missing.isEmpty() ? "none" : String.join(", ", missing);
+    }
+
+    private static void finishPlayerCyberwareUpdate(ServerPlayer player, PlayerCyberwareData data) {
+        data.recomputeHumanityBaseFromInstalled();
+        data.setDirty();
+        ModAttachments.syncCyberware(player);
+        player.syncData(ModAttachments.CYBERWARE);
+    }
+
+    private static int countInstalled(PlayerCyberwareData data, Item item, CyberwareSlot... slots) {
+        int count = 0;
+
+        if (data == null || item == null || slots == null) {
+            return 0;
+        }
+
+        for (CyberwareSlot slot : slots) {
+            if (slot == null) continue;
+
+            for (int i = 0; i < slot.size; i++) {
+                InstalledCyberware installed = data.get(slot, i);
+                if (installed == null || installed.getItem() == null || installed.getItem().isEmpty()) continue;
+
+                if (installed.getItem().is(item)) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private static List<FbcRequirement> fbcRequirements(String name) {
+        return switch (name) {
+            case "gemini" -> geminiRequirements();
+            case "samson" -> samsonRequirements();
+            case "eclipse" -> eclipseRequirements();
+            case "spyder" -> spyderRequirements();
+            case "wingman" -> wingmanRequirements();
+            case "aquarius" -> aquariusRequirements();
+            case "dymond" -> dymondRequirements();
+            case "dragoon" -> dragoonRequirements();
+            case "copernicus" -> copernicusRequirements();
+            case "genos" -> genosRequirements();
+            case "kildare" -> kildareRequirements();
+            default -> null;
+        };
+    }
+
+    private static ArrayList<FbcRequirement> baseRequirements(Supplier<? extends Item> skin) {
+        ArrayList<FbcRequirement> list = new ArrayList<>();
+
+        list.add(req(ModItems.ORGANSUPGRADES_MAGICCATALYST, CyberwareSlot.ORGANS));
+        list.add(req(ModItems.BASECYBERWARE_RIGHTARM, CyberwareSlot.RARM));
+        list.add(req(ModItems.BASECYBERWARE_LEFTARM, CyberwareSlot.LARM));
+        list.add(req(ModItems.BASECYBERWARE_RIGHTLEG, CyberwareSlot.RLEG));
+        list.add(req(ModItems.BASECYBERWARE_LEFTLEG, CyberwareSlot.LLEG));
+        list.add(req(skin, CyberwareSlot.SKIN));
+        list.add(req(ModItems.MUSCLEUPGRADES_SYNTHMUSCLE, CyberwareSlot.MUSCLE));
+        list.add(req(ModItems.HEARTUPGRADES_CYBERHEART, CyberwareSlot.HEART));
+        list.add(req(ModItems.BASECYBERWARE_LINEARFRAME, CyberwareSlot.BONE));
+        list.add(req(ModItems.BASECYBERWARE_CYBEREYES, CyberwareSlot.EYES));
+
+        return list;
+    }
+
+    private static List<FbcRequirement> geminiRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_SYNTHSKIN);
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, CyberwareSlot.BONE));
+        return list;
+    }
+
+    private static List<FbcRequirement> samsonRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, 3, CyberwareSlot.BONE));
+        list.add(req(ModItems.SKINUPGRADES_SUBDERMALARMOR, 3, CyberwareSlot.SKIN));
+        list.add(req(ModItems.ARMUPGRADES_PNEUMATICWRIST, 2, CyberwareSlot.RARM, CyberwareSlot.LARM));
+        return list;
+    }
+
+    private static List<FbcRequirement> eclipseRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, CyberwareSlot.BONE));
+        list.add(req(ModItems.LUNGSUPGRADES_HYPEROXYGENATION, 3, CyberwareSlot.LUNGS));
+        list.add(req(ModItems.LEGUPGRADES_OCELOTPAWS, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.SKINUPGRADES_CHROMATOPHORES, CyberwareSlot.SKIN));
+        list.add(req(ModItems.BONEUPGRADES_SANDEVISTAN, CyberwareSlot.BONE));
+        return list;
+    }
+
+    private static List<FbcRequirement> spyderRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.BASECYBERWARE_CYBEREYES, 2, CyberwareSlot.EYES));
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, CyberwareSlot.BONE));
+        list.add(req(ModItems.LEGUPGRADES_JUMPBOOST, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.LEGUPGRADES_ANKLEBRACERS, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.LEGUPGRADES_OCELOTPAWS, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.SKINUPGRADES_CHROMATOPHORES, CyberwareSlot.SKIN));
+        list.add(req(ModItems.SKINUPGRADES_SYNTHETICSETULES, CyberwareSlot.SKIN));
+        return list;
+    }
+
+    private static List<FbcRequirement> wingmanRequirements() {
+        if (ModItems.BONEUPGRADES_ELYTRA == null) {
+            return List.of();
+        }
+
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, CyberwareSlot.BONE));
+        list.add(req(ModItems.BONEUPGRADES_CYBERSKULL, CyberwareSlot.BONE));
+        list.add(req(ModItems.BONEUPGRADES_ELYTRA, CyberwareSlot.BONE));
+        list.add(req(ModItems.LEGUPGRADES_JUMPBOOST, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        return list;
+    }
+
+    private static List<FbcRequirement> aquariusRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, CyberwareSlot.BONE));
+        list.add(req(ModItems.LEGUPGRADES_PROPELLERS, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.EYEUPGRADES_UNDERWATERVISION, CyberwareSlot.EYES));
+        list.add(req(ModItems.LUNGSUPGRADES_OXYGEN, CyberwareSlot.LUNGS));
+        list.add(req(ModItems.WETWARE_WATERBREATHINGLUNGS, CyberwareSlot.LUNGS));
+        return list;
+    }
+
+    private static List<FbcRequirement> dymondRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, CyberwareSlot.BONE));
+        list.add(req(ModItems.ARMUPGRADES_PNEUMATICWRIST, 2, CyberwareSlot.RARM, CyberwareSlot.LARM));
+        list.add(req(ModItems.LEGUPGRADES_ANKLEBRACERS, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.LEGUPGRADES_METALDETECTOR, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.BRAINUPGRADES_MATRIX, CyberwareSlot.BRAIN));
+        list.add(req(ModItems.ARMUPGRADES_DRILLFIST, CyberwareSlot.RARM, CyberwareSlot.LARM));
+        list.add(req(ModItems.ARMUPGRADES_REINFORCEDKNUCKLES, 2, CyberwareSlot.RARM, CyberwareSlot.LARM));
+        return list;
+    }
+
+    private static List<FbcRequirement> dragoonRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, 3, CyberwareSlot.BONE));
+        list.add(req(ModItems.ARMUPGRADES_PNEUMATICWRIST, 2, CyberwareSlot.RARM, CyberwareSlot.LARM));
+        list.add(req(ModItems.LEGUPGRADES_ANKLEBRACERS, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.LEGUPGRADES_JUMPBOOST, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.ARMUPGRADES_ARMCANNON, CyberwareSlot.RARM, CyberwareSlot.LARM));
+        list.add(req(ModItems.EYEUPGRADES_TARGETING, CyberwareSlot.EYES));
+        list.add(req(ModItems.BRAINUPGRADES_MATRIX, CyberwareSlot.BRAIN));
+        list.add(req(ModItems.BONEUPGRADES_SANDEVISTAN, CyberwareSlot.BONE));
+        return list;
+    }
+
+    private static List<FbcRequirement> copernicusRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.LUNGSUPGRADES_OXYGEN, 3, CyberwareSlot.LUNGS));
+        list.add(req(ModItems.SKINUPGRADES_SOLARSKIN, CyberwareSlot.SKIN));
+        list.add(req(ModItems.SKINUPGRADES_NETHERITEPLATING, CyberwareSlot.SKIN));
+        list.add(req(ModItems.EYEUPGRADES_ZOOM, CyberwareSlot.EYES));
+        list.add(req(ModItems.EYEUPGRADES_HUDJACK, CyberwareSlot.EYES));
+        list.add(req(ModItems.ARMUPGRADES_CRAFTHANDS, CyberwareSlot.LARM, CyberwareSlot.RARM));
+        return list;
+    }
+
+    private static List<FbcRequirement> genosRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.BONEUPGRADES_BONELACING, 2, CyberwareSlot.BONE));
+        list.add(req(ModItems.ARMUPGRADES_PNEUMATICWRIST, 2, CyberwareSlot.RARM, CyberwareSlot.LARM));
+        list.add(req(ModItems.LUNGSUPGRADES_HYPEROXYGENATION, 3, CyberwareSlot.LUNGS));
+        list.add(req(ModItems.LEGUPGRADES_ANKLEBRACERS, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.LEGUPGRADES_JUMPBOOST, 2, CyberwareSlot.RLEG, CyberwareSlot.LLEG));
+        list.add(req(ModItems.ARMUPGRADES_ARMCANNON, CyberwareSlot.RARM, CyberwareSlot.LARM));
+        list.add(req(ModItems.EYEUPGRADES_TARGETING, CyberwareSlot.EYES));
+        list.add(req(ModItems.EYEUPGRADES_HUDJACK, CyberwareSlot.EYES));
+        list.add(req(ModItems.MUSCLEUPGRADES_WIREDREFLEXES, CyberwareSlot.MUSCLE));
+        list.add(req(ModItems.BRAINUPGRADES_MATRIX, CyberwareSlot.BRAIN));
+        return list;
+    }
+
+    private static List<FbcRequirement> kildareRequirements() {
+        ArrayList<FbcRequirement> list = baseRequirements(ModItems.SKINUPGRADES_METALPLATING);
+        list.add(req(ModItems.EYEUPGRADES_ZOOM, CyberwareSlot.EYES));
+        list.add(req(ModItems.EYEUPGRADES_HUDJACK, CyberwareSlot.EYES));
+        list.add(req(ModItems.ARMUPGRADES_CRAFTHANDS, CyberwareSlot.LARM, CyberwareSlot.RARM));
+        list.add(req(ModItems.ARMUPGRADES_RIPPERCLAW, CyberwareSlot.LARM, CyberwareSlot.RARM));
+        return list;
+    }
+
+    private static FbcRequirement req(Supplier<? extends Item> item, CyberwareSlot... slots) {
+        return new FbcRequirement(item, 1, slots);
+    }
+
+    private static FbcRequirement req(Supplier<? extends Item> item, int count, CyberwareSlot... slots) {
+        return new FbcRequirement(item, count, slots);
+    }
+
     private static int install(CommandSourceStack src, Entity target, Item item) {
         if (!isCreateCyberneticsCyberwareItem(item)) {
             src.sendFailure(Component.translatable(KEY_WRONG_ITEM));
@@ -165,10 +633,7 @@ public final class CyberneticsCommand {
                 return 0;
             }
 
-            data.recomputeHumanityBaseFromInstalled();
-            data.setDirty();
-            ModAttachments.syncCyberware(player);
-            player.syncData(ModAttachments.CYBERWARE);
+            finishPlayerCyberwareUpdate(player, data);
 
             src.sendSuccess(() -> Component.translatable(KEY_INSTALL_OK, stack.getHoverName(), player.getDisplayName()), false);
             return 1;
@@ -220,10 +685,7 @@ public final class CyberneticsCommand {
                 return 0;
             }
 
-            data.recomputeHumanityBaseFromInstalled();
-            data.setDirty();
-            ModAttachments.syncCyberware(player);
-            player.syncData(ModAttachments.CYBERWARE);
+            finishPlayerCyberwareUpdate(player, data);
 
             Component itemName = item.getDescription();
             src.sendSuccess(() -> Component.translatable(KEY_REMOVE_OK, itemName, player.getDisplayName()), false);
@@ -296,10 +758,7 @@ public final class CyberneticsCommand {
             data.clear();
             data.resetToDefaultOrgans();
 
-            data.recomputeHumanityBaseFromInstalled();
-            data.setDirty();
-            ModAttachments.syncCyberware(player);
-            player.syncData(ModAttachments.CYBERWARE);
+            finishPlayerCyberwareUpdate(player, data);
 
             src.sendSuccess(() -> Component.translatable(KEY_CLEAR_OK, player.getDisplayName()), false);
             return 1;

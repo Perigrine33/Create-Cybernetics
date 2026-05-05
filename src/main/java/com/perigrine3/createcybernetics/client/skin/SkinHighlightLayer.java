@@ -26,44 +26,69 @@ public final class SkinHighlightLayer extends RenderLayer<AbstractClientPlayer, 
         Entity cam = mc.getCameraEntity();
 
         if (cam instanceof Player viewer) {
-            if (target.isInvisibleTo(viewer)) return false;
-        } else {
-            if (target.isInvisible()) return false;
+            return !target.isInvisibleTo(viewer);
         }
 
-        return true;
+        return !target.isInvisible();
     }
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player,
                        float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks,
                        float netHeadYaw, float headPitch) {
-
         if (!shouldRenderOverlaysFor(player)) return;
 
         SkinModifierState state = SkinModifierManager.getPlayerSkinState(player);
         if (state == null || !state.hasHighlights()) return;
 
-        PlayerSkin.Model modelType = player.getSkin().model();
+        PlayerModel<AbstractClientPlayer> model = this.getParentModel();
 
+        boolean prevHead = model.head.visible;
+        boolean prevHat = model.hat.visible;
+        boolean prevBody = model.body.visible;
+        boolean prevJacket = model.jacket.visible;
+        boolean prevLeftArm = model.leftArm.visible;
+        boolean prevLeftSleeve = model.leftSleeve.visible;
+        boolean prevRightArm = model.rightArm.visible;
+        boolean prevRightSleeve = model.rightSleeve.visible;
+        boolean prevLeftLeg = model.leftLeg.visible;
+        boolean prevLeftPants = model.leftPants.visible;
+        boolean prevRightLeg = model.rightLeg.visible;
+        boolean prevRightPants = model.rightPants.visible;
+
+        model.head.visible = true;
+        model.hat.visible = true;
+        model.body.visible = true;
+        model.jacket.visible = true;
+        model.leftArm.visible = true;
+        model.leftSleeve.visible = true;
+        model.rightArm.visible = true;
+        model.rightSleeve.visible = true;
+        model.leftLeg.visible = true;
+        model.leftPants.visible = true;
+        model.rightLeg.visible = true;
+        model.rightPants.visible = true;
+
+        SkinVanillaWearVisibility.pushSuppress();
         RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
         try {
+            PlayerSkin.Model modelType = player.getSkin().model();
+
             for (SkinHighlight highlight : state.getHighlights()) {
                 if (highlight == null) continue;
 
                 ResourceLocation tex = highlight.getTexture(modelType);
 
-                final boolean emissive = highlight.isEmissive();
-                final boolean tintOnEmissive = highlight.tintOnEmissive();
-
                 RenderType rt;
                 int light;
                 int color;
 
-                if (emissive) {
+                if (highlight.isEmissive()) {
                     light = 0x00F000F0;
 
-                    if (tintOnEmissive) {
+                    if (highlight.tintOnEmissive()) {
                         rt = SkinRenderTypes.emissiveTinted(tex);
                         color = highlight.getColor();
                     } else {
@@ -77,12 +102,25 @@ public final class SkinHighlightLayer extends RenderLayer<AbstractClientPlayer, 
                 }
 
                 var vc = buffer.getBuffer(rt);
-                this.getParentModel().renderToBuffer(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                model.renderToBuffer(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
             }
-
         } finally {
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
+            SkinVanillaWearVisibility.popSuppress();
+
+            model.head.visible = prevHead;
+            model.hat.visible = prevHat;
+            model.body.visible = prevBody;
+            model.jacket.visible = prevJacket;
+            model.leftArm.visible = prevLeftArm;
+            model.leftSleeve.visible = prevLeftSleeve;
+            model.rightArm.visible = prevRightArm;
+            model.rightSleeve.visible = prevRightSleeve;
+            model.leftLeg.visible = prevLeftLeg;
+            model.leftPants.visible = prevLeftPants;
+            model.rightLeg.visible = prevRightLeg;
+            model.rightPants.visible = prevRightPants;
         }
     }
 }

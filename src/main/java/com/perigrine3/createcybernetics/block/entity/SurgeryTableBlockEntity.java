@@ -4,6 +4,7 @@ import com.perigrine3.createcybernetics.block.ModBlocks;
 import com.perigrine3.createcybernetics.block.SurgeryTableBlock;
 import com.perigrine3.createcybernetics.common.surgery.SurgeryController;
 import com.perigrine3.createcybernetics.screen.custom.surgery.surgery_table.SurgeryTableMenu;
+import com.perigrine3.createcybernetics.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -18,6 +19,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
@@ -272,6 +274,8 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
         timedSurgeryInProgress = true;
         timedSurgeryTicksRemaining = TIMED_SURGERY_DURATION_TICKS;
         timedSurgeryEffectTicks = EFFECT_INTERVAL_TICKS;
+
+        level.playSound(null, worldPosition, ModSounds.SURGERY_TABLE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 
         sync();
     }

@@ -18,11 +18,11 @@
     },
     {
       "chance": 0.25,
-      "id": "createcybernetics:bodypart_muscle"
+      "id": "createcybernetics:graphene_elastomer"
     },
     {
       "chance": 0.20,
-      "id": "minecraft:ghast_tear"
+      "id": "minecraft:blaze_powder"
     },
     {
       "chance": 0.25,
