@@ -84,5 +84,11 @@
     "sounds": [
       {"name": "createcybernetics:robosurgeon"}
     ]
+  },
+  "surgery_table": {
+    "subtitle": "sounds.createcybernetics.surgery_table",
+    "sounds": [
+      {"name": "createcybernetics:surgery_table"}
+    ]
   }
 }

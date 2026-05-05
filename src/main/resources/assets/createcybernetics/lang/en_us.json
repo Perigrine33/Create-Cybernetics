@@ -6,12 +6,16 @@
   "createcybernetics.configuration.keepCyberware": "Keep Cyberware on Death",
   "createcybernetics.configuration.scaleSurgeryDamage": "Scale Surgery Damage",
   "createcybernetics.configuration.epilepsyMode": "Epilepsy Mode",
+  "createcybernetics.configuration.tattooUploadMode": "Tattoo Upload Settings",
 
   "createcybernetics.configuration.engineeringDeconstructRolls": "Engineering Table Deconstruction Rolls",
   "createcybernetics.configuration.engineeringScavengedDeconstructRolls": "Engineering Table Scavenged Deconstruction Rolls",
 
   "createcybernetics.configuration.entitySlotRolls": "Entity Slot Rolls",
   "createcybernetics.configuration.entityCyberwareRolls": "Entity Cyberware Rolls",
+
+
+  "tooltip.createcybernetics.tattoo": "Tattoo: %s",
 
 
   "commands.createcybernetics.implants.invalid_entity_target": "This entity is not cybernetic.",
@@ -25,6 +29,15 @@
   "command.createcybernetics.keep_cyberware.query": "Keep Cyberware set to %s (runtime only).",
   "command.createcybernetics.keep_cyberware.set": "Keep Cyberware is currently %s (runtime only, to make permanent, change in config).",
   "commands.createcybernetics.energy_debug.set": "Energy Debug: %s",
+  "commands.createcybernetics.tattoo.reload": "Reloaded tattoo registry.",
+  "commands.createcybernetics.tattoo.pending.empty": "No pending tattoos.",
+  "commands.createcybernetics.tattoo.pending.header": "Pending tattoos:",
+  "commands.createcybernetics.tattoo.approved.empty": "No approved tattoos.",
+  "commands.createcybernetics.tattoo.approved.header": "Approved tattoos:",
+  "commands.createcybernetics.tattoo.approve.success": "Approved tattoo: %s",
+  "commands.createcybernetics.tattoo.reject.success": "Rejected tattoo: %s",
+  "commands.createcybernetics.tattoo.failure": "%s",
+  "commands.createcybernetics.tattoo.invalid_id": "Invalid tattoo id: %s",
 
 
   "screen.createcybernetics.hud_layout": "HUD Layout",
@@ -38,6 +51,7 @@
   "gui.heatengine.title": "Heat Engine",
   "gui.chipwarecreative.title": "Creative Chiware Slots",
   "gui.infolog.title": "Infolog",
+  "gui.createcybernetics.tattoo_artist": "Tattoo Artist",
 
   "gui.createcybernetics.corpse_cyberware_button": "Implants",
   "gui.createcybernetics.corpse_cyberware": "Cyberware", 
@@ -83,6 +97,7 @@
 
   "item.createcybernetics.eyeupgradebase": "Cybereye Module Base",
   "item.createcybernetics.titanium_hand": "Titanium Hand",
+  "item.createcybernetics.graphene_elastomer": "Graphene Crystal Elastomer",
   "item.createcybernetics.holoimprint_chip": "Entity Imprint Chip",
   "item.createcybernetics.expcapsule": "Cortical Stack Capsule",
   "item.createcybernetics.expcapsule.playername": "%s's Cortical Stack",
@@ -207,9 +222,9 @@
 
   "item.createcybernetics.cyberzombie_spawn_egg": "Cyberzombie Spawn Egg",
   "item.createcybernetics.cyberskeleton_spawn_egg": "Cyberskeleton Spawn Egg",
-
   "item.createcybernetics.smasher_spawn_egg": "Smasher Spawn Egg",
   "item.createcybernetics.ripper_spawn_egg": "Ripper Spawn Egg",
+  "item.createcybernetics.tathog_spawn_egg": "TatHog Spawn Egg",
   "item.createcybernetics.punklin_spawn_egg": "Punklin Spawn Egg",
   "item.createcybernetics.pigstrom_spawn_egg": "Pigstrom Spawn Egg",
   "item.createcybernetics.hogboy_spawn_egg": "HogBoy Spawn Egg",
@@ -511,6 +526,7 @@
 
 
   "entity.createcybernetics.ripper": "Ripper",
+  "entity.createcybernetics.tathog": "TatHog",
 
   "entity.createcybernetics.smasher": "Smasher",
   "entity.createcybernetics.cyberzombie": "Cyberzombie",

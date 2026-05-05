@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 32,
+    "separation": 12,
+    "salt": 91847263
+  },
+  "structures": [
+    {
+      "structure": "createcybernetics:tattooist_hut",
+      "weight": 1
+    }
+  ]
+}

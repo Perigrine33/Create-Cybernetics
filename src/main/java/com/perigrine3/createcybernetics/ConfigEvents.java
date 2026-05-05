@@ -26,5 +26,6 @@ public final class ConfigEvents {
         ConfigValues.KEEP_CYBERWARE = Config.KEEP_CYBERWARE.get();
         ConfigValues.SURGERY_DAMAGE_SCALING = Config.SURGERY_DAMAGE_SCALING.get();
         ConfigValues.EPILEPSY_MODE = Config.EPILEPSY_MODE.get();
+        ConfigValues.TATTOO_UPLOAD_MODE = Config.TATTOO_UPLOAD_MODE.get();
     }
 }

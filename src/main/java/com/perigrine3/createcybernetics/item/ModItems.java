@@ -69,6 +69,8 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> TITANIUM_HAND = ITEMS.register("titanium_hand",
             () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> GRAPHENE_ELASTOMER = ITEMS.register("graphene_elastomer",
+            () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> HOLOIMPRINT_CHIP = ITEMS.register("holoimprint_chip",
             () -> new HoloProjectionChipItem(new Item.Properties()));
     public static final DeferredItem<Item> XP_CAPSULE = ITEMS.register("expcapsule",
@@ -200,6 +202,9 @@ public class ModItems {
 //SPAWN EGGS
     public static final DeferredItem<Item> RIPPER_SPAWN_EGG = ITEMS.register("ripper_spawn_egg",
         () -> new DeferredSpawnEggItem(ModEntities.RIPPER, 0x969696, 0xFFFF003C,
+                new Item.Properties()));
+    public static final DeferredItem<Item> TATHOG_SPAWN_EGG = ITEMS.register("tathog_spawn_egg",
+        () -> new DeferredSpawnEggItem(ModEntities.TATHOG, 0xC97A4A, 0x00AFAF,
                 new Item.Properties()));
     public static final DeferredItem<Item> SMASHER_SPAWN_EGG = ITEMS.register("smasher_spawn_egg",
         () -> new DeferredSpawnEggItem(ModEntities.SMASHER, 0x7f7b7b, 0xf44336,
@@ -1112,6 +1117,7 @@ public class ModItems {
                 if (Screen.hasShiftDown()) {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_flywheel.tooltip1"));
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_flywheel.tooltip2"));
                 } else {
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.armupgrades_tooltip"));
                     tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));

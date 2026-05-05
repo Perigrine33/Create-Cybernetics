@@ -40,6 +40,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TITANIUMSHEET);
                         output.accept(ModItems.EYEUPGRADEBASE);
                         output.accept(ModItems.TITANIUM_HAND);
+                        output.accept(ModItems.GRAPHENE_ELASTOMER);
                         output.accept(ModItems.HOLOIMPRINT_CHIP);
                         output.accept(ModItems.FRONTAL_LOBE);
                         output.accept(ModItems.PARIETAL_LOBE);

@@ -1,4 +1,4 @@
-// 1.21.1	2026-04-28T14:30:29.8241873	Tags for minecraft:item mod id createcybernetics
+// 1.21.1	2026-05-04T23:03:14.9404205	Tags for minecraft:item mod id createcybernetics
 facebceb0f7eaac59aec077332daccfdb5c937c8 data/createcybernetics/tags/item/arm_cannon_ammo.json
 0cbfde627157fae8937e686d4485a3af3857048b data/createcybernetics/tags/item/arm_upgrades.json
 c3bef8bc9fc1d7e5267a79e0b1abd96b09536973 data/createcybernetics/tags/item/base_cyberware.json
@@ -19,6 +19,7 @@ a3380be03ab9239aee555d7ae26dec5f6b4aa9a2 data/createcybernetics/tags/item/eye_it
 22249b34f6639bec24672638832a7ca6ebb25fa2 data/createcybernetics/tags/item/eye_replacements.json
 39ef76e567bcaf2cbbbc53b3fcbecbf56f6d62c1 data/createcybernetics/tags/item/eye_upgrades.json
 436dc248c0ac4cf66830880b3fee05796ec9d894 data/createcybernetics/tags/item/fish_bodypart_drops.json
+d82ba82b2bae9d72c9a7080b75b51896e2574368 data/createcybernetics/tags/item/graphene.json
 721bb55b87793cad597778cdc8fdc027c2df24f2 data/createcybernetics/tags/item/grassfed_bodypart_drops.json
 a3ca309d00d9c551431e874ef212b0cc1d5bf082 data/createcybernetics/tags/item/heart_items.json
 ab8e796ee64f0bca8e33d7a1c7c91f6021b59e71 data/createcybernetics/tags/item/heart_replacements.json

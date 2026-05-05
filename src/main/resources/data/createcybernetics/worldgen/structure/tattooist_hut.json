@@ -1,0 +1,15 @@
+{
+  "type": "createcybernetics:nether_cavern_jigsaw",
+  "biomes": "#createcybernetics:has_structure/tattooist_hut",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "start_pool": "createcybernetics:tattooist_hut_pool",
+  "size": 1,
+  "start_height": {
+    "absolute": 0
+  },
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "liquid_settings": "ignore_waterlogging"
+}

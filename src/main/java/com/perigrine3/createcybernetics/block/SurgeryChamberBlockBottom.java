@@ -233,7 +233,6 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
 
         if (!connected || !closed) return;
         if (state.getValue(SURGERY_DONE)) return;
-        if (SurgeryChamberSurgeryHandler.isActive(pos)) return;
 
         BlockPos surgeonPos = topPos.above();
         if (!level.getBlockState(surgeonPos).is(ModBlocks.ROBOSURGEON.get())) return;
@@ -241,9 +240,7 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
 
         if (!hasPendingSurgeryWork(surgeon)) return;
 
-        if (level instanceof net.minecraft.server.level.ServerLevel sl) {
-            SurgeryChamberSurgeryHandler.start(player, sl, pos, topPos, surgeonPos);
-        }
+        SurgeryChamberSurgeryHandler.startOrRefresh(player, level, pos, surgeon);
     }
 
     private static boolean hasPendingSurgeryWork(RobosurgeonBlockEntity surgeon) {

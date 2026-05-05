@@ -248,6 +248,72 @@ public final class ModPayloads {
                 (payload, ctx) -> ctx.enqueueWork(() -> CybereyeIrisSyncS2CPayload.handle(payload))
         );
 
+        r.playToServer(
+                TattooUploadC2SPayload.TYPE,
+                TattooUploadC2SPayload.STREAM_CODEC,
+                TattooUploadC2SPayload::handle
+        );
+
+        r.playToClient(
+                TattooListS2CPayload.TYPE,
+                TattooListS2CPayload.STREAM_CODEC,
+                TattooListS2CPayload::handle
+        );
+
+        r.playToServer(
+                TattooImageRequestC2SPayload.TYPE,
+                TattooImageRequestC2SPayload.STREAM_CODEC,
+                TattooImageRequestC2SPayload::handle
+        );
+
+        r.playToClient(
+                TattooImageDataS2CPayload.TYPE,
+                TattooImageDataS2CPayload.STREAM_CODEC,
+                TattooImageDataS2CPayload::handle
+        );
+
+        r.playToServer(
+                TattooApplyC2SPayload.TYPE,
+                TattooApplyC2SPayload.STREAM_CODEC,
+                TattooApplyC2SPayload::handle
+        );
+
+        r.playToClient(
+                TattooAccessSyncS2CPayload.TYPE,
+                TattooAccessSyncS2CPayload.STREAM_CODEC,
+                TattooAccessSyncS2CPayload::handle
+        );
+
+        r.playToServer(
+                TattooApproveC2SPayload.TYPE,
+                TattooApproveC2SPayload.STREAM_CODEC,
+                TattooApproveC2SPayload::handle
+        );
+
+        r.playToClient(
+                TattooPendingListS2CPayload.TYPE,
+                TattooPendingListS2CPayload.STREAM_CODEC,
+                TattooPendingListS2CPayload::handle
+        );
+
+        r.playToServer(
+                TattooPendingListRequestC2SPayload.TYPE,
+                TattooPendingListRequestC2SPayload.STREAM_CODEC,
+                TattooPendingListRequestC2SPayload::handle
+        );
+
+        r.playToServer(
+                TattooRemoveApprovedC2SPayload.TYPE,
+                TattooRemoveApprovedC2SPayload.STREAM_CODEC,
+                TattooRemoveApprovedC2SPayload::handle
+        );
+
+        r.playToServer(
+                TattooRejectC2SPayload.TYPE,
+                TattooRejectC2SPayload.STREAM_CODEC,
+                TattooRejectC2SPayload::handle
+        );
+
 
 
 

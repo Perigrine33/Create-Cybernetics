@@ -2,11 +2,17 @@ package com.perigrine3.createcybernetics.item.organs;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.tattoo.TattooData;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
+import java.util.List;
 import java.util.Set;
 
 public class SkinItem extends Item implements ICyberwareItem {
@@ -21,6 +27,20 @@ public class SkinItem extends Item implements ICyberwareItem {
     public int getHumanityCost() {
         return humanityCost;
     }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        if (TattooData.has(stack)) {
+            String displayName = TattooData.getDisplayName(stack);
+            if (displayName.isBlank()) {
+                displayName = "Unknown Tattoo";
+            }
+
+            tooltip.add(Component.translatable("tooltip.createcybernetics.tattoo", displayName).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal("Layer: " + TattooData.getLayer(stack).displayName()).withStyle(ChatFormatting.DARK_GRAY));
+        }
+    }
+
 
     @Override
     public Set<CyberwareSlot> getSupportedSlots() {

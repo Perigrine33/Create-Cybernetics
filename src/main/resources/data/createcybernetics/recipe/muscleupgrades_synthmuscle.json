@@ -4,23 +4,23 @@
   "category": "misc",
 
   "key": {
-    "B": {
-      "item": "createcybernetics:bodypart_muscle"
+    "G": {
+      "item": "createcybernetics:graphene_elastomer"
     },
     "M": {
       "item": "createcybernetics:component_mesh"
     },
-    "T": {
-      "item": "minecraft:ghast_tear"
+    "B": {
+      "item": "minecraft:blaze_powder"
     }
   },
 
   "pattern": [
-    "   BM",
-    " MBMB",
-    " BTB ",
-    "BMBM ",
-    "MB   "
+    "   GG",
+    " MGMG",
+    " GBG ",
+    "GMGM ",
+    "GG   "
   ],
 
   "result": {

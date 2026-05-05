@@ -2,6 +2,7 @@ package com.perigrine3.createcybernetics.item.cyberware.skin;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.tattoo.TattooData;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -27,6 +28,16 @@ public class SynthSkinItem extends Item implements ICyberwareItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.createcybernetics.humanity", humanityCost).withStyle(ChatFormatting.GOLD));
+        }
+
+        if (TattooData.has(stack)) {
+            String displayName = TattooData.getDisplayName(stack);
+            if (displayName.isBlank()) {
+                displayName = "Unknown Tattoo";
+            }
+
+            tooltip.add(Component.translatable("tooltip.createcybernetics.tattoo", displayName).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal("Layer: " + TattooData.getLayer(stack).displayName()).withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 

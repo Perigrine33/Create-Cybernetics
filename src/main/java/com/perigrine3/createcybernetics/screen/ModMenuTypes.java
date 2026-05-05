@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.screen;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.screen.custom.TattooMenu;
 import com.perigrine3.createcybernetics.screen.custom.arm_cannon.ArmCannonMenu;
 import com.perigrine3.createcybernetics.screen.custom.chipware.ChipwareMiniMenu;
 import com.perigrine3.createcybernetics.screen.custom.crafting.EngineeringTableMenu;
@@ -56,6 +57,9 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<RipperTradeMenu>> RIPPER_TRADE_MENU =
             registerMenuType("ripper_trade_menu", RipperTradeMenu::new);
+
+    public static final DeferredHolder<MenuType<?>, MenuType<TattooMenu>> TATTOO_MENU =
+            registerMenuType("tattoo_menu", TattooMenu::new);
 
 
     private static <T extends AbstractContainerMenu>DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {

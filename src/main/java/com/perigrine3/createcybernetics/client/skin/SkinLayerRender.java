@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.compat.bettercombat.BetterCombatCompat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -30,93 +31,28 @@ import java.util.UUID;
 public final class SkinLayerRender {
     private SkinLayerRender() {}
 
-    private static final Map<UUID, boolean[]> PREV_WEAR_VIS = new HashMap<>();
-    private static final Map<UUID, SkinModifierState> SKIN_STATES = new HashMap<>();
+    private static final Map<UUID, FirstPersonArmRenderRequest> FP_RIGHT = new HashMap<>();
+    private static final Map<UUID, FirstPersonArmRenderRequest> FP_LEFT = new HashMap<>();
 
-    private static final Map<UUID, Boolean> REPLACE_FP_RIGHT = new HashMap<>();
-    private static final Map<UUID, Boolean> REPLACE_FP_LEFT  = new HashMap<>();
-
-    private static final Map<UUID, Boolean> FP_CANCEL_RIGHT = new HashMap<>();
-    private static final Map<UUID, Boolean> FP_CANCEL_LEFT  = new HashMap<>();
-    private static final Map<UUID, Boolean> FP_HIDE_SLEEVE_RIGHT = new HashMap<>();
-    private static final Map<UUID, Boolean> FP_HIDE_SLEEVE_LEFT  = new HashMap<>();
-
-    @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT)
-    public static final class Wear {
-
-        private static final Map<UUID, boolean[]> PREV_WEAR_VIS = new HashMap<>();
-
-        @SubscribeEvent
-        public static void onRenderLivingPre(net.neoforged.neoforge.client.event.RenderLivingEvent.Pre<?, ?> event) {
-            if (!(event.getEntity() instanceof AbstractClientPlayer player)) return;
-            if (!(event.getRenderer() instanceof PlayerRenderer)) return;
-
-            SkinModifierState state = SkinModifierManager.getPlayerSkinState(player);
-            if (state == null || !state.hasModifiers()) return;
-
-            var hide = state.getHideMask();
-            if (hide.isEmpty()) return;
-
-            var parentModel = ((PlayerRenderer) event.getRenderer()).getModel();
-            if (!(parentModel instanceof PlayerModel<?> pmAny)) return;
-
-            @SuppressWarnings("unchecked")
-            PlayerModel<AbstractClientPlayer> model = (PlayerModel<AbstractClientPlayer>) pmAny;
-
-            PREV_WEAR_VIS.put(player.getUUID(), new boolean[]{
-                    model.hat.visible,
-                    model.jacket.visible,
-                    model.leftSleeve.visible,
-                    model.rightSleeve.visible,
-                    model.leftPants.visible,
-                    model.rightPants.visible
-            });
-
-            if (hide.contains(SkinModifier.HideVanilla.HAT)) model.hat.visible = false;
-            if (hide.contains(SkinModifier.HideVanilla.JACKET)) model.jacket.visible = false;
-            if (hide.contains(SkinModifier.HideVanilla.LEFT_SLEEVE)) model.leftSleeve.visible = false;
-            if (hide.contains(SkinModifier.HideVanilla.RIGHT_SLEEVE)) model.rightSleeve.visible = false;
-            if (hide.contains(SkinModifier.HideVanilla.LEFT_PANTS)) model.leftPants.visible = false;
-            if (hide.contains(SkinModifier.HideVanilla.RIGHT_PANTS)) model.rightPants.visible = false;
-        }
-
-        @SubscribeEvent
-        public static void onRenderLivingPost(net.neoforged.neoforge.client.event.RenderLivingEvent.Post<?, ?> event) {
-            if (!(event.getEntity() instanceof AbstractClientPlayer player)) return;
-            if (!(event.getRenderer() instanceof PlayerRenderer)) return;
-
-            boolean[] prev = PREV_WEAR_VIS.remove(player.getUUID());
-            if (prev == null) return;
-
-            var parentModel = ((PlayerRenderer) event.getRenderer()).getModel();
-            if (!(parentModel instanceof PlayerModel<?> pmAny)) return;
-
-            @SuppressWarnings("unchecked")
-            PlayerModel<AbstractClientPlayer> model = (PlayerModel<AbstractClientPlayer>) pmAny;
-
-            model.hat.visible = prev[0];
-            model.jacket.visible = prev[1];
-            model.leftSleeve.visible = prev[2];
-            model.rightSleeve.visible = prev[3];
-            model.leftPants.visible = prev[4];
-            model.rightPants.visible = prev[5];
+    private record FirstPersonArmRenderRequest(
+            boolean replaceVanillaArm,
+            boolean hideVanillaSleeve
+    ) {
+        boolean shouldCancelVanillaRender() {
+            return replaceVanillaArm || hideVanillaSleeve;
         }
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT)
-    public final class FirstPersonSkinOverlayRenderer {
-
+    public static final class FirstPersonSkinOverlayRenderer {
         private FirstPersonSkinOverlayRenderer() {}
-
-        private static final Map<UUID, Boolean> FP_CANCEL_RIGHT = new HashMap<>();
-        private static final Map<UUID, Boolean> FP_CANCEL_LEFT  = new HashMap<>();
-        private static final Map<UUID, Boolean> FP_HIDE_SLEEVE_RIGHT = new HashMap<>();
-        private static final Map<UUID, Boolean> FP_HIDE_SLEEVE_LEFT  = new HashMap<>();
 
         @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
         public static void onRenderArmCancel(RenderArmEvent event) {
             if (BetterCombatCompat.LOADED) return;
+
             AbstractClientPlayer player = event.getPlayer();
+            if (player == null) return;
 
             SkinModifierState state = SkinModifierManager.getPlayerSkinState(player);
             if (state == null || !state.hasModifiers()) return;
@@ -124,81 +60,66 @@ public final class SkinLayerRender {
             HumanoidArm arm = event.getArm();
             UUID id = player.getUUID();
 
-            boolean replace = false;
-            for (SkinModifier m : state.getModifiers()) {
-                if (m.replacesVanillaArm(arm)) {
-                    replace = true;
+            boolean replaceVanillaArm = false;
+            for (SkinModifier modifier : state.getModifiers()) {
+                if (modifier != null && modifier.replacesVanillaArm(arm)) {
+                    replaceVanillaArm = true;
                     break;
                 }
             }
 
-            var hide = state.getHideMask();
-            boolean hideSleeve = (arm == HumanoidArm.RIGHT)
-                    ? hide.contains(SkinModifier.HideVanilla.RIGHT_SLEEVE)
-                    : hide.contains(SkinModifier.HideVanilla.LEFT_SLEEVE);
+            boolean hideVanillaSleeve = shouldHideVanillaSleeve(state, arm);
 
-            boolean cancel = replace || hideSleeve;
+            FirstPersonArmRenderRequest request =
+                    new FirstPersonArmRenderRequest(replaceVanillaArm, hideVanillaSleeve);
 
             if (arm == HumanoidArm.RIGHT) {
-                REPLACE_FP_RIGHT.put(id, replace);
-                FP_HIDE_SLEEVE_RIGHT.put(id, hideSleeve);
-                FP_CANCEL_RIGHT.put(id, cancel);
+                FP_RIGHT.put(id, request);
             } else {
-                REPLACE_FP_LEFT.put(id, replace);
-                FP_HIDE_SLEEVE_LEFT.put(id, hideSleeve);
-                FP_CANCEL_LEFT.put(id, cancel);
+                FP_LEFT.put(id, request);
             }
 
-            if (cancel) {
+            if (request.shouldCancelVanillaRender()) {
                 event.setCanceled(true);
             }
         }
 
         @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
         public static void onRenderArm(RenderArmEvent event) {
+            if (BetterCombatCompat.LOADED) return;
+
             AbstractClientPlayer player = event.getPlayer();
+            if (player == null) return;
+
+            HumanoidArm arm = event.getArm();
+            UUID id = player.getUUID();
+
+            FirstPersonArmRenderRequest request = arm == HumanoidArm.RIGHT
+                    ? FP_RIGHT.remove(id)
+                    : FP_LEFT.remove(id);
+
+            if (request == null || !request.shouldCancelVanillaRender()) return;
 
             SkinModifierState state = SkinModifierManager.getPlayerSkinState(player);
             if (state == null || !state.hasModifiers()) return;
 
             Minecraft mc = Minecraft.getInstance();
-            EntityRenderer<? super AbstractClientPlayer> renderer = mc.getEntityRenderDispatcher().getRenderer(player);
+            EntityRenderer<? super AbstractClientPlayer> renderer =
+                    mc.getEntityRenderDispatcher().getRenderer(player);
+
             if (!(renderer instanceof PlayerRenderer playerRenderer)) return;
-
-            PoseStack poseStack = event.getPoseStack();
-            MultiBufferSource buffer = event.getMultiBufferSource();
-            int light = event.getPackedLight();
-            HumanoidArm arm = event.getArm();
-
-            UUID id = player.getUUID();
-
-            boolean replaceVanillaArm = (arm == HumanoidArm.RIGHT)
-                    ? Boolean.TRUE.equals(REPLACE_FP_RIGHT.get(id))
-                    : Boolean.TRUE.equals(REPLACE_FP_LEFT.get(id));
-
-            boolean cancel = (arm == HumanoidArm.RIGHT)
-                    ? Boolean.TRUE.equals(FP_CANCEL_RIGHT.get(id))
-                    : Boolean.TRUE.equals(FP_CANCEL_LEFT.get(id));
-
-            boolean hideSleeve = (arm == HumanoidArm.RIGHT)
-                    ? Boolean.TRUE.equals(FP_HIDE_SLEEVE_RIGHT.get(id))
-                    : Boolean.TRUE.equals(FP_HIDE_SLEEVE_LEFT.get(id));
-
-            SkinModifier baseArmModifier = null;
-            if (replaceVanillaArm) {
-                for (SkinModifier m : state.getModifiers()) {
-                    if (m.replacesVanillaArm(arm)) {
-                        baseArmModifier = m;
-                        break;
-                    }
-                }
-            }
 
             PlayerModel<AbstractClientPlayer> model = playerRenderer.getModel();
             PlayerSkin.Model modelType = player.getSkin().model();
 
-            ModelPart armPart = (arm == HumanoidArm.RIGHT) ? model.rightArm : model.leftArm;
-            ModelPart sleevePart = (arm == HumanoidArm.RIGHT) ? model.rightSleeve : model.leftSleeve;
+            PoseStack poseStack = event.getPoseStack();
+            MultiBufferSource buffer = event.getMultiBufferSource();
+            int light = event.getPackedLight();
+
+            ModelPart armPart = arm == HumanoidArm.RIGHT ? model.rightArm : model.leftArm;
+            ModelPart sleevePart = arm == HumanoidArm.RIGHT ? model.rightSleeve : model.leftSleeve;
+
+            SkinModifier replacementModifier = findReplacementArmModifier(state, arm);
 
             var prevRightPose = model.rightArmPose;
             var prevLeftPose = model.leftArmPose;
@@ -206,10 +127,18 @@ public final class SkinLayerRender {
             float prevSwimAmount = model.swimAmount;
             float prevAttackTime = model.attackTime;
 
-            boolean prevRightArmVis = model.rightArm.visible;
-            boolean prevLeftArmVis = model.leftArm.visible;
-            boolean prevRightSleeveVis = model.rightSleeve.visible;
-            boolean prevLeftSleeveVis = model.leftSleeve.visible;
+            boolean prevHeadVisible = model.head.visible;
+            boolean prevHatVisible = model.hat.visible;
+            boolean prevBodyVisible = model.body.visible;
+            boolean prevJacketVisible = model.jacket.visible;
+            boolean prevRightArmVisible = model.rightArm.visible;
+            boolean prevRightSleeveVisible = model.rightSleeve.visible;
+            boolean prevLeftArmVisible = model.leftArm.visible;
+            boolean prevLeftSleeveVisible = model.leftSleeve.visible;
+            boolean prevRightLegVisible = model.rightLeg.visible;
+            boolean prevRightPantsVisible = model.rightPants.visible;
+            boolean prevLeftLegVisible = model.leftLeg.visible;
+            boolean prevLeftPantsVisible = model.leftPants.visible;
 
             poseStack.pushPose();
             try {
@@ -218,116 +147,168 @@ public final class SkinLayerRender {
                 model.attackTime = 0.0F;
                 model.crouching = false;
                 model.swimAmount = 0.0F;
+                model.rightArmPose = HumanoidModel.ArmPose.EMPTY;
+                model.leftArmPose = HumanoidModel.ArmPose.EMPTY;
 
-                model.rightArmPose = net.minecraft.client.model.HumanoidModel.ArmPose.EMPTY;
-                model.leftArmPose  = net.minecraft.client.model.HumanoidModel.ArmPose.EMPTY;
+                model.head.visible = false;
+                model.hat.visible = false;
+                model.body.visible = false;
+                model.jacket.visible = false;
+                model.rightLeg.visible = false;
+                model.rightPants.visible = false;
+                model.leftLeg.visible = false;
+                model.leftPants.visible = false;
 
-                model.rightArm.visible = (arm == HumanoidArm.RIGHT);
-                model.rightSleeve.visible = (arm == HumanoidArm.RIGHT);
-                model.leftArm.visible = (arm == HumanoidArm.LEFT);
-                model.leftSleeve.visible = (arm == HumanoidArm.LEFT);
+                model.rightArm.visible = arm == HumanoidArm.RIGHT;
+                model.rightSleeve.visible = arm == HumanoidArm.RIGHT;
+                model.leftArm.visible = arm == HumanoidArm.LEFT;
+                model.leftSleeve.visible = arm == HumanoidArm.LEFT;
 
                 model.setupAnim(player, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
 
-                if (cancel) {
-                    RenderSystem.enableBlend();
-                    RenderSystem.defaultBlendFunc();
-                    RenderSystem.colorMask(true, true, true, true);
-
-                    if (replaceVanillaArm && baseArmModifier != null) {
-                        // IMPORTANT: this is your replacement texture, not vanilla.
-                        // Even if hideSleeve == true, we still want the sleeve geometry rendered with the replacement texture.
-                        ResourceLocation baseTex = baseArmModifier.getTexture(modelType);
-                        var baseVc = buffer.getBuffer(RenderType.entityTranslucent(baseTex));
-                        int whiteOpaque = 0xFFFFFFFF;
-
-                        armPart.render(poseStack, baseVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
-                        sleevePart.render(poseStack, baseVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
-                    } else {
-                        // Vanilla skin base: DO NOT render sleeve if it's being hidden, to avoid top-layers bleeding through.
-                        ResourceLocation baseSkinTex = player.getSkin().texture();
-                        var baseVc = buffer.getBuffer(RenderType.entitySolid(baseSkinTex));
-                        int whiteOpaque = 0xFFFFFFFF;
-
-                        armPart.render(poseStack, baseVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
-                        if (!hideSleeve) {
-                            sleevePart.render(poseStack, baseVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
-                        }
-                    }
-                }
-
-                if (!replaceVanillaArm) {
-                    boolean needsPlayerUnderlay = state.getModifiers().stream()
-                            .anyMatch(m -> m.needsPlayerSkinUnderlay() && FastColor.ARGB32.alpha(m.getColor()) < 255);
-
-                    if (needsPlayerUnderlay) {
-                        RenderSystem.enableBlend();
-                        RenderSystem.defaultBlendFunc();
-                        RenderSystem.colorMask(true, true, true, true);
-
-                        ResourceLocation baseSkinTex = player.getSkin().texture();
-                        var underlayVc = buffer.getBuffer(RenderType.entityTranslucent(baseSkinTex));
-                        int whiteOpaque = 0xFFFFFFFF;
-
-                        armPart.render(poseStack, underlayVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
-                        // Keep vanilla sleeve underlay hidden when requested.
-                        if (!hideSleeve) {
-                            sleevePart.render(poseStack, underlayVc, light, OverlayTexture.NO_OVERLAY, whiteOpaque);
-                        }
-                    }
-                }
-
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
-                RenderSystem.colorMask(true, true, true, false);
+                RenderSystem.colorMask(true, true, true, true);
 
-                for (SkinModifier modifier : state.getModifiers()) {
-                    ResourceLocation overlayTex = modifier.getTexture(modelType);
+                if (request.replaceVanillaArm && replacementModifier != null) {
+                    ResourceLocation replacementTexture = replacementModifier.getTexture(modelType);
+                    var replacementVc = buffer.getBuffer(RenderType.entityTranslucent(replacementTexture));
 
-                    var vc = buffer.getBuffer(RenderType.entityTranslucent(overlayTex));
-                    int color = modifier.getColor();
+                    armPart.render(poseStack, replacementVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                    sleevePart.render(poseStack, replacementVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                } else {
+                    ResourceLocation baseSkinTexture = player.getSkin().texture();
+                    var baseVc = buffer.getBuffer(RenderType.entityTranslucent(baseSkinTexture));
 
-                    armPart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                    armPart.render(poseStack, baseVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
-                    // KEY CHANGE:
-                    // If vanilla sleeve is hidden, we STILL render the sleeve geometry for overlays,
-                    // so your "outer layer" exists in first-person.
-                    sleevePart.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
-
-                    if (modifier.hasGlint()) {
-                        var glintVc = buffer.getBuffer(RenderType.entityGlint());
-                        armPart.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-                        sleevePart.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                    if (!request.hideVanillaSleeve) {
+                        sleevePart.render(poseStack, baseVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
                     }
                 }
 
+                if (!request.replaceVanillaArm && needsPlayerSkinUnderlay(state)) {
+                    ResourceLocation baseSkinTexture = player.getSkin().texture();
+                    var underlayVc = buffer.getBuffer(RenderType.entityTranslucent(baseSkinTexture));
+
+                    armPart.render(poseStack, underlayVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+                    if (!request.hideVanillaSleeve) {
+                        sleevePart.render(poseStack, underlayVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                    }
+                }
+
+                for (SkinModifier modifier : state.getModifiers()) {
+                    if (modifier == null) continue;
+                    if (!modifierRendersThisFirstPersonArm(modifier, arm)) continue;
+
+                    ResourceLocation overlayTexture = modifier.getTexture(modelType);
+                    int color = modifier.getColor();
+
+                    var vc = buffer.getBuffer(RenderType.entityTranslucent(overlayTexture));
+
+                    if (arm == HumanoidArm.RIGHT) {
+                        if (modifier.rendersOverlayPart(SkinModifier.OverlayPart.RIGHT_ARM)) {
+                            model.rightArm.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                        }
+                        if (modifier.rendersOverlayPart(SkinModifier.OverlayPart.RIGHT_SLEEVE)) {
+                            model.rightSleeve.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                        }
+                    } else {
+                        if (modifier.rendersOverlayPart(SkinModifier.OverlayPart.LEFT_ARM)) {
+                            model.leftArm.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                        }
+                        if (modifier.rendersOverlayPart(SkinModifier.OverlayPart.LEFT_SLEEVE)) {
+                            model.leftSleeve.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY, color);
+                        }
+                    }
+
+                    if (modifier.hasGlint()) {
+                        var glintVc = buffer.getBuffer(SkinRenderTypes.translucentGlintOverlay(overlayTexture));
+
+                        if (arm == HumanoidArm.RIGHT) {
+                            if (modifier.rendersOverlayPart(SkinModifier.OverlayPart.RIGHT_ARM)) {
+                                model.rightArm.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                            }
+                            if (modifier.rendersOverlayPart(SkinModifier.OverlayPart.RIGHT_SLEEVE)) {
+                                model.rightSleeve.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                            }
+                        } else {
+                            if (modifier.rendersOverlayPart(SkinModifier.OverlayPart.LEFT_ARM)) {
+                                model.leftArm.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                            }
+                            if (modifier.rendersOverlayPart(SkinModifier.OverlayPart.LEFT_SLEEVE)) {
+                                model.leftSleeve.render(poseStack, glintVc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                            }
+                        }
+                    }
+                }
+            } finally {
                 RenderSystem.colorMask(true, true, true, true);
+                RenderSystem.defaultBlendFunc();
                 RenderSystem.disableBlend();
 
-            } finally {
                 model.rightArmPose = prevRightPose;
                 model.leftArmPose = prevLeftPose;
                 model.crouching = prevCrouching;
                 model.swimAmount = prevSwimAmount;
                 model.attackTime = prevAttackTime;
 
-                model.rightArm.visible = prevRightArmVis;
-                model.leftArm.visible = prevLeftArmVis;
-                model.rightSleeve.visible = prevRightSleeveVis;
-                model.leftSleeve.visible = prevLeftSleeveVis;
-
-                if (arm == HumanoidArm.RIGHT) {
-                    REPLACE_FP_RIGHT.remove(id);
-                    FP_CANCEL_RIGHT.remove(id);
-                    FP_HIDE_SLEEVE_RIGHT.remove(id);
-                } else {
-                    REPLACE_FP_LEFT.remove(id);
-                    FP_CANCEL_LEFT.remove(id);
-                    FP_HIDE_SLEEVE_LEFT.remove(id);
-                }
+                model.head.visible = prevHeadVisible;
+                model.hat.visible = prevHatVisible;
+                model.body.visible = prevBodyVisible;
+                model.jacket.visible = prevJacketVisible;
+                model.rightArm.visible = prevRightArmVisible;
+                model.rightSleeve.visible = prevRightSleeveVisible;
+                model.leftArm.visible = prevLeftArmVisible;
+                model.leftSleeve.visible = prevLeftSleeveVisible;
+                model.rightLeg.visible = prevRightLegVisible;
+                model.rightPants.visible = prevRightPantsVisible;
+                model.leftLeg.visible = prevLeftLegVisible;
+                model.leftPants.visible = prevLeftPantsVisible;
 
                 poseStack.popPose();
             }
+        }
+
+        private static boolean shouldHideVanillaSleeve(SkinModifierState state, HumanoidArm arm) {
+            var hide = state.getHideMask();
+
+            return arm == HumanoidArm.RIGHT
+                    ? hide.contains(SkinModifier.HideVanilla.RIGHT_SLEEVE)
+                    : hide.contains(SkinModifier.HideVanilla.LEFT_SLEEVE);
+        }
+
+        private static SkinModifier findReplacementArmModifier(SkinModifierState state, HumanoidArm arm) {
+            for (SkinModifier modifier : state.getModifiers()) {
+                if (modifier != null && modifier.replacesVanillaArm(arm)) {
+                    return modifier;
+                }
+            }
+
+            return null;
+        }
+
+        private static boolean modifierRendersThisFirstPersonArm(SkinModifier modifier, HumanoidArm arm) {
+            if (arm == HumanoidArm.RIGHT) {
+                return modifier.rendersOverlayPart(SkinModifier.OverlayPart.RIGHT_ARM)
+                        || modifier.rendersOverlayPart(SkinModifier.OverlayPart.RIGHT_SLEEVE);
+            }
+
+            return modifier.rendersOverlayPart(SkinModifier.OverlayPart.LEFT_ARM)
+                    || modifier.rendersOverlayPart(SkinModifier.OverlayPart.LEFT_SLEEVE);
+        }
+
+        private static boolean needsPlayerSkinUnderlay(SkinModifierState state) {
+            for (SkinModifier modifier : state.getModifiers()) {
+                if (modifier == null) continue;
+                if (!modifier.needsPlayerSkinUnderlay()) continue;
+                if (FastColor.ARGB32.alpha(modifier.getColor()) < 255) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

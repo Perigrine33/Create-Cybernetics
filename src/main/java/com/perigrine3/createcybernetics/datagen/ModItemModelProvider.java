@@ -21,6 +21,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         basicItem(ModItems.EYEUPGRADEBASE.get());
         basicItem(ModItems.TITANIUM_HAND.get());
+        basicItem(ModItems.GRAPHENE_ELASTOMER.get());
         basicItem(ModItems.HOLOIMPRINT_CHIP.get());
         basicItem(ModItems.FRONTAL_LOBE.get());
         basicItem(ModItems.PARIETAL_LOBE.get());
@@ -66,6 +67,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
 
         withExistingParent(ModItems.RIPPER_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.TATHOG_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.SMASHER_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.CYBERZOMBIE_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.CYBERSKELETON_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));

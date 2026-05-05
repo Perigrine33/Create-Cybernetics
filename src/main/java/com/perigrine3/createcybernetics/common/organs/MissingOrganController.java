@@ -61,6 +61,8 @@ public final class MissingOrganController {
 
         if (player.getPersistentData().getBoolean(HOLO_SNAPSHOT_FLAG)) return;
 
+        ensureFakePlayerDefaultOrgans(player);
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -258,6 +260,8 @@ public final class MissingOrganController {
         Player player = event.getEntity();
         if (player.level().isClientSide) return;
 
+        ensureFakePlayerDefaultOrgans(player);
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -288,6 +292,8 @@ public final class MissingOrganController {
     public static void onItemUse(LivingEntityUseItemEvent.Start event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
+        ensureFakePlayerDefaultOrgans(player);
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -301,6 +307,8 @@ public final class MissingOrganController {
     public static void onAttack(AttackEntityEvent event) {
         Player player = event.getEntity();
         if (player.level().isClientSide) return;
+
+        ensureFakePlayerDefaultOrgans(player);
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
@@ -397,6 +405,8 @@ public final class MissingOrganController {
         Player player = event.getEntity();
         if (player.level().isClientSide) return;
 
+        ensureFakePlayerDefaultOrgans(player);
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -419,6 +429,8 @@ public final class MissingOrganController {
         Player player = event.getEntity();
         if (player.level().isClientSide) return;
 
+        ensureFakePlayerDefaultOrgans(player);
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -434,5 +446,41 @@ public final class MissingOrganController {
         if (!handWorks(player, event.getHand(), hasLeftArm, hasRightArm)) {
             event.setCanceled(true);
         }
+    }
+
+    private static boolean ensureFakePlayerDefaultOrgans(Player player) {
+        if (!(player instanceof FakePlayer)) {
+            return false;
+        }
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) {
+            return true;
+        }
+
+        if (!hasCompleteDefaultOrganBaseline(data)) {
+            data.resetToDefaultOrgans();
+            data.setDirty();
+            player.syncData(ModAttachments.CYBERWARE);
+        }
+
+        player.getPersistentData().putBoolean(DEFAULTS_PATCHED, true);
+        return true;
+    }
+
+    private static boolean hasCompleteDefaultOrganBaseline(PlayerCyberwareData data) {
+        return hasAnyTagged(data, ModTags.Items.BRAIN_ITEMS, CyberwareSlot.BRAIN)
+                && hasAnyTagged(data, ModTags.Items.EYE_ITEMS, CyberwareSlot.EYES)
+                && hasAnyTagged(data, ModTags.Items.HEART_ITEMS, CyberwareSlot.HEART)
+                && hasAnyTagged(data, ModTags.Items.LUNGS_ITEMS, CyberwareSlot.LUNGS)
+                && hasAnyTagged(data, ModTags.Items.LIVER_ITEMS, CyberwareSlot.ORGANS)
+                && hasAnyTagged(data, ModTags.Items.INTESTINES_ITEMS, CyberwareSlot.ORGANS)
+                && hasAnyTagged(data, ModTags.Items.BONE_ITEMS, CyberwareSlot.BONE)
+                && hasAnyTagged(data, ModTags.Items.MUSCLE_ITEMS, CyberwareSlot.MUSCLE)
+                && hasAnyTagged(data, ModTags.Items.SKIN_ITEMS, CyberwareSlot.SKIN)
+                && hasAnyTagged(data, ModTags.Items.LEFTARM_ITEMS, CyberwareSlot.LARM)
+                && hasAnyTagged(data, ModTags.Items.RIGHTARM_ITEMS, CyberwareSlot.RARM)
+                && hasAnyTagged(data, ModTags.Items.LEFTLEG_ITEMS, CyberwareSlot.LLEG)
+                && hasAnyTagged(data, ModTags.Items.RIGHTLEG_ITEMS, CyberwareSlot.RLEG);
     }
 }

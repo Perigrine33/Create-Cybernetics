@@ -15,6 +15,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.ArrayList;
@@ -245,7 +246,11 @@ public final class SurgeryController {
 
             surgeon.clearSlotStates();
             surgeon.setChanged();
-            player.level().sendBlockUpdated(surgeon.getBlockPos(), surgeon.getBlockState(), surgeon.getBlockState(), 3);
+
+            Level surgeonLevel = surgeon.getLevel();
+            if (surgeonLevel != null) {
+                surgeonLevel.sendBlockUpdated(surgeon.getBlockPos(), surgeon.getBlockState(), surgeon.getBlockState(), 3);
+            }
 
             return damageApplied;
 

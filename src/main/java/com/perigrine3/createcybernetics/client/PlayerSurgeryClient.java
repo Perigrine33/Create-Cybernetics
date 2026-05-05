@@ -4,7 +4,7 @@ import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryEndPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryResultPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryRoundPayload;
 import com.perigrine3.createcybernetics.network.payload.PlayerSurgeryStartPayload;
-import com.perigrine3.createcybernetics.screen.custom.PlayerSurgeryMinigameScreen;
+import com.perigrine3.createcybernetics.screen.custom.surgery.PlayerSurgeryMinigameScreen;
 import net.minecraft.client.Minecraft;
 
 public final class PlayerSurgeryClient {

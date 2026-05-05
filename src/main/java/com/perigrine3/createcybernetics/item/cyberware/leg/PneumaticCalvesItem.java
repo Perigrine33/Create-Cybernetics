@@ -11,7 +11,6 @@ import com.perigrine3.createcybernetics.util.CyberwareAttributeHelper;
 import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -20,10 +19,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.List;
@@ -31,11 +28,6 @@ import java.util.Set;
 
 public class PneumaticCalvesItem extends Item implements ICyberwareItem {
     private final int humanityCost;
-
-    private static final int ENERGY_SPRINT_JUMP = 3;
-    private static final int ENERGY_CROUCH_JUMP = 5;
-
-    private static final String NBT_LAST_JUMP_CHARGE_TICK = "cc_calves_last_jump_charge_tick";
 
     public PneumaticCalvesItem(Properties props, int humanityCost) {
         super(props);
@@ -87,6 +79,7 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
     @Override
     public void onRemoved(LivingEntity entity) {
         if (entity.level().isClientSide) return;
+
         if (entity instanceof Player player) {
             cleanup(player);
         }
@@ -95,9 +88,36 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
     @Override
     public void onTick(LivingEntity entity) {
         if (!(entity instanceof Player player)) return;
+        maintainFor(player);
+    }
+
+    public static void cleanup(Player player) {
+        if (player == null) return;
+
+        CyberwareAttributeHelper.removeModifier(player, "calves_sprint");
+        player.removeEffect(ModEffects.PNEUMATIC_CALVES_EFFECT);
+    }
+
+    public static boolean hasActiveInstalledPair(Player player) {
+        if (player == null) return false;
+        if (player.level().isClientSide) return false;
+        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return false;
+
+        PairState pair = enforcePairRuleAndGetState(player, data);
+        return pair.bothInstalled && pair.bothEnabled;
+    }
+
+    private static void maintainFor(Player player) {
+        if (player == null) return;
         if (player.level().isClientSide) return;
+        if (!player.isAlive()) return;
+        if (player.isSpectator()) return;
 
         if (!player.hasData(ModAttachments.CYBERWARE)) return;
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -108,7 +128,14 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
             return;
         }
 
-        player.addEffect(new MobEffectInstance(ModEffects.PNEUMATIC_CALVES_EFFECT, 100, 0, false, false, false));
+        player.addEffect(new MobEffectInstance(
+                ModEffects.PNEUMATIC_CALVES_EFFECT,
+                100,
+                0,
+                false,
+                false,
+                false
+        ));
 
         if (player.isSprinting()) {
             CyberwareAttributeHelper.applyModifier(player, "calves_sprint");
@@ -117,13 +144,8 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
         }
     }
 
-    private static void cleanup(Player player) {
-        CyberwareAttributeHelper.removeModifier(player, "calves_sprint");
-        player.removeEffect(ModEffects.PNEUMATIC_CALVES_EFFECT);
-        player.getPersistentData().remove(NBT_LAST_JUMP_CHARGE_TICK);
-    }
-
     private record Found(CyberwareSlot slot, int index) {}
+
     private record PairState(boolean bothInstalled, boolean bothEnabled) {}
 
     private static PairState enforcePairRuleAndGetState(Player player, PlayerCyberwareData data) {
@@ -140,9 +162,13 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
 
                 if (!(st.getItem() instanceof PneumaticCalvesItem)) continue;
 
-                if (first == null) first = new Found(slot, i);
-                else if (second == null) second = new Found(slot, i);
-                else break;
+                if (first == null) {
+                    first = new Found(slot, i);
+                } else if (second == null) {
+                    second = new Found(slot, i);
+                } else {
+                    break;
+                }
             }
         }
 
@@ -158,6 +184,7 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
 
         boolean e1 = data.isEnabled(first.slot(), first.index());
         boolean e2 = data.isEnabled(second.slot(), second.index());
+
         return new PairState(true, e1 && e2);
     }
 
@@ -175,50 +202,7 @@ public class PneumaticCalvesItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent
         public static void onPlayerTick(PlayerTickEvent.Post event) {
-            Player player = event.getEntity();
-            if (player.level().isClientSide) return;
-            if (!player.isAlive()) return;
-            if (player.isCreative() || player.isSpectator()) return;
-
-            if (!player.hasData(ModAttachments.CYBERWARE)) return;
-            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-            if (data == null) return;
-
-            enforcePairRuleAndGetState(player, data);
-        }
-
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
-            if (!(event.getEntity() instanceof Player player)) return;
-            if (player.level().isClientSide) return;
-            if (!player.isAlive()) return;
-            if (player.isCreative() || player.isSpectator()) return;
-
-            if (!player.hasData(ModAttachments.CYBERWARE)) return;
-            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-            if (data == null) return;
-
-            PairState pair = enforcePairRuleAndGetState(player, data);
-            if (!pair.bothInstalled || !pair.bothEnabled) return;
-
-            final boolean crouchJump = player.isCrouching();
-            final boolean sprintJump = !crouchJump && player.isSprinting();
-
-            final int cost = crouchJump ? ENERGY_CROUCH_JUMP : (sprintJump ? ENERGY_SPRINT_JUMP : 0);
-            if (cost <= 0) return;
-
-            long now = player.level().getGameTime();
-            CompoundTag ptag = player.getPersistentData();
-            if (ptag.getLong(NBT_LAST_JUMP_CHARGE_TICK) == now) return;
-            ptag.putLong(NBT_LAST_JUMP_CHARGE_TICK, now);
-
-            if (!data.tryConsumeEnergy(cost)) {
-                cleanup(player);
-                return;
-            }
-
-            data.setDirty();
-            player.syncData(ModAttachments.CYBERWARE);
+            maintainFor(event.getEntity());
         }
     }
 }

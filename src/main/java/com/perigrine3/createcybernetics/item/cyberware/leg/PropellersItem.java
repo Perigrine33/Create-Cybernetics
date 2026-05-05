@@ -46,8 +46,8 @@ public class PropellersItem extends Item implements ICyberwareItem {
     @Override
     public Set<TagKey<Item>> requiresCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         return switch (slot) {
-            case RARM -> Set.of(ModTags.Items.RIGHTLEG_REPLACEMENTS);
-            case LARM -> Set.of(ModTags.Items.LEFTLEG_REPLACEMENTS);
+            case RLEG -> Set.of(ModTags.Items.RIGHTLEG_REPLACEMENTS);
+            case LLEG -> Set.of(ModTags.Items.LEFTLEG_REPLACEMENTS);
             default -> Set.of();
         };
     }
