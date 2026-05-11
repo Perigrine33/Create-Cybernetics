@@ -82,6 +82,18 @@
 
   "message.createcybernetics.zoom_level": "Zoom %sx",
 
+  "message.createcybernetics.quickhack.caster.success": "%s Successfully Deployed",
+  "message.createcybernetics.quickhack.caster.failure": "%s Failed to Initialize",
+  "message.createcybernetics.quickhack.caster.ice_blocked": "%s Was Prevented by Local ICE",
+  "message.createcybernetics.quickhack.target.success": "Script Detected: %s",
+  "message.createcybernetics.quickhack.target.failure": "Malicious Script Neutralized",
+  "message.createcybernetics.quickhack.target.ice_blocked": "[ICE DEFENSE PROTOCOL]: %s Neutralized",
+
+
+
+
+  "attribute.createcybernetics.humanity": "Humanity",
+
 
 
   "item.createcybernetics.titaniumingot": "Titanium Ingot",
@@ -323,6 +335,7 @@
   "item.createcybernetics.armupgrades_pneumaticwrist": "Pneumatic Wrist",
   "item.createcybernetics.armupgrades_reinforcedknuckles": "Reinforced Knuckles",
   "item.createcybernetics.armupgrades_ripperclaw": "Ripper Claw",
+  "item.createcybernetics.armupgrades_arccannon": "Electric Arc Cannon",
 
   "item.createcybernetics.legupgrades_metaldetector": "Metal Detector",
   "item.createcybernetics.legupgrades_anklebracers": "Ankle Bracers",
@@ -388,6 +401,7 @@
   "item.createcybernetics.skinupgrades_syntheticsetules": "Synthetic Setules",
   "item.createcybernetics.skinupgrades_sweat": "Enhanced Sweat Glands",
   "item.createcybernetics.skinupgrades_metalplating": "Metal Plating",
+  "item.createcybernetics.skinupgrades_empthreading": "EMP Threading",
   "item.createcybernetics.skinupgrades_manaskin": "Mana Assimilator",
 
   "item.createcybernetics.muscleupgrades_synthmuscle": "Myomer Muscle",
@@ -411,6 +425,8 @@
   "item.createcybernetics.wetware_dragonskin": "Ender Dragon Skin",
   "item.createcybernetics.wetware_wardenantlers": "Warden Antlers",
   "item.createcybernetics.wetware_sculkheart": "Sculk Heart",
+  "item.createcybernetics.wetware_gooeymuscle": "Gooey Musculature",
+  "item.createcybernetics.wetware_electrocytemuscle": "Electrocyte Tissue",
 
 
   "item.createcybernetics.scavenged_rightleg": "Right Cyberleg",
@@ -435,6 +451,7 @@
   "item.createcybernetics.scavenged_firestarter": "Firestarter",
   "item.createcybernetics.scavenged_pneumaticwrist": "Pneumatic Wrist",
   "item.createcybernetics.scavenged_reinforcedknuckles": "Reinforced Knuckles",
+  "item.createcybernetics.scavenged_arccannon": "Electric Arc Cannon",
   "item.createcybernetics.scavenged_metaldetector": "Metal Detector",
   "item.createcybernetics.scavenged_anklebracers": "Ankle Bracers",
   "item.createcybernetics.scavenged_jumpboost": "Pneumatic Ankles",
@@ -770,8 +787,12 @@
           "tooltip.createcybernetics.armupgrades_reinforcedknuckles.tooltip2": "§7Requires §9Cyberarm",
       "tooltip.createcybernetics.armupgrades_ripperclaw.tooltip1": "§1Grants the user higher margin of success when performing manual surgery",
           "tooltip.createcybernetics.armupgrades_ripperclaw.tooltip2": "§7Requires §9Cyberarm",
+      "tooltip.createcybernetics.armupgrades_arccannon.tooltip1": "§1Allows the user to fire lightning at the cost of high energy drain, and use of an arm",
+          "tooltip.createcybernetics.armupgrades_arccannon.tooltip2": "§1Cyberlimb Replacement",
+          "tooltip.createcybernetics.armupgrades_arccannon.energy": "Costs 10 Energy ambiently, and 180,000 Energy per shot",
 
-      "tooltip.createcybernetics.legupgrades_metaldetector.tooltip1": "§1Can detect magnetic blocks up to 15 blocks below the user",
+
+  "tooltip.createcybernetics.legupgrades_metaldetector.tooltip1": "§1Can detect magnetic blocks up to 15 blocks below the user",
           "tooltip.createcybernetics.legupgrades_metaldetector.tooltip2": "§7Requires §9Cyberleg",
           "tooltip.createcybernetics.legupgrades_metaldetector.energy": "Costs 3 Energy",
       "tooltip.createcybernetics.legupgrades_anklebracers.tooltip1": "§1Negates damage taken from falling up to 25 blocks when installed into both legs",
@@ -909,7 +930,9 @@
       "tooltip.createcybernetics.skinupgrades_subdermalspikes.tooltip1": "§1Applies the Thorns effect when attacked",
       "tooltip.createcybernetics.skinupgrades_syntheticsetules.tooltip1": "§1Allows the user to climb walls like a spider",
       "tooltip.createcybernetics.skinupgrades_metalplating.tooltip1": "§1Titanium plate skin replacement",
-      "tooltip.createcybernetics.skinupgrades_sweat.tooltip1": "§1Releases large amounts of sweat to release heat",
+      "tooltip.createcybernetics.skinupgrades_empthreading.tooltip1": "§1Provides a 3 second grace period from EMP",
+          "tooltip.createcybernetics.skinupgrades_empthreading.energy": "Costs 3 Energy",
+  "tooltip.createcybernetics.skinupgrades_sweat.tooltip1": "§1Releases large amounts of sweat to release heat",
       "tooltip.createcybernetics.skinupgrades_sweat.energy": "Costs 5 Energy",
       "tooltip.createcybernetics.skinupgrades_manaskin.tooltip1": "§1Absorbs mana and converts it into energy",
       "tooltip.createcybernetics.skinupgrades_manaskin.energy": "Adds 35 energy from each spell that hits, and more from mana in the air",
@@ -945,6 +968,8 @@
       "tooltip.createcybernetics.wetware_dragonskin.tooltip1": "§cGrants immunity to dragon fire and increases armor",
       "tooltip.createcybernetics.wetware_wardenantlers.tooltip1": "§cAllows the user to see sounds",
       "tooltip.createcybernetics.wetware_sculkheart.tooltip1": "§cCreates a steady heartbeat rhythm, and gives nearby players the darkness effect",
+      "tooltip.createcybernetics.wetware_gooeymuscle.tooltip1": "§cNegates fall damage and greatly negates mace damage",
+      "tooltip.createcybernetics.wetware_electrocytemuscle.tooltip1": "§cReleases an electric burst on all nearby creatures when attacked, with a 2 minute cooldown",
 
 
 

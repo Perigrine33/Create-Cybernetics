@@ -8,8 +8,11 @@ import com.perigrine3.createcybernetics.effect.quickhacks.OverheatQuickhackEffec
 import com.perigrine3.createcybernetics.effect.quickhacks.RebootQuickhackEffect;
 import com.perigrine3.createcybernetics.effect.quickhacks.ScrambleQuickhackEffect;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.item.cyberware.brain.ICEProtocolItem;
 import com.perigrine3.createcybernetics.network.payload.CastCyberdeckQuickhackPayload;
 import com.perigrine3.createcybernetics.util.ModTags;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,32 +51,103 @@ public final class CastCyberdeckQuickhackHandler {
             if (!target.isAlive()) return;
             if (target == sp) return;
 
-            if (quickhack.is(ModItems.QUICKHACK_OVERHEAT.get())) {
-                boolean applied = OverheatQuickhackEffect.applyQuickhack(livingTarget);
-                if (!applied) return;
+            if (!isKnownQuickhack(quickhack)) return;
 
-                sp.getCooldowns().addCooldown(cyberdeckItem, CAST_COOLDOWN_TICKS);
-            }
-            if (quickhack.is(ModItems.QUICKHACK_REBOOT.get())) {
-                boolean applied = RebootQuickhackEffect.applyQuickhack(livingTarget);
-                if (!applied) return;
+            Component quickhackName = quickhackName(quickhack);
 
-                sp.getCooldowns().addCooldown(cyberdeckItem, CAST_COOLDOWN_TICKS);
-            }
-            if (quickhack.is(ModItems.QUICKHACK_SCRAMBLE.get())) {
-                boolean applied = ScrambleQuickhackEffect.applyQuickhack(livingTarget);
-                if (!applied) return;
+            sp.getCooldowns().addCooldown(cyberdeckItem, CAST_COOLDOWN_TICKS);
 
-                sp.getCooldowns().addCooldown(cyberdeckItem, CAST_COOLDOWN_TICKS);
-            }
-            if (quickhack.is(ModItems.QUICKHACK_OPTICMALFUNCTION.get())) {
-                boolean applied = OpticMalfunctionQuickhackEffect.applyQuickhack(livingTarget);
-                if (!applied) return;
-
-                sp.getCooldowns().addCooldown(cyberdeckItem, CAST_COOLDOWN_TICKS);
+            if (ICEProtocolItem.negatesQuickhack(livingTarget)) {
+                sendCasterIceMessage(sp, quickhackName);
+                sendTargetIceMessage(livingTarget, quickhackName);
+                return;
             }
 
+            boolean applied = applyQuickhack(quickhack, livingTarget);
 
+            if (!applied) {
+                sendCasterFailureMessage(sp, quickhackName);
+                sendTargetFailureMessage(livingTarget);
+                return;
+            }
+
+            sendCasterSuccessMessage(sp, quickhackName);
+            sendTargetSuccessMessage(livingTarget, quickhackName);
         });
+    }
+
+    private static boolean isKnownQuickhack(ItemStack quickhack) {
+        return quickhack.is(ModItems.QUICKHACK_OVERHEAT.get())
+                || quickhack.is(ModItems.QUICKHACK_REBOOT.get())
+                || quickhack.is(ModItems.QUICKHACK_SCRAMBLE.get())
+                || quickhack.is(ModItems.QUICKHACK_OPTICMALFUNCTION.get());
+    }
+
+    private static boolean applyQuickhack(ItemStack quickhack, LivingEntity target) {
+        if (quickhack.is(ModItems.QUICKHACK_OVERHEAT.get())) {
+            return OverheatQuickhackEffect.applyQuickhack(target);
+        }
+
+        if (quickhack.is(ModItems.QUICKHACK_REBOOT.get())) {
+            return RebootQuickhackEffect.applyQuickhack(target);
+        }
+
+        if (quickhack.is(ModItems.QUICKHACK_SCRAMBLE.get())) {
+            return ScrambleQuickhackEffect.applyQuickhack(target);
+        }
+
+        if (quickhack.is(ModItems.QUICKHACK_OPTICMALFUNCTION.get())) {
+            return OpticMalfunctionQuickhackEffect.applyQuickhack(target);
+        }
+
+        return false;
+    }
+
+    private static Component quickhackName(ItemStack quickhack) {
+        if (quickhack == null || quickhack.isEmpty()) {
+            return Component.literal("Quickhack");
+        }
+
+        return Component.translatable(quickhack.getDescriptionId() + ".desc");
+    }
+
+    private static void sendCasterSuccessMessage(ServerPlayer caster, Component quickhackName) {
+        caster.displayClientMessage(Component.translatable("message.createcybernetics.quickhack.caster.success", quickhackName).withStyle(ChatFormatting.DARK_GREEN),
+                true);
+    }
+
+    private static void sendCasterFailureMessage(ServerPlayer caster, Component quickhackName) {
+        caster.displayClientMessage(Component.translatable("message.createcybernetics.quickhack.caster.failure", quickhackName).withStyle(ChatFormatting.DARK_RED),
+                true);
+    }
+
+    private static void sendCasterIceMessage(ServerPlayer caster, Component quickhackName) {
+        caster.displayClientMessage(
+                Component.translatable("message.createcybernetics.quickhack.caster.ice_blocked", quickhackName).withStyle(ChatFormatting.DARK_RED),
+                true);
+    }
+
+    private static void sendTargetSuccessMessage(LivingEntity target, Component quickhackName) {
+        if (!(target instanceof ServerPlayer targetPlayer)) return;
+
+        targetPlayer.displayClientMessage(Component.translatable("message.createcybernetics.quickhack.target.success", quickhackName).withStyle(ChatFormatting.DARK_PURPLE),
+                true
+        );
+    }
+
+    private static void sendTargetFailureMessage(LivingEntity target) {
+        if (!(target instanceof ServerPlayer targetPlayer)) return;
+
+        targetPlayer.displayClientMessage(Component.translatable("message.createcybernetics.quickhack.target.failure").withStyle(ChatFormatting.DARK_GREEN),
+                true);
+    }
+
+    private static void sendTargetIceMessage(LivingEntity target, Component quickhackName) {
+        if (!(target instanceof ServerPlayer targetPlayer)) return;
+
+        targetPlayer.displayClientMessage(
+                Component.translatable("message.createcybernetics.quickhack.target.ice_blocked", quickhackName).withStyle(ChatFormatting.DARK_GREEN),
+                true
+        );
     }
 }

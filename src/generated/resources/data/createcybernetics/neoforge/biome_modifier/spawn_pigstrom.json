@@ -3,8 +3,8 @@
   "biomes": "minecraft:crimson_forest",
   "spawners": {
     "type": "createcybernetics:pigstrom",
-    "maxCount": 8,
-    "minCount": 4,
-    "weight": 14
+    "maxCount": 4,
+    "minCount": 2,
+    "weight": 3
   }
 }

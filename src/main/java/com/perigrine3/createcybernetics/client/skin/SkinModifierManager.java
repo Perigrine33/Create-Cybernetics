@@ -261,6 +261,14 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/manaskin.png");
     private static final ResourceLocation DRAGONSKIN_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/dragonskin_wide.png");
+    private static final ResourceLocation ARC_CANNON_RIGHT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_right.png");
+    private static final ResourceLocation ARC_CANNON_RIGHT_WIDE_DYED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_right_dyed.png");
+    private static final ResourceLocation ARC_CANNON_LEFT_WIDE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_left.png");
+    private static final ResourceLocation ARC_CANNON_LEFT_WIDE_DYED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_left_dyed.png");
 
     private static final ResourceLocation SAMSON_WIDE =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_wide.png");
@@ -349,6 +357,14 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/manaskin_slim.png");
     private static final ResourceLocation DRAGONSKIN_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/dragonskin_slim.png");
+    private static final ResourceLocation ARC_CANNON_RIGHT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_right_slim.png");
+    private static final ResourceLocation ARC_CANNON_RIGHT_SLIM_DYED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_right_slim_dyed.png");
+    private static final ResourceLocation ARC_CANNON_LEFT_SLIM =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_left_slim.png");
+    private static final ResourceLocation ARC_CANNON_LEFT_SLIM_DYED =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_left_slim_dyed.png");
 
     private static final ResourceLocation SAMSON_SLIM =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_slim.png");
@@ -1067,6 +1083,57 @@ public class SkinModifierManager {
             }
         }
 
+// ARC CANNON RIGHT
+        if (data.hasSpecificItem(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM)) {
+            state.addModifier(SkinModifier.rightArm(ARC_CANNON_RIGHT_WIDE, ARC_CANNON_RIGHT_SLIM, 0xFFFFFFFF));
+
+            if (data.isDyed(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM)) {
+                int tint = data.dyeColor(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM);
+                state.addModifier(SkinModifier.rightArm(ARC_CANNON_RIGHT_WIDE_DYED, ARC_CANNON_RIGHT_SLIM_DYED, tint));
+            }
+
+            boolean slim = isSlimArms(player);
+
+            if (data.isTrimmed(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM);
+                int tint = data.trimColor(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(SkinModifier.rightArm(tex, tex, tint));
+                }
+            }
+        }
+
+// ARC CANNON LEFT
+        if (data.hasSpecificItem(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM)) {
+            state.addModifier(SkinModifier.leftArm(ARC_CANNON_LEFT_WIDE, ARC_CANNON_LEFT_SLIM, 0xFFFFFFFF));
+
+            if (data.isDyed(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM)) {
+                int tint = data.dyeColor(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM);
+                state.addModifier(SkinModifier.leftArm(ARC_CANNON_LEFT_WIDE_DYED, ARC_CANNON_LEFT_SLIM_DYED, tint));
+            }
+
+            boolean slim = isSlimArms(player);
+
+            if (data.isTrimmed(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM)) {
+                ResourceLocation patternId = data.trimPatternId(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM);
+                int tint = data.trimColor(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM);
+
+                ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.ARM, slim);
+                if (tex != null) {
+                    state.addModifier(SkinModifier.leftArm(tex, tex, tint));
+                }
+            }
+        }
+
+
+// ISOTHERMAL SKIN
+        if (data.hasSpecificItem(ModItems.SKINUPGRADES_NETHERITEPLATING.get(), CyberwareSlot.SKIN)) {
+            state.addModifier(new SkinModifier(NETHERPLATED_SKIN_TEXTURE_WIDE, NETHERPLATED_SKIN_TEXTURE_SLIM,
+                    0xFFFFFFFF, true, FULL_OUTER_HIDE));
+        }
+
 // SAMSON MODEL
         if (FullBorgHandler.isSamson(data)) {
 
@@ -1288,7 +1355,7 @@ public class SkinModifierManager {
         }
 
 // COPERNICUS MODEL
-        if (ModCompats.isInstalled("northstar")) {
+        if (ModCompats.isInstalled("northstar") ||  ModCompats.isInstalled("creatingspace")) {
             if (FullBorgHandler.isCopernicus(data)) {
 
                 state.removeModifier(new SkinModifier(LEFT_CYBERLEG_TEXTURE, LEFT_CYBERLEG_TEXTURE));
@@ -1449,6 +1516,47 @@ public class SkinModifierManager {
                 if (dyn != null) {
                     state.addModifier(new SkinModifier(dyn, dyn, tint, false));
                     state.addHighlight(new SkinHighlight(dyn, dyn, tint, true, true));
+                }
+            }
+
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM)) {
+                state.addModifier(SkinModifier.rightArm(ARC_CANNON_RIGHT_WIDE, ARC_CANNON_RIGHT_SLIM, 0xFFFFFFFF));
+
+                if (data.isDyed(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM)) {
+                    int tint = data.dyeColor(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM);
+                    state.addModifier(SkinModifier.rightArm(ARC_CANNON_RIGHT_WIDE_DYED, ARC_CANNON_RIGHT_SLIM_DYED, tint));
+                }
+
+                boolean slim = isSlimArms(player);
+
+                if (data.isTrimmed(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM);
+                    int tint = data.trimColor(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.RARM);
+
+                    ResourceLocation tex = resolveTrimOverlay(patternId, false, Limb.ARM, slim);
+                    if (tex != null) {
+                        state.addModifier(SkinModifier.rightArm(tex, tex, tint));
+                    }
+                }
+            }
+            if (data.hasSpecificItem(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM)) {
+                state.addModifier(SkinModifier.leftArm(ARC_CANNON_LEFT_WIDE, ARC_CANNON_LEFT_SLIM, 0xFFFFFFFF));
+
+                if (data.isDyed(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM)) {
+                    int tint = data.dyeColor(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM);
+                    state.addModifier(SkinModifier.leftArm(ARC_CANNON_LEFT_WIDE_DYED, ARC_CANNON_LEFT_SLIM_DYED, tint));
+                }
+
+                boolean slim = isSlimArms(player);
+
+                if (data.isTrimmed(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM)) {
+                    ResourceLocation patternId = data.trimPatternId(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM);
+                    int tint = data.trimColor(ModItems.ARMUPGRADES_ARCCANNON.get(), CyberwareSlot.LARM);
+
+                    ResourceLocation tex = resolveTrimOverlay(patternId, true, Limb.ARM, slim);
+                    if (tex != null) {
+                        state.addModifier(SkinModifier.leftArm(tex, tex, tint));
+                    }
                 }
             }
         }

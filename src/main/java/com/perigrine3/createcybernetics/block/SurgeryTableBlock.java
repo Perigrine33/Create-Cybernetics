@@ -150,6 +150,8 @@ public class SurgeryTableBlock extends BaseEntityBlock implements EntityBlock {
 
         BlockPos headPos = getHeadPos(state, pos);
         if (level.getBlockEntity(headPos) instanceof SurgeryTableBlockEntity table) {
+            table.dropStagedItems(level, headPos);
+
             Player patient = table.getPatient();
             if (patient != null && patient.isSleeping()) {
                 patient.stopSleeping();

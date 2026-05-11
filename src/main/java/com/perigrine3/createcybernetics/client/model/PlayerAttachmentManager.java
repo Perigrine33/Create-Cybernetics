@@ -259,6 +259,31 @@ public final class PlayerAttachmentManager {
         return item == null ? null : item;
     }
 
+    // =========================
+    // ARC CANNON PRONGS
+    // =========================
+    private static final ResourceLocation ARC_CANNON_ITEM_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "armupgrades_arccannon");
+
+    public static final ResourceLocation ARC_CANNON_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/arc_cannon_prongs.png");
+
+    private static ArcCannonProngsAttachmentModel ARC_CANNON_PRONGS_MODEL;
+
+    public static ArcCannonProngsAttachmentModel arcCannonProngsModel() {
+        if (ARC_CANNON_PRONGS_MODEL == null) {
+            var baked = Minecraft.getInstance().getEntityModels().bakeLayer(ArcCannonProngsAttachmentModel.LAYER);
+            ARC_CANNON_PRONGS_MODEL = new ArcCannonProngsAttachmentModel(baked);
+        }
+        return ARC_CANNON_PRONGS_MODEL;
+    }
+
+    private static Item arcCannonItemOrNull() {
+        if (!BuiltInRegistries.ITEM.containsKey(ARC_CANNON_ITEM_ID)) return null;
+        Item item = BuiltInRegistries.ITEM.get(ARC_CANNON_ITEM_ID);
+        return item == null ? null : item;
+    }
+
 
 
 
@@ -285,8 +310,10 @@ public final class PlayerAttachmentManager {
         Item wardenAntlersItem = wardenAntlersItemOrNull();
         Item neuralProcessorItem = neuralProcessorItemOrNull();
         Item ripperClawItem = ripperClawItemOrNull();
+        Item arcCannonItem = arcCannonItemOrNull();
 
-        if (clawsItem == null && drillItem == null && ripperClawItem == null && pawsItem == null && calfPropellerItem == null && spurItem == null && guardianEyeItem == null && wardenAntlersItem == null) return state;
+        if (clawsItem == null && drillItem == null && ripperClawItem == null && pawsItem == null && calfPropellerItem == null
+                && spurItem == null && guardianEyeItem == null && wardenAntlersItem == null && arcCannonItem == null) return state;
 
         for (var entry : data.getAll().entrySet()) {
             CyberwareSlot slot = entry.getKey();
@@ -299,8 +326,16 @@ public final class PlayerAttachmentManager {
                 if (cw == null) continue;
                 ItemStack stack = cw.getItem();
                 if (stack == null || stack.isEmpty()) continue;
-                if (!data.isEnabled(slot, idx)) continue;
 
+
+
+                if (arcCannonItem != null && stack.is(arcCannonItem)) {
+                    state.add(new ArcCannonAttachment(anchor));
+                }
+
+
+
+            if (!data.isEnabled(slot, idx)) continue;
 
                 if (clawsItem != null && stack.is(clawsItem)) {
                     state.add(new ClawAttachment(anchor));
@@ -485,6 +520,22 @@ public final class PlayerAttachmentManager {
 
         pose.scale(1F, 1F, 1F);
     }
+
+    public static void applyArcCannonProngsTransform(PoseStack pose, AttachmentAnchor armAnchor) {
+        pose.translate(0.0F, -0.1F, 0.0F);
+
+        if (armAnchor == AttachmentAnchor.LEFT_ARM) {
+            pose.translate(-0.3F, 0.0F, 0.0F);
+            pose.mulPose(Axis.YP.rotationDegrees(180.0F));
+        } else if (armAnchor == AttachmentAnchor.RIGHT_ARM) {
+            pose.translate(0.3F, 0.0F, 0.0F);
+        }
+
+        pose.scale(1.0F, 1.0F, 1.0F);
+    }
+
+
+
 
     // =========================
     // ATTACHMENTS
@@ -863,6 +914,44 @@ public final class PlayerAttachmentManager {
         @Override
         public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
             applyRipperClawTransform(poseStack, anchor);
+        }
+    }
+
+    private static final class ArcCannonAttachment implements PlayerAttachment {
+        private final AttachmentAnchor anchor;
+
+        private ArcCannonAttachment(AttachmentAnchor anchor) {
+            this.anchor = anchor;
+        }
+
+        @Override
+        public AttachmentAnchor anchor() {
+            return anchor;
+        }
+
+        @Override
+        public ResourceLocation texture(PlayerSkin.Model modelType) {
+            return ARC_CANNON_TEXTURE;
+        }
+
+        @Override
+        public Model model(PlayerSkin.Model modelType) {
+            return arcCannonProngsModel();
+        }
+
+        @Override
+        public int color() {
+            return 0xFFFFFFFF;
+        }
+
+        @Override
+        public boolean thirdPersonOnly() {
+            return false;
+        }
+
+        @Override
+        public void setupPose(PoseStack poseStack, AbstractClientPlayer player, PlayerModel<AbstractClientPlayer> parentModel, PlayerSkin.Model modelType, float partialTick) {
+            applyArcCannonProngsTransform(poseStack, anchor);
         }
     }
 }

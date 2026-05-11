@@ -3,8 +3,8 @@
   "biomes": "minecraft:warped_forest",
   "spawners": {
     "type": "createcybernetics:punklin",
-    "maxCount": 7,
-    "minCount": 3,
-    "weight": 10
+    "maxCount": 3,
+    "minCount": 1,
+    "weight": 3
   }
 }

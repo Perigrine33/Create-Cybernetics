@@ -2,6 +2,8 @@ package com.perigrine3.createcybernetics.item.cyberware.wetware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.ChatFormatting;
@@ -53,13 +55,17 @@ public class GuardianEyeItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean isToggleableByWheel(ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
     public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
         return Set.of(ModItems.WETWARE_SCULKLUNGS.get(), ModItems.WETWARE_FIREBREATHINGLUNGS.get());
     }
 
     @Override
     public void onInstalled(LivingEntity entity) {
-        // grant strength modifier
     }
 
     @Override
@@ -71,10 +77,27 @@ public class GuardianEyeItem extends Item implements ICyberwareItem {
 
     @Override
     public void onTick(LivingEntity entity) {
-        if (!(entity instanceof Player player)) return;
+    }
 
-        if (!player.level().isClientSide) {
-            player.addEffect(new MobEffectInstance(ModEffects.GUARDIAN_EYE_EFFECT, 500, 0, false, false, false));
+    @Override
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
+        if (!(entity instanceof Player player)) return;
+        if (player.level().isClientSide) return;
+        if (!isEnabled(player, slot, index)) {
+            player.removeEffect(ModEffects.GUARDIAN_EYE_EFFECT);
+            return;
         }
+
+        player.addEffect(new MobEffectInstance(ModEffects.GUARDIAN_EYE_EFFECT, 500, 0, false, false, false));
+    }
+
+    private static boolean isEnabled(Player player, CyberwareSlot slot, int index) {
+        if (player == null) return false;
+        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return false;
+
+        return data.isEnabled(slot, index);
     }
 }

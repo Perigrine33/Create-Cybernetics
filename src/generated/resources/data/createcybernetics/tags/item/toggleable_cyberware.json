@@ -12,6 +12,13 @@
     "createcybernetics:armupgrades_armcannon",
     "createcybernetics:legupgrades_jumpboost",
     "createcybernetics:skinupgrades_syntheticsetules",
+    "createcybernetics:armupgrades_arccannon",
+    "createcybernetics:wetware_firebreathinglungs",
+    "createcybernetics:wetware_sculklungs",
+    "createcybernetics:wetware_guardianeye",
+    "createcybernetics:wetware_webshooting_leftarm",
+    "createcybernetics:wetware_webshooting_rightarm",
+    "createcybernetics:wetware_webshootingintestines",
     {
       "id": "createcybernetics:boneupgrades_elytra",
       "required": false

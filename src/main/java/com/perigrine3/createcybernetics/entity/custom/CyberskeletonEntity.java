@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.entity.custom;
 
 import com.perigrine3.createcybernetics.common.attributes.ModAttributes;
+import com.perigrine3.createcybernetics.entity.ai.goal.CyberentityDynamicBowAttackGoal;
 import com.perigrine3.createcybernetics.entity.ai.goal.CyberentityPneumaticCalvesJumpGoal;
 import com.perigrine3.createcybernetics.entity.ai.goal.CyberentitySandevistanGoal;
 import net.minecraft.core.BlockPos;
@@ -18,9 +19,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForgeMod;
 
 public class CyberskeletonEntity extends Skeleton {
+
     public CyberskeletonEntity(EntityType<? extends Skeleton> type, Level level) {
         super(type, level);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+        this.forceBow();
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -65,10 +67,35 @@ public class CyberskeletonEntity extends Skeleton {
                 .add(ModAttributes.ENDER_PEARL_DAMAGE, 0.0D);
     }
 
+    private void forceBow() {
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+
+        if (!this.level().isClientSide) {
+            this.reassessWeaponGoal();
+        }
+    }
+
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
-        super.populateDefaultEquipmentSlots(random, difficulty);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+        this.forceBow();
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+
+        this.goalSelector.addGoal(4, new CyberentityDynamicBowAttackGoal<>(this, 1.0D, 15.0F));
+        this.goalSelector.addGoal(3, new CyberentitySandevistanGoal(this));
+        this.goalSelector.addGoal(6, new CyberentityPneumaticCalvesJumpGoal(this));
+    }
+
+    @Override
+    public void reassessWeaponGoal() {
+        super.reassessWeaponGoal();
+
+        if (!this.level().isClientSide) {
+            this.goalSelector.addGoal(4, new CyberentityDynamicBowAttackGoal<>(this, 1.0D, 15.0F));
+        }
     }
 
     @Override
@@ -79,13 +106,5 @@ public class CyberskeletonEntity extends Skeleton {
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
         super.playStepSound(pos, blockIn);
-    }
-
-    @Override
-    protected void registerGoals() {
-        super.registerGoals();
-
-        this.goalSelector.addGoal(4, new CyberentityPneumaticCalvesJumpGoal(this));
-        this.goalSelector.addGoal(3, new CyberentitySandevistanGoal(this));
     }
 }

@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.compat;
 
+import com.perigrine3.createcybernetics.compat.creatingspace.CreatingSpaceCompat;
 import com.perigrine3.createcybernetics.compat.northstar.NorthstarCompat;
 
 public final class CompatBootstrap {
@@ -7,5 +8,6 @@ public final class CompatBootstrap {
 
     public static void bootstrap() {
         NorthstarCompat.bootstrap();
+        CreatingSpaceCompat.bootstrap();
     }
 }

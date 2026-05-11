@@ -136,8 +136,8 @@ dependencies {
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    implementation "maven.modrinth:create-aeronautics:YhZLrAFC"
-    implementation "curse.maven:sable-1312371:8007005"
+    //implementation "maven.modrinth:create-aeronautics:YhZLrAFC"
+    //implementation "curse.maven:sable-1312371:8007005"
 
     implementation "curse.maven:cybernetics-cyberchems-1520237:8003738"
 
@@ -158,6 +158,8 @@ dependencies {
     implementation "curse.maven:cloth-config-348521:5729127"
 
     implementation "curse.maven:northstar-redux-1318310:7476517"
+
+    //implementation "curse.maven:create-creating-space-858897:8034284"
 
     compileOnly "io.redspace:irons_spellbooks:1.21.1-3.15.2:api"
     localRuntime "io.redspace:irons_spellbooks:1.21.1-3.15.2"
@@ -180,6 +182,11 @@ dependencies {
     //implementation "curse.maven:reforgedplay-mod-1018692:6942967"
 
     //implementation "curse.maven:female-gender-neoforge-481655:5579007"
+
+    //implementation "curse.maven:origins-neoforge-1375372:8063289"
+    //implementation "curse.maven:jupiter-1072905:7738312"
+
+    implementation "curse.maven:ears-412013:6166554"
 
 }
 

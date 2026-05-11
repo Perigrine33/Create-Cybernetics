@@ -25,7 +25,6 @@ import com.perigrine3.createcybernetics.recipe.ModRecipeSerializers;
 import com.perigrine3.createcybernetics.recipe.ModRecipes;
 import com.perigrine3.createcybernetics.screen.ModMenuTypes;
 import com.perigrine3.createcybernetics.screen.custom.TattooArtistScreen;
-import com.perigrine3.createcybernetics.screen.custom.TattooMenu;
 import com.perigrine3.createcybernetics.screen.custom.arm_cannon.ArmCannonScreen;
 import com.perigrine3.createcybernetics.screen.custom.chipware.ChipwareMiniScreen;
 import com.perigrine3.createcybernetics.screen.custom.crafting.EngineeringTableScreen;
@@ -115,6 +114,7 @@ public class CreateCybernetics {
         if (CorpseCompat.isLoaded()) {
             ModCorpseCompatMenus.register(eventBus);
         }
+
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -221,6 +221,7 @@ public class CreateCybernetics {
             EntityRenderers.register(ModEntities.NUGGET_PROJECTILE.get(), NuggetProjectileRenderer::new);
             EntityRenderers.register(ModEntities.EMP_GRENADE_PROJECTILE.get(), ThrownItemRenderer::new);
             EntityRenderers.register(ModEntities.GUARDIAN_BEAM.get(), GuardianBeamRenderer::new);
+            EntityRenderers.register(ModEntities.ARC_LIGHTNING_BOLT.get(), ArcLightningBoltRenderer::new);
 
             EntityRenderers.register(ModEntities.RIPPER.get(), RipperRenderer::new);
             EntityRenderers.register(ModEntities.TATHOG.get(), TatHogRenderer::new);

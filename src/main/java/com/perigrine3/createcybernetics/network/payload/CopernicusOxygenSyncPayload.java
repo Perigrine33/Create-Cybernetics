@@ -29,7 +29,6 @@ public record CopernicusOxygenSyncPayload(int oxygen) implements CustomPacketPay
     }
 
     public static void handle(CopernicusOxygenSyncPayload payload, IPayloadContext ctx) {
-        // Always enqueue onto the main thread.
         ctx.enqueueWork(() -> RegistrateDistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
                 CopernicusClientHooks.setOxygenHud(payload.oxygen())
         ));

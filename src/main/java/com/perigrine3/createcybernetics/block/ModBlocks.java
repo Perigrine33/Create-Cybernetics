@@ -77,7 +77,7 @@ public class ModBlocks {
             () -> new RobosurgeonBlock(BlockBehaviour.Properties.of().strength(6, 8)
                     .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> CHARGING_BLOCK = registerBlock("charging_block",
-            () -> new Block(BlockBehaviour.Properties.of().strength(6, 8)
+            () -> new ChargingBlock(BlockBehaviour.Properties.of().strength(6, 8)
                     .noOcclusion().sound(SoundType.METAL)), true);
     public static final DeferredBlock<Block> ENGINEERING_TABLE = registerBlock("engineering_table",
             () -> new EngineeringTableBlock(BlockBehaviour.Properties.of().strength(6, 6)

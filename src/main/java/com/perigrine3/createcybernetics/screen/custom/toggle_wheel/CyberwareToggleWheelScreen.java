@@ -25,6 +25,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -207,7 +208,7 @@ public class CyberwareToggleWheelScreen extends Screen {
             CURSOR_Y *= DAMPING;
         }
 
-        @SubscribeEvent
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onMouseButton(InputEvent.MouseButton.Pre event) {
             if (!OPEN) return;
             if (event.getAction() != GLFW.GLFW_PRESS) return;

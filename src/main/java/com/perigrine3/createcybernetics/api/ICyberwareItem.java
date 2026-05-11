@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.api;
 
 import com.perigrine3.createcybernetics.common.capabilities.CyberwareAccess;
+import com.perigrine3.createcybernetics.util.ModTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,6 +34,81 @@ public interface ICyberwareItem {
 
     default Set<TagKey<Item>> incompatibleCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         return Set.of();
+    }
+
+    default boolean matchesCyberwareTagAsInstalled(ItemStack installedStack, CyberwareSlot installedSlot, TagKey<Item> tag) {
+        if (installedStack == null || installedStack.isEmpty() || installedSlot == null || tag == null) {
+            return false;
+        }
+
+        if (installedStack.is(tag)) {
+            return true;
+        }
+
+        Item item = installedStack.getItem();
+
+        if (item instanceof ICyberwareItem cyberwareItem) {
+            TagKey<Item> contextualReplacementTag = cyberwareItem.getReplacedOrganItemTag(installedStack, installedSlot);
+            return tag.equals(contextualReplacementTag);
+        }
+
+        return false;
+    }
+
+    default boolean matchesAnyCyberwareTagAsInstalled(ItemStack installedStack, CyberwareSlot installedSlot, Set<TagKey<Item>> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return false;
+        }
+
+        for (TagKey<Item> tag : tags) {
+            if (matchesCyberwareTagAsInstalled(installedStack, installedSlot, tag)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    default boolean hasRequiredCyberware(
+            ItemStack thisStack,
+            CyberwareSlot thisSlot,
+            ItemStack otherStack,
+            CyberwareSlot otherSlot
+    ) {
+        if (thisStack == null || thisStack.isEmpty()) {
+            return false;
+        }
+
+        if (otherStack == null || otherStack.isEmpty()) {
+            return false;
+        }
+
+        if (requiresCyberware(thisStack, thisSlot).contains(otherStack.getItem())) {
+            return true;
+        }
+
+        return matchesAnyCyberwareTagAsInstalled(otherStack, otherSlot, requiresCyberwareTags(thisStack, thisSlot));
+    }
+
+    default boolean isIncompatibleWith(
+            ItemStack thisStack,
+            CyberwareSlot thisSlot,
+            ItemStack otherStack,
+            CyberwareSlot otherSlot
+    ) {
+        if (thisStack == null || thisStack.isEmpty()) {
+            return false;
+        }
+
+        if (otherStack == null || otherStack.isEmpty()) {
+            return false;
+        }
+
+        if (incompatibleCyberware(thisStack, thisSlot).contains(otherStack.getItem())) {
+            return true;
+        }
+
+        return matchesAnyCyberwareTagAsInstalled(otherStack, otherSlot, incompatibleCyberwareTags(thisStack, thisSlot));
     }
 
     boolean replacesOrgan();
@@ -74,7 +150,7 @@ public interface ICyberwareItem {
     }
 
     default boolean isToggleableByWheel(ItemStack installedStack, CyberwareSlot slot) {
-        return installedStack.is(com.perigrine3.createcybernetics.util.ModTags.Items.TOGGLEABLE_CYBERWARE);
+        return installedStack.is(ModTags.Items.TOGGLEABLE_CYBERWARE);
     }
 
     default boolean isEnabledByWheel(LivingEntity entity) {

@@ -71,6 +71,11 @@ public class ArmSpinneretteItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean isToggleableByWheel(ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
     public Set<TagKey<Item>> incompatibleCyberwareTags(ItemStack installedStack, CyberwareSlot slot) {
         if (slot == CyberwareSlot.LARM) {
             return Set.of(ModTags.Items.LEFTARM_REPLACEMENTS);
@@ -81,12 +86,12 @@ public class ArmSpinneretteItem extends Item implements ICyberwareItem {
         return Set.of();
     }
 
-    /* -------------------- INTERACTION (INSTALLED CYBERWARE) -------------------- */
-
     private static boolean hasSpinneretteOnSide(LivingEntity entity, CyberwareSlot slot) {
-        if (entity == null) return false;
+        if (entity == null || slot == null) return false;
 
         if (entity instanceof Player player) {
+            if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return false;
 
@@ -108,6 +113,8 @@ public class ArmSpinneretteItem extends Item implements ICyberwareItem {
 
             return false;
         }
+
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return false;
 
         EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
         if (data == null) return false;
@@ -199,7 +206,7 @@ public class ArmSpinneretteItem extends Item implements ICyberwareItem {
     private static HumanoidArm armForHand(Player player, InteractionHand hand) {
         HumanoidArm main = player.getMainArm();
         if (hand == InteractionHand.MAIN_HAND) return main;
-        return (main == HumanoidArm.RIGHT) ? HumanoidArm.LEFT : HumanoidArm.RIGHT;
+        return main == HumanoidArm.RIGHT ? HumanoidArm.LEFT : HumanoidArm.RIGHT;
     }
 
     private static CyberwareSlot slotForHand(Player player, InteractionHand hand) {

@@ -3,9 +3,11 @@ package com.perigrine3.createcybernetics.mixin.client;
 import com.google.common.base.MoreObjects;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.item.cyberware.arm.ElectricArcCannonItem;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -47,10 +49,13 @@ public abstract class ItemInHandRendererMixin {
         PlayerCyberwareData data = playerEntity.getData(ModAttachments.CYBERWARE);
 
         HumanoidArm main = playerEntity.getMainArm();
-        CyberwareSlot offSlot = (main == HumanoidArm.RIGHT) ? CyberwareSlot.LARM : CyberwareSlot.RARM;
+        HumanoidArm offArm = main.getOpposite();
+        CyberwareSlot offSlot = offArm == HumanoidArm.LEFT ? CyberwareSlot.LARM : CyberwareSlot.RARM;
 
-        if (!data.hasSpecificItem(ModItems.ARMUPGRADES_DRILLFIST.get(), offSlot)) return;
-        if (!playerEntity.getOffhandItem().isEmpty()) return;
+        boolean renderForDrillfist = data.hasSpecificItem(ModItems.ARMUPGRADES_DRILLFIST.get(), offSlot);
+        boolean renderForArcCannon = cc$hasEnabledArcCannonInSlot(data, offSlot);
+
+        if (!renderForDrillfist && !renderForArcCannon) return;
 
         float equipped = 1.0F - Mth.lerp(partialTicks, this.oOffHandHeight, this.offHandHeight);
 
@@ -59,8 +64,32 @@ public abstract class ItemInHandRendererMixin {
         InteractionHand swinging = MoreObjects.firstNonNull(playerEntity.swingingArm, InteractionHand.MAIN_HAND);
         float swing = (swinging == InteractionHand.OFF_HAND) ? attack : 0.0F;
 
-        this.renderPlayerArm(poseStack, buffer, combinedLight, equipped, swing, main.getOpposite());
+        this.renderPlayerArm(poseStack, buffer, combinedLight, equipped, swing, offArm);
+
         poseStack.popPose();
+    }
+
+    @Unique
+    private static boolean cc$hasEnabledArcCannonInSlot(PlayerCyberwareData data, CyberwareSlot slot) {
+        if (data == null || slot == null) return false;
+
+        InstalledCyberware[] arr = data.getAll().get(slot);
+        if (arr == null) return false;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack stack = installed.getItem();
+            if (stack == null || stack.isEmpty()) continue;
+
+            if (!(stack.getItem() instanceof ElectricArcCannonItem)) continue;
+            if (!data.isEnabled(slot, i)) continue;
+
+            return true;
+        }
+
+        return false;
     }
 
     @Unique

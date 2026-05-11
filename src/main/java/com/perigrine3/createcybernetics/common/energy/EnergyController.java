@@ -9,6 +9,7 @@ import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
+import com.perigrine3.createcybernetics.item.cyberware.skin.EMPThreadingItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +30,11 @@ public final class EnergyController {
 
     private static final Map<Class<?>, Boolean> OVERRIDES_SHOULD_GENERATE = new ConcurrentHashMap<>();
 
+    private static final String NBT_ON_CHARGER_UNTIL = "cc_on_charging_block_until";
+
+    private static final String NBT_EMP_THREADING_GRACE_UNTIL = "cc_emp_threading_grace_until";
+    private static final int EMP_THREADING_GRACE_TICKS = 60;
+
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
@@ -38,11 +44,21 @@ public final class EnergyController {
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
+        boolean empLikeShutdown = hasEmpLikeShutdownEffect(player);
+
+        if (!empLikeShutdown) {
+            player.getPersistentData().remove(NBT_EMP_THREADING_GRACE_UNTIL);
+        }
+
         // ================================================================
         // EMP / REBOOT: wipe stored energy, clear activation-paid flags,
         // and mark all cyberware unpowered.
+        //
+        // Capacitor Frame still fully protects as before.
+        // EMP Threading gives a 3 second grace window before this shutdown
+        // path is allowed to run.
         // ================================================================
-        if (hasEmpLikeShutdownEffect(player) && !hasEmpProtection(data)) {
+        if (empLikeShutdown && !hasEmpProtection(data) && !hasEmpThreadingGrace(player, data)) {
             data.setEnergyStored(player, 0);
 
             for (var entry : data.getAll().entrySet()) {
@@ -273,6 +289,7 @@ public final class EnergyController {
                 if (item.acceptsGeneratedEnergy(player, stack, slot)) return true;
             }
         }
+
         return false;
     }
 
@@ -298,17 +315,81 @@ public final class EnergyController {
 
     private static boolean isOnChargerBlock(Player player) {
         Level level = player.level();
+
+        long now = level.getGameTime();
+        long markedUntil = player.getPersistentData().getLong(NBT_ON_CHARGER_UNTIL);
+
+        if (markedUntil >= now) {
+            return true;
+        }
+
         BlockPos below = player.blockPosition().below();
-        return level.getBlockState(below).is(ModBlocks.CHARGING_BLOCK.get());
+        if (level.getBlockState(below).is(ModBlocks.CHARGING_BLOCK.get())) {
+            return true;
+        }
+
+        BlockPos feetBelow = BlockPos.containing(
+                player.getX(),
+                player.getBoundingBox().minY - 0.05D,
+                player.getZ()
+        );
+
+        return !feetBelow.equals(below)
+                && level.getBlockState(feetBelow).is(ModBlocks.CHARGING_BLOCK.get());
+    }
+
+    public static void markOnChargingBlock(Player player) {
+        if (player == null) return;
+        if (player.level().isClientSide) return;
+
+        player.getPersistentData().putLong(
+                NBT_ON_CHARGER_UNTIL,
+                player.level().getGameTime() + 2L
+        );
     }
 
     private static boolean hasEmpProtection(PlayerCyberwareData data) {
         return data.hasSpecificItem(ModItems.BONEUPGRADES_CAPACITORFRAME.get(), CyberwareSlot.BONE);
     }
 
-    private static final class MutableInt {
-        int value;
-        MutableInt(int value) { this.value = value; }
+    private static boolean hasEmpThreadingGrace(Player player, PlayerCyberwareData data) {
+        if (player == null || data == null) return false;
+
+        if (!hasEnabledEmpThreading(data)) {
+            player.getPersistentData().remove(NBT_EMP_THREADING_GRACE_UNTIL);
+            return false;
+        }
+
+        long now = player.level().getGameTime();
+        CompoundTag tag = player.getPersistentData();
+
+        if (!tag.contains(NBT_EMP_THREADING_GRACE_UNTIL)) {
+            tag.putLong(NBT_EMP_THREADING_GRACE_UNTIL, now + EMP_THREADING_GRACE_TICKS);
+            return true;
+        }
+
+        long graceUntil = tag.getLong(NBT_EMP_THREADING_GRACE_UNTIL);
+        return now <= graceUntil;
+    }
+
+    private static boolean hasEnabledEmpThreading(PlayerCyberwareData data) {
+        InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.SKIN);
+        if (arr == null) return false;
+
+        for (int i = 0; i < arr.length; i++) {
+            InstalledCyberware installed = arr[i];
+            if (installed == null) continue;
+
+            ItemStack stack = installed.getItem();
+            if (stack == null || stack.isEmpty()) continue;
+
+            if (!(stack.getItem() instanceof EMPThreadingItem)) continue;
+            if (!data.isEnabled(CyberwareSlot.SKIN, i)) continue;
+
+            return true;
+        }
+
+        return false;
     }
 
     private static boolean hasEmpLikeShutdownEffect(Player player) {
@@ -317,5 +398,13 @@ public final class EnergyController {
 
     private static boolean hasDrainHack(Player player) {
         return player.hasEffect(ModEffects.DRAIN_HACK);
+    }
+
+    private static final class MutableInt {
+        int value;
+
+        MutableInt(int value) {
+            this.value = value;
+        }
     }
 }

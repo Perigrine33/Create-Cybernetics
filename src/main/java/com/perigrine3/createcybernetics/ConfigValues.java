@@ -22,7 +22,7 @@ public final class ConfigValues {
     public static boolean EPILEPSY_MODE = false;
 
     /** Tattoo upload policy. */
-    public static TattooUploadMode TATTOO_UPLOAD_MODE = TattooUploadMode.SERVER_FILES_ONLY;
+    public static TattooUploadMode TATTOO_UPLOAD_MODE = TattooUploadMode.ANY_PLAYER_AUTO_APPROVE;
 
     public enum TattooUploadMode {
         SERVER_FILES_ONLY,

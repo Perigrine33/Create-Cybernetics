@@ -66,7 +66,10 @@ public class IntestineSpinneretteItem extends Item implements ICyberwareItem {
         return Set.of(CyberwareSlot.ORGANS);
     }
 
-    /* -------------------- INTERACTION (INSTALLED CYBERWARE) -------------------- */
+    @Override
+    public boolean isToggleableByWheel(ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
 
     private static boolean hasSpinneretteInstalled(LivingEntity entity) {
         if (entity == null) return false;
@@ -137,8 +140,14 @@ public class IntestineSpinneretteItem extends Item implements ICyberwareItem {
         level.setBlock(placePos, cobweb, 3);
 
         SoundType sound = cobweb.getSoundType(level, placePos, player);
-        level.playSound(null, placePos, sound.getPlaceSound(), SoundSource.BLOCKS,
-                (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+        level.playSound(
+                null,
+                placePos,
+                sound.getPlaceSound(),
+                SoundSource.BLOCKS,
+                (sound.getVolume() + 1.0F) / 2.0F,
+                sound.getPitch() * 0.8F
+        );
 
         return true;
     }
@@ -166,7 +175,7 @@ public class IntestineSpinneretteItem extends Item implements ICyberwareItem {
     @SubscribeEvent
     public static void onRightClickEntity(PlayerInteractEvent.EntityInteract event) {
         Player player = event.getEntity();
-        if (player == null || !player.isCrouching()) return;
+        if (!player.isCrouching()) return;
         if (!hasSpinneretteInstalled(player)) return;
 
         Level level = player.level();

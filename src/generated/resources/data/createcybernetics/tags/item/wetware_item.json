@@ -47,6 +47,8 @@
     "createcybernetics:wetware_dragonskin",
     "createcybernetics:wetware_wardenantlers",
     "createcybernetics:wetware_sculkheart",
+    "createcybernetics:wetware_gooeymuscle",
+    "createcybernetics:wetware_electrocytemuscle",
     {
       "id": "createcybernetics:wetware_blubber",
       "required": false

@@ -10,7 +10,9 @@
     "createcybernetics:basecyberware_rightarm",
     "createcybernetics:basecyberware_leftarm",
 
-    "createcybernetics:skinupgrades_metalplating"
+    "createcybernetics:skinupgrades_metalplating",
+    "createcybernetics:legupgrades_ocelotpaws",
+    "createcybernetics:armupgrades_arccannon"
 
 
   ]

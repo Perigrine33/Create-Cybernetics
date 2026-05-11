@@ -30,6 +30,9 @@ public final class ClientItemProperties {
                     (stack, level, entity, seed) -> stack.has(DataComponents.DYED_COLOR) ? 1.0F : 0.0F);
             ItemProperties.register(ModItems.BASECYBERWARE_CYBEREYES.get(), ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dyed"),
                     (stack, level, entity, seed) -> stack.has(DataComponents.DYED_COLOR) ? 1.0F : 0.0F);
+
+            ItemProperties.register(ModItems.ARMUPGRADES_ARCCANNON.get(), ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "dyed"),
+                    (stack, level, entity, seed) -> stack.has(DataComponents.DYED_COLOR) ? 1.0F : 0.0F);
         });
     }
 }

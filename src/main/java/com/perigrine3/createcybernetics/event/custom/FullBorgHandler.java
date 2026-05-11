@@ -127,11 +127,13 @@ public final class FullBorgHandler {
             CyberwareAttributeHelper.removeModifier(player, "dragoon_knockback");
         }
 
-        boolean copernicusModel = isCopernicus(data);
-        if (copernicusModel) {
-            CyberwareAttributeHelper.applyModifier(player, "copernicus_oxygen");
-        } else {
-            CyberwareAttributeHelper.removeModifier(player, "copernicus_oxygen");
+        if (ModCompats.isInstalled("creatingspace")) {
+            boolean copernicusModel = isCopernicus(data);
+            if (copernicusModel) {
+                CyberwareAttributeHelper.applyModifier(player, "copernicus_oxygen");
+            } else {
+                CyberwareAttributeHelper.removeModifier(player, "copernicus_oxygen");
+            }
         }
 
         boolean genosModel = isGenos(data);

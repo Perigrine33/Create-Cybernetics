@@ -249,6 +249,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SKINUPGRADES_SUBDERMALARMOR.get());
         basicItem(ModItems.SKINUPGRADES_SUBDERMALSPIKES.get());
         basicItem(ModItems.SKINUPGRADES_SYNTHETICSETULES.get());
+        basicItem(ModItems.SKINUPGRADES_EMPTHREADING.get());
     }
 
 //MUSCLE
@@ -276,6 +277,8 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.WETWARE_DRAGONSKIN.get());
             basicItem(ModItems.WETWARE_WARDENANTLERS.get());
             basicItem(ModItems.WETWARE_SCULKHEART.get());
+            basicItem(ModItems.WETWARE_GOOEYMUSCLE.get());
+            basicItem(ModItems.WETWARE_ELECTROCYTEMUSCLE.get());
         }
 
 
@@ -303,6 +306,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.SCAVENGED_FIRESTARTER.get());
             basicItem(ModItems.SCAVENGED_PNEUMATICWRIST.get());
             basicItem(ModItems.SCAVENGED_REINFORCEDKNUCKLES.get());
+            basicItem(ModItems.SCAVENGED_ARCCANNON.get());
             basicItem(ModItems.SCAVENGED_METALDETECTOR.get());
             basicItem(ModItems.SCAVENGED_ANKLEBRACERS.get());
             basicItem(ModItems.SCAVENGED_JUMPBOOST.get());

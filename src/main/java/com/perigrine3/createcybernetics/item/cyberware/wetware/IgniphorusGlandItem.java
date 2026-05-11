@@ -5,8 +5,10 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareData;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
+import com.perigrine3.createcybernetics.common.capabilities.EntityCyberwareData;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.ModMobAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.util.ModTags;
 import io.netty.buffer.ByteBuf;
@@ -89,6 +91,11 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean isToggleableByWheel(ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
     public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
         return Set.of(ModItems.WETWARE_SCULKLUNGS.get(), ModItems.WETWARE_GUARDIANEYE.get());
     }
@@ -103,7 +110,6 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
 
     @Override
     public void onTick(LivingEntity entity) {
-        ICyberwareItem.super.onTick(entity);
     }
 
     public record DragonBreathFireballPayload() implements CustomPacketPayload {
@@ -121,6 +127,8 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.MOD)
     public static final class NetworkRegistration {
+        private NetworkRegistration() {}
+
         @SubscribeEvent
         public static void registerPayloads(RegisterPayloadHandlersEvent event) {
             PayloadRegistrar registrar = event.registrar("1");
@@ -138,6 +146,8 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
     @EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
     public static final class ClientInput {
         private static boolean wasUseDown = false;
+
+        private ClientInput() {}
 
         @SubscribeEvent
         public static void onClientTick(ClientTickEvent.Post event) {
@@ -175,22 +185,29 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
         return entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
     }
 
-    private static boolean hasIgniphorusInstalled(LivingEntity entity) {
+    private static boolean hasEnabledIgniphorusInstalled(LivingEntity entity) {
         ICyberwareData data = getCyberwareData(entity);
         if (data == null) return false;
 
         InstalledCyberware[] installed = data.getAll().get(CyberwareSlot.LUNGS);
         if (installed == null) return false;
 
-        for (InstalledCyberware entry : installed) {
+        for (int i = 0; i < installed.length; i++) {
+            InstalledCyberware entry = installed[i];
             if (entry == null) continue;
 
             ItemStack stack = entry.getItem();
             if (stack == null || stack.isEmpty()) continue;
 
-            if (stack.is(ModItems.WETWARE_FIREBREATHINGLUNGS.get())) {
-                return true;
+            if (!stack.is(ModItems.WETWARE_FIREBREATHINGLUNGS.get())) continue;
+
+            if (data instanceof PlayerCyberwareData playerData) {
+                if (!playerData.isEnabled(CyberwareSlot.LUNGS, i)) continue;
+            } else if (data instanceof EntityCyberwareData entityData) {
+                if (!entityData.isEnabled(CyberwareSlot.LUNGS, i)) continue;
             }
+
+            return true;
         }
 
         return false;
@@ -199,7 +216,7 @@ public class IgniphorusGlandItem extends Item implements ICyberwareItem {
     private static void tryShoot(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
         if (!player.isCrouching()) return;
-        if (!hasIgniphorusInstalled(player)) return;
+        if (!hasEnabledIgniphorusInstalled(player)) return;
 
         double reach = 5.0D;
         Vec3 start = player.getEyePosition();

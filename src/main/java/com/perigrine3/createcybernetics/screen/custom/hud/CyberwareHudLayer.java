@@ -7,14 +7,16 @@ import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
 import com.perigrine3.createcybernetics.api.InstalledCyberware;
 import com.perigrine3.createcybernetics.client.HudConfigClient;
+import com.perigrine3.createcybernetics.client.gui.HudLayoutScreen;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.compat.creatingspace.CreatingSpaceSuitPredicate;
 import com.perigrine3.createcybernetics.compat.northstar.CopernicusSuitPredicate;
 import com.perigrine3.createcybernetics.item.ModItems;
 import com.perigrine3.createcybernetics.item.cyberware.eyes.CybereyeItem;
 import com.perigrine3.createcybernetics.util.ModTags;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -45,13 +47,17 @@ public final class CyberwareHudLayer {
 
     private CyberwareHudLayer() {}
 
-    public static final ResourceLocation LAYER_ID =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_hud");
+    public static final ResourceLocation HUD_LAYER_LEFT =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_hud_left");
 
-    public static final ResourceLocation CROSSHAIR_LAYER_ID =
+    public static final ResourceLocation HUD_LAYER_RIGHT =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_hud_right");
+
+    public static final ResourceLocation HUD_WIDGETS_LAYER =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_hud_widgets");
+
+    public static final ResourceLocation CROSSHAIR_LAYER =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "cyberware_hud_crosshair");
-
-    // -------------------- Textures --------------------
 
     private static final ResourceLocation FRAME =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/hud/hud_batteryframe.png");
@@ -74,25 +80,21 @@ public final class CyberwareHudLayer {
     private static final ResourceLocation CENTER_SPINNER =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/hud/hud_overlay_circle.png");
 
-    // -------------------- Overlay sizing (resolution-locked) --------------------
-
     private static final int OVERLAY_W = 2048;
     private static final int OVERLAY_H = 1055;
+    private static final int OVERLAY_HALF_W = OVERLAY_W / 2;
+
     private static final int SPINNER_W = 2048;
     private static final int SPINNER_H = 1055;
 
     private static final float OVERLAY_MAX_SCREEN_FRACTION = 0.95f;
     private static final float OVERLAY_ALPHA = 0.5f;
-    private static final boolean OVERLAY_DRAW_BEHIND_BATTERY = true;
 
     private static final float SPINNER_MAX_SCREEN_FRACTION = 1.25f;
     private static final float SPINNER_ALPHA = 0.1f;
-    private static float SPINNER_OFFSET_X_PX = -0.5f;
-    private static float SPINNER_OFFSET_Y_PX = -0.5f;
-
-    private static float SPINNER_DEG_PER_SECOND = 10.0f;
-
-    // -------------------- Battery texture metrics --------------------
+    private static final float SPINNER_OFFSET_X_PX = -0.5f;
+    private static final float SPINNER_OFFSET_Y_PX = -0.5f;
+    private static final float SPINNER_DEG_PER_SECOND = 10.0f;
 
     private static final int TEX_W = 13;
     private static final int TEX_H = 25;
@@ -101,40 +103,10 @@ public final class CyberwareHudLayer {
     private static final int INNER_W = 10;
     private static final int INNER_H = 21;
 
-    // -------------------- Shared positioning helpers --------------------
-
-    public enum Anchor {
-        TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TOP_CENTER, BOTTOM_CENTER, CENTER
-    }
-
-    private static int anchoredX(int screenW, int widgetW, Anchor anchor, int offsetX) {
-        return switch (anchor) {
-            case TOP_LEFT, BOTTOM_LEFT -> offsetX;
-            case TOP_RIGHT, BOTTOM_RIGHT -> screenW - widgetW - offsetX;
-            case TOP_CENTER, BOTTOM_CENTER, CENTER -> (screenW / 2) - (widgetW / 2) + offsetX;
-        };
-    }
-
-    private static int anchoredY(int screenH, int widgetH, Anchor anchor, int offsetY) {
-        return switch (anchor) {
-            case TOP_LEFT, TOP_RIGHT, TOP_CENTER -> offsetY;
-            case BOTTOM_LEFT, BOTTOM_RIGHT, BOTTOM_CENTER -> screenH - widgetH - offsetY;
-            case CENTER -> (screenH / 2) - (widgetH / 2) + offsetY;
-        };
-    }
-
-    // -------------------- HUD tint behavior --------------------
-
     private static final int HUD_TINT_WHITE_ARGB = 0xFFFFFFFF;
     private static final int HUD_TINT_LOW_RED_ARGB = 0xFFFF5555;
 
-    // -------------------- Battery knobs (resolution-locked) --------------------
-
-    private static Anchor BATTERY_ANCHOR = Anchor.BOTTOM_RIGHT;
-    private static int BATTERY_OFFSET_X_PX = 300;
-    private static int BATTERY_OFFSET_Y_PX = 100;
-    private static float BATTERY_SCALE_PX = 4f;
-
+    private static final float BATTERY_SCALE_PX = 4f;
     private static final float VALUE_SCALE_REL = 0.75f;
 
     private static final int VALUE_PADDING_PX = 2;
@@ -146,46 +118,22 @@ public final class CyberwareHudLayer {
     private static final int ENERGY_STATS_LINE_GAP_PX = 1;
     private static final int ENERGY_STATS_EXTRA_PADDING_PX = 2;
 
-    // -------------------- Coords/biome (top-right) --------------------
-
-    private static Anchor COORDS_ANCHOR = Anchor.TOP_RIGHT;
-    private static int COORDS_OFFSET_X_PX = 160;
-    private static int COORDS_OFFSET_Y_PX = 120;
     private static final int COORDS_LINE_GAP_PX = 1;
     private static final boolean COORDS_SHADOW = true;
 
-    // -------------------- Toggle list (left side) --------------------
-
-    private static Anchor TOGGLE_ANCHOR = Anchor.TOP_LEFT;
-    private static int TOGGLE_OFFSET_X_PX = 140;
-    private static int TOGGLE_OFFSET_Y_PX = 130;
     private static final int TOGGLE_ROW_GAP_PX = 2;
     private static final int TOGGLE_ICON_TEXT_GAP_PX = 4;
     private static final boolean TOGGLE_SHADOW = true;
-    private static int TOGGLE_MAX_ROWS = 16;
+    private static final int TOGGLE_MAX_ROWS = 16;
 
     private static final Component ENABLED_TXT = Component.literal("ENABLED");
     private static final Component DISABLED_TXT = Component.literal("DISABLED");
+    private static final int TOGGLE_ENABLED_COLOR = 0x55FF55;
 
-    private static final int TOGGLE_ENABLED_COLOR = 0x55FF55; // green
-
-    // -------------------- Shards (bottom-left) --------------------
-
-    private static Anchor SHARDS_ANCHOR = Anchor.BOTTOM_LEFT;
-    private static int SHARDS_OFFSET_X_PX = 270;
-    private static int SHARDS_OFFSET_Y_PX = 90;
     private static final int SHARDS_ICON_GAP_PX = 0;
-    private static float SHARDS_SCALE_REL = 1.75f;
+    private static final float SHARDS_SCALE_REL = 1.75f;
 
-    // -------------------- Target name --------------------
-
-    private static Anchor TARGET_ANCHOR = Anchor.CENTER;
-    private static int TARGET_OFFSET_X_PX = 0;
-    private static final int TARGET_OFFSET_Y_ABOVE_HOTBAR_PX = 250; // your current
-    private static final int TARGET_OFFSET_Y_UNDER_CROSSHAIR_PX = 50; // requested
     private static final boolean TARGET_SHADOW = true;
-
-    // -------------------- Oxygen --------------------
 
     public static final int COPERNICUS_OXYGEN_MAX_DISPLAY = 3000;
     private static final int OXYGEN_TEXT_COLOR = 0xFFFFFF;
@@ -193,106 +141,173 @@ public final class CyberwareHudLayer {
     private static final boolean OXYGEN_TEXT_SHADOW = true;
     private static final float OXYGEN_LOW_THRESHOLD = 0.25f;
 
-    // -------------------- Heat Engine flame + time --------------------
-
     private static final ResourceLocation HEAT_FLAME_TEX =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/gui/flame_indicator.png");
 
     private static final int HEAT_FLAME_TEX_W = 16;
     private static final int HEAT_FLAME_TEX_H = 16;
-
     private static final int HEAT_FLAME_DRAW_W = 16;
     private static final int HEAT_FLAME_DRAW_H = 16;
-
     private static final int HEAT_FLAME_TEXT_GAP_PX = 4;
-    private static int HEAT_TIME_OFFSET_X_PX = 0;
-    private static int HEAT_TIME_OFFSET_Y_PX = 165;
-
-    private static float HEAT_TIME_SCALE_REL = 1f;
-
-    // -------------------- Registration --------------------
+    private static final int HEAT_TIME_OFFSET_X_PX = 0;
+    private static final int HEAT_TIME_OFFSET_Y_PX = 165;
+    private static final float HEAT_TIME_SCALE_REL = 1f;
 
     @SubscribeEvent
     public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
-        event.registerAbove(VanillaGuiLayers.HOTBAR, LAYER_ID, CyberwareHudLayer::renderHud);
-        event.registerAbove(VanillaGuiLayers.CROSSHAIR, CROSSHAIR_LAYER_ID, CyberwareHudLayer::renderCrosshairOverlay);
+        event.registerAbove(VanillaGuiLayers.HOTBAR, HUD_LAYER_LEFT, CyberwareHudLayer::renderHudLayerLeft);
+        event.registerAbove(VanillaGuiLayers.HOTBAR, HUD_LAYER_RIGHT, CyberwareHudLayer::renderHudLayerRight);
+        event.registerAbove(VanillaGuiLayers.HOTBAR, HUD_WIDGETS_LAYER, CyberwareHudLayer::renderHud);
+        event.registerAbove(VanillaGuiLayers.CROSSHAIR, CROSSHAIR_LAYER, CyberwareHudLayer::renderCrosshairOverlay);
     }
 
-    // ======================================================================
-    // Public helpers for the config screen
-    // ======================================================================
+    public enum HudLayerSide {
+        LEFT,
+        RIGHT
+    }
+
+    public record HudRect(int x, int y, int w, int h) {
+        public boolean containsPixel(int px, int py) {
+            return px >= x && py >= y && px < x + w && py < y + h;
+        }
+
+        public boolean containsGui(double guiX, double guiY, Minecraft mc) {
+            double guiScale = mc.getWindow().getGuiScale();
+            int px = Math.round((float) (guiX * guiScale));
+            int py = Math.round((float) (guiY * guiScale));
+            return containsPixel(px, py);
+        }
+    }
+
+    private record BatteryRectData(HudRect rawRect, HudRect clampedRect, int rawIconX, int rawIconY, int iconW, int iconH) {}
 
     public record HudWidgetRects(
-            int batteryX, int batteryY, int batteryW, int batteryH,
-            int coordsX, int coordsY, int coordsW, int coordsH,
-            int toggleX, int toggleY, int toggleW, int toggleH,
-            int shardsX, int shardsY, int shardsW, int shardsH,
-            int targetX, int targetY, int targetW, int targetH
-    ) {}
+            HudRect hudLeft,
+            HudRect hudRight,
+            HudRect battery,
+            HudRect coords,
+            HudRect toggleList,
+            HudRect shards,
+            HudRect target
+    ) {
+        public HudRect rect(HudConfigClient.HudComponent component) {
+            return switch (component) {
+                case HUD_LEFT -> hudLeft;
+                case HUD_RIGHT -> hudRight;
+                case BATTERY -> battery;
+                case COORDS -> coords;
+                case TOGGLE_LIST -> toggleList;
+                case SHARDS -> shards;
+                case TARGET -> target;
+            };
+        }
+    }
 
     public static HudWidgetRects computeRectsForConfig(Minecraft mc, HudConfigClient.HudConfig cfg) {
         int screenPxW = mc.getWindow().getScreenWidth();
         int screenPxH = mc.getWindow().getScreenHeight();
 
-        float hudTextScale = BATTERY_SCALE_PX * VALUE_SCALE_REL;
-        float hudIconScale = hudTextScale;
+        float overlayScale = overlayBaseScale(screenPxW, screenPxH) * cfg.hudLayer.scale;
+        int overlayHalfW = Math.round(OVERLAY_HALF_W * overlayScale);
+        int overlayH = Math.round(OVERLAY_H * overlayScale);
 
-        int scaledBatteryW = Math.round(TEX_W * BATTERY_SCALE_PX);
-        int scaledBatteryH = Math.round(TEX_H * BATTERY_SCALE_PX);
-        int batteryX = anchoredX(screenPxW, scaledBatteryW, BATTERY_ANCHOR, BATTERY_OFFSET_X_PX);
-        int batteryY = anchoredY(screenPxH, scaledBatteryH, BATTERY_ANCHOR, BATTERY_OFFSET_Y_PX);
-        int batteryBlockX = batteryX;
-        int batteryBlockY = batteryY;
-        int batteryBlockW = scaledBatteryW;
-        int batteryBlockH = scaledBatteryH;
-        int approxCoordsW = Math.round(180 * hudTextScale);
-        int approxCoordsH = Math.round((mc.font.lineHeight * hudTextScale) * 2) + COORDS_LINE_GAP_PX;
-        int coordsX = anchoredX(screenPxW, approxCoordsW, COORDS_ANCHOR, COORDS_OFFSET_X_PX);
-        int coordsY = anchoredY(screenPxH, approxCoordsH, COORDS_ANCHOR, COORDS_OFFSET_Y_PX);
-        int iconPx = Math.round(16f * hudIconScale);
-        int lineH = Math.round(mc.font.lineHeight * hudTextScale);
+        int hudLayerY = clampInt(cfg.hudLayer.pixelY(screenPxH), 0, Math.max(0, screenPxH - overlayH));
+
+        HudRect hudLeft = new HudRect(
+                clampInt(cfg.hudLayer.leftPixelX(screenPxW), 0, Math.max(0, screenPxW - overlayHalfW)),
+                hudLayerY,
+                overlayHalfW,
+                overlayH
+        );
+
+        HudRect hudRight = new HudRect(
+                clampInt(cfg.hudLayer.rightPixelX(screenPxW), 0, Math.max(0, screenPxW - overlayHalfW)),
+                hudLayerY,
+                overlayHalfW,
+                overlayH
+        );
+
+        BatteryRectData batteryData = computeBatteryRectData(mc, cfg, screenPxW, screenPxH);
+
+        HudConfigClient.ComponentLayout coordsLayout = cfg.coords;
+        HudConfigClient.ComponentLayout toggleLayout = cfg.toggleList;
+        HudConfigClient.ComponentLayout shardsLayout = cfg.shards;
+        HudConfigClient.ComponentLayout targetLayout = cfg.target;
+
+        float coordsScale = BATTERY_SCALE_PX * VALUE_SCALE_REL * coordsLayout.scale;
+        int coordsW = Math.round(190 * coordsScale);
+        int coordsH = Math.round((mc.font.lineHeight * coordsScale) * 2) + COORDS_LINE_GAP_PX;
+
+        HudRect coords = clampRectToScreen(
+                new HudRect(coordsLayout.pixelX(screenPxW), coordsLayout.pixelY(screenPxH), coordsW, coordsH),
+                screenPxW,
+                screenPxH
+        );
+
+        float toggleTextScale = BATTERY_SCALE_PX * VALUE_SCALE_REL * toggleLayout.scale;
+        float toggleIconScale = toggleTextScale;
+
+        int iconPx = Math.round(16f * toggleIconScale);
+        int lineH = Math.round(mc.font.lineHeight * toggleTextScale);
         int rowH = Math.max(iconPx, lineH);
         int rows = Math.max(1, Math.min(TOGGLE_MAX_ROWS, 10));
-        int enabledW = Math.round(mc.font.width(ENABLED_TXT.getString()) * hudTextScale);
-        int disabledW = Math.round(mc.font.width(DISABLED_TXT.getString()) * hudTextScale);
+
+        int enabledW = Math.round(mc.font.width(ENABLED_TXT.getString()) * toggleTextScale);
+        int disabledW = Math.round(mc.font.width(DISABLED_TXT.getString()) * toggleTextScale);
         int statusW = Math.max(enabledW, disabledW);
+
         int toggleW = iconPx + TOGGLE_ICON_TEXT_GAP_PX + statusW;
         int toggleH = rows * rowH + Math.max(0, rows - 1) * TOGGLE_ROW_GAP_PX;
-        int toggleX = anchoredX(screenPxW, toggleW, TOGGLE_ANCHOR, TOGGLE_OFFSET_X_PX);
-        int toggleY = anchoredY(screenPxH, toggleH, TOGGLE_ANCHOR, TOGGLE_OFFSET_Y_PX);
-        float shardScale = hudIconScale * SHARDS_SCALE_REL;
+
+        HudRect toggleList = clampRectToScreen(
+                new HudRect(toggleLayout.pixelX(screenPxW), toggleLayout.pixelY(screenPxH), toggleW, toggleH),
+                screenPxW,
+                screenPxH
+        );
+
+        float shardScale = BATTERY_SCALE_PX * VALUE_SCALE_REL * SHARDS_SCALE_REL * shardsLayout.scale;
         int shardIconPx = Math.round(16f * shardScale);
         int shardsW = (2 * shardIconPx) + SHARDS_ICON_GAP_PX;
         int shardsH = shardIconPx;
-        int shardsX = anchoredX(screenPxW, shardsW, SHARDS_ANCHOR, SHARDS_OFFSET_X_PX);
-        int shardsY = anchoredY(screenPxH, shardsH, SHARDS_ANCHOR, SHARDS_OFFSET_Y_PX);
-        int targetOffsetY = switch (cfg.targetMode) {
-            case ABOVE_HOTBAR -> TARGET_OFFSET_Y_ABOVE_HOTBAR_PX;
-            case UNDER_CROSSHAIR -> TARGET_OFFSET_Y_UNDER_CROSSHAIR_PX;
-            case OFF -> TARGET_OFFSET_Y_ABOVE_HOTBAR_PX;
-        };
 
-        int approxTargetW = Math.round(140 * hudTextScale);
-        int approxTargetH = Math.round(mc.font.lineHeight * hudTextScale);
-        int targetX = anchoredX(screenPxW, approxTargetW, TARGET_ANCHOR, TARGET_OFFSET_X_PX);
-        int targetY = anchoredY(screenPxH, approxTargetH, TARGET_ANCHOR, targetOffsetY);
+        HudRect shards = clampRectToScreen(
+                new HudRect(shardsLayout.pixelX(screenPxW), shardsLayout.pixelY(screenPxH), shardsW, shardsH),
+                screenPxW,
+                screenPxH
+        );
 
-        if (cfg.batteryMode == HudConfigClient.BatteryMode.TEXT_ONLY) {
-            int textW = Math.round(mc.font.width("9999/9999") * hudTextScale);
-            int textH = Math.round(mc.font.lineHeight * hudTextScale);
-            batteryBlockW = textW;
-            batteryBlockH = textH;
-            batteryBlockX = batteryX + (scaledBatteryW / 2) - (textW / 2);
-            batteryBlockY = batteryY - VALUE_PADDING_PX - textH;
-        }
+        float targetScale = BATTERY_SCALE_PX * VALUE_SCALE_REL * targetLayout.scale;
+        int targetW = Math.round(140 * targetScale);
+        int targetH = Math.round(mc.font.lineHeight * targetScale);
+
+        HudRect target = clampRectToScreen(
+                new HudRect(targetLayout.pixelX(screenPxW), targetLayout.pixelY(screenPxH), targetW, targetH),
+                screenPxW,
+                screenPxH
+        );
 
         return new HudWidgetRects(
-                batteryBlockX, batteryBlockY, batteryBlockW, batteryBlockH,
-                coordsX, coordsY, approxCoordsW, approxCoordsH,
-                toggleX, toggleY, toggleW, toggleH,
-                shardsX, shardsY, shardsW, shardsH,
-                targetX, targetY, approxTargetW, approxTargetH
+                hudLeft,
+                hudRight,
+                batteryData.clampedRect(),
+                coords,
+                toggleList,
+                shards,
+                target
         );
+    }
+
+    public static void renderHudLayerPreview(GuiGraphics gg, float partialTick, HudConfigClient.HudConfig cfg) {
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null) return;
+        if (mc.options.hideGui) return;
+        if (!cfg.hudLayer.enabled) return;
+
+        int hudTintArgb = resolveHudTintArgb(player);
+
+        renderHudLayerSidePixels(gg, cfg, HudLayerSide.LEFT, hudTintArgb);
+        renderHudLayerSidePixels(gg, cfg, HudLayerSide.RIGHT, hudTintArgb);
     }
 
     public static void renderHudPreview(GuiGraphics gg, float partialTick, HudConfigClient.HudConfig cfg) {
@@ -306,23 +321,22 @@ public final class CyberwareHudLayer {
         int screenPxH = mc.getWindow().getScreenHeight();
 
         float hudTextScale = BATTERY_SCALE_PX * VALUE_SCALE_REL;
-        float hudIconScale = hudTextScale;
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
 
         int hudTintArgb = resolveHudTintArgb(player);
 
-        int current = (data != null) ? data.getEnergyStored() : 0;
-        int capacity = (data != null) ? data.getTotalEnergyCapacity(player) : 0;
+        int current = data != null ? data.getEnergyStored() : 0;
+        int capacity = data != null ? data.getTotalEnergyCapacity(player) : 0;
 
         TickSnapshot snap = ClientEnergyState.getSnapshot();
-        EnergyRates localRates = (data != null) ? computeClientEnergyRates(player, data) : EnergyRates.ZERO;
+        EnergyRates localRates = data != null ? computeClientEnergyRates(player, data) : EnergyRates.ZERO;
 
         int genPerTick = localRates.generatedPerTick;
         int usePerTick = localRates.requiredPerTick;
 
         if (snap != null) {
-            boolean snapMeaningful = (snap.generatedPerTick() != 0) || (snap.consumedPerTick() != 0);
+            boolean snapMeaningful = snap.generatedPerTick() != 0 || snap.consumedPerTick() != 0;
             if (snapMeaningful) {
                 genPerTick = snap.generatedPerTick();
                 usePerTick = snap.consumedPerTick();
@@ -340,27 +354,31 @@ public final class CyberwareHudLayer {
         gg.pose().pushPose();
         gg.pose().scale((float) (1.0 / guiScale), (float) (1.0 / guiScale), 1.0f);
 
-        if (OVERLAY_DRAW_BEHIND_BATTERY) {
-            renderCenteredImageAutoFitTintedPixels(
-                    gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H,
-                    screenPxW, screenPxH,
-                    OVERLAY_MAX_SCREEN_FRACTION, OVERLAY_ALPHA,
-                    hudTintArgb
+        if (cfg.battery.enabled) {
+            renderBatteryWithModePixels(
+                    gg,
+                    mc,
+                    screenPxW,
+                    screenPxH,
+                    current,
+                    capacity,
+                    capForPct,
+                    genPerTick,
+                    usePerTick,
+                    netPerTick,
+                    low,
+                    hudTintArgb,
+                    batteryTintArgb,
+                    cfg
             );
         }
 
-        renderBatteryWithModePixels(
-                gg, mc, screenPxW, screenPxH,
-                current, capacity, capForPct,
-                genPerTick, usePerTick, netPerTick,
-                low, hudTintArgb, batteryTintArgb,
-                hudTextScale,
-                cfg.batteryMode
-        );
-
         renderHeatEngineRemainingBurnAboveHotbarPixels(
-                gg, mc, player,
-                screenPxW, screenPxH,
+                gg,
+                mc,
+                player,
+                screenPxW,
+                screenPxH,
                 partialTick,
                 hudTintArgb,
                 hudTextScale * HEAT_TIME_SCALE_REL
@@ -368,32 +386,20 @@ public final class CyberwareHudLayer {
 
         renderCopernicusOxygenIndicatorTintedPixels(gg, mc, player, screenPxW, screenPxH, hudTintArgb, hudTextScale);
 
-        if (cfg.coordsEnabled) {
-            renderCoordsAndBiomePixels(gg, mc, player, screenPxW, screenPxH, hudTintArgb, hudTextScale);
+        if (cfg.coords.enabled) {
+            renderCoordsAndBiomePixels(gg, mc, player, screenPxW, screenPxH, hudTintArgb, cfg);
         }
 
-        if (cfg.toggleListEnabled) {
-            renderToggleListPixels(gg, mc, player, screenPxW, screenPxH, hudTintArgb, hudTextScale, hudIconScale);
+        if (cfg.toggleList.enabled) {
+            renderToggleListPixels(gg, mc, player, screenPxW, screenPxH, hudTintArgb, cfg);
         }
 
-        if (cfg.shardsEnabled) {
-            renderChipwareShardsPixels(gg, player, screenPxW, screenPxH, hudIconScale);
+        if (cfg.shards.enabled) {
+            renderChipwareShardsPixels(gg, player, screenPxW, screenPxH, cfg);
         }
 
-        if (cfg.targetMode != HudConfigClient.TargetMode.OFF) {
-            int targetOffsetY = (cfg.targetMode == HudConfigClient.TargetMode.UNDER_CROSSHAIR)
-                    ? TARGET_OFFSET_Y_UNDER_CROSSHAIR_PX
-                    : TARGET_OFFSET_Y_ABOVE_HOTBAR_PX;
-            renderTargetNamePixels(gg, mc, player, screenPxW, screenPxH, hudTintArgb, hudTextScale, targetOffsetY);
-        }
-
-        if (!OVERLAY_DRAW_BEHIND_BATTERY) {
-            renderCenteredImageAutoFitTintedPixels(
-                    gg, CENTER_OVERLAY, OVERLAY_W, OVERLAY_H,
-                    screenPxW, screenPxH,
-                    OVERLAY_MAX_SCREEN_FRACTION, OVERLAY_ALPHA,
-                    hudTintArgb
-            );
+        if (cfg.target.enabled && cfg.targetMode != HudConfigClient.TargetMode.OFF) {
+            renderTargetNamePixels(gg, mc, player, screenPxW, screenPxH, hudTintArgb, cfg);
         }
 
         gg.pose().popPose();
@@ -417,8 +423,10 @@ public final class CyberwareHudLayer {
         renderSpinningCenteredImageAutoFitTintedPixels(
                 gg,
                 CENTER_SPINNER,
-                SPINNER_W, SPINNER_H,
-                screenPxW, screenPxH,
+                SPINNER_W,
+                SPINNER_H,
+                screenPxW,
+                screenPxH,
                 SPINNER_MAX_SCREEN_FRACTION,
                 SPINNER_ALPHA,
                 player.tickCount,
@@ -432,11 +440,34 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    // ======================================================================
-    // Vanilla HUD layer entrypoints (now config-driven)
-    // ======================================================================
+    private static void renderHudLayerLeft(GuiGraphics gg, DeltaTracker delta) {
+        renderHudLayerSide(gg, delta, HudLayerSide.LEFT);
+    }
+
+    private static void renderHudLayerRight(GuiGraphics gg, DeltaTracker delta) {
+        renderHudLayerSide(gg, delta, HudLayerSide.RIGHT);
+    }
+
+    private static void renderHudLayerSide(GuiGraphics gg, DeltaTracker delta, HudLayerSide side) {
+        if (hudLayoutEditorOpen()) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null) return;
+        if (mc.options.hideGui) return;
+        if (!mc.options.getCameraType().isFirstPerson()) return;
+        if (!CyberwareInstallQueries.hasHudAccess(player)) return;
+
+        HudConfigClient.HudConfig cfg = HudConfigClient.get(player.getUUID());
+        if (!cfg.hudLayer.enabled) return;
+
+        int hudTintArgb = resolveHudTintArgb(player);
+        renderHudLayerSidePixels(gg, cfg, side, hudTintArgb);
+    }
 
     private static void renderHud(GuiGraphics gg, DeltaTracker delta) {
+        if (hudLayoutEditorOpen()) return;
+
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null) return;
@@ -457,6 +488,8 @@ public final class CyberwareHudLayer {
     }
 
     private static void renderCrosshairOverlay(GuiGraphics gg, DeltaTracker delta) {
+        if (hudLayoutEditorOpen()) return;
+
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null) return;
@@ -476,9 +509,146 @@ public final class CyberwareHudLayer {
         renderCrosshairPreview(gg, partialTick, cfg);
     }
 
-    // ======================================================================
-    // Energy rates (client-side)
-    // ======================================================================
+    private static boolean hudLayoutEditorOpen() {
+        return Minecraft.getInstance().screen instanceof HudLayoutScreen;
+    }
+
+    private static void renderHudLayerSidePixels(GuiGraphics gg, HudConfigClient.HudConfig cfg, HudLayerSide side, int tintArgb) {
+        Minecraft mc = Minecraft.getInstance();
+        double guiScale = mc.getWindow().getGuiScale();
+        int screenPxW = mc.getWindow().getScreenWidth();
+        int screenPxH = mc.getWindow().getScreenHeight();
+
+        HudWidgetRects rects = computeRectsForConfig(mc, cfg);
+        HudRect rect = side == HudLayerSide.LEFT ? rects.hudLeft() : rects.hudRight();
+
+        float baseScale = overlayBaseScale(screenPxW, screenPxH);
+        float scale = baseScale * cfg.hudLayer.scale;
+
+        int srcU = side == HudLayerSide.LEFT ? 0 : OVERLAY_HALF_W;
+
+        gg.pose().pushPose();
+        gg.pose().scale((float) (1.0 / guiScale), (float) (1.0 / guiScale), 1.0f);
+        gg.pose().translate(rect.x(), rect.y(), 0);
+        gg.pose().scale(scale, scale, 1.0f);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        int argb = argbWithAlphaFromFloat(tintArgb, OVERLAY_ALPHA);
+        setShaderColorFromArgb(argb);
+
+        gg.blit(
+                CENTER_OVERLAY,
+                0,
+                0,
+                srcU,
+                0,
+                OVERLAY_HALF_W,
+                OVERLAY_H,
+                OVERLAY_W,
+                OVERLAY_H
+        );
+
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        RenderSystem.disableBlend();
+
+        gg.pose().popPose();
+    }
+
+    private static float overlayBaseScale(int screenPxW, int screenPxH) {
+        float sx = (screenPxW * OVERLAY_MAX_SCREEN_FRACTION) / (float) OVERLAY_W;
+        float sy = (screenPxH * OVERLAY_MAX_SCREEN_FRACTION) / (float) OVERLAY_H;
+        return Math.min(Math.min(sx, sy), 1.0f);
+    }
+
+    private static BatteryRectData computeBatteryRectData(Minecraft mc, HudConfigClient.HudConfig cfg, int screenPxW, int screenPxH) {
+        HudConfigClient.ComponentLayout batteryLayout = cfg.battery;
+
+        float batteryScale = BATTERY_SCALE_PX * batteryLayout.scale;
+        float batteryTextScale = batteryScale * VALUE_SCALE_REL;
+
+        int iconW = Math.round(TEX_W * batteryScale);
+        int iconH = Math.round(TEX_H * batteryScale);
+
+        int iconX = batteryLayout.pixelX(screenPxW);
+        int iconY = batteryLayout.pixelY(screenPxH);
+
+        int rectX = iconX;
+        int rectY = iconY;
+        int rectW = iconW;
+        int rectH = iconH;
+
+        if (cfg.batteryMode == HudConfigClient.BatteryMode.TEXT_ONLY) {
+            int textW = Math.round(mc.font.width("9999/9999") * batteryTextScale);
+            int textH = Math.round(mc.font.lineHeight * batteryTextScale);
+
+            rectX = iconX + (iconW / 2) - (textW / 2);
+            rectY = iconY - VALUE_PADDING_PX - textH;
+            rectW = textW;
+            rectH = textH;
+        } else {
+            boolean hasText = cfg.batteryMode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY
+                    || cfg.batteryMode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY_PLUS_STATS;
+
+            boolean hasStats = cfg.batteryMode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY_PLUS_STATS;
+
+            if (hasText) {
+                int textW = Math.round(mc.font.width("9999/9999") * batteryTextScale);
+                int textH = Math.round(mc.font.lineHeight * batteryTextScale);
+
+                int textX = iconX + (iconW / 2) - (textW / 2);
+                int textY = iconY - VALUE_PADDING_PX - textH;
+
+                int minX = Math.min(rectX, textX);
+                int minY = Math.min(rectY, textY);
+                int maxX = Math.max(rectX + rectW, textX + textW);
+                int maxY = Math.max(rectY + rectH, textY + textH);
+
+                rectX = minX;
+                rectY = minY;
+                rectW = maxX - minX;
+                rectH = maxY - minY;
+
+                if (hasStats) {
+                    int genW = Math.round(mc.font.width("GEN: +999") * batteryTextScale);
+                    int useW = Math.round(mc.font.width("USE: -999") * batteryTextScale);
+                    int statsW = Math.max(genW, useW);
+
+                    int lineH = Math.round(mc.font.lineHeight * batteryTextScale);
+                    int statsH = (lineH * 2) + ENERGY_STATS_LINE_GAP_PX;
+
+                    int statsX = iconX + (iconW / 2) - (statsW / 2);
+                    int statsY = textY - ENERGY_STATS_EXTRA_PADDING_PX - statsH;
+
+                    minX = Math.min(rectX, statsX);
+                    minY = Math.min(rectY, statsY);
+                    maxX = Math.max(rectX + rectW, statsX + statsW);
+                    maxY = Math.max(rectY + rectH, statsY + statsH);
+
+                    rectX = minX;
+                    rectY = minY;
+                    rectW = maxX - minX;
+                    rectH = maxY - minY;
+                }
+            }
+        }
+
+        HudRect raw = new HudRect(rectX, rectY, rectW, rectH);
+        HudRect clamped = clampRectToScreen(raw, screenPxW, screenPxH);
+
+        return new BatteryRectData(raw, clamped, iconX, iconY, iconW, iconH);
+    }
+
+    private static HudRect clampRectToScreen(HudRect rect, int screenPxW, int screenPxH) {
+        int x = clampInt(rect.x(), 0, Math.max(0, screenPxW - rect.w()));
+        int y = clampInt(rect.y(), 0, Math.max(0, screenPxH - rect.h()));
+        return new HudRect(x, y, rect.w(), rect.h());
+    }
+
+    private static int clampInt(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
 
     private static final class EnergyRates {
         static final EnergyRates ZERO = new EnergyRates(0, 0);
@@ -501,13 +671,11 @@ public final class CyberwareHudLayer {
             InstalledCyberware[] arr = entry.getValue();
             if (arr == null) continue;
 
-            for (int idx = 0; idx < arr.length; idx++) {
-                InstalledCyberware cw = arr[idx];
+            for (InstalledCyberware cw : arr) {
                 if (cw == null) continue;
 
                 ItemStack stack = cw.getItem();
                 if (stack == null || stack.isEmpty()) continue;
-
                 if (!(stack.getItem() instanceof ICyberwareItem item)) continue;
 
                 int gen = item.getEnergyGeneratedPerTick(player, stack, slot);
@@ -526,10 +694,6 @@ public final class CyberwareHudLayer {
         return new EnergyRates(generated, required);
     }
 
-    // ======================================================================
-    // Battery (mode-driven)
-    // ======================================================================
-
     private static void renderBatteryWithModePixels(
             GuiGraphics gg,
             Minecraft mc,
@@ -544,51 +708,75 @@ public final class CyberwareHudLayer {
             boolean low,
             int hudTintArgb,
             int batteryTintArgb,
-            float hudTextScale,
-            HudConfigClient.BatteryMode mode
+            HudConfigClient.HudConfig cfg
     ) {
-        int scaledW = Math.round(TEX_W * BATTERY_SCALE_PX);
-        int scaledH = Math.round(TEX_H * BATTERY_SCALE_PX);
+        HudConfigClient.ComponentLayout layout = cfg.battery;
 
-        int x = anchoredX(screenPxW, scaledW, BATTERY_ANCHOR, BATTERY_OFFSET_X_PX);
-        int y = anchoredY(screenPxH, scaledH, BATTERY_ANCHOR, BATTERY_OFFSET_Y_PX);
+        float batteryScale = BATTERY_SCALE_PX * layout.scale;
+        float textScale = batteryScale * VALUE_SCALE_REL;
 
-        boolean drawIcon = (mode != HudConfigClient.BatteryMode.TEXT_ONLY);
-        boolean drawCapacityText = (mode == HudConfigClient.BatteryMode.TEXT_ONLY)
-                || (mode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY)
-                || (mode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY_PLUS_STATS);
+        BatteryRectData data = computeBatteryRectData(mc, cfg, screenPxW, screenPxH);
 
-        boolean drawStats = (mode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY_PLUS_STATS);
+        int dx = data.clampedRect().x() - data.rawRect().x();
+        int dy = data.clampedRect().y() - data.rawRect().y();
 
-        int valueTopY = y;
+        int iconX = data.rawIconX() + dx;
+        int iconY = data.rawIconY() + dy;
+
+        int scaledW = data.iconW();
+
+        boolean drawIcon = cfg.batteryMode != HudConfigClient.BatteryMode.TEXT_ONLY;
+        boolean drawCapacityText = cfg.batteryMode == HudConfigClient.BatteryMode.TEXT_ONLY
+                || cfg.batteryMode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY
+                || cfg.batteryMode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY_PLUS_STATS;
+
+        boolean drawStats = cfg.batteryMode == HudConfigClient.BatteryMode.ICON_PLUS_CAPACITY_PLUS_STATS;
+
+        int valueTopY = iconY;
 
         if (drawCapacityText) {
             valueTopY = renderEnergyValueAboveBatteryPixels(
-                    gg, mc, current, capacity,
-                    x, y, scaledW,
-                    low, hudTextScale
+                    gg,
+                    mc,
+                    current,
+                    capacity,
+                    iconX,
+                    iconY,
+                    scaledW,
+                    low,
+                    textScale
             );
         }
 
         if (drawStats && drawCapacityText) {
             renderEnergyStatsPixels(
-                    gg, mc,
-                    genPerTick, usePerTick, netPerTick,
-                    x, valueTopY, scaledW,
-                    low, hudTintArgb,
-                    hudTextScale
+                    gg,
+                    mc,
+                    genPerTick,
+                    usePerTick,
+                    netPerTick,
+                    iconX,
+                    valueTopY,
+                    scaledW,
+                    low,
+                    hudTintArgb,
+                    textScale
             );
         }
 
         if (drawIcon) {
-            renderBatteryScaledPixels(gg, x, y, current, capForPct, 0, low, batteryTintArgb, BATTERY_SCALE_PX);
+            renderBatteryScaledPixels(gg, iconX, iconY, current, capForPct, 0, low, batteryTintArgb, batteryScale);
         }
     }
 
     private static int renderEnergyValueAboveBatteryPixels(
-            GuiGraphics gg, Minecraft mc,
-            int current, int capacity,
-            int batteryX, int batteryY, int scaledBatteryW,
+            GuiGraphics gg,
+            Minecraft mc,
+            int current,
+            int capacity,
+            int batteryX,
+            int batteryY,
+            int scaledBatteryW,
             boolean low,
             float valueScale
     ) {
@@ -632,7 +820,7 @@ public final class CyberwareHudLayer {
             color = VALUE_COLOR_LOW;
         } else {
             int rgbTint = hudTintArgb & 0x00FFFFFF;
-            color = (rgbTint != 0) ? rgbTint : VALUE_COLOR;
+            color = rgbTint != 0 ? rgbTint : VALUE_COLOR;
         }
 
         int genW = Math.round(mc.font.width(genText) * statsScale);
@@ -660,11 +848,17 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    private static void renderBatteryScaledPixels(GuiGraphics gg, int x, int y,
-                                                  int currentPower, int maxPower, int netPowerPerTick,
-                                                  boolean low,
-                                                  int tintArgb,
-                                                  float batteryScalePx) {
+    private static void renderBatteryScaledPixels(
+            GuiGraphics gg,
+            int x,
+            int y,
+            int currentPower,
+            int maxPower,
+            int netPowerPerTick,
+            boolean low,
+            int tintArgb,
+            float batteryScalePx
+    ) {
         gg.pose().pushPose();
         gg.pose().translate(x, y, 0);
         gg.pose().scale(batteryScalePx, batteryScalePx, 1.0f);
@@ -672,11 +866,17 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    private static void renderBatteryTinted(GuiGraphics gg, int x, int y,
-                                            int currentPower, int maxPower, int netPowerPerTick,
-                                            boolean low,
-                                            int tintArgb) {
-        float pct = (maxPower <= 0) ? 0f : (currentPower / (float) maxPower);
+    private static void renderBatteryTinted(
+            GuiGraphics gg,
+            int x,
+            int y,
+            int currentPower,
+            int maxPower,
+            int netPowerPerTick,
+            boolean low,
+            int tintArgb
+    ) {
+        float pct = maxPower <= 0 ? 0f : currentPower / (float) maxPower;
         pct = Mth.clamp(pct, 0f, 1f);
 
         int fillPx = Math.round(pct * INNER_H);
@@ -702,13 +902,20 @@ public final class CyberwareHudLayer {
         blitTinted(gg, frame, x, y, 0, 0, TEX_W, TEX_H, TEX_W, TEX_H, tintArgb);
     }
 
-    // ======================================================================
-    // Coords + biome
-    // ======================================================================
+    private static void renderCoordsAndBiomePixels(
+            GuiGraphics gg,
+            Minecraft mc,
+            LocalPlayer player,
+            int screenPxW,
+            int screenPxH,
+            int hudTintArgb,
+            HudConfigClient.HudConfig cfg
+    ) {
+        HudConfigClient.ComponentLayout layout = cfg.coords;
+        float hudTextScale = BATTERY_SCALE_PX * VALUE_SCALE_REL * layout.scale;
 
-    private static void renderCoordsAndBiomePixels(GuiGraphics gg, Minecraft mc, LocalPlayer player,
-                                                   int screenPxW, int screenPxH, int hudTintArgb,
-                                                   float hudTextScale) {
+        HudRect rect = computeRectsForConfig(mc, cfg).coords();
+
         BlockPos pos = player.blockPosition();
 
         String coords = "X: " + pos.getX() + "  Y: " + pos.getY() + "  Z: " + pos.getZ();
@@ -716,18 +923,13 @@ public final class CyberwareHudLayer {
         String biomeLine = "Biome: " + biomeComp.getString();
 
         int rgbTint = hudTintArgb & 0x00FFFFFF;
-        int color = (rgbTint != 0) ? rgbTint : 0xFFFFFF;
+        int color = rgbTint != 0 ? rgbTint : 0xFFFFFF;
 
         int lineH = Math.round(mc.font.lineHeight * hudTextScale);
         int gap = COORDS_LINE_GAP_PX;
 
-        int w1 = Math.round(mc.font.width(coords) * hudTextScale);
-        int w2 = Math.round(mc.font.width(biomeLine) * hudTextScale);
-        int blockW = Math.max(w1, w2);
-        int blockH = (lineH * 2) + gap;
-
-        int x = anchoredX(screenPxW, blockW, COORDS_ANCHOR, COORDS_OFFSET_X_PX);
-        int y = anchoredY(screenPxH, blockH, COORDS_ANCHOR, COORDS_OFFSET_Y_PX);
+        int x = rect.x();
+        int y = rect.y();
 
         gg.pose().pushPose();
         gg.pose().translate(x, y, 0);
@@ -750,20 +952,25 @@ public final class CyberwareHudLayer {
 
             ResourceLocation id = key.location();
             return Component.translatable("biome." + id.getNamespace() + "." + id.getPath());
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
             return Component.literal("Unknown");
         }
     }
 
-    // ======================================================================
-    // Toggle list
-    // ======================================================================
-
     private static void renderToggleListPixels(
-            GuiGraphics gg, Minecraft mc, LocalPlayer player,
-            int screenPxW, int screenPxH, int hudTintArgb,
-            float hudTextScale, float hudIconScale
+            GuiGraphics gg,
+            Minecraft mc,
+            LocalPlayer player,
+            int screenPxW,
+            int screenPxH,
+            int hudTintArgb,
+            HudConfigClient.HudConfig cfg
     ) {
+        HudConfigClient.ComponentLayout layout = cfg.toggleList;
+
+        float hudTextScale = BATTERY_SCALE_PX * VALUE_SCALE_REL * layout.scale;
+        float hudIconScale = hudTextScale;
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -773,22 +980,16 @@ public final class CyberwareHudLayer {
         int rows = Math.min(TOGGLE_MAX_ROWS, entries.size());
 
         int iconPx = Math.round(16f * hudIconScale);
-
         int lineH = Math.round(mc.font.lineHeight * hudTextScale);
         int rowH = Math.max(iconPx, lineH);
 
-        int enabledW = Math.round(mc.font.width(ENABLED_TXT.getString()) * hudTextScale);
-        int disabledW = Math.round(mc.font.width(DISABLED_TXT.getString()) * hudTextScale);
-        int statusW = Math.max(enabledW, disabledW);
+        HudRect rect = computeRectsForConfig(mc, cfg).toggleList();
 
-        int maxRowW = iconPx + TOGGLE_ICON_TEXT_GAP_PX + statusW;
-        int blockH = rows * rowH + Math.max(0, rows - 1) * TOGGLE_ROW_GAP_PX;
-
-        int x0 = anchoredX(screenPxW, maxRowW, TOGGLE_ANCHOR, TOGGLE_OFFSET_X_PX);
-        int y0 = anchoredY(screenPxH, blockH, TOGGLE_ANCHOR, TOGGLE_OFFSET_Y_PX);
+        int x0 = rect.x();
+        int y0 = rect.y();
 
         int rgbTint = hudTintArgb & 0x00FFFFFF;
-        int disabledColor = (rgbTint != 0) ? rgbTint : 0xFFFFFF;
+        int disabledColor = rgbTint != 0 ? rgbTint : 0xFFFFFF;
 
         for (int i = 0; i < rows; i++) {
             ToggleEntry e = entries.get(i);
@@ -831,7 +1032,6 @@ public final class CyberwareHudLayer {
 
                 ItemStack stack = cw.getItem();
                 if (stack == null || stack.isEmpty()) continue;
-
                 if (!stack.is(ModTags.Items.TOGGLEABLE_CYBERWARE)) continue;
 
                 boolean enabled = data.isEnabled(slot, idx);
@@ -844,17 +1044,17 @@ public final class CyberwareHudLayer {
 
     private record ToggleEntry(ItemStack stack, boolean enabled) {}
 
-    // ======================================================================
-    // Chipware shards icons
-    // ======================================================================
-
     private static void renderChipwareShardsPixels(
             GuiGraphics gg,
             LocalPlayer player,
             int screenPxW,
             int screenPxH,
-            float hudIconScale
+            HudConfigClient.HudConfig cfg
     ) {
+        Minecraft mc = Minecraft.getInstance();
+
+        HudConfigClient.ComponentLayout layout = cfg.shards;
+
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return;
 
@@ -862,24 +1062,17 @@ public final class CyberwareHudLayer {
         ItemStack s1 = data.getChipwareStack(1);
         if (s0.isEmpty() && s1.isEmpty()) return;
 
-        float shardScale = hudIconScale * SHARDS_SCALE_REL;
+        float shardScale = BATTERY_SCALE_PX * VALUE_SCALE_REL * SHARDS_SCALE_REL * layout.scale;
         int iconPx = Math.round(16f * shardScale);
 
-        int count = 0;
-        if (!s0.isEmpty()) count++;
-        if (!s1.isEmpty()) count++;
+        HudRect rect = computeRectsForConfig(mc, cfg).shards();
 
-        int blockW = (count * iconPx) + Math.max(0, count - 1) * SHARDS_ICON_GAP_PX;
-        int blockH = iconPx;
-
-        int x0 = anchoredX(screenPxW, blockW, SHARDS_ANCHOR, SHARDS_OFFSET_X_PX);
-        int y0 = anchoredY(screenPxH, blockH, SHARDS_ANCHOR, SHARDS_OFFSET_Y_PX);
-
-        int x = x0;
+        int x = rect.x();
+        int y = rect.y();
 
         if (!s0.isEmpty()) {
             gg.pose().pushPose();
-            gg.pose().translate(x, y0, 0);
+            gg.pose().translate(x, y, 0);
             gg.pose().scale(shardScale, shardScale, 1.0f);
             gg.renderItem(s0, 0, 0);
             gg.pose().popPose();
@@ -888,21 +1081,22 @@ public final class CyberwareHudLayer {
 
         if (!s1.isEmpty()) {
             gg.pose().pushPose();
-            gg.pose().translate(x, y0, 0);
+            gg.pose().translate(x, y, 0);
             gg.pose().scale(shardScale, shardScale, 1.0f);
             gg.renderItem(s1, 0, 0);
             gg.pose().popPose();
         }
     }
 
-    // ======================================================================
-    // Target name
-    // ======================================================================
-
-    private static void renderTargetNamePixels(GuiGraphics gg, Minecraft mc, LocalPlayer player,
-                                               int screenPxW, int screenPxH, int hudTintArgb,
-                                               float hudTextScale,
-                                               int targetOffsetYPx) {
+    private static void renderTargetNamePixels(
+            GuiGraphics gg,
+            Minecraft mc,
+            LocalPlayer player,
+            int screenPxW,
+            int screenPxH,
+            int hudTintArgb,
+            HudConfigClient.HudConfig cfg
+    ) {
         HitResult hr = mc.hitResult;
         if (hr == null || hr.getType() == HitResult.Type.MISS) return;
 
@@ -929,14 +1123,16 @@ public final class CyberwareHudLayer {
         String text = name.getString();
         if (text.isBlank()) return;
 
+        HudConfigClient.ComponentLayout layout = cfg.target;
+        float hudTextScale = BATTERY_SCALE_PX * VALUE_SCALE_REL * layout.scale;
+
         int rgbTint = hudTintArgb & 0x00FFFFFF;
-        int color = (rgbTint != 0) ? rgbTint : 0xFFFFFF;
+        int color = rgbTint != 0 ? rgbTint : 0xFFFFFF;
 
-        int w = Math.round(mc.font.width(text) * hudTextScale);
-        int h = Math.round(mc.font.lineHeight * hudTextScale);
+        HudRect rect = computeRectsForConfig(mc, cfg).target();
 
-        int x = anchoredX(screenPxW, w, TARGET_ANCHOR, TARGET_OFFSET_X_PX);
-        int y = anchoredY(screenPxH, h, TARGET_ANCHOR, targetOffsetYPx);
+        int x = rect.x();
+        int y = rect.y();
 
         gg.pose().pushPose();
         gg.pose().translate(x, y, 0);
@@ -945,26 +1141,27 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    // ======================================================================
-    // Oxygen (unchanged behavior)
-    // ======================================================================
-
-    private static void renderCopernicusOxygenIndicatorTintedPixels(GuiGraphics gg, Minecraft mc, LocalPlayer player,
-                                                                    int screenPxW, int screenPxH,
-                                                                    int hudTintArgb,
-                                                                    float hudTextScale) {
-        if (!CopernicusSuitPredicate.hasCopernicusSetInstalled(player)) return;
+    private static void renderCopernicusOxygenIndicatorTintedPixels(
+            GuiGraphics gg,
+            Minecraft mc,
+            LocalPlayer player,
+            int screenPxW,
+            int screenPxH,
+            int hudTintArgb,
+            float hudTextScale
+    ) {
+        if (!hasExternalOxygenHudAccess(player)) return;
 
         int oxygen = ClientCopernicusOxygenState.get();
         int max = COPERNICUS_OXYGEN_MAX_DISPLAY;
 
         String text = "OXYGEN: " + oxygen + "/" + max;
 
-        float pct = (max <= 0) ? 0f : (oxygen / (float) max);
+        float pct = max <= 0 ? 0f : oxygen / (float) max;
         boolean low = pct <= OXYGEN_LOW_THRESHOLD;
 
         int rgbTint = hudTintArgb & 0x00FFFFFF;
-        int color = low ? OXYGEN_TEXT_COLOR_LOW : (rgbTint != 0 ? rgbTint : OXYGEN_TEXT_COLOR);
+        int color = low ? OXYGEN_TEXT_COLOR_LOW : rgbTint != 0 ? rgbTint : OXYGEN_TEXT_COLOR;
 
         int oxygenBarCenterX = (screenPxW / 2) + 200;
         int oxygenBarTopY = screenPxH - 200;
@@ -982,9 +1179,10 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    // ======================================================================
-    // Tint + overlay helpers
-    // ======================================================================
+    private static boolean hasExternalOxygenHudAccess(LocalPlayer player) {
+        return CopernicusSuitPredicate.hasCopernicusSetInstalled(player)
+                || CreatingSpaceSuitPredicate.hasCreatingSpaceSuitEquivalentInstalled(player);
+    }
 
     private static int resolveHudTintArgb(LocalPlayer player) {
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
@@ -1013,46 +1211,22 @@ public final class CyberwareHudLayer {
         RenderSystem.setShaderColor(r, g, b, a);
     }
 
-    private static void renderCenteredImageAutoFitTintedPixels(GuiGraphics gg, ResourceLocation tex, int texW, int texH,
-                                                               int screenPxW, int screenPxH,
-                                                               float maxScreenFraction, float alpha,
-                                                               int tintArgb) {
-        float sx = (screenPxW * maxScreenFraction) / (float) texW;
-        float sy = (screenPxH * maxScreenFraction) / (float) texH;
-        float scale = Math.min(sx, sy);
-        scale = Math.min(scale, 1.0f);
-
-        int drawW = Math.round(texW * scale);
-        int drawH = Math.round(texH * scale);
-
-        int x = (screenPxW - drawW) / 2;
-        int y = (screenPxH - drawH) / 2;
-
-        gg.pose().pushPose();
-        gg.pose().translate(x, y, 0);
-        gg.pose().scale(scale, scale, 1.0f);
-
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-
-        int argb = argbWithAlphaFromFloat(tintArgb, alpha);
-        setShaderColorFromArgb(argb);
-
-        gg.blit(tex, 0, 0, 0, 0, texW, texH, texW, texH);
-
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        RenderSystem.disableBlend();
-
-        gg.pose().popPose();
-    }
-
-    private static void renderSpinningCenteredImageAutoFitTintedPixels(GuiGraphics gg, ResourceLocation tex, int texW, int texH,
-                                                                       int screenPxW, int screenPxH,
-                                                                       float maxScreenFraction, float alpha,
-                                                                       int tickCount, float partialTick,
-                                                                       float degPerSecond,
-                                                                       float offsetXPx, float offsetYPx,
-                                                                       int tintArgb) {
+    private static void renderSpinningCenteredImageAutoFitTintedPixels(
+            GuiGraphics gg,
+            ResourceLocation tex,
+            int texW,
+            int texH,
+            int screenPxW,
+            int screenPxH,
+            float maxScreenFraction,
+            float alpha,
+            int tickCount,
+            float partialTick,
+            float degPerSecond,
+            float offsetXPx,
+            float offsetYPx,
+            int tintArgb
+    ) {
         float sx = (screenPxW * maxScreenFraction) / (float) texW;
         float sy = (screenPxH * maxScreenFraction) / (float) texH;
         float scale = Math.min(sx, sy);
@@ -1081,10 +1255,19 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    private static void blitTinted(GuiGraphics gg, ResourceLocation tex,
-                                   int x, int y, int u, int v, int w, int h,
-                                   int texW, int texH,
-                                   int argb) {
+    private static void blitTinted(
+            GuiGraphics gg,
+            ResourceLocation tex,
+            int x,
+            int y,
+            int u,
+            int v,
+            int w,
+            int h,
+            int texW,
+            int texH,
+            int argb
+    ) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
@@ -1095,10 +1278,6 @@ public final class CyberwareHudLayer {
         RenderSystem.disableBlend();
     }
 
-    // ======================================================================
-    // Heat Engine remaining burn-time (hotbar anchored)
-    // ======================================================================
-
     private static int computeHeatEngineRemainingBurnTicks(LocalPlayer player, PlayerCyberwareData data) {
         int burnRemaining = Math.max(0, data.getHeatEngineBurnTime());
 
@@ -1106,14 +1285,14 @@ public final class CyberwareHudLayer {
         if (fuel.isEmpty()) return burnRemaining;
 
         Integer perItem = AbstractFurnaceBlockEntity.getFuel().get(fuel.getItem());
-        int perItemTicks = (perItem != null) ? Math.max(0, perItem) : 0;
+        int perItemTicks = perItem != null ? Math.max(0, perItem) : 0;
 
         if (perItemTicks <= 0) return burnRemaining;
 
         long extra = (long) fuel.getCount() * (long) perItemTicks;
         long total = (long) burnRemaining + extra;
 
-        return (total > Integer.MAX_VALUE) ? Integer.MAX_VALUE : (int) total;
+        return total > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) total;
     }
 
     private static String formatTicksAsTime(int ticks) {
@@ -1125,6 +1304,7 @@ public final class CyberwareHudLayer {
         if (h > 0) {
             return h + ":" + String.format("%02d:%02d", m, s);
         }
+
         return m + ":" + String.format("%02d", s);
     }
 
@@ -1171,9 +1351,9 @@ public final class CyberwareHudLayer {
         int y0 = baseAnchorY - HEAT_TIME_OFFSET_Y_PX - blockH;
 
         int rgbTint = hudTintArgb & 0x00FFFFFF;
-        int color = (rgbTint != 0) ? rgbTint : 0xFFFFFF;
+        int color = rgbTint != 0 ? rgbTint : 0xFFFFFF;
 
-        float t = (mc.level != null ? (mc.level.getGameTime() + partialTick) : partialTick);
+        float t = mc.level != null ? mc.level.getGameTime() + partialTick : partialTick;
 
         float pulse = 1.0f + 0.06f * Mth.sin(t * 0.35f);
         float bob = 0.8f * Mth.sin(t * 0.25f);
@@ -1182,9 +1362,7 @@ public final class CyberwareHudLayer {
         int flameX = x0;
         int flameY = y0 + (blockH - flameH) / 2;
 
-        // ---- Flame ----
         gg.pose().pushPose();
-
         gg.pose().translate(flameX, flameY, 0);
         gg.pose().scale(hudTextScale, hudTextScale, 1.0f);
 
@@ -1202,11 +1380,16 @@ public final class CyberwareHudLayer {
 
         gg.blit(
                 HEAT_FLAME_TEX,
-                (int) baseX, (int) baseY,
-                HEAT_FLAME_DRAW_W, HEAT_FLAME_DRAW_H,
-                0, 0,
-                HEAT_FLAME_TEX_W, HEAT_FLAME_TEX_H,
-                HEAT_FLAME_TEX_W, HEAT_FLAME_TEX_H
+                (int) baseX,
+                (int) baseY,
+                HEAT_FLAME_DRAW_W,
+                HEAT_FLAME_DRAW_H,
+                0,
+                0,
+                HEAT_FLAME_TEX_W,
+                HEAT_FLAME_TEX_H,
+                HEAT_FLAME_TEX_W,
+                HEAT_FLAME_TEX_H
         );
 
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
@@ -1222,16 +1405,11 @@ public final class CyberwareHudLayer {
         gg.pose().popPose();
     }
 
-    // ======================================================================
-    // Access gate
-    // ======================================================================
-
     public static final class CyberwareInstallQueries {
         private CyberwareInstallQueries() {}
 
         public static boolean hasHudAccess(LocalPlayer player) {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-            if (data == null) return false;
 
             return hasHudUpgrade(data) && cybereyesAreFunctionalForHud(data);
         }
@@ -1254,7 +1432,6 @@ public final class CyberwareHudLayer {
 
                 ItemStack stack = installed.getItem();
                 if (stack == null || stack.isEmpty()) continue;
-
                 if (!(stack.getItem() instanceof CybereyeItem)) continue;
                 if (!data.isEnabled(CyberwareSlot.EYES, idx)) continue;
 
@@ -1268,10 +1445,6 @@ public final class CyberwareHudLayer {
             return !foundEnabledCybereyes || foundPoweredEnabledCybereyes;
         }
     }
-
-    // ======================================================================
-    // Client-fed state
-    // ======================================================================
 
     public record TickSnapshot(
             int generatedPerTick,

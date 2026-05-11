@@ -202,74 +202,83 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
             return;
         }
 
-        if (clickType == ClickType.PICKUP && slotId >= 0 && slotId < SpinalInjectorItem.SLOT_COUNT) {
-            Slot target = this.slots.get(slotId);
-            ItemStack carried = this.getCarried();
-            ItemStack inSlot = target.getItem();
-
-            if (carried.isEmpty()) {
-                if (inSlot.isEmpty()) return;
-
-                int cur = injectorCounts[slotId];
-                if (cur <= 0) cur = 1;
-
-                ItemStack one = inSlot.copy();
-                one.setCount(1);
-                this.setCarried(one);
-
-                cur -= 1;
-                injectorCounts[slotId] = cur;
-
-                if (cur <= 0) {
-                    target.set(ItemStack.EMPTY);
-                    injectorCounts[slotId] = 0;
-                }
-
-                target.setChanged();
-                this.broadcastChanges();
+        if (isInjectorMenuSlot(slotId)) {
+            if (clickType == ClickType.QUICK_MOVE) {
+                this.quickMoveStack(player, slotId);
                 return;
             }
 
-            if (!carried.isEmpty() && SpinalInjectorItem.isInjectable(carried)) {
-                int want = (button == 1) ? 1 : carried.getCount();
-                int cap = Math.min(INJECTOR_MAX, SpinalInjectorItem.maxStackFor(carried));
+            if (clickType == ClickType.PICKUP) {
+                Slot target = this.slots.get(slotId);
+                ItemStack carried = this.getCarried();
+                ItemStack inSlot = target.getItem();
 
-                if (inSlot.isEmpty()) {
-                    int move = Math.min(want, cap);
-                    if (move <= 0) return;
+                if (carried.isEmpty()) {
+                    if (inSlot.isEmpty()) return;
 
-                    ItemStack rep = carried.copy();
-                    rep.setCount(1);
-
-                    target.set(rep);
-                    injectorCounts[slotId] = move;
-
-                    carried.shrink(move);
-                    this.setCarried(carried);
-
-                    target.setChanged();
-                    this.broadcastChanges();
-                    return;
-                }
-
-                if (ItemStack.isSameItemSameComponents(inSlot, carried)) {
                     int cur = injectorCounts[slotId];
                     if (cur <= 0) cur = 1;
 
-                    int space = cap - cur;
-                    int move = Math.min(space, want);
-                    if (move <= 0) return;
+                    ItemStack one = inSlot.copy();
+                    one.setCount(1);
+                    this.setCarried(one);
 
-                    injectorCounts[slotId] = cur + move;
+                    cur -= 1;
+                    injectorCounts[slotId] = cur;
 
-                    carried.shrink(move);
-                    this.setCarried(carried);
+                    if (cur <= 0) {
+                        target.set(ItemStack.EMPTY);
+                        injectorCounts[slotId] = 0;
+                    }
 
                     target.setChanged();
                     this.broadcastChanges();
                     return;
                 }
+
+                if (SpinalInjectorItem.isInjectable(carried)) {
+                    int want = (button == 1) ? 1 : carried.getCount();
+                    int cap = Math.min(INJECTOR_MAX, SpinalInjectorItem.maxStackFor(carried));
+
+                    if (inSlot.isEmpty()) {
+                        int move = Math.min(want, cap);
+                        if (move <= 0) return;
+
+                        ItemStack rep = carried.copy();
+                        rep.setCount(1);
+
+                        target.set(rep);
+                        injectorCounts[slotId] = move;
+
+                        carried.shrink(move);
+                        this.setCarried(carried);
+
+                        target.setChanged();
+                        this.broadcastChanges();
+                        return;
+                    }
+
+                    if (ItemStack.isSameItemSameComponents(inSlot, carried)) {
+                        int cur = injectorCounts[slotId];
+                        if (cur <= 0) cur = 1;
+
+                        int space = cap - cur;
+                        int move = Math.min(space, want);
+                        if (move <= 0) return;
+
+                        injectorCounts[slotId] = cur + move;
+
+                        carried.shrink(move);
+                        this.setCarried(carried);
+
+                        target.setChanged();
+                        this.broadcastChanges();
+                        return;
+                    }
+                }
             }
+
+            return;
         }
 
         super.clicked(slotId, button, clickType, player);
@@ -411,6 +420,25 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
             data.setDirty();
             sp.syncData(ModAttachments.CYBERWARE);
         }
+    }
+
+    private boolean isInjectorMenuSlot(int slotId) {
+        return slotId >= 0 && slotId < SpinalInjectorItem.SLOT_COUNT;
+    }
+
+    private boolean isInjectorSlot(Slot slot) {
+        int slotId = this.slots.indexOf(slot);
+        return isInjectorMenuSlot(slotId);
+    }
+
+    @Override
+    public boolean canDragTo(Slot slot) {
+        return !isInjectorSlot(slot) && super.canDragTo(slot);
+    }
+
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
+        return !isInjectorSlot(slot) && super.canTakeItemForPickAll(stack, slot);
     }
 
     @Override

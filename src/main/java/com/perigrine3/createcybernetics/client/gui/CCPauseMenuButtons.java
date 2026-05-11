@@ -52,7 +52,7 @@ public final class CCPauseMenuButtons {
             event.addListener(eyeBtn);
         }
 
-        if (videoBtn != null) {
+        if (isInWorld() && videoBtn != null) {
             int x = videoBtn.getX() - (ICON_W + GAP_PX);
             int y = videoBtn.getY();
 
@@ -68,6 +68,11 @@ public final class CCPauseMenuButtons {
         }
     }
 
+    private static boolean isInWorld() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.level != null && mc.player != null;
+    }
+
     private static boolean alreadyHasOurButtons(ScreenEvent.Init.Post event) {
         for (var child : event.getListenersList()) {
             if (child instanceof CCIconButton b) {
@@ -81,13 +86,14 @@ public final class CCPauseMenuButtons {
 
     private static void openHudLayout(OptionsScreen parent) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc == null) return;
+        if (mc.level == null || mc.player == null) return;
+
         mc.setScreen(new HudLayoutScreen(parent));
     }
 
     private static void openCybereyeSkin(OptionsScreen parent) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc == null) return;
+
         mc.setScreen(new CybereyeSkinConfigScreen(parent));
     }
 
@@ -98,6 +104,7 @@ public final class CCPauseMenuButtons {
             String k = getTranslatableKey(w.getMessage());
             if (k != null && k.equals(key)) return w;
         }
+
         return null;
     }
 
@@ -105,17 +112,20 @@ public final class CCPauseMenuButtons {
         for (var child : event.getListenersList()) {
             if (!(child instanceof AbstractWidget w)) continue;
 
-            String s = w.getMessage() != null ? w.getMessage().getString() : "";
+            String s = w.getMessage().getString();
             if (s.toLowerCase(Locale.ROOT).contains(needleLower)) return w;
         }
+
         return null;
     }
 
     private static String getTranslatableKey(Component c) {
         if (c == null) return null;
+
         if (c.getContents() instanceof TranslatableContents tc) {
             return tc.getKey();
         }
+
         return null;
     }
 }

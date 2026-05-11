@@ -2,6 +2,8 @@
   "values": [
     "createcybernetics:wetware_ravagertendons",
     "createcybernetics:bodypart_sculkmuscle",
+    "createcybernetics:wetware_electrocytemuscle",
+    "createcybernetics:wetware_gooeymuscle",
     "createcybernetics:muscleupgrades_synthmuscle"
   ]
 }

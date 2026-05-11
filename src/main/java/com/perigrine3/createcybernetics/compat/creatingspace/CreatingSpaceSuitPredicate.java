@@ -1,0 +1,19 @@
+package com.perigrine3.createcybernetics.compat.creatingspace;
+
+import com.perigrine3.createcybernetics.api.CyberwareSlot;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
+import com.perigrine3.createcybernetics.event.custom.FullBorgHandler;
+import com.perigrine3.createcybernetics.item.ModItems;
+import net.minecraft.world.entity.player.Player;
+
+public final class CreatingSpaceSuitPredicate {
+    private CreatingSpaceSuitPredicate() {}
+
+    public static boolean hasCreatingSpaceSuitEquivalentInstalled(Player player) {
+        if (player == null) return false;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        return FullBorgHandler.isCopernicus(data);
+    }
+}

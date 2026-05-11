@@ -22,6 +22,8 @@ public class CyberentitySandevistanGoal extends Goal {
     private static final int ACTIVE_TICKS = 80;
     private static final int COOLDOWN_TICKS = 100;
 
+    private static final int MELEE_ATTACK_COOLDOWN_TICKS = 10;
+
     private static final double MIN_ACTIVATION_DISTANCE_SQ = 9.0D;
     private static final double MAX_ACTIVATION_DISTANCE_SQ = 256.0D;
 
@@ -29,6 +31,7 @@ public class CyberentitySandevistanGoal extends Goal {
     private static final double NORMAL_MOVE_SPEED = 1.1D;
 
     private final Mob mob;
+    private int meleeAttackCooldown;
 
     public CyberentitySandevistanGoal(Mob mob) {
         this.mob = mob;
@@ -72,6 +75,8 @@ public class CyberentitySandevistanGoal extends Goal {
         tag.putLong(NBT_SANDY_ACTIVE_UNTIL, now + ACTIVE_TICKS);
         tag.putLong(NBT_SANDY_COOLDOWN_UNTIL, now + ACTIVE_TICKS + COOLDOWN_TICKS);
 
+        meleeAttackCooldown = 0;
+
         mob.addEffect(new MobEffectInstance(
                 ModEffects.SANDEVISTAN_EFFECT,
                 ACTIVE_TICKS,
@@ -91,18 +96,24 @@ public class CyberentitySandevistanGoal extends Goal {
         LivingEntity target = mob.getTarget();
         boolean active = isSandevistanActive();
 
+        if (meleeAttackCooldown > 0) {
+            meleeAttackCooldown--;
+        }
+
         if (!active) {
             mob.setSprinting(false);
 
             if (isValidTarget(target)) {
                 mob.getNavigation().moveTo(target, NORMAL_MOVE_SPEED);
             }
+
             return;
         }
 
         if (isValidTarget(target)) {
             mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
             mob.getNavigation().moveTo(target, ACTIVE_MOVE_SPEED);
+            tryMeleeAttack(target);
         }
 
         mob.setSprinting(true);
@@ -111,11 +122,28 @@ public class CyberentitySandevistanGoal extends Goal {
     @Override
     public void stop() {
         mob.setSprinting(false);
+        meleeAttackCooldown = 0;
 
         LivingEntity target = mob.getTarget();
         if (isValidTarget(target)) {
             mob.getNavigation().moveTo(target, NORMAL_MOVE_SPEED);
         }
+    }
+
+    private void tryMeleeAttack(LivingEntity target) {
+        if (meleeAttackCooldown > 0) return;
+        if (!mob.hasLineOfSight(target)) return;
+        if (!isCloseEnoughToBump(target)) return;
+
+        mob.swing(mob.getUsedItemHand());
+        mob.doHurtTarget(target);
+
+        meleeAttackCooldown = MELEE_ATTACK_COOLDOWN_TICKS;
+    }
+
+    private boolean isCloseEnoughToBump(LivingEntity target) {
+        double reach = mob.getBbWidth() + target.getBbWidth() + 0.35D;
+        return mob.distanceToSqr(target) <= reach * reach;
     }
 
     private boolean hasInstalledSandevistan() {

@@ -2,6 +2,8 @@ package com.perigrine3.createcybernetics.item.cyberware.wetware;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
 import com.perigrine3.createcybernetics.api.ICyberwareItem;
+import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
+import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import com.perigrine3.createcybernetics.item.ModItems;
 import net.minecraft.ChatFormatting;
@@ -53,6 +55,11 @@ public class SculkLungsItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public boolean isToggleableByWheel(ItemStack installedStack, CyberwareSlot slot) {
+        return true;
+    }
+
+    @Override
     public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
         return Set.of(ModItems.WETWARE_AEROSTASISGYROBLADDER.get(), ModItems.BODYPART_LUNGS.get());
     }
@@ -69,9 +76,27 @@ public class SculkLungsItem extends Item implements ICyberwareItem {
 
     @Override
     public void onTick(LivingEntity entity) {
+    }
+
+    @Override
+    public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
         if (!(entity instanceof Player player)) return;
         if (player.level().isClientSide) return;
+        if (!isEnabled(player, slot, index)) {
+            player.removeEffect(ModEffects.SCULK_LUNGS_EFFECT);
+            return;
+        }
 
         player.addEffect(new MobEffectInstance(ModEffects.SCULK_LUNGS_EFFECT, 500, 0, false, false, false));
+    }
+
+    private static boolean isEnabled(Player player, CyberwareSlot slot, int index) {
+        if (player == null) return false;
+        if (!player.hasData(ModAttachments.CYBERWARE)) return false;
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) return false;
+
+        return data.isEnabled(slot, index);
     }
 }

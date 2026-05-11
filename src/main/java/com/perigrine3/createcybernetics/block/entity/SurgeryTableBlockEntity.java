@@ -21,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -451,6 +452,45 @@ public class SurgeryTableBlockEntity extends BlockEntity implements MenuProvider
         } else {
             patient.hurt(source, damage);
         }
+    }
+
+    public void dropStagedItems(Level level, BlockPos pos) {
+        SurgeryTableBlockEntity controller = getController();
+        if (controller != null && controller != this) {
+            controller.dropStagedItems(level, pos);
+            return;
+        }
+
+        if (level.isClientSide) {
+            return;
+        }
+
+        double x = pos.getX() + 0.5D;
+        double y = pos.getY() + 0.5D;
+        double z = pos.getZ() + 0.5D;
+
+        for (int i = 0; i < SLOT_COUNT; i++) {
+            if (!staged[i]) {
+                continue;
+            }
+
+            ItemStack stack = inventory.getStackInSlot(i);
+            if (stack.isEmpty()) {
+                staged[i] = false;
+                markedForRemoval[i] = false;
+                continue;
+            }
+
+            ItemStack dropped = stack.copy();
+
+            inventory.setStackInSlot(i, ItemStack.EMPTY);
+            staged[i] = false;
+            markedForRemoval[i] = false;
+
+            Containers.dropItemStack(level, x, y, z, dropped);
+        }
+
+        sync();
     }
 
     private void sync() {
