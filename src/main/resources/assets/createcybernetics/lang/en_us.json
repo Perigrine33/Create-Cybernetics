@@ -914,7 +914,7 @@
           "tooltip.createcybernetics.organsupgrades_manabattery.energy": "Stores 100 mana",
 
       "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip1": "§1Generates energy from user movement",
-          "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip2": "§3Stacks up to 4x",
+          "tooltip.createcybernetics.skinupgrades_arterialturbine.tooltip2": "§3Stacks up to 3x",
           "tooltip.createcybernetics.skinupgrades_arterialturbine.energy": "Adds 3/10/25/50 Energy From Blood Pressure",
       "tooltip.createcybernetics.skinupgrades_chromatophores.tooltip1": "§1Allows the user to camoflauge perfectly in any environment",
       "tooltip.createcybernetics.skinupgrades_chromatophores.energy": "Costs 7 Energy",

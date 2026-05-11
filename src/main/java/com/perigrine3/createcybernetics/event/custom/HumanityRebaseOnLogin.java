@@ -18,6 +18,24 @@ public final class HumanityRebaseOnLogin {
         if (!sp.hasData(ModAttachments.CYBERWARE)) return;
 
         PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
-        data.recomputeHumanityBaseFromInstalled();
+        data.recomputeHumanityBaseFromInstalled(sp);
+    }
+
+    @SubscribeEvent
+    public static void onRespawn(PlayerEvent.PlayerRespawnEvent e) {
+        if (!(e.getEntity() instanceof ServerPlayer sp)) return;
+        if (!sp.hasData(ModAttachments.CYBERWARE)) return;
+
+        PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
+        data.recomputeHumanityBaseFromInstalled(sp);
+    }
+
+    @SubscribeEvent
+    public static void onClone(PlayerEvent.Clone e) {
+        if (!(e.getEntity() instanceof ServerPlayer sp)) return;
+        if (!sp.hasData(ModAttachments.CYBERWARE)) return;
+
+        PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
+        data.recomputeHumanityBaseFromInstalled(sp);
     }
 }

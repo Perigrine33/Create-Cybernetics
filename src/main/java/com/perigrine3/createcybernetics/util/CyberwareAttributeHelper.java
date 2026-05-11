@@ -272,6 +272,10 @@ public class CyberwareAttributeHelper {
                 ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "ripperclaw_damage"),
                 2, AttributeModifier.Operation.ADD_VALUE));
 
+        registerModifier("gooeymuscle_fall", new AttributeModifierData(safeFallDistanceAttribute,
+                ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "gooeymuscle_fall"),
+                7, AttributeModifier.Operation.ADD_VALUE));
+
 
 
 
@@ -600,5 +604,68 @@ public class CyberwareAttributeHelper {
                     .map(h -> (Holder<Attribute>) h)
                     .orElse(null);
         }
+    }
+
+    public static void setPermanentModifier(
+            LivingEntity entity,
+            Holder<Attribute> attribute,
+            ResourceLocation modifierId,
+            double amount,
+            AttributeModifier.Operation operation
+    ) {
+        if (entity == null || attribute == null || modifierId == null || operation == null) {
+            return;
+        }
+
+        var instance = entity.getAttribute(attribute);
+        if (instance == null) {
+            return;
+        }
+
+        instance.removeModifier(modifierId);
+        instance.addOrReplacePermanentModifier(new AttributeModifier(modifierId, amount, operation));
+    }
+
+    public static void removePermanentModifier(
+            LivingEntity entity,
+            Holder<Attribute> attribute,
+            ResourceLocation modifierId
+    ) {
+        if (entity == null || attribute == null || modifierId == null) {
+            return;
+        }
+
+        var instance = entity.getAttribute(attribute);
+        if (instance == null) {
+            return;
+        }
+
+        instance.removeModifier(modifierId);
+    }
+
+    public static int getIntValue(LivingEntity entity, Holder<Attribute> attribute, int fallback) {
+        if (entity == null || attribute == null) {
+            return fallback;
+        }
+
+        var instance = entity.getAttribute(attribute);
+        if (instance == null) {
+            return fallback;
+        }
+
+        return net.minecraft.util.Mth.floor(instance.getValue());
+    }
+
+    public static void setBaseValue(LivingEntity entity, Holder<Attribute> attribute, double value) {
+        if (entity == null || attribute == null) {
+            return;
+        }
+
+        var instance = entity.getAttribute(attribute);
+        if (instance == null) {
+            return;
+        }
+
+        instance.setBaseValue(value);
     }
 }

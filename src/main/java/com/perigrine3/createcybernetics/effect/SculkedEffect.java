@@ -51,7 +51,7 @@ public class SculkedEffect extends MobEffect {
 
         Replacement chosen = eligible.get(rng.nextInt(eligible.size()));
         if (replaceIfStillDefault(player, data, chosen)) {
-            data.recomputeHumanityBaseFromInstalled();
+            data.recomputeHumanityBaseFromInstalled(player);
             data.clampEnergyToCapacity(player);
             data.setDirty();
         }

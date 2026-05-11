@@ -13,6 +13,8 @@ public final class ModAttributeEvents {
 
     @SubscribeEvent
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
+        event.add(EntityType.PLAYER, ModAttributes.HUMANITY);
+
         event.add(EntityType.PLAYER, ModAttributes.XP_GAIN_MULTIPLIER);
         event.add(EntityType.PLAYER, ModAttributes.ORE_DROP_MULTIPLIER);
         event.add(EntityType.PLAYER, ModAttributes.HAGGLING);

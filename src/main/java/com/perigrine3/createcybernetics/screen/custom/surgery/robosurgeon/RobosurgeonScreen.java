@@ -381,7 +381,7 @@ public class RobosurgeonScreen extends AbstractContainerScreen<RobosurgeonMenu> 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data == null) return 100;
 
-        int humanity = data.getHumanity();
+        int humanity = data.getHumanity(player);
         humanity += getNeuropozyneBonusClient(player);
 
         ItemStack[] guiStacks = new ItemStack[65];

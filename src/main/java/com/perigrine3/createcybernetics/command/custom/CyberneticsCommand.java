@@ -308,7 +308,7 @@ public final class CyberneticsCommand {
         data.set(placement.slot(), placement.index(), installed);
         cyberwareItem.onInstalled(player, installed.getItem());
 
-        data.recomputeHumanityBaseFromInstalled();
+        data.recomputeHumanityBaseFromInstalled(player);
         data.setDirty();
 
         int after = countInstalled(data, item, allowedSlots);
@@ -456,7 +456,7 @@ public final class CyberneticsCommand {
     }
 
     private static void finishPlayerCyberwareUpdate(ServerPlayer player, PlayerCyberwareData data) {
-        data.recomputeHumanityBaseFromInstalled();
+        data.recomputeHumanityBaseFromInstalled(player);
         data.setDirty();
         ModAttachments.syncCyberware(player);
         player.syncData(ModAttachments.CYBERWARE);

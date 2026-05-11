@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class NeuropozyneEffect extends MobEffect {
 
+    private static final String HUMANITY_BONUS_KEY = "neuropozyne";
     private static final int HUMANITY_PER_LEVEL = 25;
 
     private static final int SIDE_EFFECT_START_AMP = 5;
@@ -37,13 +38,18 @@ public class NeuropozyneEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(LivingEntity living, int amplifier) {
-        if (!(living instanceof Player player)) return true;
-        if (player.level().isClientSide) return true;
+        if (!(living instanceof Player player)) {
+            return true;
+        }
+
+        if (player.level().isClientSide) {
+            return true;
+        }
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
         if (data != null) {
             int bonus = (amplifier + 1) * HUMANITY_PER_LEVEL;
-            data.setHumanityBonus(bonus);
+            data.setHumanityBonus(player, HUMANITY_BONUS_KEY, bonus);
         }
 
         if ((player.tickCount % 20) == 0) {
@@ -62,11 +68,18 @@ public class NeuropozyneEffect extends MobEffect {
 
     @Override
     public void onMobRemoved(LivingEntity living, int amplifier, Entity.RemovalReason reason) {
-        if (!(living instanceof Player player)) return;
-        if (player.level().isClientSide) return;
+        if (!(living instanceof Player player)) {
+            return;
+        }
+
+        if (player.level().isClientSide) {
+            return;
+        }
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data != null) data.clearHumanityBonus();
+        if (data != null) {
+            data.clearHumanityBonus(player, HUMANITY_BONUS_KEY);
+        }
     }
 
     private static void rollSideEffects(Player player, int amplifier) {
@@ -78,17 +91,25 @@ public class NeuropozyneEffect extends MobEffect {
         int debuffDuration = DEBUFF_DURATION_BASE + (level - 1) * DEBUFF_DURATION_PER_LEVEL;
         int debuffAmp = Math.min(2, (level - 1) / 2);
 
-        maybeApply(player, MobEffects.WEAKNESS, chance * 1.00f, debuffDuration, debuffAmp);
+        maybeApply(player, MobEffects.WEAKNESS, chance, debuffDuration, debuffAmp);
         maybeApply(player, MobEffects.DIG_SLOWDOWN, chance * 0.85f, debuffDuration, debuffAmp);
         maybeApply(player, MobEffects.CONFUSION, chance * 0.70f, debuffDuration, 0);
     }
 
     private static void maybeApply(Player player, Holder<MobEffect> effect, float chance, int duration, int amplifier) {
-        if (chance <= 0f) return;
-        if (player.getRandom().nextFloat() >= chance) return;
-        MobEffectInstance existing = player.getEffect(effect);
+        if (chance <= 0f) {
+            return;
+        }
 
-        if (existing != null && existing.getDuration() > duration / 2) return;
+        if (player.getRandom().nextFloat() >= chance) {
+            return;
+        }
+
+        MobEffectInstance existing = player.getEffect(effect);
+        if (existing != null && existing.getDuration() > duration / 2) {
+            return;
+        }
+
         player.addEffect(new MobEffectInstance(effect, duration, amplifier, false, true, true));
     }
 }

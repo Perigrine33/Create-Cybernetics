@@ -52,6 +52,19 @@ public class HyperoxygenationBoostItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
+        if (!(entity instanceof Player player)) {
+            return 0;
+        }
+
+        if (!player.isSprinting()) {
+            return 0;
+        }
+
+        return ENERGY_PER_TICK_PER_STACK;
+    }
+
+    @Override
     public boolean requiresEnergyToFunction(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
         return true;
     }
@@ -87,21 +100,26 @@ public class HyperoxygenationBoostItem extends Item implements ICyberwareItem {
 
     @Override
     public void onRemoved(LivingEntity entity) {
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide) {
+            return;
+        }
 
         clearModifiers(entity);
         entity.getPersistentData().remove(NBT_LAST_APPLIED_TICK);
-
-        onInstalled(entity);
     }
 
     @Override
     public void onTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot, int index) {
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide) {
+            return;
+        }
 
         long now = entity.level().getGameTime();
         CompoundTag tag = entity.getPersistentData();
-        if (tag.getLong(NBT_LAST_APPLIED_TICK) == now) return;
+        if (tag.getLong(NBT_LAST_APPLIED_TICK) == now) {
+            return;
+        }
+
         tag.putLong(NBT_LAST_APPLIED_TICK, now);
 
         clearModifiers(entity);
@@ -118,40 +136,77 @@ public class HyperoxygenationBoostItem extends Item implements ICyberwareItem {
     }
 
     private void tickPlayer(Player player) {
-        if (!player.isSprinting()) return;
-        if (!player.hasData(ModAttachments.CYBERWARE)) return;
+        if (!player.isSprinting()) {
+            return;
+        }
+
+        if (!player.hasData(ModAttachments.CYBERWARE)) {
+            return;
+        }
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
 
-        int stacks = countPlayerStacks(data);
-        if (stacks <= 0) return;
+        int poweredStacks = countPoweredPlayerStacks(data);
+        if (poweredStacks <= 0) {
+            return;
+        }
 
-        int cost = ENERGY_PER_TICK_PER_STACK * stacks;
-        if (!data.tryConsumeEnergy(cost)) return;
-
-        applyStacks(player, stacks);
+        applyStacks(player, poweredStacks);
     }
 
     private void tickEntity(LivingEntity entity) {
-        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) return;
+        if (!entity.hasData(ModMobAttachments.CYBERENTITY_CYBERWARE)) {
+            return;
+        }
 
         EntityCyberwareData data = entity.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
 
         int stacks = countEntityStacks(data);
-        if (stacks <= 0) return;
+        if (stacks <= 0) {
+            return;
+        }
 
         applyStacks(entity, stacks);
     }
 
-    private static int countPlayerStacks(PlayerCyberwareData data) {
+    private static int countPoweredPlayerStacks(PlayerCyberwareData data) {
+        InstalledCyberware[] lungs = data.getAll().get(CyberwareSlot.LUNGS);
+        if (lungs == null) {
+            return 0;
+        }
+
         int stacks = 0;
 
-        for (int i = 0; i < CyberwareSlot.LUNGS.size; i++) {
-            if (data.isInstalled(ModItems.LUNGSUPGRADES_HYPEROXYGENATION.get(), CyberwareSlot.LUNGS, i)) {
-                stacks++;
+        for (int i = 0; i < lungs.length; i++) {
+            InstalledCyberware installed = lungs[i];
+            if (installed == null) {
+                continue;
             }
+
+            ItemStack stack = installed.getItem();
+            if (stack == null || stack.isEmpty()) {
+                continue;
+            }
+
+            if (!stack.is(ModItems.LUNGSUPGRADES_HYPEROXYGENATION.get())) {
+                continue;
+            }
+
+            if (!data.isEnabled(CyberwareSlot.LUNGS, i)) {
+                continue;
+            }
+
+            if (!installed.isPowered()) {
+                continue;
+            }
+
+            stacks++;
         }
 
         return Math.min(stacks, 3);
@@ -159,16 +214,31 @@ public class HyperoxygenationBoostItem extends Item implements ICyberwareItem {
 
     private static int countEntityStacks(EntityCyberwareData data) {
         InstalledCyberware[] lungs = data.getAll().get(CyberwareSlot.LUNGS);
-        if (lungs == null) return 0;
+        if (lungs == null) {
+            return 0;
+        }
 
         int stacks = 0;
 
         for (int i = 0; i < lungs.length; i++) {
             InstalledCyberware installed = lungs[i];
-            if (installed == null) continue;
-            if (installed.getItem() == null || installed.getItem().isEmpty()) continue;
-            if (!installed.getItem().is(ModItems.LUNGSUPGRADES_HYPEROXYGENATION.get())) continue;
-            if (!data.isEnabled(CyberwareSlot.LUNGS, i)) continue;
+            if (installed == null) {
+                continue;
+            }
+
+            ItemStack stack = installed.getItem();
+            if (stack == null || stack.isEmpty()) {
+                continue;
+            }
+
+            if (!stack.is(ModItems.LUNGSUPGRADES_HYPEROXYGENATION.get())) {
+                continue;
+            }
+
+            if (!data.isEnabled(CyberwareSlot.LUNGS, i)) {
+                continue;
+            }
+
             stacks++;
         }
 
@@ -176,9 +246,17 @@ public class HyperoxygenationBoostItem extends Item implements ICyberwareItem {
     }
 
     private static void applyStacks(LivingEntity entity, int stacks) {
-        if (stacks >= 1) CyberwareAttributeHelper.applyModifier(entity, "hyperoxygenation_speed_1");
-        if (stacks >= 2) CyberwareAttributeHelper.applyModifier(entity, "hyperoxygenation_speed_2");
-        if (stacks >= 3) CyberwareAttributeHelper.applyModifier(entity, "hyperoxygenation_speed_3");
+        if (stacks >= 1) {
+            CyberwareAttributeHelper.applyModifier(entity, "hyperoxygenation_speed_1");
+        }
+
+        if (stacks >= 2) {
+            CyberwareAttributeHelper.applyModifier(entity, "hyperoxygenation_speed_2");
+        }
+
+        if (stacks >= 3) {
+            CyberwareAttributeHelper.applyModifier(entity, "hyperoxygenation_speed_3");
+        }
     }
 
     private static void clearModifiers(LivingEntity entity) {

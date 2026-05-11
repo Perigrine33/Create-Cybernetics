@@ -333,7 +333,7 @@ public class SurgeryTableScreen extends AbstractContainerScreen<SurgeryTableMenu
         PlayerCyberwareData data = patient.getData(ModAttachments.CYBERWARE);
         if (data == null) return 100;
 
-        int humanity = data.getHumanity();
+        int humanity = data.getHumanity(patient);
         humanity += getNeuropozyneBonusClient(patient);
 
         ItemStack[] guiStacks = new ItemStack[65];

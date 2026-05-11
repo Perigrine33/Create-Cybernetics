@@ -1,7 +1,7 @@
 package com.perigrine3.createcybernetics.api;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
 public class InstalledCyberware {
@@ -15,10 +15,10 @@ public class InstalledCyberware {
     public InstalledCyberware() {}
 
     public InstalledCyberware(ItemStack item, CyberwareSlot slot, int index, int humanityCost) {
-        this.item = item.copy();
+        this.item = item == null ? ItemStack.EMPTY : item.copy();
         this.slot = slot;
         this.index = index;
-        this.humanityCost = humanityCost;
+        this.humanityCost = Math.max(0, humanityCost);
     }
 
     public ItemStack getItem() {
@@ -50,7 +50,7 @@ public class InstalledCyberware {
     public CompoundTag save(net.minecraft.core.HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
 
-        if (!item.isEmpty()) {
+        if (item != null && !item.isEmpty()) {
             tag.put("Item", item.save(provider));
         }
 
@@ -59,32 +59,37 @@ public class InstalledCyberware {
             tag.putInt("Index", index);
         }
 
-        tag.putInt("Humanity", humanityCost);
+        tag.putInt("Humanity", Math.max(0, humanityCost));
         tag.putBoolean("Powered", powered);
+
         return tag;
     }
 
     public static InstalledCyberware load(CompoundTag tag, net.minecraft.core.HolderLookup.Provider provider) {
-        InstalledCyberware c = new InstalledCyberware();
+        InstalledCyberware installed = new InstalledCyberware();
 
-        if (tag.contains("Item", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
-            c.item = ItemStack.parse(provider, tag.getCompound("Item"))
-                    .orElse(ItemStack.EMPTY);
+        if (tag.contains("Item", Tag.TAG_COMPOUND)) {
+            installed.item = ItemStack.parse(provider, tag.getCompound("Item")).orElse(ItemStack.EMPTY);
         } else {
-            c.item = ItemStack.EMPTY;
+            installed.item = ItemStack.EMPTY;
         }
 
-        if (tag.contains("Slot", net.minecraft.nbt.Tag.TAG_STRING)) {
-            c.slot = CyberwareSlot.valueOf(tag.getString("Slot"));
-            c.index = tag.getInt("Index");
+        if (tag.contains("Slot", Tag.TAG_STRING)) {
+            try {
+                installed.slot = CyberwareSlot.valueOf(tag.getString("Slot"));
+                installed.index = tag.getInt("Index");
+            } catch (IllegalArgumentException ignored) {
+                installed.slot = null;
+                installed.index = -1;
+            }
         } else {
-            c.slot = null;
-            c.index = -1;
+            installed.slot = null;
+            installed.index = -1;
         }
 
-        c.humanityCost = tag.getInt("Humanity");
-        c.powered = tag.getBoolean("Powered");
+        installed.humanityCost = Math.max(0, tag.getInt("Humanity"));
+        installed.powered = !tag.contains("Powered", Tag.TAG_BYTE) || tag.getBoolean("Powered");
 
-        return c;
+        return installed;
     }
 }

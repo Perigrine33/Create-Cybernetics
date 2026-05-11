@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.common.attributes;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -14,6 +15,10 @@ public final class ModAttributes {
 
     public static final DeferredRegister<Attribute> ATTRIBUTES =
             DeferredRegister.create(Registries.ATTRIBUTE, CreateCybernetics.MODID);
+
+    public static final DeferredHolder<Attribute, Attribute> HUMANITY =
+            ATTRIBUTES.register("humanity", () -> new RangedAttribute("attribute." + CreateCybernetics.MODID + ".humanity",
+                    100.0D, -1000.0D, 1000.0D).setSyncable(true));
 
     public static final DeferredHolder<Attribute, Attribute> XP_GAIN_MULTIPLIER =
             ATTRIBUTES.register("xp_gain_multiplier", () -> new RangedAttribute("attribute." + CreateCybernetics.MODID + ".xp_gain_multiplier",

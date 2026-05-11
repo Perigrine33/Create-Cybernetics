@@ -224,8 +224,7 @@ public final class SurgeryController {
                 }
             }
 
-            data.recomputeHumanityBaseFromInstalled();
-
+            data.recomputeHumanityBaseFromInstalled(player);
             float damageApplied = 0.0F;
 
             if (didWork) {
@@ -448,7 +447,7 @@ public final class SurgeryController {
                 }
             }
 
-            data.recomputeHumanityBaseFromInstalled();
+            data.recomputeHumanityBaseFromInstalled(player);
 
             float damageApplied = 0.0F;
 
