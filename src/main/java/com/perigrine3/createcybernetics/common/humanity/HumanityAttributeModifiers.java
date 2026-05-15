@@ -29,6 +29,10 @@ public final class HumanityAttributeModifiers {
     }
 
     public static void resetBase(Player player) {
+        if (player == null) {
+            return;
+        }
+
         CyberwareAttributeHelper.setBaseValue(player, ModAttributes.HUMANITY, ConfigValues.BASE_HUMANITY);
     }
 
@@ -66,8 +70,9 @@ public final class HumanityAttributeModifiers {
                     continue;
                 }
 
-                int cost = Math.max(0, item.getHumanityCost());
-                if (cost <= 0) {
+                int cost = item.getHumanityCost();
+
+                if (cost == 0) {
                     continue;
                 }
 

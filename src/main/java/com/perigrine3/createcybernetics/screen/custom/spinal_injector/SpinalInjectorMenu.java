@@ -14,7 +14,6 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -37,19 +36,6 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
 
     private final int[] injectorCounts = new int[SpinalInjectorItem.SLOT_COUNT];
 
-    public int getInjectorDisplayCount(int slot) {
-        if (slot < 0 || slot >= injectorCounts.length) return 0;
-        return injectorCounts[slot];
-    }
-
-    public int getInjectorSlotX(int i) {
-        return INJECTOR_X[i];
-    }
-
-    public int getInjectorSlotY(int i) {
-        return INJECTOR_Y[i];
-    }
-
     public SpinalInjectorMenu(int id, Inventory playerInv, RegistryFriendlyByteBuf buf) {
         this(id, playerInv, CyberwareSlot.valueOf(buf.readUtf()), buf.readVarInt());
     }
@@ -64,8 +50,14 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
 
         this.injectorInv = new SimpleContainer(SpinalInjectorItem.SLOT_COUNT) {
             @Override
-            public boolean stillValid(Player p) {
+            public boolean stillValid(Player player) {
                 return true;
+            }
+
+            @Override
+            public void setChanged() {
+                super.setChanged();
+                SpinalInjectorMenu.this.syncCountsFromStacks();
             }
         };
 
@@ -80,6 +72,7 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
                 @Override
                 public void set(int value) {
                     injectorCounts[idx] = value;
+                    SpinalInjectorMenu.this.applyClientCountToStack(idx, value);
                 }
             });
         }
@@ -89,6 +82,7 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
             this.serverFallbackSnapshot = real.isEmpty() ? ItemStack.EMPTY : real.copy();
 
             SpinalInjectorItem.loadFromInstalledStack(real, provider, injectorInv, injectorCounts);
+            applyStoredCountsToStacks();
             sanitizeInjectorState();
         }
 
@@ -101,12 +95,18 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
 
                 @Override
                 public int getMaxStackSize(ItemStack stack) {
-                    return Math.min(INJECTOR_MAX, SpinalInjectorItem.maxStackFor(stack));
+                    return getInjectorStackLimit(stack);
                 }
 
                 @Override
                 public int getMaxStackSize() {
                     return INJECTOR_MAX;
+                }
+
+                @Override
+                public void setChanged() {
+                    super.setChanged();
+                    SpinalInjectorMenu.this.syncCountsFromStacks();
                 }
             });
         }
@@ -124,56 +124,155 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
         for (int col = 0; col < 9; col++) {
             this.addSlot(new Slot(playerInv, col, invX + col * 18, hotbarY));
         }
+
+        syncCountsFromStacks();
+    }
+
+    public int getInjectorDisplayCount(int slot) {
+        if (slot < 0 || slot >= injectorCounts.length) {
+            return 0;
+        }
+
+        return injectorCounts[slot];
+    }
+
+    public int getInjectorSlotX(int i) {
+        return INJECTOR_X[i];
+    }
+
+    public int getInjectorSlotY(int i) {
+        return INJECTOR_Y[i];
+    }
+
+    private static int getInjectorStackLimit(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) {
+            return INJECTOR_MAX;
+        }
+
+        return Math.max(1, Math.min(INJECTOR_MAX, SpinalInjectorItem.maxStackFor(stack)));
     }
 
     private ItemStack getRealInstalledInjectorStack(ServerPlayer sp) {
-        if (!sp.hasData(ModAttachments.CYBERWARE)) return ItemStack.EMPTY;
+        if (!sp.hasData(ModAttachments.CYBERWARE)) {
+            return ItemStack.EMPTY;
+        }
 
         PlayerCyberwareData data = sp.getData(ModAttachments.CYBERWARE);
-        if (data == null) return ItemStack.EMPTY;
+        if (data == null) {
+            return ItemStack.EMPTY;
+        }
 
-        var inst = data.get(installedSlot, installedIndex);
-        if (inst == null) return ItemStack.EMPTY;
+        var installed = data.get(installedSlot, installedIndex);
+        if (installed == null) {
+            return ItemStack.EMPTY;
+        }
 
-        ItemStack real = inst.getItem();
+        ItemStack real = installed.getItem();
         return real == null ? ItemStack.EMPTY : real;
     }
 
-    private void sanitizeInjectorState() {
+    private void applyStoredCountsToStacks() {
         for (int i = 0; i < SpinalInjectorItem.SLOT_COUNT; i++) {
-            ItemStack st = injectorInv.getItem(i);
+            ItemStack stack = injectorInv.getItem(i);
+            int count = injectorCounts[i];
 
-            if (st.isEmpty()) {
-                injectorCounts[i] = 0;
-                continue;
-            }
-
-            if (!SpinalInjectorItem.isInjectable(st)) {
+            if (stack == null || stack.isEmpty() || count <= 0) {
                 injectorInv.setItem(i, ItemStack.EMPTY);
                 injectorCounts[i] = 0;
                 continue;
             }
 
-            if (st.getCount() != 1) st.setCount(1);
+            int cap = getInjectorStackLimit(stack);
+            int clamped = Math.min(cap, count);
 
-            int cap = Math.min(INJECTOR_MAX, SpinalInjectorItem.maxStackFor(st));
-            int c = injectorCounts[i];
-            if (c <= 0) c = 1;
-            injectorCounts[i] = Math.min(cap, c);
+            stack.setCount(clamped);
+            injectorInv.setItem(i, stack);
+            injectorCounts[i] = clamped;
+        }
+    }
+
+    private void applyClientCountToStack(int slot, int value) {
+        if (slot < 0 || slot >= SpinalInjectorItem.SLOT_COUNT) {
+            return;
+        }
+
+        ItemStack stack = injectorInv.getItem(slot);
+        if (stack == null || stack.isEmpty()) {
+            return;
+        }
+
+        int cap = getInjectorStackLimit(stack);
+        int clamped = Math.max(0, Math.min(cap, value));
+
+        if (clamped <= 0) {
+            injectorInv.setItem(slot, ItemStack.EMPTY);
+            return;
+        }
+
+        stack.setCount(clamped);
+        injectorInv.setItem(slot, stack);
+    }
+
+    private void sanitizeInjectorState() {
+        for (int i = 0; i < SpinalInjectorItem.SLOT_COUNT; i++) {
+            ItemStack stack = injectorInv.getItem(i);
+
+            if (stack == null || stack.isEmpty()) {
+                injectorInv.setItem(i, ItemStack.EMPTY);
+                injectorCounts[i] = 0;
+                continue;
+            }
+
+            if (!SpinalInjectorItem.isInjectable(stack)) {
+                injectorInv.setItem(i, ItemStack.EMPTY);
+                injectorCounts[i] = 0;
+                continue;
+            }
+
+            int cap = getInjectorStackLimit(stack);
+            int count = stack.getCount();
+
+            if (count <= 0) {
+                injectorInv.setItem(i, ItemStack.EMPTY);
+                injectorCounts[i] = 0;
+                continue;
+            }
+
+            if (count > cap) {
+                stack.setCount(cap);
+                injectorInv.setItem(i, stack);
+                count = cap;
+            }
+
+            injectorCounts[i] = count;
+        }
+    }
+
+    private void syncCountsFromStacks() {
+        for (int i = 0; i < SpinalInjectorItem.SLOT_COUNT; i++) {
+            ItemStack stack = injectorInv.getItem(i);
+
+            if (stack == null || stack.isEmpty() || !SpinalInjectorItem.isInjectable(stack)) {
+                injectorCounts[i] = 0;
+                continue;
+            }
+
+            injectorCounts[i] = Math.max(0, Math.min(getInjectorStackLimit(stack), stack.getCount()));
         }
     }
 
     private void mirrorIntoPlayerData(ServerPlayer sp, PlayerCyberwareData data) {
         for (int i = 0; i < SpinalInjectorItem.SLOT_COUNT; i++) {
-            ItemStack st = injectorInv.getItem(i);
+            ItemStack stack = injectorInv.getItem(i);
 
-            if (st == null || st.isEmpty() || injectorCounts[i] <= 0) {
+            if (stack == null || stack.isEmpty() || !SpinalInjectorItem.isInjectable(stack)) {
                 data.setSpinalInjectorStack(i, ItemStack.EMPTY);
                 continue;
             }
 
-            ItemStack copy = st.copy();
-            copy.setCount(injectorCounts[i]);
+            ItemStack copy = stack.copy();
+            copy.setCount(Math.max(1, Math.min(getInjectorStackLimit(copy), stack.getCount())));
+
             data.setSpinalInjectorStack(i, copy);
         }
     }
@@ -182,7 +281,9 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
     public void broadcastChanges() {
         if (owner instanceof ServerPlayer) {
             sanitizeInjectorState();
+            syncCountsFromStacks();
         }
+
         super.broadcastChanges();
     }
 
@@ -191,199 +292,70 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
         super.slotsChanged(container);
 
         if (container == injectorInv && owner instanceof ServerPlayer) {
+            sanitizeInjectorState();
+            syncCountsFromStacks();
             this.broadcastChanges();
         }
     }
 
     @Override
-    public void clicked(int slotId, int button, ClickType clickType, Player player) {
-        if (player.level().isClientSide) {
-            super.clicked(slotId, button, clickType, player);
-            return;
-        }
-
-        if (isInjectorMenuSlot(slotId)) {
-            if (clickType == ClickType.QUICK_MOVE) {
-                this.quickMoveStack(player, slotId);
-                return;
-            }
-
-            if (clickType == ClickType.PICKUP) {
-                Slot target = this.slots.get(slotId);
-                ItemStack carried = this.getCarried();
-                ItemStack inSlot = target.getItem();
-
-                if (carried.isEmpty()) {
-                    if (inSlot.isEmpty()) return;
-
-                    int cur = injectorCounts[slotId];
-                    if (cur <= 0) cur = 1;
-
-                    ItemStack one = inSlot.copy();
-                    one.setCount(1);
-                    this.setCarried(one);
-
-                    cur -= 1;
-                    injectorCounts[slotId] = cur;
-
-                    if (cur <= 0) {
-                        target.set(ItemStack.EMPTY);
-                        injectorCounts[slotId] = 0;
-                    }
-
-                    target.setChanged();
-                    this.broadcastChanges();
-                    return;
-                }
-
-                if (SpinalInjectorItem.isInjectable(carried)) {
-                    int want = (button == 1) ? 1 : carried.getCount();
-                    int cap = Math.min(INJECTOR_MAX, SpinalInjectorItem.maxStackFor(carried));
-
-                    if (inSlot.isEmpty()) {
-                        int move = Math.min(want, cap);
-                        if (move <= 0) return;
-
-                        ItemStack rep = carried.copy();
-                        rep.setCount(1);
-
-                        target.set(rep);
-                        injectorCounts[slotId] = move;
-
-                        carried.shrink(move);
-                        this.setCarried(carried);
-
-                        target.setChanged();
-                        this.broadcastChanges();
-                        return;
-                    }
-
-                    if (ItemStack.isSameItemSameComponents(inSlot, carried)) {
-                        int cur = injectorCounts[slotId];
-                        if (cur <= 0) cur = 1;
-
-                        int space = cap - cur;
-                        int move = Math.min(space, want);
-                        if (move <= 0) return;
-
-                        injectorCounts[slotId] = cur + move;
-
-                        carried.shrink(move);
-                        this.setCarried(carried);
-
-                        target.setChanged();
-                        this.broadcastChanges();
-                        return;
-                    }
-                }
-            }
-
-            return;
-        }
-
-        super.clicked(slotId, button, clickType, player);
-    }
-
-    private boolean movePotionIntoInjector(ItemStack stack) {
-        if (stack.isEmpty() || !SpinalInjectorItem.isInjectable(stack)) return false;
-
-        boolean movedAny = false;
-
-        for (int i = 0; i < SpinalInjectorItem.SLOT_COUNT && !stack.isEmpty(); i++) {
-            Slot s = this.slots.get(i);
-            ItemStack curStack = s.getItem();
-            if (curStack.isEmpty()) continue;
-
-            if (ItemStack.isSameItemSameComponents(curStack, stack)) {
-                int cap = Math.min(INJECTOR_MAX, SpinalInjectorItem.maxStackFor(curStack));
-                int cur = injectorCounts[i];
-                if (cur <= 0) cur = 1;
-
-                int space = cap - cur;
-                if (space <= 0) continue;
-
-                int move = Math.min(space, stack.getCount());
-                if (move > 0) {
-                    injectorCounts[i] = cur + move;
-                    stack.shrink(move);
-                    s.setChanged();
-                    movedAny = true;
-                }
-            }
-        }
-
-        for (int i = 0; i < SpinalInjectorItem.SLOT_COUNT && !stack.isEmpty(); i++) {
-            Slot s = this.slots.get(i);
-            if (!s.getItem().isEmpty()) continue;
-
-            int cap = Math.min(INJECTOR_MAX, SpinalInjectorItem.maxStackFor(stack));
-            int move = Math.min(cap, stack.getCount());
-            if (move <= 0) continue;
-
-            ItemStack rep = stack.copy();
-            rep.setCount(1);
-
-            s.set(rep);
-            injectorCounts[i] = move;
-
-            stack.shrink(move);
-            s.setChanged();
-            movedAny = true;
-        }
-
-        if (movedAny) this.broadcastChanges();
-        return movedAny;
-    }
-
-    @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        if (player.level().isClientSide) return ItemStack.EMPTY;
+        if (player.level().isClientSide) {
+            return ItemStack.EMPTY;
+        }
+
+        if (index < 0 || index >= this.slots.size()) {
+            return ItemStack.EMPTY;
+        }
 
         Slot slot = this.slots.get(index);
-        if (!slot.hasItem()) return ItemStack.EMPTY;
+        if (slot == null || !slot.hasItem()) {
+            return ItemStack.EMPTY;
+        }
 
         int injectorEnd = SpinalInjectorItem.SLOT_COUNT;
         int playerStart = injectorEnd;
         int playerEnd = this.slots.size();
 
+        ItemStack stack = slot.getItem();
+        ItemStack original = stack.copy();
+
         if (index < injectorEnd) {
-            ItemStack base = slot.getItem();
-            int cur = injectorCounts[index];
-            if (cur <= 0) cur = 1;
-
-            int moved = 0;
-            for (int n = 0; n < cur; n++) {
-                ItemStack one = base.copy();
-                one.setCount(1);
-
-                if (!this.moveItemStackTo(one, playerStart, playerEnd, true)) break;
-                moved++;
+            if (!this.moveItemStackTo(stack, playerStart, playerEnd, true)) {
+                return ItemStack.EMPTY;
             }
 
-            if (moved == 0) return ItemStack.EMPTY;
-
-            injectorCounts[index] = cur - moved;
-            if (injectorCounts[index] <= 0) {
-                injectorCounts[index] = 0;
+            if (stack.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
             }
 
-            slot.setChanged();
+            sanitizeInjectorState();
+            syncCountsFromStacks();
             this.broadcastChanges();
-            return base.copy();
+
+            return original;
         }
 
-        ItemStack in = slot.getItem();
-        if (!SpinalInjectorItem.isInjectable(in)) return ItemStack.EMPTY;
+        if (!SpinalInjectorItem.isInjectable(stack)) {
+            return ItemStack.EMPTY;
+        }
 
-        ItemStack original = in.copy();
+        if (!this.moveItemStackTo(stack, 0, injectorEnd, false)) {
+            return ItemStack.EMPTY;
+        }
 
-        if (!movePotionIntoInjector(in)) return ItemStack.EMPTY;
+        if (stack.isEmpty()) {
+            slot.set(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
 
-        if (in.isEmpty()) slot.set(ItemStack.EMPTY);
-        else slot.setChanged();
-
+        sanitizeInjectorState();
+        syncCountsFromStacks();
         this.broadcastChanges();
+
         return original;
     }
 
@@ -391,7 +363,12 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
     public void removed(Player player) {
         super.removed(player);
 
-        if (!(player instanceof ServerPlayer sp)) return;
+        if (!(player instanceof ServerPlayer sp)) {
+            return;
+        }
+
+        sanitizeInjectorState();
+        syncCountsFromStacks();
 
         PlayerCyberwareData data = sp.hasData(ModAttachments.CYBERWARE) ? sp.getData(ModAttachments.CYBERWARE) : null;
 
@@ -401,6 +378,7 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
         if (stillInstalled && data != null) {
             SpinalInjectorItem.saveIntoInstalledStack(real, provider, injectorInv, injectorCounts);
             mirrorIntoPlayerData(sp, data);
+
             data.setDirty();
             sp.syncData(ModAttachments.CYBERWARE);
             return;
@@ -417,6 +395,7 @@ public class SpinalInjectorMenu extends AbstractContainerMenu {
             for (int i = 0; i < SpinalInjectorItem.SLOT_COUNT; i++) {
                 data.setSpinalInjectorStack(i, ItemStack.EMPTY);
             }
+
             data.setDirty();
             sp.syncData(ModAttachments.CYBERWARE);
         }

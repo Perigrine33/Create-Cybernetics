@@ -7,7 +7,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_actuator",
-          "weight": 40,
+          "weight": 160,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -22,7 +22,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_fiberoptics",
-          "weight": 40,
+          "weight": 160,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -37,7 +37,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_wiring",
-          "weight": 45,
+          "weight": 180,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -52,7 +52,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_diodes",
-          "weight": 35,
+          "weight": 140,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -67,7 +67,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_plating",
-          "weight": 40,
+          "weight": 160,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -82,7 +82,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_graphicscard",
-          "weight": 25,
+          "weight": 100,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -97,7 +97,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_ssd",
-          "weight": 25,
+          "weight": 100,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -112,7 +112,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_storage",
-          "weight": 30,
+          "weight": 120,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -127,7 +127,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_synthnerves",
-          "weight": 25,
+          "weight": 100,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -142,7 +142,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:component_mesh",
-          "weight": 25,
+          "weight": 100,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -158,7 +158,7 @@
         {
           "type": "minecraft:item",
           "name": "createcybernetics:gold_upgrade_template",
-          "weight": 8
+          "weight": 32
         },
 
         {
@@ -168,8 +168,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_eyeofdefender",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:brainupgrades_enderjammer",
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_enderjammer",
+          "weight": 9
         },
         {
           "type": "minecraft:item",
@@ -178,8 +188,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_matrix",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:brainupgrades_neuralcontextualizer",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_neuralcontextualizer",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -188,8 +208,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_cyberdeck",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:brainupgrades_chipwareslots",
           "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_chipwareslots",
+          "weight": 24
         },
         {
           "type": "minecraft:item",
@@ -198,8 +228,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_neuralprocessor",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:brainupgrades_iceprotocol",
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_iceprotocol",
+          "weight": 9
         },
 
         {
@@ -209,8 +249,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_cybereyes",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:eyeupgrades_hudlens",
           "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_hudlens",
+          "weight": 18
         },
         {
           "type": "minecraft:item",
@@ -219,8 +269,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_hudjack",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:eyeupgrades_nightvision",
           "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_nightvision",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
@@ -229,8 +289,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_targeting",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:eyeupgrades_underwatervision",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_underwatervision",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -239,8 +309,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_zoom",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:eyeupgrades_trajectorycalculator",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_trajectorycalculator",
+          "weight": 12
         },
 
         {
@@ -250,8 +330,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_cyberheart",
+          "weight": 24
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:heartupgrades_coupler",
           "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_coupler",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
@@ -260,8 +350,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_creeperheart",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:heartupgrades_defibrillator",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_defibrillator",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -270,8 +370,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_stemcell",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:heartupgrades_platelets",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_platelets",
+          "weight": 12
         },
 
         {
@@ -281,8 +391,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_hyperoxygenation",
+          "weight": 18
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:lungsupgrades_oxygen",
           "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_oxygen",
+          "weight": 15
         },
 
         {
@@ -292,8 +412,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_adrenaline",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:organsupgrades_battery",
           "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_battery",
+          "weight": 18
         },
         {
           "type": "minecraft:item",
@@ -302,8 +432,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_diamondwaferstack",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:organsupgrades_liverfilter",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_liverfilter",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -312,13 +452,28 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_metabolic",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:organsupgrade_densebattery",
           "weight": 4
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_densebattery",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:organsupgrades_heatengine",
           "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_heatengine",
+          "weight": 15
         },
 
         {
@@ -328,8 +483,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_linearframe",
+          "weight": 30
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:boneupgrades_bonebattery",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_bonebattery",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -338,8 +503,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_boneflex",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:boneupgrades_bonelacing",
           "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_bonelacing",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
@@ -348,8 +523,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_capacitorframe",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:boneupgrades_piezo",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_piezo",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -358,8 +543,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_spinalinjector",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:boneupgrades_sandevistan",
           "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_sandevistan",
+          "weight": 6
         },
         {
           "type": "minecraft:item",
@@ -374,8 +569,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_arterialturbine",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:skinupgrades_chromatophores",
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_chromatophores",
+          "weight": 9
         },
         {
           "type": "minecraft:item",
@@ -384,8 +589,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_synthskin",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:skinupgrades_immuno",
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_immuno",
+          "weight": 9
         },
         {
           "type": "minecraft:item",
@@ -394,8 +609,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_faceplate",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:skinupgrades_netheriteplating",
           "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_netheriteplating",
+          "weight": 6
         },
         {
           "type": "minecraft:item",
@@ -404,8 +629,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_solarskin",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:skinupgrades_subdermalarmor",
           "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_subdermalarmor",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
@@ -414,13 +649,28 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_subdermalspikes",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:skinupgrades_syntheticsetules",
           "weight": 3
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_syntheticsetules",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:skinupgrades_metalplating",
           "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_metalplating",
+          "weight": 24
         },
 
         {
@@ -430,8 +680,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_synthmuscle",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:muscleupgrades_wiredreflexes",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_wiredreflexes",
+          "weight": 12
         },
 
         {
@@ -441,8 +701,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_rightarm",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:basecyberware_rightarm",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_rightarm",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -451,8 +721,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_armcannon",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:armupgrades_flywheel",
           "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_flywheel",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
@@ -461,8 +741,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_claws",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:armupgrades_crafthands",
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_crafthands",
+          "weight": 9
         },
         {
           "type": "minecraft:item",
@@ -471,8 +761,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_drillfist",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:armupgrades_firestarter",
           "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_firestarter",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
@@ -481,8 +781,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_pneumaticwrist",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:armupgrades_reinforcedknuckles",
           "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_reinforcedknuckles",
+          "weight": 18
         },
 
         {
@@ -492,8 +802,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_leftarm",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:basecyberware_leftarm_goldplated",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_leftarm",
+          "weight": 12
         },
 
         {
@@ -503,8 +823,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_rightleg",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:basecyberware_rightleg_goldplated",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_rightleg",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -513,8 +843,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_metaldetector",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:legupgrades_anklebracers",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_anklebracers",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
@@ -523,8 +863,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_jumpboost",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:legupgrades_propellers",
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_propellers",
+          "weight": 9
         },
         {
           "type": "minecraft:item",
@@ -533,8 +883,18 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_spurs",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:legupgrades_ocelotpaws",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_ocelotpaws",
+          "weight": 12
         },
 
         {
@@ -544,8 +904,34 @@
         },
         {
           "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_leftleg",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
           "name": "createcybernetics:basecyberware_leftleg_goldplated",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_leftleg",
+          "weight": 12
+        },
+
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_arccannon",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_dualisticconverter",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
+          "name": "createcybernetics:scavenged_idem",
+          "weight": 9
         }
       ]
     }

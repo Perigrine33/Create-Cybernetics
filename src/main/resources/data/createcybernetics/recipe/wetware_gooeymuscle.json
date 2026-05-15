@@ -1,0 +1,10 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:component_synthnerves" },
+    { "item": "minecraft:slime_ball" },
+    { "item": "minecraft:slime_ball" },
+    { "item": "minecraft:slime_ball" }
+  ],
+  "result": { "id": "createcybernetics:wetware_gooeymuscle", "count": 1 }
+}

@@ -968,7 +968,7 @@
       "tooltip.createcybernetics.wetware_dragonskin.tooltip1": "§cGrants immunity to dragon fire and increases armor",
       "tooltip.createcybernetics.wetware_wardenantlers.tooltip1": "§cAllows the user to see sounds",
       "tooltip.createcybernetics.wetware_sculkheart.tooltip1": "§cCreates a steady heartbeat rhythm, and gives nearby players the darkness effect",
-      "tooltip.createcybernetics.wetware_gooeymuscle.tooltip1": "§cNegates fall damage and greatly negates mace damage",
+      "tooltip.createcybernetics.wetware_gooeymuscle.tooltip1": "§cNegates small falls and greatly negates mace damage",
       "tooltip.createcybernetics.wetware_electrocytemuscle.tooltip1": "§cReleases an electric burst on all nearby creatures when attacked, with a 2 minute cooldown",
 
 

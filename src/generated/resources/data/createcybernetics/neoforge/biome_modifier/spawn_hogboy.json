@@ -3,7 +3,7 @@
   "biomes": "minecraft:soul_sand_valley",
   "spawners": {
     "type": "createcybernetics:hogboy",
-    "maxCount": 4,
+    "maxCount": 2,
     "minCount": 1,
     "weight": 2
   }

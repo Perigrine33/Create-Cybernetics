@@ -1,5 +1,6 @@
 package com.perigrine3.createcybernetics.api;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +19,7 @@ public class InstalledCyberware {
         this.item = item == null ? ItemStack.EMPTY : item.copy();
         this.slot = slot;
         this.index = index;
-        this.humanityCost = Math.max(0, humanityCost);
+        this.humanityCost = humanityCost;
     }
 
     public ItemStack getItem() {
@@ -45,9 +46,7 @@ public class InstalledCyberware {
         this.powered = powered;
     }
 
-    /* ---------------- NBT ---------------- */
-
-    public CompoundTag save(net.minecraft.core.HolderLookup.Provider provider) {
+    public CompoundTag save(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
 
         if (item != null && !item.isEmpty()) {
@@ -59,13 +58,13 @@ public class InstalledCyberware {
             tag.putInt("Index", index);
         }
 
-        tag.putInt("Humanity", Math.max(0, humanityCost));
+        tag.putInt("Humanity", humanityCost);
         tag.putBoolean("Powered", powered);
 
         return tag;
     }
 
-    public static InstalledCyberware load(CompoundTag tag, net.minecraft.core.HolderLookup.Provider provider) {
+    public static InstalledCyberware load(CompoundTag tag, HolderLookup.Provider provider) {
         InstalledCyberware installed = new InstalledCyberware();
 
         if (tag.contains("Item", Tag.TAG_COMPOUND)) {
@@ -87,7 +86,7 @@ public class InstalledCyberware {
             installed.index = -1;
         }
 
-        installed.humanityCost = Math.max(0, tag.getInt("Humanity"));
+        installed.humanityCost = tag.getInt("Humanity");
         installed.powered = !tag.contains("Powered", Tag.TAG_BYTE) || tag.getBoolean("Powered");
 
         return installed;

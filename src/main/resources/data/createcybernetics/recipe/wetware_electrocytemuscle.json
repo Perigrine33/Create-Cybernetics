@@ -1,0 +1,10 @@
+{
+  "type": "createcybernetics:grafting_table",
+  "wetware": [
+    { "item": "createcybernetics:bodypart_muscle" },
+    { "item": "createcybernetics:component_wiring" },
+    { "item": "minecraft:redstone" },
+    { "item": "minecraft:redstone" }
+  ],
+  "result": { "id": "createcybernetics:wetware_electrocytemuscle", "count": 1 }
+}

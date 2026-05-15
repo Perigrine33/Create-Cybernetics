@@ -8,13 +8,13 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public class NeuropozyneEffect extends MobEffect {
 
-    private static final String HUMANITY_BONUS_KEY = "neuropozyne";
+    public static final String HUMANITY_BONUS_KEY = "neuropozyne";
+
     private static final int HUMANITY_PER_LEVEL = 25;
 
     private static final int SIDE_EFFECT_START_AMP = 5;
@@ -46,11 +46,7 @@ public class NeuropozyneEffect extends MobEffect {
             return true;
         }
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data != null) {
-            int bonus = (amplifier + 1) * HUMANITY_PER_LEVEL;
-            data.setHumanityBonus(player, HUMANITY_BONUS_KEY, bonus);
-        }
+        applyHumanityBonus(player, amplifier);
 
         if ((player.tickCount % 20) == 0) {
             MobEffectInstance rejection = player.getEffect(ModEffects.CYBERWARE_REJECTION);
@@ -66,20 +62,31 @@ public class NeuropozyneEffect extends MobEffect {
         return true;
     }
 
-    @Override
-    public void onMobRemoved(LivingEntity living, int amplifier, Entity.RemovalReason reason) {
-        if (!(living instanceof Player player)) {
-            return;
-        }
-
-        if (player.level().isClientSide) {
+    public static void applyHumanityBonus(Player player, int amplifier) {
+        if (player == null || player.level().isClientSide) {
             return;
         }
 
         PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data != null) {
-            data.clearHumanityBonus(player, HUMANITY_BONUS_KEY);
+        if (data == null) {
+            return;
         }
+
+        int bonus = (amplifier + 1) * HUMANITY_PER_LEVEL;
+        data.setHumanityBonus(player, HUMANITY_BONUS_KEY, bonus);
+    }
+
+    public static void clearHumanityBonus(Player player) {
+        if (player == null || player.level().isClientSide) {
+            return;
+        }
+
+        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        if (data == null) {
+            return;
+        }
+
+        data.clearHumanityBonus(player, HUMANITY_BONUS_KEY);
     }
 
     private static void rollSideEffects(Player player, int amplifier) {

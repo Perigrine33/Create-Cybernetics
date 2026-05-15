@@ -1,9 +1,7 @@
 package com.perigrine3.createcybernetics.common.surgery;
 
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
-import com.perigrine3.createcybernetics.compat.origins.OriginProfileResolver;
 import com.perigrine3.createcybernetics.item.ModItems;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumMap;
@@ -119,42 +117,26 @@ public final class DefaultOrgans {
 
     private DefaultOrgans() {}
 
-    public static ItemStack get(Player player, CyberwareSlot slot, int index) {
-        ItemStack fallback = getVanillaDefault(slot, index);
-
-        if (player == null) {
-            return fallback;
-        }
-
-        return OriginProfileResolver.getDefaultOrgan(player, slot, index, fallback);
-    }
-
     public static ItemStack get(CyberwareSlot slot, int index) {
-        return getVanillaDefault(slot, index);
-    }
-
-    private static ItemStack getVanillaDefault(CyberwareSlot slot, int index) {
         ItemStack[] arr = DEFAULTS.get(slot);
         if (arr == null || index < 0 || index >= arr.length) {
             return ItemStack.EMPTY;
         }
-
-        ItemStack stack = arr[index];
-        return stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
+        return arr[index].copy();
     }
 
     public static boolean isOrganForSlot(ItemStack stack, CyberwareSlot slot) {
         if (stack.isEmpty()) return false;
 
         ItemStack[] arr = DEFAULTS.get(slot);
-        if (arr != null) {
-            for (ItemStack organ : arr) {
-                if (!organ.isEmpty() && stack.is(organ.getItem())) {
-                    return true;
-                }
+        if (arr == null) return false;
+
+        for (ItemStack organ : arr) {
+            if (!organ.isEmpty() && stack.is(organ.getItem())) {
+                return true;
             }
         }
-
-        return OriginProfileResolver.isConfiguredOrganForSlot(stack, slot);
+        return false;
     }
+
 }

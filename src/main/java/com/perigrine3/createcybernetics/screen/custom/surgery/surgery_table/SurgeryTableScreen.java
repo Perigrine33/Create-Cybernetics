@@ -308,17 +308,6 @@ public class SurgeryTableScreen extends AbstractContainerScreen<SurgeryTableMenu
         return com.perigrine3.createcybernetics.Config.HUMANITY.get();
     }
 
-    private static final int NEUROPOZYNE_HUMANITY_PER_LEVEL = 25;
-
-    private int getNeuropozyneBonusClient(Player player) {
-        for (MobEffectInstance inst : player.getActiveEffects()) {
-            if (inst.is(ModEffects.NEUROPOZYNE)) {
-                return (inst.getAmplifier() + 1) * NEUROPOZYNE_HUMANITY_PER_LEVEL;
-            }
-        }
-        return 0;
-    }
-
     private int getHumanityColor(float percent) {
         if (percent > 0.66f) return 0xFF2AFF00;
         if (percent > 0.25f) return 0xFFFFAA00;
@@ -334,7 +323,6 @@ public class SurgeryTableScreen extends AbstractContainerScreen<SurgeryTableMenu
         if (data == null) return 100;
 
         int humanity = data.getHumanity(patient);
-        humanity += getNeuropozyneBonusClient(patient);
 
         ItemStack[] guiStacks = new ItemStack[65];
         for (Slot s : menu.slots) {

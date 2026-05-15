@@ -2,7 +2,10 @@ package com.perigrine3.createcybernetics.compat.corpse;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,6 +19,7 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
 
     public static final int COLUMNS = 10;
     public static final int ROWS = 8;
+
     private static final String CORPSE_ENTITY_CLASS = "de.maxhenkel.corpse.entities.CorpseEntity";
 
     private final Container cyberwareInventory;
@@ -84,7 +88,10 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return true;
+        Entity corpse = resolveCorpse(player, corpseEntityId);
+        return corpse != null
+                && corpse.isAlive()
+                && player.distanceToSqr(corpse) <= 64.0D;
     }
 
     @Override
@@ -116,6 +123,29 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
         return copy;
     }
 
+    private void reloadCorpseCyberwareInventory() {
+        if (cyberwareInventory instanceof CorpseCyberwareInventory corpseInventory) {
+            corpseInventory.reloadFromCorpse();
+        }
+    }
+
+    private boolean isSameCorpseMenu(Entity corpse) {
+        return corpse != null && corpse.getId() == corpseEntityId;
+    }
+
+    private static void syncOpenCorpseCyberwareMenus(Entity corpse) {
+        if (corpse == null || corpse.level().isClientSide()) return;
+        if (!(corpse.level() instanceof ServerLevel serverLevel)) return;
+
+        for (ServerPlayer player : serverLevel.players()) {
+            if (!(player.containerMenu instanceof CorpseCyberwareMenu menu)) continue;
+            if (!menu.isSameCorpseMenu(corpse)) continue;
+
+            menu.reloadCorpseCyberwareInventory();
+            menu.broadcastChanges();
+        }
+    }
+
     private static boolean isCorpseEntity(Entity entity) {
         if (entity == null || !CorpseCompat.isLoaded()) {
             return false;
@@ -132,10 +162,24 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
     private static class CorpseCyberwareInventory implements Container {
         private final Entity corpse;
         private final NonNullList<ItemStack> items;
+        private boolean reloading;
 
         private CorpseCyberwareInventory(Entity corpse) {
             this.corpse = corpse;
-            this.items = CorpseCompat.getCorpseCyberwareItems(corpse);
+            this.items = NonNullList.withSize(CorpseCompat.CYBERWARE_SLOT_COUNT, ItemStack.EMPTY);
+            reloadFromCorpse();
+        }
+
+        private void reloadFromCorpse() {
+            reloading = true;
+
+            NonNullList<ItemStack> fresh = CorpseCompat.getCorpseCyberwareItems(corpse);
+            for (int i = 0; i < items.size(); i++) {
+                ItemStack stack = i >= 0 && i < fresh.size() ? fresh.get(i) : ItemStack.EMPTY;
+                items.set(i, stack.copy());
+            }
+
+            reloading = false;
         }
 
         @Override
@@ -158,40 +202,45 @@ public class CorpseCyberwareMenu extends AbstractContainerMenu {
 
         @Override
         public ItemStack removeItem(int slot, int amount) {
-            ItemStack stack = getItem(slot);
-            if (stack.isEmpty()) return ItemStack.EMPTY;
-
-            ItemStack split = stack.split(amount);
-            if (!split.isEmpty()) {
+            ItemStack removed = ContainerHelper.removeItem(items, slot, amount);
+            if (!removed.isEmpty()) {
                 setChanged();
             }
-            return split;
+            return removed;
         }
 
         @Override
         public ItemStack removeItemNoUpdate(int slot) {
             if (slot < 0 || slot >= items.size()) return ItemStack.EMPTY;
-            ItemStack stack = items.get(slot);
+
+            ItemStack removed = items.get(slot);
             items.set(slot, ItemStack.EMPTY);
             setChanged();
-            return stack;
+            return removed;
         }
 
         @Override
         public void setItem(int slot, ItemStack stack) {
             if (slot < 0 || slot >= items.size()) return;
-            items.set(slot, stack);
+
+            items.set(slot, stack == null ? ItemStack.EMPTY : stack);
             setChanged();
         }
 
         @Override
         public void setChanged() {
+            if (reloading) return;
+
             CorpseCompat.writeCorpseCyberwareItems(corpse, items);
+            syncOpenCorpseCyberwareMenus(corpse);
         }
 
         @Override
         public boolean stillValid(Player player) {
-            return true;
+            Entity resolved = resolveCorpse(player, corpse.getId());
+            return resolved != null
+                    && resolved.isAlive()
+                    && player.distanceToSqr(resolved) <= 64.0D;
         }
 
         @Override

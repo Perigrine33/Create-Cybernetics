@@ -183,8 +183,8 @@ dependencies {
 
     //implementation "curse.maven:female-gender-neoforge-481655:5579007"
 
-    //implementation "curse.maven:origins-neoforge-1375372:8063289"
-    //implementation "curse.maven:jupiter-1072905:7738312"
+    implementation "curse.maven:origins-neoforge-1375372:8063289"
+    implementation "curse.maven:jupiter-1072905:7738312"
 
     implementation "curse.maven:ears-412013:6166554"
 

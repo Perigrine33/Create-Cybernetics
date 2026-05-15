@@ -45,9 +45,9 @@ public final class CyberwareDeathReset {
     private static final float MOB_CYBERWARE_DROP_CHANCE = 0.15f;
     private static final float SMASHER_CYBERWARE_DROP_CHANCE = 0.75f;
 
-    private static final float HOGBOY_CYBERWARE_DROP_CHANCE = 0.20f;
-    private static final float PUNKLIN_CYBERWARE_DROP_CHANCE = 0.30f;
-    private static final float PIGSTROM_CYBERWARE_DROP_CHANCE = 0.45f;
+    private static final float HOGBOY_CYBERWARE_DROP_CHANCE = 0.10f;
+    private static final float PUNKLIN_CYBERWARE_DROP_CHANCE = 0.15f;
+    private static final float PIGSTROM_CYBERWARE_DROP_CHANCE = 0.20f;
 
     private CyberwareDeathReset() {}
 

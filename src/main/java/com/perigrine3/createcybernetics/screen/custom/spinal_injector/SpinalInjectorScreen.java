@@ -1,8 +1,6 @@
 package com.perigrine3.createcybernetics.screen.custom.spinal_injector;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.item.cyberware.bone.SpinalInjectorItem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -38,46 +36,10 @@ public class SpinalInjectorScreen extends AbstractContainerScreen<SpinalInjector
     public void render(GuiGraphics gfx, int mouseX, int mouseY, float partial) {
         this.renderBackground(gfx, mouseX, mouseY, partial);
         super.render(gfx, mouseX, mouseY, partial);
-
-        renderInjectorCounts(gfx);
-
         this.renderTooltip(gfx, mouseX, mouseY);
-    }
-
-    private void renderInjectorCounts(GuiGraphics gfx) {
-        gfx.pose().pushPose();
-        // Very high Z so it is definitely above everything rendered earlier.
-        gfx.pose().translate(0.0F, 0.0F, 10_000.0F);
-
-        RenderSystem.disableDepthTest();
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        for (int i = 0; i < SpinalInjectorItem.SLOT_COUNT; i++) {
-            int count = this.menu.getInjectorDisplayCount(i);
-            if (count <= 1) continue;
-
-            int x = this.leftPos + this.menu.getInjectorSlotX(i);
-            int y = this.topPos + this.menu.getInjectorSlotY(i);
-
-            String text = Integer.toString(count);
-            int w = this.font.width(text);
-
-            // bottom-right within 16x16 slot
-            int tx = x + 16 - w - 1;
-            int ty = y + 16 - 8 - 1;
-
-            gfx.drawString(this.font, text, tx, ty, 0xEDEDED, false);
-        }
-
-        RenderSystem.enableDepthTest();
-        gfx.pose().popPose();
     }
 
     @Override
     protected void renderLabels(GuiGraphics gfx, int mouseX, int mouseY) {
-        // intentionally no labels
     }
 }
