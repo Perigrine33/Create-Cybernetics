@@ -2,8 +2,6 @@ package com.perigrine3.createcybernetics.common.capabilities;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
 import com.perigrine3.createcybernetics.entity.ModEntities;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,6 +23,7 @@ public final class CyberentitySpawnEvents {
         if (mob.getPersistentData().getBoolean(NBT_CYBERWARE_ROLLED)) return;
 
         EntityCyberwareData data = mob.getData(ModMobAttachments.CYBERENTITY_CYBERWARE);
+
         CyberentityRolls.generateRandomCyberware(mob, data, mob.getRandom());
 
         mob.setHealth(mob.getMaxHealth());

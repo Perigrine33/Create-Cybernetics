@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.createcybernetics.music_disc_my_retro_jacket.desc"
+  },
+  "length_in_seconds": 177.0,
+  "sound_event": "createcybernetics:my_retro_jacket"
+}

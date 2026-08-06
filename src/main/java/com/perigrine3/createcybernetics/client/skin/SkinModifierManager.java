@@ -229,6 +229,12 @@ public class SkinModifierManager {
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/multioptics4_dyed.png");
     private static final ResourceLocation MULTIOPTICS4_HIGHLIGHT =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/multioptics4_highlight.png");
+    private static final ResourceLocation COAXIAL_PORT_HEAD_OFF =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/coaxial_link_port_head_off.png");
+    private static final ResourceLocation COAXIAL_PORT_HEAD_ON =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/coaxial_link_port_head_on.png");
+    private static final ResourceLocation COAXIAL_PORT_HEAD_HIGHLIGHT =
+            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/coaxial_link_port_head_on_highlight.png");
 
     private static final ResourceLocation SAMSON_EYES_DYED =
             ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "textures/entity/samson_eyes_dyed.png");
@@ -1967,6 +1973,17 @@ public class SkinModifierManager {
             state.addModifier(new SkinModifier(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
                     0xFFFFFFFF, false));
             state.addHighlight(new SkinHighlight(CYBERDECK_TEXTURE, CYBERDECK_TEXTURE,
+                    0xFFFFFFFF, true));
+        }
+// COAXIAL PORT
+        if (data.hasSpecificItem(ModItems.BRAINUPGRADES_COAXIALPORT.get(), CyberwareSlot.BRAIN)) {
+            state.addModifier(new SkinModifier(COAXIAL_PORT_HEAD_OFF, COAXIAL_PORT_HEAD_OFF,
+                    0xFFFFFFFF, false));
+
+            state.addModifier(new SkinModifier(COAXIAL_PORT_HEAD_ON, COAXIAL_PORT_HEAD_ON,
+                    0xFFFFFFFF, false));
+
+            state.addHighlight(new SkinHighlight(COAXIAL_PORT_HEAD_HIGHLIGHT, COAXIAL_PORT_HEAD_HIGHLIGHT,
                     0xFFFFFFFF, true));
         }
 // NEURAL PROCESSOR PORT

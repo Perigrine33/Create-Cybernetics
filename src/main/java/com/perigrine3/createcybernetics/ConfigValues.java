@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ConfigValues {
+
     private ConfigValues() {}
 
     /** Base Humanity Value (50-1000). */
@@ -96,26 +97,42 @@ public final class ConfigValues {
         ANY_PLAYER_AUTO_APPROVE
     }
 
-    /** Entity spawning. */
+
+
+    /**
+     * Relative replacement weight for Cyberzombies against a vanilla Zombie
+     * baseline weight of 100.
+     */
     public static int CYBERZOMBIE_SPAWN_WEIGHT = 10;
+
     public static int CYBERZOMBIE_MIN_GROUP = 1;
     public static int CYBERZOMBIE_MAX_GROUP = 3;
 
+    /**
+     * Relative replacement weight for Cyberskeletons against a vanilla Skeleton
+     * baseline weight of 100.
+     */
     public static int CYBERSKELETON_SPAWN_WEIGHT = 10;
+
     public static int CYBERSKELETON_MIN_GROUP = 1;
     public static int CYBERSKELETON_MAX_GROUP = 3;
 
+    /** Natural biome spawn-pool weight for Hogboys. */
     public static int HOGBOY_SPAWN_WEIGHT = 5;
     public static int HOGBOY_MIN_GROUP = 1;
     public static int HOGBOY_MAX_GROUP = 4;
 
+    /** Natural biome spawn-pool weight for Punklins. */
     public static int PUNKLIN_SPAWN_WEIGHT = 10;
     public static int PUNKLIN_MIN_GROUP = 3;
     public static int PUNKLIN_MAX_GROUP = 7;
 
+    /** Natural biome spawn-pool weight for Pigstroms. */
     public static int PIGSTROM_SPAWN_WEIGHT = 14;
     public static int PIGSTROM_MIN_GROUP = 4;
     public static int PIGSTROM_MAX_GROUP = 8;
+
+
 
     /** Engineering Table deconstruction rolls for regular cyberware. */
     public static List<EngineeringRoll> ENGINEERING_DECONSTRUCT_ROLLS = new ArrayList<>();
@@ -125,6 +142,8 @@ public final class ConfigValues {
 
     public record EngineeringRoll(Item item, int min, int max, int weight) {
     }
+
+
 
     public static List<EntitySlotRoll> ENTITY_SLOT_ROLLS = new ArrayList<>();
     public static List<EntityCyberwareRoll> ENTITY_CYBERWARE_ROLLS = new ArrayList<>();

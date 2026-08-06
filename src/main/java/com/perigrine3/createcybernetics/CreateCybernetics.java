@@ -98,8 +98,7 @@ public class CreateCybernetics {
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     public CreateCybernetics(IEventBus eventBus, ModContainer modContainer) {
         eventBus.addListener(this::commonSetup);
@@ -350,6 +349,87 @@ public class CreateCybernetics {
                         CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
                 );
             }
+        }
+
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+
+            event.insertAfter(
+                    Items.MUSIC_DISC_PIGSTEP.getDefaultInstance(),
+                    ModItems.MUSIC_DISC_CYBERPSYCHO.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_CYBERPSYCHO.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_NEON_OVERLORDS.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_NEON_OVERLORDS.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_NEUROHACK.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_NEUROHACK.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_THE_GRID.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_THE_GRID.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_DANGER_SNOW.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_DANGER_SNOW.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_DARK.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_DARK.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_MY_RETRO_JACKET.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_MY_RETRO_JACKET.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_GAMEBOY_GIRL.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_GAMEBOY_GIRL.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_NIGHTMARES_ON_HAUPTSTRASSE.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_NIGHTMARES_ON_HAUPTSTRASSE.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_INTERGALACTIC_WALK.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_INTERGALACTIC_WALK.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_SENSATION.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_SENSATION.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_SHOTGUN.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
+
+            event.insertAfter(
+                    ModItems.MUSIC_DISC_SHOTGUN.get().getDefaultInstance(),
+                    ModItems.MUSIC_DISC_DESCENT_INTO_MADNESS.get().getDefaultInstance(),
+                    CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
+            );
         }
     }
 

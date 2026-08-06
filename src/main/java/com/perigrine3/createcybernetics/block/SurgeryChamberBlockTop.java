@@ -130,33 +130,16 @@ public class SurgeryChamberBlockTop extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide) {
-            boolean newState = !state.getValue(OPENED);
-            level.setBlock(pos, state.setValue(OPENED, newState), 3);
-            BlockPos bottomPos = pos.below();
-            BlockState bottomState = level.getBlockState(bottomPos);
-            if (bottomState.is(ModBlocks.SURGERY_CHAMBER_BOTTOM.get())) {
-                BlockState newBottomState = bottomState
-                        .setValue(SurgeryChamberBlockBottom.OPENED, newState)
-                        .setValue(SurgeryChamberBlockBottom.SURGERY_DONE, !newState && bottomState.getValue(SurgeryChamberBlockBottom.SURGERY_DONE));
-                if (newState) {
-                    newBottomState = newBottomState.setValue(SurgeryChamberBlockBottom.SURGERY_DONE, false);
-                }
-                level.setBlock(bottomPos, newBottomState, 3);
-            }
-            level.playSound(
-                    null,
-                    pos,
-                    newState ? net.minecraft.sounds.SoundEvents.IRON_DOOR_OPEN
-                            : net.minecraft.sounds.SoundEvents.IRON_DOOR_CLOSE,
-                    SoundSource.BLOCKS,
-                    1.0f,
-                    1.0f
-            );
+        BlockPos bottomPos = pos.below();
+        BlockState bottomState = level.getBlockState(bottomPos);
+
+        if (!bottomState.is(ModBlocks.SURGERY_CHAMBER_BOTTOM.get())) {
+            return InteractionResult.CONSUME;
         }
+
+        SurgeryChamberBlockBottom.toggleChamber(level, bottomPos, player);
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
-
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {

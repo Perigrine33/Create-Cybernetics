@@ -1,14 +1,10 @@
 package com.perigrine3.createcybernetics.client;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
-import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
-import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.effect.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -18,7 +14,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -33,13 +28,11 @@ import java.util.List;
 public final class CyberpsychosisInputSuppressor {
 
     private static final double TARGET_SEARCH_RADIUS = 24.0D;
-    private static final double TARGET_ABOVE_JUMP_THRESHOLD = 1.15D;
+    private static final double TARGET_ABOVE_JUMP_THRESHOLD = 0.55D;
+    private static final double TARGET_JUMP_MAX_DISTANCE = 8.0D;
 
     private static final int WANDER_RESELECT_MIN = 35;
     private static final int WANDER_RESELECT_MAX = 90;
-
-    private static final ResourceLocation PNEUMATIC_CALVES_ID =
-            ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, "legupgrades_jumpboost");
 
     private static LivingEntity currentTarget = null;
     private static float wanderYaw = 0.0F;
@@ -63,9 +56,7 @@ public final class CyberpsychosisInputSuppressor {
         boolean inFugue = hasEffect(player, ModEffects.CYBERPSYCHOSIS_FUGUE);
 
         if (!inFugue) {
-            if (wasInFugue) {
-                resetState();
-            }
+            if (wasInFugue) resetState();
 
             wasInFugue = false;
             return;
@@ -73,65 +64,48 @@ public final class CyberpsychosisInputSuppressor {
 
         wasInFugue = true;
 
+        if (isIntegratedServerPaused(mc)) {
+            forcedJump = false;
+            return;
+        }
+
         currentTarget = findTarget(player);
 
         if (isValidTarget(player, currentTarget)) {
-            aimAt(
-                    player,
-                    currentTarget.position().add(0.0D, currentTarget.getBbHeight() * 0.65D, 0.0D),
-                    16.0F,
-                    12.0F
-            );
-
-            forcedJump = shouldJumpAtTarget(player, currentTarget);
+            aimAt(player, currentTarget.position().add(0.0D, currentTarget.getBbHeight() * 0.65D, 0.0D), 16.0F, 12.0F);
+            forcedJump = shouldAutoJump(player, currentTarget);
         } else {
             tickWander(player);
-            forcedJump = false;
+            forcedJump = shouldAutoJump(player, null);
         }
 
-        /*
-         * Do not mutate mc.options.keyUp/keySprint/keyJump here.
-         *
-         * Those are real keybind states. Forcing them false/true can leak outside fugue
-         * and break normal movement after the fugue effect ends.
-         *
-         * MovementInputUpdateEvent below is the only place we override movement input.
-         */
         player.setSprinting(true);
     }
 
     @SubscribeEvent
     public static void onMovementInput(MovementInputUpdateEvent event) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null) {
-            return;
-        }
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
 
-        if (!hasEffect(player, ModEffects.CYBERPSYCHOSIS_FUGUE)) {
-            return;
-        }
+        if (player == null) return;
+        if (!hasEffect(player, ModEffects.CYBERPSYCHOSIS_FUGUE)) return;
+        if (isIntegratedServerPaused(mc)) return;
 
-        /*
-         * Fugue-only movement override.
-         *
-         * Outside CYBERPSYCHOSIS_FUGUE, this method returns without touching anything.
-         */
         event.getInput().leftImpulse = 0.0F;
         event.getInput().forwardImpulse = 1.0F;
-
         event.getInput().jumping = forcedJump;
         event.getInput().shiftKeyDown = false;
 
-        /*
-         * These fields exist in current NeoForge mappings.
-         * If your mappings complain, remove this block only.
-         */
         event.getInput().up = true;
         event.getInput().down = false;
         event.getInput().left = false;
         event.getInput().right = false;
 
         player.setSprinting(true);
+    }
+
+    private static boolean isIntegratedServerPaused(Minecraft mc) {
+        return mc.hasSingleplayerServer() && mc.isPaused();
     }
 
     private static void tickWander(LocalPlayer player) {
@@ -152,113 +126,64 @@ public final class CyberpsychosisInputSuppressor {
     }
 
     private static LivingEntity findTarget(LocalPlayer player) {
-        if (player.level() == null) {
-            return null;
-        }
+        if (player.level() == null) return null;
 
-        List<LivingEntity> candidates = player.level().getEntitiesOfClass(
-                LivingEntity.class,
-                player.getBoundingBox().inflate(TARGET_SEARCH_RADIUS),
-                entity -> isCandidateTarget(player, entity)
-        );
+        List<LivingEntity> candidates = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(TARGET_SEARCH_RADIUS), entity -> isCandidateTarget(player, entity));
 
-        if (candidates.isEmpty()) {
-            return null;
-        }
+        if (candidates.isEmpty()) return null;
 
-        return candidates.stream()
-                .min(Comparator
-                        .comparingInt(CyberpsychosisInputSuppressor::targetPriority)
-                        .thenComparingDouble(player::distanceToSqr))
-                .orElse(null);
+        return candidates.stream().min(Comparator.comparingInt(CyberpsychosisInputSuppressor::targetPriority).thenComparingDouble(player::distanceToSqr)).orElse(null);
     }
 
     private static boolean isCandidateTarget(LocalPlayer player, LivingEntity entity) {
-        if (entity == player) {
-            return false;
-        }
+        if (entity == player) return false;
+        if (!entity.isAlive()) return false;
+        if (!EntitySelector.NO_SPECTATORS.test(entity)) return false;
 
-        if (!entity.isAlive()) {
-            return false;
-        }
-
-        if (!EntitySelector.NO_SPECTATORS.test(entity)) {
-            return false;
-        }
-
-        if (entity instanceof Player otherPlayer) {
-            return !otherPlayer.isCreative() && !otherPlayer.isSpectator();
-        }
+        if (entity instanceof Player otherPlayer) return !otherPlayer.isCreative() && !otherPlayer.isSpectator();
 
         return player.distanceToSqr(entity) <= TARGET_SEARCH_RADIUS * TARGET_SEARCH_RADIUS;
     }
 
     private static boolean isValidTarget(LocalPlayer player, LivingEntity target) {
-        if (target == null || !target.isAlive()) {
-            return false;
-        }
+        if (target == null || !target.isAlive()) return false;
+        if (target == player) return false;
+        if (target.level() != player.level()) return false;
 
-        if (target == player) {
-            return false;
-        }
-
-        if (target.level() != player.level()) {
-            return false;
-        }
-
-        if (target instanceof Player otherPlayer && (otherPlayer.isCreative() || otherPlayer.isSpectator())) {
-            return false;
-        }
+        if (target instanceof Player otherPlayer && (otherPlayer.isCreative() || otherPlayer.isSpectator())) return false;
 
         return player.distanceToSqr(target) <= TARGET_SEARCH_RADIUS * TARGET_SEARCH_RADIUS;
     }
 
     private static int targetPriority(LivingEntity entity) {
-        if (entity instanceof Player) {
-            return 0;
-        }
-
-        if (entity instanceof AbstractVillager) {
-            return 1;
-        }
-
-        if (entity instanceof Animal) {
-            return 2;
-        }
-
-        if (entity instanceof Enemy) {
-            return 3;
-        }
+        if (entity instanceof Player) return 0;
+        if (entity instanceof AbstractVillager) return 1;
+        if (entity instanceof Animal) return 2;
+        if (entity instanceof Enemy) return 3;
 
         return 4;
     }
 
-    private static boolean shouldJumpAtTarget(LocalPlayer player, LivingEntity target) {
-        if (target == null) {
-            return false;
-        }
+    private static boolean shouldAutoJump(LocalPlayer player, LivingEntity target) {
+        if (!player.onGround()) return false;
+        if (player.horizontalCollision) return true;
 
-        if (!hasInstalledItem(player, PNEUMATIC_CALVES_ID)) {
-            return false;
-        }
+        Vec3 movement = player.getDeltaMovement();
+        double horizontalMovementSqr = movement.x * movement.x + movement.z * movement.z;
 
-        if (!player.onGround()) {
-            return false;
-        }
+        if (horizontalMovementSqr < 0.0004D && player.zza > 0.0F) return true;
+        if (target == null) return false;
 
         double targetDeltaY = target.getY() - player.getY();
-        if (targetDeltaY < TARGET_ABOVE_JUMP_THRESHOLD) {
-            return false;
-        }
+        if (targetDeltaY < TARGET_ABOVE_JUMP_THRESHOLD) return false;
 
-        double horizontalDistanceSqr = horizontalDistanceSqr(player.position(), target.position());
-
-        return horizontalDistanceSqr <= 8.0D * 8.0D;
+        return horizontalDistanceSqr(player.position(), target.position()) <= TARGET_JUMP_MAX_DISTANCE * TARGET_JUMP_MAX_DISTANCE;
     }
 
     private static double horizontalDistanceSqr(Vec3 a, Vec3 b) {
         double dx = a.x - b.x;
         double dz = a.z - b.z;
+
         return dx * dx + dz * dz;
     }
 
@@ -269,7 +194,7 @@ public final class CyberpsychosisInputSuppressor {
         double horizontal = Math.sqrt(delta.x * delta.x + delta.z * delta.z);
 
         float wantedYaw = (float) (Mth.atan2(delta.z, delta.x) * (180.0D / Math.PI)) - 90.0F;
-        float wantedPitch = (float) (-(Mth.atan2(delta.y, horizontal) * (180.0D / Math.PI)));
+        float wantedPitch = (float) -(Mth.atan2(delta.y, horizontal) * (180.0D / Math.PI));
 
         float yaw = rotateToward(player.getYRot(), wantedYaw, maxYawChange);
         float pitch = rotateToward(player.getXRot(), wantedPitch, maxPitchChange);
@@ -288,58 +213,13 @@ public final class CyberpsychosisInputSuppressor {
     private static float rotateToward(float current, float target, float maxChange) {
         float delta = Mth.wrapDegrees(target - current);
         delta = Mth.clamp(delta, -maxChange, maxChange);
+
         return current + delta;
     }
 
-    private static boolean hasInstalledItem(LocalPlayer player, ResourceLocation id) {
-        if (player == null || id == null) {
-            return false;
-        }
-
-        if (!player.hasData(ModAttachments.CYBERWARE)) {
-            return false;
-        }
-
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
-        if (data == null) {
-            return false;
-        }
-
-        var item = BuiltInRegistries.ITEM.get(id);
-        if (item == null) {
-            return false;
-        }
-
-        for (var entry : data.getAll().entrySet()) {
-            var arr = entry.getValue();
-            if (arr == null) {
-                continue;
-            }
-
-            for (var cw : arr) {
-                if (cw == null) {
-                    continue;
-                }
-
-                ItemStack stack = cw.getItem();
-                if (stack == null || stack.isEmpty()) {
-                    continue;
-                }
-
-                if (stack.is(item)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private static boolean hasEffect(LocalPlayer player, Holder<MobEffect> effect) {
-        for (MobEffectInstance inst : player.getActiveEffects()) {
-            if (inst != null && inst.is(effect)) {
-                return true;
-            }
+        for (MobEffectInstance instance : player.getActiveEffects()) {
+            if (instance != null && instance.is(effect)) return true;
         }
 
         return false;

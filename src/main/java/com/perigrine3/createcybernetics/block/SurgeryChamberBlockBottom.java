@@ -2,7 +2,6 @@ package com.perigrine3.createcybernetics.block;
 
 import com.mojang.serialization.MapCodec;
 import com.perigrine3.createcybernetics.api.CyberwareSlot;
-import com.perigrine3.createcybernetics.block.entity.RobosurgeonBlockEntity;
 import com.perigrine3.createcybernetics.common.capabilities.ModAttachments;
 import com.perigrine3.createcybernetics.common.capabilities.PlayerCyberwareData;
 import com.perigrine3.createcybernetics.common.surgery.SurgeryChamberSurgeryHandler;
@@ -170,25 +169,39 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide) {
-            boolean newState = !state.getValue(OPENED);
-
-            if (newState && level instanceof net.minecraft.server.level.ServerLevel sl) {
-                SurgeryChamberSurgeryHandler.cancelIfActive(sl, pos, true);
-            }
-
-            level.setBlock(pos, state.setValue(OPENED, newState), 3);
-
-            BlockPos topPos = pos.above();
-            BlockState topState = level.getBlockState(topPos);
-            if (topState.is(ModBlocks.SURGERY_CHAMBER_TOP.get())) {
-                level.setBlock(topPos, topState.setValue(SurgeryChamberBlockTop.OPENED, newState), 3);
-            }
-
-            level.playSound(null, pos, newState ? net.minecraft.sounds.SoundEvents.IRON_DOOR_OPEN
-                    : net.minecraft.sounds.SoundEvents.IRON_DOOR_CLOSE, SoundSource.BLOCKS, 1.0f, 1.0f);
-        }
+        toggleChamber(level, pos, player);
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    public static void toggleChamber(Level level, BlockPos bottomPos, Player player) {
+        if (level.isClientSide) return;
+
+        BlockState bottomState = level.getBlockState(bottomPos);
+        if (!bottomState.is(ModBlocks.SURGERY_CHAMBER_BOTTOM.get())) return;
+
+        BlockPos topPos = bottomPos.above();
+        BlockState topState = level.getBlockState(topPos);
+        if (!topState.is(ModBlocks.SURGERY_CHAMBER_TOP.get())) return;
+
+        boolean opened = !bottomState.getValue(OPENED);
+
+        if (opened && level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            SurgeryChamberSurgeryHandler.cancelIfActive(serverLevel, bottomPos, true);
+        }
+
+        BlockState newBottomState = bottomState.setValue(OPENED, opened);
+        if (opened) {
+            newBottomState = newBottomState.setValue(SURGERY_DONE, false);
+        }
+
+        level.setBlock(bottomPos, newBottomState, 3);
+        level.setBlock(topPos, topState.setValue(SurgeryChamberBlockTop.OPENED, opened), 3);
+
+        level.playSound(null, bottomPos, opened ? net.minecraft.sounds.SoundEvents.IRON_DOOR_OPEN : net.minecraft.sounds.SoundEvents.IRON_DOOR_CLOSE, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+        if (!opened && level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            SurgeryChamberSurgeryHandler.tryStartForClosedChamber(serverLevel, bottomPos);
+        }
     }
 
     @Override
@@ -217,52 +230,6 @@ public class SurgeryChamberBlockBottom extends HorizontalDirectionalBlock {
             }
             super.onRemove(state, level, pos, newState, isMoving);
         }
-    }
-
-    @Override
-    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (level.isClientSide) return;
-        if (!(entity instanceof net.minecraft.server.level.ServerPlayer player)) return;
-
-        BlockPos topPos = pos.above();
-        BlockState topState = level.getBlockState(topPos);
-        if (!topState.is(ModBlocks.SURGERY_CHAMBER_TOP.get())) return;
-
-        boolean connected = topState.getValue(SurgeryChamberBlockTop.CONNECTED);
-        boolean closed = !topState.getValue(SurgeryChamberBlockTop.OPENED) && !state.getValue(OPENED);
-
-        if (!connected || !closed) return;
-        if (state.getValue(SURGERY_DONE)) return;
-
-        BlockPos surgeonPos = topPos.above();
-        if (!level.getBlockState(surgeonPos).is(ModBlocks.ROBOSURGEON.get())) return;
-        if (!(level.getBlockEntity(surgeonPos) instanceof RobosurgeonBlockEntity surgeon)) return;
-
-        if (!hasPendingSurgeryWork(surgeon)) return;
-
-        SurgeryChamberSurgeryHandler.startOrRefresh(player, level, pos, surgeon);
-    }
-
-    private static boolean hasPendingSurgeryWork(RobosurgeonBlockEntity surgeon) {
-        boolean[] marked = surgeon.markedForRemoval;
-        if (marked != null) {
-            for (boolean b : marked) {
-                if (b) return true;
-            }
-        }
-
-        boolean[] staged = surgeon.staged;
-        if (staged != null) {
-            int slots = surgeon.inventory.getSlots();
-            int len = Math.min(staged.length, slots);
-
-            for (int i = 0; i < len; i++) {
-                if (!staged[i]) continue;
-                if (!surgeon.inventory.getStackInSlot(i).isEmpty()) return true;
-            }
-        }
-
-        return false;
     }
 
     private static VoxelShape rotateShapeFromNorth(Direction facing, VoxelShape shapeNorth) {

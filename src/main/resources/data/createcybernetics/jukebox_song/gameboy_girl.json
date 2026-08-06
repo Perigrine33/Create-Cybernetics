@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.createcybernetics.music_disc_gameboy_girl.desc"
+  },
+  "length_in_seconds": 168.0,
+  "sound_event": "createcybernetics:gameboy_girl"
+}

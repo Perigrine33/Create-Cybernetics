@@ -94,6 +94,21 @@ public class ModItems {
                 }});
     public static final DeferredItem<Item> EMP_GRENADE = ITEMS.register("emp_grenade",
             () -> new EmpGrenadeItem(new Item.Properties()));
+    public static final DeferredItem<Item> LINK_CABLE = ITEMS.register("link_cable",
+            () -> new Item(new Item.Properties()){
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.link_cable").withStyle(ChatFormatting.GRAY));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }});
+
+    public static final DeferredItem<Item> TAR = ITEMS.register("tar",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> UNREFINED_POLYMER = ITEMS.register("unrefined_polymer",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> PLASTIC_SHEET = ITEMS.register("plastic_sheet",
+            () -> new Item(new Item.Properties()));
+
     public static final DeferredItem<Item> DATURA_FLOWER = ITEMS.register("datura_flower",
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> DATURA_SEED_POD = ITEMS.register("datura_seed_pod",
@@ -208,6 +223,25 @@ public class ModItems {
             () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.NEUROHACK_KEY)));
     public static final DeferredItem<Item> MUSIC_DISC_THE_GRID = ITEMS.register("music_disc_the_grid",
             () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.THE_GRID_KEY)));
+
+    public static final DeferredItem<Item> MUSIC_DISC_DANGER_SNOW = ITEMS.register("music_disc_danger_snow",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.DANGER_SNOW_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_DARK = ITEMS.register("music_disc_dark",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.DARK_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_MY_RETRO_JACKET = ITEMS.register("music_disc_my_retro_jacket",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.MY_RETRO_JACKET_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_GAMEBOY_GIRL = ITEMS.register("music_disc_gameboy_girl",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.GAMEBOY_GIRL_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_NIGHTMARES_ON_HAUPTSTRASSE = ITEMS.register("music_disc_nightmares_on_hauptstrasse",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.NIGHTMARES_ON_HAUPTSTRASSE_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_INTERGALACTIC_WALK = ITEMS.register("music_disc_intergalactic_walk",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.INTERGALACTIC_WALK_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_SENSATION = ITEMS.register("music_disc_sensation",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.SENSATION_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_SHOTGUN = ITEMS.register("music_disc_shotgun",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.SHOTGUN_KEY)));
+    public static final DeferredItem<Item> MUSIC_DISC_DESCENT_INTO_MADNESS = ITEMS.register("music_disc_descent_into_madness",
+            () -> new Item(new Item.Properties().stacksTo(1).jukeboxPlayable(ModSounds.DESCENT_INTO_MADNESS_KEY)));
 
 
 //SPAWN EGGS
@@ -427,8 +461,8 @@ public class ModItems {
 
                     InfologGuideSection.whenModLoaded("creatingspace","item.createcybernetics.data_shard_infolog_fbc_guide.copernicus"),
                     InfologGuideSection.whenModLoaded("creatingspace","item.createcybernetics.data_shard_infolog_fbc_guide.linebreak"),
-                    InfologGuideSection.whenModLoaded("northstar-redux","item.createcybernetics.data_shard_infolog_fbc_guide.copernicus"),
-                    InfologGuideSection.whenModLoaded("northstar-redux","item.createcybernetics.data_shard_infolog_fbc_guide.linebreak"),
+                    InfologGuideSection.whenModLoaded("northstar","item.createcybernetics.data_shard_infolog_fbc_guide.copernicus"),
+                    InfologGuideSection.whenModLoaded("northstar","item.createcybernetics.data_shard_infolog_fbc_guide.linebreak"),
 
                     InfologGuideSection.always("item.createcybernetics.data_shard_infolog_fbc_guide.genos"),
                     InfologGuideSection.always("item.createcybernetics.data_shard_infolog_fbc_guide.linebreak"),
@@ -2437,6 +2471,20 @@ public class ModItems {
                     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
                 }
             });
+    public static final DeferredItem<Item> BRAINUPGRADES_COAXIALPORT = ITEMS.register("brainupgrades_coaxialport",
+        () -> new CoaxialPortItem(new Item.Properties().stacksTo(18), 5) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrades_coaxial_port.tooltip1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.brainupgrade_tooltip"));
+                        tooltipComponents.add(Component.translatable("tooltip.createcybernetics.hold_shift_down"));
+                    }
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
 
     //HEART UPGRADES
     public static final DeferredItem<Item> HEARTUPGRADES_CYBERHEART = ITEMS.register("heartupgrades_cyberheart",
@@ -3770,6 +3818,14 @@ public class ModItems {
                 }
             });
     public static final DeferredItem<Item> SCAVENGED_ICEPROTOCOL = ITEMS.register("scavenged_iceprotocol",
+            () -> new Item(new Item.Properties().stacksTo(64)) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    tooltipComponents.add(Component.translatable("tooltip.createcybernetics.scavenged_tooltip"));
+                    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                }
+            });
+    public static final DeferredItem<Item> SCAVENGED_COAXIALPORT = ITEMS.register("scavenged_coaxialport",
             () -> new Item(new Item.Properties().stacksTo(64)) {
                 @Override
                 public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {

@@ -14,9 +14,10 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import java.util.ArrayList;
 import java.util.List;
 
-@EventBusSubscriber(modid = CreateCybernetics.MODID, bus = EventBusSubscriber.Bus.MOD)
-public class Config {
+public final class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+
+    private Config() {}
 
     public static final ModConfigSpec.IntValue HUMANITY = BUILDER
             .comment("Base Humanity Value")
@@ -140,7 +141,10 @@ public class Config {
 
 
     public static final ModConfigSpec.IntValue CYBERZOMBIE_SPAWN_WEIGHT = BUILDER
-            .comment("Cyberzombie spawn weight. Set to 0 to disable natural spawning.")
+            .comment("Cyberzombie relative replacement weight against vanilla Zombies.")
+            .comment("Vanilla Zombies use an effective baseline weight of 100.")
+            .comment("A value of 10 gives Cyberzombies 10 shares against 100 vanilla Zombie shares.")
+            .comment("Set to 0 to disable Zombie replacement.")
             .defineInRange("cyberzombieSpawn", 10, 0, 1000);
 
     public static final ModConfigSpec.IntValue CYBERZOMBIE_MIN_GROUP = BUILDER
@@ -152,7 +156,10 @@ public class Config {
             .defineInRange("cyberzombieMax", 3, 1, 100);
 
     public static final ModConfigSpec.IntValue CYBERSKELETON_SPAWN_WEIGHT = BUILDER
-            .comment("Cyberskeleton spawn weight. Set to 0 to disable natural spawning.")
+            .comment("Cyberskeleton relative replacement weight against vanilla Skeletons.")
+            .comment("Vanilla Skeletons use an effective baseline weight of 100.")
+            .comment("A value of 10 gives Cyberskeletons 10 shares against 100 vanilla Skeleton shares.")
+            .comment("Set to 0 to disable Skeleton replacement.")
             .defineInRange("cyberskeletonSpawn", 10, 0, 1000);
 
     public static final ModConfigSpec.IntValue CYBERSKELETON_MIN_GROUP = BUILDER
@@ -245,26 +252,11 @@ public class Config {
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 
-    public static void bake() {
-        ConfigValues.BASE_HUMANITY = HUMANITY.get();
-        ConfigValues.KEEP_CYBERWARE = KEEP_CYBERWARE.get();
-        ConfigValues.SURGERY_DAMAGE_SCALING = SURGERY_DAMAGE_SCALING.get();
-
+    static void bakeRollTables() {
         ConfigValues.ENGINEERING_DECONSTRUCT_ROLLS = parseEngineeringRolls(ENGINEERING_DECONSTRUCT_ROLLS.get());
         ConfigValues.ENGINEERING_SCAVENGED_DECONSTRUCT_ROLLS = parseEngineeringRolls(ENGINEERING_SCAVENGED_DECONSTRUCT_ROLLS.get());
-
         ConfigValues.ENTITY_SLOT_ROLLS = parseEntitySlotRolls(ENTITY_SLOT_ROLLS.get());
         ConfigValues.ENTITY_CYBERWARE_ROLLS = parseEntityCyberwareRolls(ENTITY_CYBERWARE_ROLLS.get());
-    }
-
-    @SubscribeEvent
-    public static void onConfigLoading(ModConfigEvent.Loading event) {
-        if (event.getConfig().getSpec() == SPEC) bake();
-    }
-
-    @SubscribeEvent
-    public static void onConfigReloading(ModConfigEvent.Reloading event) {
-        if (event.getConfig().getSpec() == SPEC) bake();
     }
 
     private static List<String> defaultEngineeringDeconstructRolls() {
@@ -509,7 +501,6 @@ public class Config {
 
             defaults.add(tableId + ",createcybernetics:heartupgrades_cyberheart,HEART,8");
             defaults.add(tableId + ",createcybernetics:heartupgrades_coupler,HEART,5");
-            defaults.add(tableId + ",createcybernetics:heartupgrades_creeperheart,HEART,1");
             defaults.add(tableId + ",createcybernetics:heartupgrades_defibrillator,HEART,4");
             defaults.add(tableId + ",createcybernetics:heartupgrades_stemcell,HEART,4");
             defaults.add(tableId + ",createcybernetics:heartupgrades_platelets,HEART,4");

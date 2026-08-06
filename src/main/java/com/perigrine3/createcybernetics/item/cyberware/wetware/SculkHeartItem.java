@@ -89,16 +89,7 @@ public class SculkHeartItem extends Item implements ICyberwareItem {
         if (level.isClientSide) return;
         if ((player.tickCount % 30) != 0) return;
 
-        level.playSound(
-                null,
-                player.getX(),
-                player.getY(),
-                player.getZ(),
-                SoundEvents.WARDEN_HEARTBEAT,
-                SoundSource.PLAYERS,
-                1.0F,
-                1.0F
-        );
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 0.5F, 1.0F);
 
         AABB box = player.getBoundingBox().inflate(10.0D);
         List<Player> nearbyPlayers = level.getEntitiesOfClass(Player.class, box, p -> p.isAlive() && p != player);

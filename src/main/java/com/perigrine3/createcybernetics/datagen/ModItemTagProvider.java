@@ -319,6 +319,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get())
                 .add(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get())
                 .add(ModItems.BRAINUPGRADES_ICEPROTOCOL.get())
+                .add(ModItems.BRAINUPGRADES_COAXIALPORT.get())
                 .add(ModItems.BRAINUPGRADES_CYBERBRAIN.get())
                 .add(ModItems.HEARTUPGRADES_CYBERHEART.get())
                 .add(ModItems.HEARTUPGRADES_COUPLER.get())
@@ -599,6 +600,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.BONEUPGRADES_CAPACITORFRAME.get())
                 .add(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get())
                 .add(ModItems.BRAINUPGRADES_ICEPROTOCOL.get())
+                .add(ModItems.BRAINUPGRADES_COAXIALPORT.get())
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_consciousnesstransmitter"))
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_corticalstack"))
                 .addOptional(resourceLocation("createcybernetics:brainupgrades_spelljammer"));
@@ -667,6 +669,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SCAVENGED_CHIPWARESLOTS.get())
                 .add(ModItems.SCAVENGED_NEURALPROCESSOR.get())
                 .add(ModItems.SCAVENGED_ICEPROTOCOL.get())
+                .add(ModItems.SCAVENGED_COAXIALPORT.get())
                 .add(ModItems.SCAVENGED_IDEM.get())
 
                 .add(ModItems.SCAVENGED_CYBERHEART.get())
@@ -1136,7 +1139,17 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.MUSIC_DISC_CYBERPSYCHO.get())
                 .add(ModItems.MUSIC_DISC_THE_GRID.get())
                 .add(ModItems.MUSIC_DISC_NEON_OVERLORDS.get())
-                .add(ModItems.MUSIC_DISC_CYBERPSYCHO.get());
+                .add(ModItems.MUSIC_DISC_CYBERPSYCHO.get())
+
+                .add(ModItems.MUSIC_DISC_DANGER_SNOW.get())
+                .add(ModItems.MUSIC_DISC_DARK.get())
+                .add(ModItems.MUSIC_DISC_MY_RETRO_JACKET.get())
+                .add(ModItems.MUSIC_DISC_GAMEBOY_GIRL.get())
+                .add(ModItems.MUSIC_DISC_NIGHTMARES_ON_HAUPTSTRASSE.get())
+                .add(ModItems.MUSIC_DISC_INTERGALACTIC_WALK.get())
+                .add(ModItems.MUSIC_DISC_SENSATION.get())
+                .add(ModItems.MUSIC_DISC_SHOTGUN.get())
+                .add(ModItems.MUSIC_DISC_DESCENT_INTO_MADNESS.get());
 
         tag(ItemTags.TRIMMABLE_ARMOR)
                 .add(ModItems.BASECYBERWARE_RIGHTLEG.get())

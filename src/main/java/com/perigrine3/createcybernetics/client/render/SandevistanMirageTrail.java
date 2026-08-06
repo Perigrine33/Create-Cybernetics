@@ -3,6 +3,8 @@ package com.perigrine3.createcybernetics.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.api.client.ISandevistanSkinOverlayProvider;
+import com.perigrine3.createcybernetics.api.client.SandevistanSkinOverlayApi;
 import com.perigrine3.createcybernetics.client.skin.SkinHighlight;
 import com.perigrine3.createcybernetics.client.skin.SkinModifier;
 import com.perigrine3.createcybernetics.client.skin.SkinModifierManager;
@@ -557,9 +559,12 @@ public final class SandevistanMirageTrail {
         int modCount = (mods == null) ? 0 : mods.size();
         int hiCount = (highs == null) ? 0 : highs.size();
 
+        List<ISandevistanSkinOverlayProvider.OverlayPass> externalPasses = SandevistanSkinOverlayApi.capture(player);
+        int externalCount = externalPasses.size();
+
         if (modCount == 0 && hiCount == 0) return SkinSnapshot.empty();
 
-        OverlayPass[] passes = new OverlayPass[modCount + hiCount];
+        OverlayPass[] passes = new OverlayPass[modCount + hiCount + externalCount];
 
         boolean hideHat = false;
         boolean hideJacket = false;
@@ -614,6 +619,11 @@ public final class SandevistanMirageTrail {
                 int tint = extractTint(h, 0xFFFFFFFF);
 
                 passes[idx++] = new OverlayPass(tex, tint, true);
+            }
+
+            for (ISandevistanSkinOverlayProvider.OverlayPass pass : externalPasses) {
+                if (pass == null || pass.texture() == null) continue;
+                passes[idx++] = new OverlayPass(pass.texture(), pass.color(), pass.fullBright());
             }
         }
 

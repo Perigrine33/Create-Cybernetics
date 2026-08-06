@@ -394,9 +394,9 @@ public final class PlayerAttachmentManager {
     // STATE BUILD
     // =========================
     public static PlayerAttachmentState getState(AbstractClientPlayer player) {
-        if (!player.hasData(ModAttachments.CYBERWARE)) return null;
+        if (player == null) return null;
 
-        PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+        PlayerCyberwareData data = PlayerCyberwareData.getForVisual(player, player.registryAccess());
         if (data == null) return null;
 
         PlayerAttachmentState state = STATES.computeIfAbsent(player.getUUID(), id -> new PlayerAttachmentState());
@@ -773,9 +773,10 @@ public final class PlayerAttachmentManager {
         }
 
         private @Nullable PlayerCyberwareData dataOrNull() {
-            Player p = (renderPlayer != null) ? renderPlayer : Minecraft.getInstance().player;
-            if (p == null || !p.hasData(ModAttachments.CYBERWARE)) return null;
-            return p.getData(ModAttachments.CYBERWARE);
+            Player player = renderPlayer != null ? renderPlayer : Minecraft.getInstance().player;
+            if (player == null) return null;
+
+            return PlayerCyberwareData.getForVisual(player, player.registryAccess());
         }
 
         @Override

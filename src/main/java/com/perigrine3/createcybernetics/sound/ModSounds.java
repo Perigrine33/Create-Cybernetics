@@ -29,7 +29,7 @@ public class ModSounds {
 //EFFECT SOUNDS
     public static final Supplier<SoundEvent> AUTOINJECTOR = registerSoundEvent("autoinjector");
     public static final Supplier<SoundEvent> GLITCHY = registerSoundEvent("glitchy");
-
+    public static final Supplier<SoundEvent> CYBERPSYCHOSIS_SCARES = registerSoundEvent("cyberpsychosis_scares");
 
 //ENTITY SOUNDS
     public static final Supplier<SoundEvent> SMASHER_IDLE = registerSoundEvent("smasher_idle");
@@ -37,7 +37,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> PIGSTROM_IDLE = registerSoundEvent("pigstrom_idle");
 
 
-    //MUSIC DISCS
+//MUSIC DISCS
     public static final Supplier<SoundEvent> CYBERPSYCHO = registerSoundEvent("cyberpsycho");
     public static final ResourceKey<JukeboxSong> CYBERPSYCHO_KEY = createSong("cyberpsycho");
     public static final Supplier<SoundEvent> NEON_OVERLORDS = registerSoundEvent("neon_overlords");
@@ -46,6 +46,25 @@ public class ModSounds {
     public static final ResourceKey<JukeboxSong> NEUROHACK_KEY = createSong("neurohack");
     public static final Supplier<SoundEvent> THE_GRID = registerSoundEvent("the_grid");
     public static final ResourceKey<JukeboxSong> THE_GRID_KEY = createSong("the_grid");
+
+    public static final Supplier<SoundEvent> DANGER_SNOW = registerSoundEvent("danger_snow");
+    public static final ResourceKey<JukeboxSong> DANGER_SNOW_KEY = createSong("danger_snow");
+    public static final Supplier<SoundEvent> DESCENT_INTO_MADNESS = registerSoundEvent("descent_into_madness");
+    public static final ResourceKey<JukeboxSong> DESCENT_INTO_MADNESS_KEY = createSong("descent_into_madness");
+    public static final Supplier<SoundEvent> DARK = registerSoundEvent("dark");
+    public static final ResourceKey<JukeboxSong> DARK_KEY = createSong("dark");
+    public static final Supplier<SoundEvent> MY_RETRO_JACKET = registerSoundEvent("my_retro_jacket");
+    public static final ResourceKey<JukeboxSong> MY_RETRO_JACKET_KEY = createSong("my_retro_jacket");
+    public static final Supplier<SoundEvent> GAMEBOY_GIRL = registerSoundEvent("gameboy_girl");
+    public static final ResourceKey<JukeboxSong> GAMEBOY_GIRL_KEY = createSong("gameboy_girl");
+    public static final Supplier<SoundEvent> NIGHTMARES_ON_HAUPTSTRASSE = registerSoundEvent("nightmares_on_hauptstrasse");
+    public static final ResourceKey<JukeboxSong> NIGHTMARES_ON_HAUPTSTRASSE_KEY = createSong("nightmares_on_hauptstrasse");
+    public static final Supplier<SoundEvent> INTERGALACTIC_WALK = registerSoundEvent("intergalactic_walk");
+    public static final ResourceKey<JukeboxSong> INTERGALACTIC_WALK_KEY = createSong("intergalactic_walk");
+    public static final Supplier<SoundEvent> SENSATION = registerSoundEvent("sensation");
+    public static final ResourceKey<JukeboxSong> SENSATION_KEY = createSong("sensation");
+    public static final Supplier<SoundEvent> SHOTGUN = registerSoundEvent("shotgun");
+    public static final ResourceKey<JukeboxSong> SHOTGUN_KEY = createSong("shotgun");
 
     private static ResourceKey<JukeboxSong> createSong(String name) {
         return ResourceKey.create(Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath(CreateCybernetics.MODID, name));

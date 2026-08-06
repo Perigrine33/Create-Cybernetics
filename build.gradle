@@ -151,7 +151,7 @@ dependencies {
 
     implementation ("curse.maven:farmers-delight-398521:6917256")
 
-    implementation ("curse.maven:cold-sweat-506194:7316464")
+    //implementation ("curse.maven:cold-sweat-506194:7316464")
 
     implementation "curse.maven:better-combat-by-daedelus-639842:7348161"
     implementation "curse.maven:playeranimator-658587:7389814"
@@ -220,6 +220,9 @@ dependencies {
     //compileOnly "curse.maven:neosync-1521718:8233799"
     implementation "curse.maven:neosync-1521718:8233799"
 
+    implementation "curse.maven:relics-mod-445274:8158315"
+    implementation "curse.maven:shatterbyte-lib-916747:8040848"
+
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -252,12 +255,18 @@ neoForge.ideSyncTask generateModMetadata
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
+            groupId = mod_group_id
+            artifactId = mod_id
+            version = mod_version
+
             from components.java
         }
     }
+
     repositories {
         maven {
-            url "file://${project.projectDir}/repo"
+            name = "projectLocal"
+            url = layout.projectDirectory.dir("repo")
         }
     }
 }

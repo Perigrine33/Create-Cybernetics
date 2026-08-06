@@ -60,16 +60,16 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.CEREBELLUM);
                         output.accept(ModItems.FACEPLATE);
                         output.accept(ModItems.EMP_GRENADE);
+                        output.accept(ModItems.LINK_CABLE);
                         output.accept(ModItems.EXOSUIT1);
+
+                        output.accept(ModItems.TAR);
+                        output.accept(ModItems.UNREFINED_POLYMER);
+                        output.accept(ModItems.PLASTIC_SHEET);
 
                         output.accept(ModItems.COPPER_UPGRADE_TEMPLATE);
                         output.accept(ModItems.IRON_UPGRADE_TEMPLATE);
                         output.accept(ModItems.GOLD_UPGRADE_TEMPLATE);
-
-                        output.accept(ModItems.MUSIC_DISC_CYBERPSYCHO);
-                        output.accept(ModItems.MUSIC_DISC_NEON_OVERLORDS);
-                        output.accept(ModItems.MUSIC_DISC_NEUROHACK);
-                        output.accept(ModItems.MUSIC_DISC_THE_GRID);
 
                         //COMPONENTS
                         output.accept(ModItems.COMPONENT_ACTUATOR);

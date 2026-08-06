@@ -31,6 +31,78 @@
       }
     ]
   },
+  "danger_snow": {
+    "sounds": [
+      {
+        "name": "createcybernetics:danger_snow",
+        "stream": true
+      }
+    ]
+  },
+  "dark": {
+    "sounds": [
+      {
+        "name": "createcybernetics:dark",
+        "stream": true
+      }
+    ]
+  },
+  "my_retro_jacket": {
+    "sounds": [
+      {
+        "name": "createcybernetics:my_retro_jacket",
+        "stream": true
+      }
+    ]
+  },
+  "gameboy_girl": {
+    "sounds": [
+      {
+        "name": "createcybernetics:gameboy_girl",
+        "stream": true
+      }
+    ]
+  },
+  "nightmares_on_hauptstrasse": {
+    "sounds": [
+      {
+        "name": "createcybernetics:nightmares_on_hauptstrasse",
+        "stream": true
+      }
+    ]
+  },
+  "intergalactic_walk": {
+    "sounds": [
+      {
+        "name": "createcybernetics:intergalactic_walk",
+        "stream": true
+      }
+    ]
+  },
+  "sensation": {
+    "sounds": [
+      {
+        "name": "createcybernetics:sensation",
+        "stream": true
+      }
+    ]
+  },
+  "shotgun": {
+    "sounds": [
+      {
+        "name": "createcybernetics:shotgun",
+        "stream": true
+      }
+    ]
+  },
+  "descent_into_madness": {
+    "sounds": [
+      {
+        "name": "createcybernetics:descent_into_madness",
+        "stream": true
+      }
+    ]
+  },
   "metal_detector_beeps": {
     "subtitle": "sounds.createcybernetics.metal_detector_beeps",
     "sounds": [
@@ -77,6 +149,19 @@
       {"name": "createcybernetics:glitch9"},
       {"name": "createcybernetics:glitch10"},
       {"name": "createcybernetics:glitch11"}
+    ]
+  },
+  "cyberpsychosis_scares": {
+    "subtitle": "sounds.createcybernetics.cyberpsychosis_scares",
+    "sounds": [
+      {"name": "createcybernetics:psycho_breath"},
+      {"name": "createcybernetics:psycho_heartbeat_whining"},
+      {"name": "createcybernetics:psycho_heartbeat_whining"},
+      {"name": "createcybernetics:psycho_heartbeat_anxiety"},
+      {"name": "createcybernetics:psycho_heartbeat_drone"},
+      {"name": "createcybernetics:psycho_paranoia"},
+      {"name": "createcybernetics:psycho_heartbeat"},
+      {"name": "createcybernetics:psycho_heartbeat_whine"}
     ]
   },
   "surgery": {

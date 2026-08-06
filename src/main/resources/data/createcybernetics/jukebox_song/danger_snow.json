@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.createcybernetics.music_disc_danger_snow.desc"
+  },
+  "length_in_seconds": 134.0,
+  "sound_event": "createcybernetics:danger_snow"
+}

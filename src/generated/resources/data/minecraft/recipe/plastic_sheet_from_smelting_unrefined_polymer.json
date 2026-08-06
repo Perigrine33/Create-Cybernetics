@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "plastic_sheet",
+  "ingredient": {
+    "item": "createcybernetics:unrefined_polymer"
+  },
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:plastic_sheet"
+  }
+}

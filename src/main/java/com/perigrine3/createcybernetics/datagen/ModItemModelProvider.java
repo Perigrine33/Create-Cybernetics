@@ -31,7 +31,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.XP_CAPSULE.get());
         basicItem(ModItems.FACEPLATE.get());
         basicItem(ModItems.NETHERITE_QPU.get());
+        basicItem(ModItems.LINK_CABLE.get());
         basicItem(ModItems.EXOSUIT1.get());
+
+        basicItem(ModItems.TAR.get());
+        basicItem(ModItems.UNREFINED_POLYMER.get());
+        basicItem(ModItems.PLASTIC_SHEET.get());
+
         basicItem(ModItems.DATURA_FLOWER.get());
         basicItem(ModItems.DATURA_SEED_POD.get());
 
@@ -56,6 +62,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.MUSIC_DISC_NEON_OVERLORDS.get());
         basicItem(ModItems.MUSIC_DISC_NEUROHACK.get());
         basicItem(ModItems.MUSIC_DISC_THE_GRID.get());
+
+        basicItem(ModItems.MUSIC_DISC_DANGER_SNOW.get());
+        basicItem(ModItems.MUSIC_DISC_DARK.get());
+        basicItem(ModItems.MUSIC_DISC_MY_RETRO_JACKET.get());
+        basicItem(ModItems.MUSIC_DISC_GAMEBOY_GIRL.get());
+        basicItem(ModItems.MUSIC_DISC_NIGHTMARES_ON_HAUPTSTRASSE.get());
+        basicItem(ModItems.MUSIC_DISC_INTERGALACTIC_WALK.get());
+        basicItem(ModItems.MUSIC_DISC_SENSATION.get());
+        basicItem(ModItems.MUSIC_DISC_SHOTGUN.get());
+        basicItem(ModItems.MUSIC_DISC_DESCENT_INTO_MADNESS.get());
 
 
 
@@ -214,6 +230,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BRAINUPGRADES_CHIPWARESLOTS.get());
         basicItem(ModItems.BRAINUPGRADES_NEURALPROCESSOR.get());
         basicItem(ModItems.BRAINUPGRADES_ICEPROTOCOL.get());
+        basicItem(ModItems.BRAINUPGRADES_COAXIALPORT.get());
     }
 
 //HEART
@@ -348,6 +365,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             basicItem(ModItems.SCAVENGED_IDEM.get());
             basicItem(ModItems.SCAVENGED_CHIPWARESLOTS.get());
             basicItem(ModItems.SCAVENGED_ICEPROTOCOL.get());
+            basicItem(ModItems.SCAVENGED_COAXIALPORT.get());
             basicItem(ModItems.SCAVENGED_NEURALPROCESSOR.get());
             basicItem(ModItems.SCAVENGED_CYBERHEART.get());
             basicItem(ModItems.SCAVENGED_COUPLER.get());

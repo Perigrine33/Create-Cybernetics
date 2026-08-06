@@ -109,6 +109,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(ModItems.TITANIUMINGOT.get())
                 .unlockedBy("has_titaniumingot", has(ModItems.TITANIUMINGOT))
                 .save(recipeOutput, "createcybernetics:titaniumnugget_from_titaniumingot");
+//UNREFINED POLYMER
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.UNREFINED_POLYMER.get(), 3)
+                .requires(ModItems.TAR.get())
+                .requires(Items.SLIME_BALL)
+                .requires(Items.BONE_MEAL)
+                .unlockedBy("has_tar", has(ModItems.TAR.get()))
+                .save(recipeOutput);
 //ANDOUILLE SAUSAGE
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.ANDOUILLE_SAUSAGE.get(), 4)
                 .requires(ModItems.GROUND_OFFAL.get()).requires(ModItems.BODYPART_INTESTINES.get())
@@ -128,6 +135,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 //TITANIUM BLASTING
         oreBlasting(recipeOutput, TITANIUM_SMELTABLES, RecipeCategory.MISC,
                 ModItems.TITANIUMINGOT.get(), 0.25f, 100, "titanium");
+//PLASTIC
+        oreSmelting(recipeOutput, List.of(Items.COAL, Items.CHARCOAL), RecipeCategory.MISC,
+                ModItems.TAR, 0.25f, 200, "tar_from_coal");
+        oreSmelting(recipeOutput, List.of(ModItems.UNREFINED_POLYMER), RecipeCategory.MISC,
+                ModItems.PLASTIC_SHEET.get(), 0.25f, 200, "plastic_sheet");
 
 //SMOOTH TITANIUM
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(ModBlocks.TITANIUM_BLOCK.get()),

@@ -12,7 +12,9 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Comparator;
@@ -33,6 +35,15 @@ public final class CyberpsychosisFugueController {
 
     private static final int RETARGET_INTERVAL_TICKS = 10;
     private static final int FUGUE_SYNC_DURATION_TICKS = 12;
+
+    private static final int MAX_BLOCKED_TARGET_TICKS = 30;
+    private static final int STUCK_CHECK_INTERVAL_TICKS = 20;
+    private static final int MAX_STUCK_CHECKS = 2;
+
+    private static final double MIN_STUCK_MOVEMENT_SQR = 0.25D;
+    private static final double CHASE_SPEED = 0.18D;
+    private static final double CHASE_ACCELERATION = 0.22D;
+    private static final double JUMP_VELOCITY = 0.42D;
 
     private CyberpsychosisFugueController() {
     }
@@ -93,11 +104,14 @@ public final class CyberpsychosisFugueController {
         forceCloseScreens(serverPlayer);
 
         if (serverPlayer.tickCount % RETARGET_INTERVAL_TICKS == 0 || !isValidTarget(serverPlayer, state.target)) {
-            state.target = findTarget(serverPlayer);
+            state.setTarget(findTarget(serverPlayer), serverPlayer.position());
         }
 
         if (isValidTarget(serverPlayer, state.target)) {
             tickAttackTarget(serverPlayer, state, state.target);
+        } else {
+            serverPlayer.setSprinting(false);
+            state.setTarget(null, serverPlayer.position());
         }
     }
 
@@ -109,14 +123,7 @@ public final class CyberpsychosisFugueController {
             return;
         }
 
-        player.addEffect(new MobEffectInstance(
-                ModEffects.CYBERPSYCHOSIS_FUGUE,
-                FUGUE_SYNC_DURATION_TICKS,
-                amplifier,
-                false,
-                false,
-                false
-        ));
+        player.addEffect(new MobEffectInstance(ModEffects.CYBERPSYCHOSIS_FUGUE, FUGUE_SYNC_DURATION_TICKS, amplifier, false, false, false));
     }
 
     private static void forceCloseScreens(ServerPlayer player) {
@@ -126,22 +133,117 @@ public final class CyberpsychosisFugueController {
     }
 
     private static void tickAttackTarget(ServerPlayer player, FugueState state, LivingEntity target) {
-        Vec3 targetLookPos = target.position().add(0.0D, target.getBbHeight() * 0.65D, 0.0D);
+        Vec3 targetLookPos = getTargetLookPosition(target);
         lookAt(player, targetLookPos, 35.0F, 22.0F);
 
         double distanceSqr = player.distanceToSqr(target);
         double attackRangeSqr = ATTACK_RANGE * ATTACK_RANGE;
+        boolean clearLine = hasClearLine(player, targetLookPos);
 
-        player.setSprinting(distanceSqr > attackRangeSqr);
+        if (!clearLine) {
+            state.blockedTargetTicks++;
+            player.setSprinting(false);
 
-        if (distanceSqr <= attackRangeSqr && state.attackCooldown <= 0 && player.hasLineOfSight(target)) {
+            if (state.blockedTargetTicks >= MAX_BLOCKED_TARGET_TICKS) {
+                state.setTarget(null, player.position());
+            }
+
+            tickAttackCooldown(state);
+            return;
+        }
+
+        state.blockedTargetTicks = 0;
+
+        if (distanceSqr > attackRangeSqr) {
+            player.setSprinting(true);
+            moveTowardTarget(player, target);
+            checkStuck(player, state);
+        } else {
+            player.setSprinting(false);
+            state.stuckChecks = 0;
+            state.lastStuckCheckPosition = player.position();
+        }
+
+        if (distanceSqr <= attackRangeSqr && state.attackCooldown <= 0 && canAttackTarget(player, target)) {
             forceAttack(player, target);
             state.attackCooldown = ATTACK_COOLDOWN_TICKS;
         }
 
+        tickAttackCooldown(state);
+    }
+
+    private static void moveTowardTarget(ServerPlayer player, LivingEntity target) {
+        Vec3 horizontalDirection = new Vec3(target.getX() - player.getX(), 0.0D, target.getZ() - player.getZ());
+
+        if (horizontalDirection.lengthSqr() <= 0.0001D) {
+            return;
+        }
+
+        horizontalDirection = horizontalDirection.normalize();
+
+        Vec3 currentMovement = player.getDeltaMovement();
+        double wantedX = horizontalDirection.x * CHASE_SPEED;
+        double wantedZ = horizontalDirection.z * CHASE_SPEED;
+
+        double movementX = Mth.lerp(CHASE_ACCELERATION, currentMovement.x, wantedX);
+        double movementZ = Mth.lerp(CHASE_ACCELERATION, currentMovement.z, wantedZ);
+        double movementY = currentMovement.y;
+
+        if (player.horizontalCollision && player.onGround()) {
+            movementY = Math.max(movementY, JUMP_VELOCITY);
+        }
+
+        player.setDeltaMovement(movementX, movementY, movementZ);
+        player.hurtMarked = true;
+    }
+
+    private static void checkStuck(ServerPlayer player, FugueState state) {
+        if (player.tickCount % STUCK_CHECK_INTERVAL_TICKS != 0) {
+            return;
+        }
+
+        double movedSqr = player.position().distanceToSqr(state.lastStuckCheckPosition);
+        state.lastStuckCheckPosition = player.position();
+
+        if (movedSqr >= MIN_STUCK_MOVEMENT_SQR) {
+            state.stuckChecks = 0;
+            return;
+        }
+
+        state.stuckChecks++;
+
+        if (state.stuckChecks >= MAX_STUCK_CHECKS) {
+            state.setTarget(null, player.position());
+        }
+    }
+
+    private static void tickAttackCooldown(FugueState state) {
         if (state.attackCooldown > 0) {
             state.attackCooldown--;
         }
+    }
+
+    private static boolean canAttackTarget(ServerPlayer player, LivingEntity target) {
+        if (!isValidTarget(player, target)) {
+            return false;
+        }
+
+        if (player.distanceToSqr(target) > ATTACK_RANGE * ATTACK_RANGE) {
+            return false;
+        }
+
+        Vec3 targetLookPos = getTargetLookPosition(target);
+
+        return player.hasLineOfSight(target) && hasClearLine(player, targetLookPos);
+    }
+
+    private static boolean hasClearLine(ServerPlayer player, Vec3 targetPos) {
+        HitResult result = player.level().clip(new ClipContext(player.getEyePosition(), targetPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+        return result.getType() == HitResult.Type.MISS;
+    }
+
+    private static Vec3 getTargetLookPosition(LivingEntity target) {
+        return target.position().add(0.0D, target.getBbHeight() * 0.65D, 0.0D);
     }
 
     private static void forceAttack(ServerPlayer player, LivingEntity target) {
@@ -161,21 +263,13 @@ public final class CyberpsychosisFugueController {
     private static LivingEntity findTarget(ServerPlayer player) {
         Level level = player.level();
 
-        List<LivingEntity> candidates = level.getEntitiesOfClass(
-                LivingEntity.class,
-                player.getBoundingBox().inflate(TARGET_SEARCH_RADIUS),
-                entity -> isCandidateTarget(player, entity)
-        );
+        List<LivingEntity> candidates = level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(TARGET_SEARCH_RADIUS), entity -> isCandidateTarget(player, entity));
 
         if (candidates.isEmpty()) {
             return null;
         }
 
-        return candidates.stream()
-                .min(Comparator
-                        .comparingInt(CyberpsychosisFugueController::targetPriority)
-                        .thenComparingDouble(player::distanceToSqr))
-                .orElse(null);
+        return candidates.stream().min(Comparator.comparingInt(CyberpsychosisFugueController::targetPriority).thenComparingDouble(player::distanceToSqr)).orElse(null);
     }
 
     private static boolean isCandidateTarget(ServerPlayer player, LivingEntity entity) {
@@ -191,11 +285,15 @@ public final class CyberpsychosisFugueController {
             return false;
         }
 
-        if (entity instanceof Player otherPlayer) {
-            return !otherPlayer.isCreative() && !otherPlayer.isSpectator();
+        if (entity instanceof Player otherPlayer && (otherPlayer.isCreative() || otherPlayer.isSpectator())) {
+            return false;
         }
 
-        return player.distanceToSqr(entity) <= TARGET_SEARCH_RADIUS * TARGET_SEARCH_RADIUS;
+        if (player.distanceToSqr(entity) > TARGET_SEARCH_RADIUS * TARGET_SEARCH_RADIUS) {
+            return false;
+        }
+
+        return player.hasLineOfSight(entity) && hasClearLine(player, getTargetLookPosition(entity));
     }
 
     private static boolean isValidTarget(ServerPlayer player, LivingEntity target) {
@@ -208,6 +306,10 @@ public final class CyberpsychosisFugueController {
         }
 
         if (target.level() != player.level()) {
+            return false;
+        }
+
+        if (!EntitySelector.NO_SPECTATORS.test(target)) {
             return false;
         }
 
@@ -274,7 +376,10 @@ public final class CyberpsychosisFugueController {
         private int controlTicksLeft = 0;
 
         private int attackCooldown = 0;
+        private int blockedTargetTicks = 0;
+        private int stuckChecks = 0;
 
+        private Vec3 lastStuckCheckPosition = Vec3.ZERO;
         private LivingEntity target = null;
 
         private void tick(ServerPlayer player, float negativeProgress) {
@@ -283,7 +388,7 @@ public final class CyberpsychosisFugueController {
 
                 if (fugueTicksLeft <= 0) {
                     inFugue = false;
-                    target = null;
+                    setTarget(null, player.position());
                     attackCooldown = 0;
                     controlTicksLeft = rollControlTicks(player, negativeProgress);
                 }
@@ -298,8 +403,15 @@ public final class CyberpsychosisFugueController {
 
             inFugue = true;
             fugueTicksLeft = rollFugueTicks(player, negativeProgress);
-            target = null;
+            setTarget(null, player.position());
             attackCooldown = 0;
+        }
+
+        private void setTarget(LivingEntity target, Vec3 playerPosition) {
+            this.target = target;
+            blockedTargetTicks = 0;
+            stuckChecks = 0;
+            lastStuckCheckPosition = playerPosition;
         }
 
         private static int rollFugueTicks(ServerPlayer player, float negativeProgress) {

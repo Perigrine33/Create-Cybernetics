@@ -1,0 +1,32 @@
+{
+  "type": "createcybernetics:engineering_table",
+  "accept_mirrored": true,
+
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "P": {
+      "item": "createcybernetics:plastic_sheet"
+    },
+    "W": {
+      "item": "createcybernetics:component_wiring"
+    },
+    "S": {
+      "item": "createcybernetics:component_ssd"
+    }
+  },
+
+  "pattern": [
+    "GS   ",
+    "WWP  ",
+    " PWP ",
+    "  PWW",
+    "   SG"
+  ],
+
+  "result": {
+    "count": 1,
+    "id": "createcybernetics:link_cable"
+  }
+}

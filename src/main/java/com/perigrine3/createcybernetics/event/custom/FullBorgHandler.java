@@ -131,7 +131,7 @@ public final class FullBorgHandler {
             CyberwareAttributeHelper.removeModifier(player, "dragoon_step");
         }
 
-        if (ModCompats.isInstalled("creatingspace")) {
+        if (ModCompats.isInstalled("creatingspace") || ModCompats.isInstalled("northstar")) {
             boolean copernicusModel = isCopernicus(data);
             if (copernicusModel) {
                 CyberwareAttributeHelper.applyModifier(player, "copernicus_oxygen");

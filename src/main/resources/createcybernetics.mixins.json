@@ -18,19 +18,19 @@
     "VillagerHostilesSensorMixin",
     "create.FillingBySpoutMixin",
     "neosync.NeoSyncShellContainerCollisionMixin",
-    "neosync.ShellStateMixin",
-    "neosync.NeoSyncShellContainerCollisionMixin"
-
+    "neosync.ShellStateMixin"
   ],
   "client": [
     "PlayerEyeHeightMixin",
     "client.AbstractContainerScreenAccessor",
+    "client.AbstractContainerScreenMixin",
     "client.CorpseAdditionalScreenMixin",
     "client.CorpseInventoryScreenMixin",
     "client.CorpseRendererMixin",
     "client.CorpseRendererSkeletonOverlayMixin",
     "client.CreativeModeInventoryButtonsMixin",
     "client.CreativeSlotWrapperHideChipwareMixin",
+    "client.GuiFakeHealthMixin",
     "client.InventoryScreenChipwareSlotsMixin",
     "client.ItemInHandRendererMixin",
     "client.ItemInHandRendererOverlayMixin",

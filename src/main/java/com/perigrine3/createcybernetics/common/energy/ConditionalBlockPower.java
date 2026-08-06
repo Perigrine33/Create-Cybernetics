@@ -28,7 +28,8 @@ public final class ConditionalBlockPower {
             "modern_industrialization",
             "powergrid",
             "oritech",
-            "industrialupgrade"
+            "industrialupgrade",
+            "electroenergetics"
     );
 
     public static boolean hasTechEnergyModLoaded() {

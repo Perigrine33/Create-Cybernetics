@@ -17,8 +17,8 @@ public class CyberwareRejectionEffect extends MobEffect {
     private static final int EFFECT_ROLL_INTERVAL_TICKS = 20;
 
     private static final int LEVEL_1_DURATION = 80;
-    private static final int LEVEL_2_DURATION = 140;
-    private static final int LEVEL_3_DURATION = 220;
+    private static final int LEVEL_2_DURATION = 100;
+    private static final int LEVEL_3_DURATION = 1400;
 
     private static final float LEVEL_1_BASE_CHANCE = 0.20F;
     private static final float LEVEL_2_BASE_CHANCE = 0.55F;
@@ -26,6 +26,8 @@ public class CyberwareRejectionEffect extends MobEffect {
 
     private static final float LEVEL_2_DAMAGE_CHANCE = 0.08F;
     private static final float LEVEL_3_DAMAGE_CHANCE = 0.16F;
+
+    private static final float REJECTION_DAMAGE = 0.001F;
 
     public CyberwareRejectionEffect(MobEffectCategory category, int color) {
         super(category, color);
@@ -77,7 +79,6 @@ public class CyberwareRejectionEffect extends MobEffect {
 
         maybeApply(player, MobEffects.WEAKNESS, chance * 0.75F, LEVEL_1_DURATION, 0);
         maybeApply(player, MobEffects.DIG_SLOWDOWN, chance * 0.60F, LEVEL_1_DURATION, 0);
-        maybeApply(player, MobEffects.CONFUSION, chance * 0.35F, LEVEL_1_DURATION, 0);
     }
 
     private static void applyLevelTwo(Player player) {
@@ -89,11 +90,9 @@ public class CyberwareRejectionEffect extends MobEffect {
 
         maybeApply(player, MobEffects.WEAKNESS, chance, duration, amplifier);
         maybeApply(player, MobEffects.DIG_SLOWDOWN, chance * 0.90F, duration, amplifier);
-        maybeApply(player, MobEffects.CONFUSION, chance * 0.85F, duration, 0);
 
         if (player.getRandom().nextFloat() < LEVEL_2_DAMAGE_CHANCE) {
-            float damage = 0.5F + progress * 1.0F;
-            player.hurt(ModDamageSources.cyberwareRejection(player.level(), player, null), damage);
+            applyRejectionDamage(player);
         }
     }
 
@@ -108,12 +107,14 @@ public class CyberwareRejectionEffect extends MobEffect {
         maybeApply(player, MobEffects.DAMAGE_BOOST, chance, duration, amplifier);
         maybeApply(player, MobEffects.DAMAGE_RESISTANCE, chance, duration, amplifier);
         maybeApply(player, MobEffects.DIG_SLOWDOWN, chance, duration, amplifier);
-        maybeApply(player, MobEffects.CONFUSION, chance, duration, 0);
 
         if (player.getRandom().nextFloat() < LEVEL_3_DAMAGE_CHANCE) {
-            float damage = 1.0F + negativeProgress * 2.0F;
-            player.hurt(ModDamageSources.cyberwareRejection(player.level(), player, null), damage);
+            applyRejectionDamage(player);
         }
+    }
+
+    private static void applyRejectionDamage(Player player) {
+        player.hurt(ModDamageSources.cyberwareRejection(player.level(), player, null), REJECTION_DAMAGE);
     }
 
     private static void maybeApply(Player player, Holder<MobEffect> effect, float chance, int duration, int amplifier) {

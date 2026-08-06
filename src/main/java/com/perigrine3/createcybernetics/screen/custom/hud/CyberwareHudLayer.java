@@ -1493,11 +1493,24 @@ public final class CyberwareHudLayer {
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
             if (data == null) return false;
 
-            return hasFunctionalHudUpgrade(player, data)
-                    && hasFunctionalCybereyes(player, data);
+            return hasFunctionalMonovision(player, data)
+                    || hasFunctionalHudLens(player, data)
+                    || hasFunctionalHudJack(player, data) && hasFunctionalCybereyes(player, data);
         }
 
-        private static boolean hasFunctionalHudUpgrade(LocalPlayer player, PlayerCyberwareData data) {
+        private static boolean hasFunctionalHudLens(LocalPlayer player, PlayerCyberwareData data) {
+            return hasFunctionalSpecificItem(player, data, ModItems.EYEUPGRADES_HUDLENS.get());
+        }
+
+        private static boolean hasFunctionalHudJack(LocalPlayer player, PlayerCyberwareData data) {
+            return hasFunctionalSpecificItem(player, data, ModItems.EYEUPGRADES_HUDJACK.get());
+        }
+
+        private static boolean hasFunctionalMonovision(LocalPlayer player, PlayerCyberwareData data) {
+            return hasFunctionalSpecificItem(player, data, ModItems.EYEUPGRADES_MONOVISION.get());
+        }
+
+        private static boolean hasFunctionalSpecificItem(LocalPlayer player, PlayerCyberwareData data, net.minecraft.world.item.Item requiredItem) {
             InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.EYES);
             if (arr == null) return false;
 
@@ -1507,13 +1520,7 @@ public final class CyberwareHudLayer {
 
                 ItemStack stack = installed.getItem();
                 if (stack == null || stack.isEmpty()) continue;
-
-                boolean isHudUpgrade =
-                        stack.is(ModItems.EYEUPGRADES_HUDLENS.get())
-                                || stack.is(ModItems.EYEUPGRADES_HUDJACK.get())
-                                || stack.is(ModItems.EYEUPGRADES_MONOVISION.get());
-
-                if (!isHudUpgrade) continue;
+                if (!stack.is(requiredItem)) continue;
                 if (!isFunctional(player, data, installed, stack, idx)) continue;
 
                 return true;
@@ -1533,12 +1540,7 @@ public final class CyberwareHudLayer {
                 ItemStack stack = installed.getItem();
                 if (stack == null || stack.isEmpty()) continue;
 
-                if (!(stack.getItem() instanceof CybereyeItem) &&
-                        !(stack.getItem() instanceof MonovisionOpticsItem) &&
-                        !(stack.getItem() instanceof MultiopticsItem)) {
-                    continue;
-                }
-
+                if (!(stack.getItem() instanceof CybereyeItem) && !(stack.getItem() instanceof MultiopticsItem)) continue;
                 if (!isFunctional(player, data, installed, stack, idx)) continue;
 
                 return true;
@@ -1547,24 +1549,11 @@ public final class CyberwareHudLayer {
             return false;
         }
 
-        private static boolean isFunctional(
-                LocalPlayer player,
-                PlayerCyberwareData data,
-                InstalledCyberware installed,
-                ItemStack stack,
-                int idx
-        ) {
-            if (!data.isEnabled(CyberwareSlot.EYES, idx)) {
-                return false;
-            }
+        private static boolean isFunctional(LocalPlayer player, PlayerCyberwareData data, InstalledCyberware installed, ItemStack stack, int idx) {
+            if (!data.isEnabled(CyberwareSlot.EYES, idx)) return false;
 
-            if (!(stack.getItem() instanceof ICyberwareItem cyberwareItem)) {
-                return true;
-            }
-
-            if (!cyberwareItem.requiresEnergyToFunction(player, stack, CyberwareSlot.EYES)) {
-                return true;
-            }
+            if (!(stack.getItem() instanceof ICyberwareItem cyberwareItem)) return true;
+            if (!cyberwareItem.requiresEnergyToFunction(player, stack, CyberwareSlot.EYES)) return true;
 
             return installed.isPowered();
         }

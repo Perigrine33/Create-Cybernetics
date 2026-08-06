@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.createcybernetics.music_disc_dark.desc"
+  },
+  "length_in_seconds": 502.0,
+  "sound_event": "createcybernetics:dark"
+}

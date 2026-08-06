@@ -66,6 +66,8 @@ import java.util.UUID;
 
 public class MantisBladeItem extends Item implements ICyberwareItem {
 
+    private static final int ENERGY_USED_PER_TICK = 15;
+
     private static final int COPPER_ENERGY_DRAIN_MIN = 1;
     private static final int COPPER_ENERGY_DRAIN_MAX = 5_000;
     private static final int IRON_SHIELD_DISABLE_TICKS = 40;
@@ -176,13 +178,16 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
 
     @Override
     public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
-        return Set.of(ModItems.ARMUPGRADES_CLAWS.get(), ModItems.ARMUPGRADES_RIPPERCLAW.get(),
-                ModItems.ARMUPGRADES_DRILLFIST.get());
+        return Set.of(
+                ModItems.ARMUPGRADES_CLAWS.get(),
+                ModItems.ARMUPGRADES_RIPPERCLAW.get(),
+                ModItems.ARMUPGRADES_DRILLFIST.get()
+        );
     }
 
     @Override
     public int getEnergyUsedPerTick(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
-        return isInstalledBladeEnabled(entity, installedStack, slot) ? 15 : 0;
+        return isInstalledBladeEnabled(entity, installedStack, slot) ? ENERGY_USED_PER_TICK : 0;
     }
 
     private static boolean isInstalledBladeEnabled(LivingEntity entity, ItemStack installedStack, CyberwareSlot slot) {
@@ -195,6 +200,11 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
         }
 
         PlayerCyberwareData data = entity.getData(ModAttachments.CYBERWARE);
+
+        if (data == null) {
+            return false;
+        }
+
         InstalledCyberware[] arr = data.getAll().get(slot);
 
         if (arr == null) {
@@ -210,7 +220,11 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
 
             ItemStack stack = cyberware.getItem();
 
-            if (stack != installedStack) {
+            if (stack == null || stack.isEmpty()) {
+                continue;
+            }
+
+            if (stack != installedStack && !ItemStack.isSameItemSameComponents(stack, installedStack)) {
                 continue;
             }
 
@@ -295,12 +309,10 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
         for (ItemAttributeModifiers.Entry entry : modifiers.modifiers()) {
             Holder<Attribute> attribute = entry.attribute();
 
-            boolean attackDamage =
-                    attribute != null && attribute.value() == Attributes.ATTACK_DAMAGE.value();
+            boolean attackDamage = attribute != null && attribute.value() == Attributes.ATTACK_DAMAGE.value();
 
-            boolean mainhand =
-                    entry.slot() == EquipmentSlotGroup.MAINHAND
-                            || entry.slot().test(EquipmentSlot.MAINHAND);
+            boolean mainhand = entry.slot() == EquipmentSlotGroup.MAINHAND
+                    || entry.slot().test(EquipmentSlot.MAINHAND);
 
             if (attackDamage && mainhand && entry.modifier().amount() != 0.0D) {
                 return true;
@@ -377,12 +389,15 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
 
             if (!player.hasData(ModAttachments.CYBERWARE)) {
                 removeAllMantisBladeModifiers(player);
+                clearTrackedState(player);
                 return;
             }
 
             PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
+
             if (data == null) {
                 removeAllMantisBladeModifiers(player);
+                clearTrackedState(player);
                 return;
             }
 
@@ -392,19 +407,7 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
             boolean leftEnabled = leftBlade != null;
             boolean rightEnabled = rightBlade != null;
 
-            UUID id = player.getUUID();
-
-            boolean prevLeft = LAST_LEFT.getOrDefault(id, false);
-            if (leftEnabled != prevLeft) {
-                LAST_LEFT.put(id, leftEnabled);
-                playToggleSound(player, leftEnabled);
-            }
-
-            boolean prevRight = LAST_RIGHT.getOrDefault(id, false);
-            if (rightEnabled != prevRight) {
-                LAST_RIGHT.put(id, rightEnabled);
-                playToggleSound(player, rightEnabled);
-            }
+            updateToggleSound(player, leftEnabled, rightEnabled);
 
             removeAllMantisBladeModifiers(player);
 
@@ -420,9 +423,37 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
                 applyVariantModifiers(player, leftBlade.variant(), 2);
             } else if (rightBlade != null) {
                 applyVariantModifiers(player, rightBlade.variant(), 1);
-            } else {
+            } else if (leftBlade != null) {
                 applyVariantModifiers(player, leftBlade.variant(), 1);
             }
+        }
+
+        private static void updateToggleSound(Player player, boolean leftEnabled, boolean rightEnabled) {
+            UUID id = player.getUUID();
+
+            boolean previousLeft = LAST_LEFT.getOrDefault(id, false);
+
+            if (leftEnabled != previousLeft) {
+                LAST_LEFT.put(id, leftEnabled);
+                playToggleSound(player, leftEnabled);
+            }
+
+            boolean previousRight = LAST_RIGHT.getOrDefault(id, false);
+
+            if (rightEnabled != previousRight) {
+                LAST_RIGHT.put(id, rightEnabled);
+                playToggleSound(player, rightEnabled);
+            }
+        }
+
+        private static void clearTrackedState(Player player) {
+            if (player == null) {
+                return;
+            }
+
+            UUID id = player.getUUID();
+            LAST_LEFT.remove(id);
+            LAST_RIGHT.remove(id);
         }
 
         @SubscribeEvent
@@ -455,10 +486,9 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
                 amount *= GOLD_DAMAGE_MULTIPLIER;
             }
 
-            if (variants.contains(Variant.NETHERITE)) {
-                if (target.getHealth() <= target.getMaxHealth() * NETHERITE_EXECUTION_HEALTH_FRACTION) {
-                    amount += NETHERITE_EXECUTION_BONUS_DAMAGE;
-                }
+            if (variants.contains(Variant.NETHERITE)
+                    && target.getHealth() <= target.getMaxHealth() * NETHERITE_EXECUTION_HEALTH_FRACTION) {
+                amount += NETHERITE_EXECUTION_BONUS_DAMAGE;
             }
 
             event.setAmount(amount);
@@ -617,7 +647,12 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
             PlayerCyberwareData targetData = playerTarget.getData(ModAttachments.CYBERWARE);
             PlayerCyberwareData attackerData = attacker.getData(ModAttachments.CYBERWARE);
 
-            int rolledDrain = COPPER_ENERGY_DRAIN_MIN + attacker.getRandom().nextInt(COPPER_ENERGY_DRAIN_MAX - COPPER_ENERGY_DRAIN_MIN + 1);
+            if (targetData == null || attackerData == null) {
+                return;
+            }
+
+            int rolledDrain = COPPER_ENERGY_DRAIN_MIN
+                    + attacker.getRandom().nextInt(COPPER_ENERGY_DRAIN_MAX - COPPER_ENERGY_DRAIN_MIN + 1);
 
             int drained = drainUpTo(targetData, rolledDrain);
 
@@ -639,7 +674,6 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
 
             int drained = 0;
             int remaining = maxAmount;
-
             int step = Integer.highestOneBit(maxAmount);
 
             while (step > 0 && remaining > 0) {
@@ -734,16 +768,13 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
 
         @SubscribeEvent
         public static void onLogout(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
-            UUID id = event.getEntity().getUUID();
-            LAST_LEFT.remove(id);
-            LAST_RIGHT.remove(id);
+            clearTrackedState(event.getEntity());
         }
 
         private record EnabledBlade(Variant variant) {
         }
 
-        private ServerHandler() {
-        }
+        private ServerHandler() {}
     }
 
     @EventBusSubscriber(modid = CreateCybernetics.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
@@ -784,13 +815,11 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
                 if (player.isInvisibleTo(viewer)) {
                     return;
                 }
-            } else {
-                if (player.isInvisible()) {
-                    return;
-                }
+            } else if (player.isInvisible()) {
+                return;
             }
 
-            if (minecraft.player == null || player.getUUID() != minecraft.player.getUUID()) {
+            if (minecraft.player == null || !player.getUUID().equals(minecraft.player.getUUID())) {
                 return;
             }
 
@@ -854,12 +883,9 @@ public class MantisBladeItem extends Item implements ICyberwareItem {
                 pose.mulPose(Axis.YP.rotationDegrees(RIGHT_Y_ROT));
                 pose.mulPose(Axis.ZP.rotationDegrees(RIGHT_Z_ROT));
             }
-
-            pose.scale(1.0F, 1.0F, 1.0F);
         }
 
-        private ClientFirstPerson() {
-        }
+        private ClientFirstPerson() {}
     }
 
     private static MantisBladeRenderState getMantisBladeRenderStateInSlot(PlayerCyberwareData data, CyberwareSlot slot) {

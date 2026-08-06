@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_tar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createcybernetics:tar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createcybernetics:unrefined_polymer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tar"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createcybernetics:unrefined_polymer"
+    ]
+  }
+}

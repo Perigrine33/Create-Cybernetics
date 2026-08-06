@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.createcybernetics.music_disc_intergalactic_walk.desc"
+  },
+  "length_in_seconds": 163.0,
+  "sound_event": "createcybernetics:intergalactic_walk"
+}

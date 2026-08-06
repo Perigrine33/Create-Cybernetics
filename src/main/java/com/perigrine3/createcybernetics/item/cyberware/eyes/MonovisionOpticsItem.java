@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -97,6 +98,12 @@ public class MonovisionOpticsItem extends Item implements ICyberwareItem {
     }
 
     @Override
+    public Set<Item> incompatibleCyberware(ItemStack installedStack, CyberwareSlot slot) {
+        return Set.of(ModItems.EYEUPGRADES_MULTIOPTICS1.get(), ModItems.EYEUPGRADES_MULTIOPTICS2.get(),
+                ModItems.EYEUPGRADES_MULTIOPTICS3.get(), ModItems.EYEUPGRADES_MULTIOPTICS4.get());
+    }
+
+    @Override
     public void onInstalled(LivingEntity entity) {
     }
 
@@ -107,6 +114,59 @@ public class MonovisionOpticsItem extends Item implements ICyberwareItem {
     @Override
     public void onTick(LivingEntity entity) {
         ICyberwareItem.super.onTick(entity);
+
+        if (entity.level().isClientSide()) {
+            return;
+        }
+
+        if (!entity.hasData(ModAttachments.CYBERWARE)) {
+            return;
+        }
+
+        PlayerCyberwareData data = entity.getData(ModAttachments.CYBERWARE);
+        if (!poweredMultiopticsInstalled(data)) {
+            return;
+        }
+
+        entity.removeEffect(MobEffects.BLINDNESS);
+        entity.removeEffect(MobEffects.DARKNESS);
+    }
+
+    private static boolean poweredMultiopticsInstalled(PlayerCyberwareData data) {
+        if (data == null) {
+            return false;
+        }
+
+        InstalledCyberware[] arr = data.getAll().get(CyberwareSlot.EYES);
+        if (arr == null) {
+            return false;
+        }
+
+        for (int idx = 0; idx < arr.length; idx++) {
+            InstalledCyberware installed = arr[idx];
+            if (installed == null) {
+                continue;
+            }
+
+            ItemStack stack = installed.getItem();
+            if (stack == null || stack.isEmpty()) {
+                continue;
+            }
+
+            if (!(stack.getItem() instanceof MonovisionOpticsItem)) {
+                continue;
+            }
+
+            if (!data.isEnabled(CyberwareSlot.EYES, idx)) {
+                continue;
+            }
+
+            if (installed.isPowered()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static boolean enabledMonovisionInstalledAndUnpowered(PlayerCyberwareData data) {

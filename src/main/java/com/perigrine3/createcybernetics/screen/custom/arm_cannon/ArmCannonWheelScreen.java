@@ -27,7 +27,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -43,19 +42,6 @@ public class ArmCannonWheelScreen extends Screen {
 
     private static int SEGMENTS = 4;
     private static int SELECTED_INDEX = 0;
-    private static int STICKY_INDEX = 0;
-    private static double CURSOR_X = 0.0;
-    private static double CURSOR_Y = 0.0;
-
-    private static boolean HAS_LAST_ROT = false;
-    private static float LAST_YAW = 0.0f;
-    private static float LAST_PITCH = 0.0f;
-
-    private static final double YAW_TO_CURSOR = 0.020;
-    private static final double PITCH_TO_CURSOR = 0.020;
-    private static final double DAMPING = 0.85;
-    private static final double CURSOR_MAX = 1.25;
-    private static final double SELECT_DEADZONE = 0.08;
 
     private static final int BASE_ARGB = 0x88000000;
     private static final int HOVER_ARGB = 0xAA2E7BFF;
@@ -74,40 +60,25 @@ public class ArmCannonWheelScreen extends Screen {
     public static void open(int segments) {
         SEGMENTS = Math.max(1, segments);
         OPEN = true;
-
-        STICKY_INDEX = 0;
         SELECTED_INDEX = 0;
-        CURSOR_X = 0.0;
-        CURSOR_Y = 0.0;
 
         Minecraft mc = Minecraft.getInstance();
-        Player p = mc.player;
+        Player player = mc.player;
 
-        if (p != null) {
-            LAST_YAW = p.getYRot();
-            LAST_PITCH = p.getXRot();
-            HAS_LAST_ROT = true;
+        if (player != null && player.hasData(ModAttachments.CYBERWARE)) {
+            PlayerCyberwareData data = player.getData(ModAttachments.CYBERWARE);
 
-            // Optional nicety: preselect currently loaded slot if available
-            if (p.hasData(ModAttachments.CYBERWARE)) {
-                PlayerCyberwareData data = p.getData(ModAttachments.CYBERWARE);
-                if (data != null) {
-                    setPreselectedIndex(data.getArmCannonSelected());
-                }
-            }
-        } else {
-            HAS_LAST_ROT = false;
+            setPreselectedIndex(data.getArmCannonSelected());
         }
 
         KeyMapping attack = mc.options.keyAttack;
-        if (attack != null && attack.isDown()) {
+        if (attack.isDown()) {
             attack.setDown(false);
         }
     }
 
     public static void close() {
         OPEN = false;
-        HAS_LAST_ROT = false;
     }
 
     public static int getSelectedIndex() {
@@ -115,11 +86,19 @@ public class ArmCannonWheelScreen extends Screen {
         return Mth.clamp(SELECTED_INDEX, 0, Math.max(0, SEGMENTS - 1));
     }
 
-    public static void setPreselectedIndex(int idx) {
-        int n = Math.max(1, SEGMENTS);
-        int clamped = Mth.clamp(idx, 0, n - 1);
-        STICKY_INDEX = clamped;
-        SELECTED_INDEX = clamped;
+    public static void scrollSelection(double scrollDelta) {
+        if (!OPEN) return;
+        if (scrollDelta == 0.0D) return;
+
+        int segments = Math.max(1, SEGMENTS);
+        int direction = scrollDelta > 0.0D ? -1 : 1;
+
+        SELECTED_INDEX = Math.floorMod(SELECTED_INDEX + direction, segments);
+    }
+
+    public static void setPreselectedIndex(int index) {
+        int segments = Math.max(1, SEGMENTS);
+        SELECTED_INDEX = Mth.clamp(index, 0, segments - 1);
     }
 
     @Override
@@ -160,51 +139,11 @@ public class ArmCannonWheelScreen extends Screen {
     public static final class ClientGameBus {
 
         @SubscribeEvent
-        public static void onClientTick(ClientTickEvent.Post event) {
+        public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
             if (!OPEN) return;
 
-            Minecraft mc = Minecraft.getInstance();
-
-            if (mc.screen != null) {
-                close();
-                return;
-            }
-
-            Player p = mc.player;
-            if (p == null) {
-                close();
-                return;
-            }
-
-            KeyMapping attack = mc.options.keyAttack;
-            if (attack != null && attack.isDown()) {
-                attack.setDown(false);
-            }
-
-            float yaw = p.getYRot();
-            float pitch = p.getXRot();
-
-            if (!HAS_LAST_ROT) {
-                LAST_YAW = yaw;
-                LAST_PITCH = pitch;
-                HAS_LAST_ROT = true;
-                return;
-            }
-
-            float dyaw = Mth.wrapDegrees(yaw - LAST_YAW);
-            float dpitch = pitch - LAST_PITCH;
-
-            LAST_YAW = yaw;
-            LAST_PITCH = pitch;
-
-            CURSOR_X += dyaw * YAW_TO_CURSOR;
-            CURSOR_Y += dpitch * PITCH_TO_CURSOR;
-
-            CURSOR_X = Mth.clamp(CURSOR_X, -CURSOR_MAX, CURSOR_MAX);
-            CURSOR_Y = Mth.clamp(CURSOR_Y, -CURSOR_MAX, CURSOR_MAX);
-
-            CURSOR_X *= DAMPING;
-            CURSOR_Y *= DAMPING;
+            event.setCanceled(true);
+            scrollSelection(event.getScrollDeltaY());
         }
 
         @SubscribeEvent
@@ -218,10 +157,10 @@ public class ArmCannonWheelScreen extends Screen {
                 event.setCanceled(true);
 
                 KeyMapping attack = mc.options.keyAttack;
-                if (attack != null) attack.setDown(false);
+                attack.setDown(false);
 
-                int idx = getSelectedIndex();
-                PacketDistributor.sendToServer(new ArmCannonWheelPayloads.SelectArmCannonAmmoSlotPayload(idx));
+                int index = getSelectedIndex();
+                PacketDistributor.sendToServer(new ArmCannonWheelPayloads.SelectArmCannonAmmoSlotPayload(index));
 
                 close();
                 return;
@@ -231,6 +170,9 @@ public class ArmCannonWheelScreen extends Screen {
                 event.setCanceled(true);
                 close();
             }
+        }
+
+        private ClientGameBus() {
         }
     }
 
@@ -266,7 +208,6 @@ public class ArmCannonWheelScreen extends Screen {
         ItemStack[] stacks = new ItemStack[n];
         for (int i = 0; i < n; i++) stacks[i] = ItemStack.EMPTY;
 
-        // --------- IMPORTANT CHANGE: read ammo from INSTALLED ARM CANNON STACK CUSTOM_DATA ----------
         if (mc.player != null && mc.player.hasData(ModAttachments.CYBERWARE)) {
             PlayerCyberwareData data = mc.player.getData(ModAttachments.CYBERWARE);
             if (data != null) {
@@ -274,10 +215,8 @@ public class ArmCannonWheelScreen extends Screen {
 
                 ItemStack installedCannon = findInstalledArmCannonStack(data);
                 if (!installedCannon.isEmpty()) {
-                    // decode CUSTOM_DATA -> TMP_INV
                     ArmCannonItem.loadFromInstalledStack(installedCannon, mc.player.level().registryAccess(), TMP_INV);
 
-                    // copy out for rendering
                     for (int i = 0; i < n && i < ArmCannonItem.SLOT_COUNT; i++) {
                         ItemStack st = TMP_INV.getItem(i);
                         stacks[i] = (st == null) ? ItemStack.EMPTY : st;
@@ -285,13 +224,12 @@ public class ArmCannonWheelScreen extends Screen {
                 }
             }
         }
-        // ------------------------------------------------------------------------------------------
 
-        int hovered = selectedIndexFromCursor(n);
-        SELECTED_INDEX = hovered;
+        SELECTED_INDEX = Mth.clamp(SELECTED_INDEX, 0, n - 1);
+        int selected = SELECTED_INDEX;
 
         for (int i = 0; i < n; i++) {
-            int argb = (i == hovered) ? HOVER_ARGB : BASE_ARGB;
+            int argb = i == selected ? HOVER_ARGB : BASE_ARGB;
             drawDonutSegment(graphics, cx, cy, innerR, outerR, n, i, 24, argb);
         }
 
@@ -340,12 +278,47 @@ public class ArmCannonWheelScreen extends Screen {
                 }
             }
         }
+
+        renderInstructions(graphics, mc, w, h, cx, cy, outerR);
     }
 
-    /**
-     * Finds the installed Arm Cannon cyberware stack (the one that stores ammo in CUSTOM_DATA).
-     * Your menu/open handler matches ModItems.ARMUPGRADES_ARMCANNON, so we match that here too.
-     */
+    private static void renderInstructions(GuiGraphics graphics, Minecraft mc, int screenWidth, int screenHeight, int centerX, int centerY, float outerRadius) {
+        final String line1 = "SCROLL = Select";
+        final String line2 = "L-MB = Load";
+        final String line3 = "R-MB = Close";
+
+        int textX = (int) (centerX + outerRadius + 12);
+        int textY = centerY - mc.font.lineHeight;
+
+        int maximumX = screenWidth - 4;
+        int maximumY = screenHeight - 4;
+
+        int line1Width = mc.font.width(line1);
+        int line2Width = mc.font.width(line2);
+        int line3Width = mc.font.width(line3);
+        int maximumLineWidth = Math.max(line1Width, Math.max(line2Width, line3Width));
+
+        if (textX + maximumLineWidth > maximumX) {
+            textX = maximumX - maximumLineWidth;
+        }
+
+        if (textX < 4) {
+            textX = 4;
+        }
+
+        if (textY < 4) {
+            textY = 4;
+        }
+
+        if (textY + mc.font.lineHeight * 3 + 4 > maximumY) {
+            textY = maximumY - mc.font.lineHeight * 3 - 4;
+        }
+
+        graphics.drawString(mc.font, line1, textX, textY, 0xFFFFFFFF, true);
+        graphics.drawString(mc.font, line2, textX, textY + mc.font.lineHeight + 2, 0xFFFFFFFF, true);
+        graphics.drawString(mc.font, line3, textX, textY + (mc.font.lineHeight + 2) * 2, 0xFFFFFFFF, true);
+    }
+
     private static ItemStack findInstalledArmCannonStack(PlayerCyberwareData data) {
         for (var entry : data.getAll().entrySet()) {
             var arr = entry.getValue();
@@ -364,25 +337,6 @@ public class ArmCannonWheelScreen extends Screen {
             }
         }
         return ItemStack.EMPTY;
-    }
-
-    private static int selectedIndexFromCursor(int n) {
-        if (n <= 0) return 0;
-
-        double mag = Math.sqrt(CURSOR_X * CURSOR_X + CURSOR_Y * CURSOR_Y);
-        if (mag < SELECT_DEADZONE) {
-            return Mth.clamp(STICKY_INDEX, 0, n - 1);
-        }
-
-        double ang = Math.atan2(CURSOR_Y, CURSOR_X);
-        ang = (ang + Math.PI / 2.0 + (Math.PI * 2.0)) % (Math.PI * 2.0);
-
-        int idx = (int) Math.floor((ang / (Math.PI * 2.0)) * n);
-        if (idx < 0) idx += n;
-        if (idx >= n) idx -= n;
-
-        STICKY_INDEX = idx;
-        return idx;
     }
 
     private static double angleForIndex(int n, int i) {

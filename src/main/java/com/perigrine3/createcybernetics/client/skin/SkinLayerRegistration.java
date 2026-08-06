@@ -1,6 +1,7 @@
 package com.perigrine3.createcybernetics.client.skin;
 
 import com.perigrine3.createcybernetics.CreateCybernetics;
+import com.perigrine3.createcybernetics.client.render.attachment.CyberwarePlayerAttachmentLayer;
 import net.minecraft.client.renderer.entity.ArmorStandRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -23,12 +24,14 @@ public final class SkinLayerRegistration {
         if (wide != null) {
             wide.addLayer(new SkinLayerHandler(wide));
             wide.addLayer(new SkinHighlightLayer(wide));
+            wide.addLayer(new CyberwarePlayerAttachmentLayer(wide));
         }
 
         PlayerRenderer slim = event.getSkin(PlayerSkin.Model.SLIM);
         if (slim != null) {
             slim.addLayer(new SkinLayerHandler(slim));
             slim.addLayer(new SkinHighlightLayer(slim));
+            slim.addLayer(new CyberwarePlayerAttachmentLayer(slim));
         }
 
         EntityRenderer<? extends ArmorStand> armorStandRenderer =
