@@ -437,6 +437,8 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
     }
 
     private int countItemInSlotType(CyberwareSlot slotType, ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return 0;
+
         int count = 0;
 
         for (int i = 0; i < RobosurgeonSlotMap.mappedSize(slotType); i++) {
@@ -444,7 +446,9 @@ public class RobosurgeonMenu extends AbstractContainerMenu {
             if (invIndex < 0) continue;
 
             ItemStack inTe = blockEntity.inventory.getStackInSlot(invIndex);
-            if (!inTe.isEmpty() && ItemStack.isSameItemSameComponents(inTe, stack)) {
+            if (inTe.isEmpty()) continue;
+
+            if (ItemStack.isSameItem(inTe, stack)) {
                 count++;
             }
         }
